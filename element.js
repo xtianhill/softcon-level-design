@@ -17,7 +17,7 @@ function Element(pos, url, scl, spd){
 
 
 
-/*example for how to create a function for a prototype. this is the javascript version
+/* Example for how to create a function for a prototype. this is the javascript version
  of creating a method within a class*/
 
 Element.prototype.foo = function(/*args can go here*/){
