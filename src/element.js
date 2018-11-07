@@ -15,13 +15,11 @@ function Element(pos, url, scl, spd){
 	this.bar = 1;
 }
 
-
-
 /* Example for how to create a function for a prototype. this is the javascript version
  of creating a method within a class*/
 
 Element.prototype.add1 = function(){
- 	bar = bar+1;
+ 	this.bar = this.bar+1;
 }
 
-module.exports = 'element.js';
+module.exports = Element;

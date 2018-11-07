@@ -1,4 +1,5 @@
-// var element = require('src/element.js');
+var Element = require('./element.js');
+var expect = require('chai').expect;
 
 describe('Element', function() {
     let testElement;
