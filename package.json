@@ -1,0 +1,26 @@
+{
+  "name": "softcon-level-design",
+  "version": "1.0.0",
+  "description": "Level Editor",
+  "main": "src",
+  "dependencies": {
+    "chai": "^4.2.0",
+    "mysql": "^2.16.0"
+  },
+  "devDependencies": {
+    "mocha": "^5.2.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hillcb/softcon-level-design.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hillcb/softcon-level-design/issues"
+  },
+  "homepage": "https://github.com/hillcb/softcon-level-design#readme"
+}
