@@ -27,8 +27,8 @@ Character.prototype.Character = function(){
 /* Example for how to create a function for a prototype. this is the javascript version
  of creating a method within a class*/
 //decrement health function
-Character.prototype.decHealth = function(enemy){
- 	//decrement health by enemy damage amount
+Character.prototype.decHealth = function(amount){
+ 	//decrement health by amount
 }
 
 //getters and setters
