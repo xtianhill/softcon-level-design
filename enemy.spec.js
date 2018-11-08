@@ -1,4 +1,4 @@
-var Character = require('./enemy.js');
+var Enemy = require('./enemy.js');
 
 describe('Enemy', function() {
     let testEnemy;
