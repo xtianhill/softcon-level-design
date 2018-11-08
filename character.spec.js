@@ -1,11 +1,10 @@
 
-//test for dec health: make a dummy enemy(w 0 damage and w/ 1 damage) then dec correctly.
 // if it hits 0, status should change to 0 from 1
 
 //full constructor tests
 //empty constructor tests
 //get/set message tests
-// test displayMessage w/ full and empty NPC messages
+
 
 var Character = require('./character.js');
 
@@ -26,7 +25,7 @@ describe('Character', function() {
 
     //test full constructor
 
-describe('NPC', function(_loc,_max,_hea,_stat,_msg) {
+describe('Character', function(_loc,_max,_hea,_stat,_msg) {
         it('should create a new character with loc (1,1), maxhealth 20 health 0, status 0', function() {
             testCharacter = Character(vector(1,1), 20, 0, 0);
             expect(testCharacter.getLocation()).toEqual(vector(1,1));
@@ -133,6 +132,20 @@ describe('NPC', function(_loc,_max,_hea,_stat,_msg) {
         });
     }); 
 
+    //test decHealth
+    describe('decHealth', function(_amount) {
+        it('should decrement the health of the character by the given amount and return 1', function(_amount) {
+            testCharacter = Character();
+            expect(testCharacter.decHealth(1)).toEqual(1);
+            expect(testCharacter.getHealth()).toEqual(9);
+        });
+        it('should decrement health by 100, return 1, change status to 0', function() {
+            testCharacter = Character();
+            expect(testCharacter.decHealth()).toEqual(1);
+            expect(testCharacter.getHealth()).toEqual(-90);
+            expect(testCharaceter.getStatus()).toEqual(0);
+        });
+    });
 
 });
 
