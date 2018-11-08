@@ -23,3 +23,5 @@ Item.prototype.getCollected= function(){
 Item.prototype.setCollected= function(){
 
 };
+
+module.exports = Item;
