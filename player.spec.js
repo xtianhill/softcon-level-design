@@ -62,6 +62,14 @@ describe('Player', function() {
         expect(testPlayer.getOwnedItem()).toEqual(testItem);
     });
 
+    // test useItem -> dont know if effects will be functions, or just have titles that useItem
+    // will switch between at this point, so.. for now will say it activates effect
+    it('should use item', function(){
+        testItem.setEffect(new Effect('fire'));
+        testPlayer.setOwnedItem(testItem);
+        testPlayer.useItem();
+        expect(testItem.getIsActive()).toBeTruthy();
+    });
 
 });
 

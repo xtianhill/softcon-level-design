@@ -26,4 +26,7 @@ Player.prototype.setOwnedItem = function(itm){
     // set item.collected to be true
 }
 
+Player.prototype.useItem = function(){
+    // if have an item, use its effect on whatever
+}
 module.exports = Player;
