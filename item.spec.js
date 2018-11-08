@@ -11,12 +11,12 @@ describe('Item', function(){
 
     });
     it('should set and get effect', function(){
-    	testItem.setEffect(true);
-    	expect(testItem.getEffect()).toBeTruthy();
+    	testItem.setEffect(false);
+    	expect(testItem.getEffect()).toBeFalsy();
     });
     it('should set and get collected', function(){
-    	testItem.setCollected(true);
-    	expect(testItem.getCollected()).toBeTruthy();
+    	testItem.setCollected(false);
+    	expect(testItem.getCollected()).toBeFalsy();
     });
 
 });
