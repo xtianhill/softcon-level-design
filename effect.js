@@ -1,10 +1,11 @@
-function Effect(){
+function Effect(title){
+    this.effect = title;
     this.isActive = false;
 }
 
-Effect.prototype.Effect = function(bool){
-    console.log('called');
+Effect.prototype.Effect = function(bool, title){
     this.isActive = bool;
+    this.effect = title;
 }
 
 Effect.prototype.activate = function(){
@@ -17,6 +18,14 @@ Effect.prototype.deactivate = function(){
 
 Effect.prototype.getIsActive = function(){
     return this.isActive;
+}
+
+Effect.prototype.setEffect = function(effect){
+    this.effect = effect;
+}
+
+Effect.prototype.getEffect = function(){
+    return this.effect;
 }
 
 module.exports = Effect;
