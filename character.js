@@ -1,4 +1,4 @@
-  
+const Element = require('./element.js');
 //data: point location, int health, bool status
 //function void dechealth
 
@@ -12,11 +12,14 @@ function Vector(x,y){
 Note: location is a vector with x and y*/
 
 function Character(loc, max, hea, stat){
+    Element.call(this, loc, 'url', 'scale');
     this.location=loc ; //position
     this.maxHealth = max; //maximum health
 	this.health=hea; //int health
 	this.status=stat; //true for alive, false for dead
 }
+
+Character.prototype = Object.create(Element.prototype);
 
 //empty constructor
 Character.prototype.Character = function(){

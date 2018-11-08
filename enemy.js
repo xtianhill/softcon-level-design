@@ -1,5 +1,6 @@
 /*Enemy Prototype
 Note: location is a vector with x and y*/
+const Character = require('./character.js');
 
 function Enemy(loc, max, hea, stat, dmg){
     Character.call(this, loc, max, hea, stat);
