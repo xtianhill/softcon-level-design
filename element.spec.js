@@ -14,18 +14,31 @@ describe('Element', function() {
     });
     
     it('should set position and get position', function() {
-        testElement.setPosition('newPos');
-        expect(testElement.getPosition()).toEqual('newPos');
+        testElement.setPosition(new Vector(10,10));
+        expect(testElement.getPosition()).toEqual(new Vector(10,10));
+        testElement.setPosition('invalid');
+        expect(testElement.getPosition()).toEqual(new Vector(10,10));
     });
 
     it('should set sprite and get sprite', function() {
-        testElement.setSprite('newUrl');
-        expect(testElement.getSprite()).toEqual('newUrl');
+        testElement.setSprite(new Vector(10,10));
+        expect(testElement.getSprite()).toEqual(new Vector(10,10));
+        testElement.setSprite('invalid');
+        expect(testElement.getSprite()).toEqual(new Vector(10,10));
     });
 
     it('should set scale and get scale', function() {
-        testElement.setScale('newScale');
-        expect(testElement.getScale()).toEqual('newScale');
+        testElement.setScale(new Vector(10,10));
+        expect(testElement.getScale()).toEqual(new Vector(10,10));
+        testElement.setScale('invalid');
+        expect(testElement.getScale()).toEqual(new Vector(10,10));
+    });
+
+    it('should set hitbox and get hitbox', function() {
+        testElement.setHitbox(new Vector(10,10));
+        expect(testElement.getHitbox()).toEqual(new Vector(10,10));
+        testElement.setHitbox('invalid');
+        expect(testElement.getHitbox()).toEqual(new Vector(10,10));
     });
 
 });

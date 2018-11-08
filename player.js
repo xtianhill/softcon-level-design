@@ -2,8 +2,8 @@
 Note: location is a vector with x and y*/
 const Character = require('./character.js');
 
-function Player(loc, max, hea, stat, itm){
-    Character.call(this, loc, max, hea, stat);
+function Player(loc, max, hea, stat, itm, hbox){
+    Character.call(this, loc, max, hea, stat, hbox);
     this.ownedItem = itm;
 }
 
