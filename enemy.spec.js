@@ -17,7 +17,7 @@ describe('Enemy', function() {
     });
 
     //test full constructor
-describe('Enemy', function('loc','max','hea','stat','dmg') {
+describe('Enemy', function(_loc,_max,_hea,_stat,_dmg) {
         it('should create a new enemy with create enemy with loc (1,1), maxhealth 20 health 0, status 0, damage 5', function() {
             testEnemy = new Enemy(new vector(1,1), 20, 0, 0, 5);
             expect(testEnemy.getDamage()).toEqual(5);
@@ -30,13 +30,13 @@ describe('Enemy', function('loc','max','hea','stat','dmg') {
 
     //test setDamage
 
-    describe('setDamage', function(amount) {
+    describe('setDamage', function(_amount) {
         testEnemy = new Enemy();
-        it('should set the enemy's damage level and return 1', function() {
+        it('should set the enemys damage level and return 1', function() {
             expect(testEnemy.setDamage(5)).toEqual(1);
             expect(testEnemy.getDamage()).toEqual(5);
         });
-        it('should not set the enemy's damage to 2.5 and return 0', function() {
+        it('should not set the enemys damage to 2.5 and return 0', function() {
             expect(testEnemy.setDamage(2.5)).toEqual(0);
             expect(testEnemy.getDamage()).toEqual(5);
         });
@@ -45,7 +45,7 @@ describe('Enemy', function('loc','max','hea','stat','dmg') {
     //test getDamage
     describe('getDamage', function() {
         testEnemy = new Enemy();
-        it('should return the enemy's damage level', function() {
+        it('should return the enemys damage level', function() {
             expect(testEnemy.getDamage()).toEqual(1);
             testEnemy.setDamage(5);
             expect(testEnemy.getDamage()).toEqual(5);
