@@ -1,8 +1,4 @@
-/*Vector class */
-function Vector(x,y){
-	this.x=x;
-	this.y=y;
-}
+const Vector = require('./utility.js').vector;
 
 /*Element prototype */
 /*note: pos, scl are vectors with x and y values */

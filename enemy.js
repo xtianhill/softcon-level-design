@@ -7,6 +7,8 @@ function Enemy(loc, max, hea, stat, dmg){
     this.damage = dmg;
 }
 
+Enemy.prototype = Object.create(Character.prototype);
+
 //empty constructor. void
 Enemy.prototype.Enemy = function(){
     //create enemy with loc = (0,0), maxhealth = 10
@@ -22,3 +24,5 @@ Enemy.prototype.getDamage = function(){
 Enemy.prototype.setDamage = function(amount){
     //set damage to amount
 }
+
+module.exports = Enemy;

@@ -1,8 +1,11 @@
+const Character = require('./character.js');
 
 function NPC(loc, max, hea, stat, msg){
     Character.call(this, loc, max, hea, stat);
     this.message = msg;
 }
+
+NPC.prototype = Object.create(Character.prototype);
 
 //empty constructor
 NPC.prototype.NPC = function(){
@@ -23,3 +26,5 @@ NPC.prototype.setMessage = function(msg){
 NPC.prototype.displayMessage = function(){
     //print message to the screen, return 1 on success or 0 if message is empty
 }  
+
+module.exports = NPC;

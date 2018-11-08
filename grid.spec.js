@@ -1,10 +1,6 @@
 const Grid = require('./grid.js');
 const Element = require('./element.js');
-
-function Vector(x,y){
-	this.x=x;
-	this.y=y;
-}
+const Vector = require('./utility.js').vector;
 
 describe('Grid', function(){
     let testGrid;

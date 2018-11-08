@@ -5,7 +5,7 @@
 //empty constructor tests
 //get/set message tests
 
-
+const Vector = require('./utility.js').vector;
 var Character = require('./character.js');
 
 describe('Character', function() {
@@ -16,7 +16,7 @@ describe('Character', function() {
         testCharacter = Character();
     });
     it('should create a new character with with loc (0,0), maxhealth 10 health 10, and status 1', function() {
-        expect(testCharacter.getLocation()).toEqual(vector(0,0));
+        expect(testCharacter.getLocation()).toEqual(new Vector(0,0));
         expect(testCharacter.getMaxHealth()).toEqual(10);
         expect(testCharacter.getHealth()).toEqual(10);
         expect(testCharacter.getStatus()).toEqual(1);
@@ -24,7 +24,7 @@ describe('Character', function() {
 
     //test full constructor
     it('should create a new character with loc (1,1), maxhealth 20 health 0, status 0', function() {
-        testCharacter = Character(vector(1,1), 20, 0, 0);
+        testCharacter = Character(new Vector(1,1), 20, 0, 0);
         expect(testCharacter.getLocation()).toEqual(vector(1,1));
         expect(testCharacter.getMaxHealth()).toEqual(20);
         expect(testCharacter.getHealth()).toEqual(0);
@@ -33,19 +33,19 @@ describe('Character', function() {
 
     //test setLocation
     it('should set the characters location to (1,1) and return 1', function() {
-        expect(testCharacter.setLocation(vector(1,1))).toEqual(1);
+        expect(testCharacter.setLocation(new Vector(1,1))).toEqual(1);
         expect(testCharacter.getLocation()).toEqual(vector(1,1));
     });
     it('should not set the characters location to (-1, -1) and then return 0', function() {
-        expect(testCharacter.setLocation(vector(-1,-1))).toEqual(0);
+        expect(testCharacter.setLocation(new Vector(-1,-1))).toEqual(0);
         expect(testCharacter.getLocation()).toEqual(vector(1,1));
     });
 
     //test get location
     it('should return the Characters location vector', function() {
-        expect(testCharacter.getLocation()).toEqual(vector (0,0));
-        testCharacter.setLocation(vector (1,1));
-        expect(testCharacter.getLocation()).toEqual(vector (1,1));
+        expect(testCharacter.getLocation()).toEqual(new Vector(0,0));
+        testCharacter.setLocation(new Vector(1,1));
+        expect(testCharacter.getLocation()).toEqual(new Vector(1,1));
     });
 
     //test setMaxHealth
