@@ -13,6 +13,7 @@
 var Player = require('./player.js');
 var Item = require('./item.js');
 var Vector = require('./utility.js').vector;
+var Effect = require('./effect.js');
 
 describe('Player', function() {
     let testPlayer;
@@ -68,7 +69,7 @@ describe('Player', function() {
         testItem.setEffect(new Effect('fire'));
         testPlayer.setOwnedItem(testItem);
         testPlayer.useItem();
-        expect(testItem.getIsActive()).toBeTruthy();
+        expect(testItem.getEffect().getIsActive()).toBeTruthy();
     });
 
 });
