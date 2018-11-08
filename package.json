@@ -1,23 +1,24 @@
 {
   "name": "softcon-level-design",
   "version": "1.0.0",
-  "description": "Level Editor",
-  "main": "src",
+  "description": "",
+  "main": "character.js",
+  "directories": {
+    "test": "tests"
+  },
   "dependencies": {
-    "chai": "^4.2.0",
     "jasmine": "^3.3.0",
     "mysql": "^2.16.0"
   },
-  "devDependencies": {
-    "mocha": "^5.2.0"
-  },
+  "devDependencies": {},
   "scripts": {
-    "test": "jasmine"
+    "backend-test": "jasmine tests/database-test.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/hillcb/softcon-level-design.git"
   },
+  "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
