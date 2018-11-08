@@ -1,10 +1,13 @@
 /*Player Prototype
 Note: location is a vector with x and y*/
+const Character = require('./character.js');
 
 function Player(loc, max, hea, stat, itm){
     Character.call(this, loc, max, hea, stat);
     this.ownedItem = itm;
 }
+
+Player.prototype = Object.create(Character.prototype);
 
 //empty constructor. void
 Player.prototype.Player = function(){
@@ -20,5 +23,7 @@ Player.prototype.getOwnedItem= function(){
 //set owned item and return 1. return 0 for non-item input.
 Player.prototype.setOwnedItem = function(itm){
     //set owned item to itm
+    // set item.collected to be true
 }
-  
+
+module.exports = Player;
