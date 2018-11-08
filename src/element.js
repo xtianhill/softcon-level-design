@@ -5,21 +5,36 @@ function Vector(x,y){
 }
 
 /*Element prototype */
-/*note: pos, scl, and spd are vectors with x and y values */
+/*note: pos, scl are vectors with x and y values */
 
-function Element(pos, url, scl, spd){
-	this.position=pos ; 
+function Element(pos, url, scl){
+	this.position=pos; 
 	this.sprite=url; //url to image file
 	this.scale=scl; //scale to resize image dimensions
-	this.speed=spd; // x: speed of x coordinate, y: speed of y coordinate 
-	this.bar = 1;
 }
 
-/* Example for how to create a function for a prototype. this is the javascript version
- of creating a method within a class*/
+Element.prototype.getPosition = function(){
+	return this.position;
+}
 
-Element.prototype.add1 = function(){
- 	this.bar = this.bar+1;
+Element.prototype.setPosition = function(pos){
+	this.position = pos;
+}
+
+Element.prototype.getSprite = function(){
+	return this.sprite;
+}
+
+Element.prototype.setSprite = function(url){
+	this.sprite = url;
+}
+
+Element.prototype.getScale = function(){
+	return this.scale;
+}
+
+Element.prototype.setScale = function(scale){
+	this.scale = scale;
 }
 
 module.exports = Element;
