@@ -29,4 +29,13 @@ Player.prototype.setOwnedItem = function(itm){
 Player.prototype.useItem = function(){
     // if have an item, use its effect on whatever
 }
+
+Player.prototype.moveLeft = function(){
+    //
+}
+
+Player.prototype.moveRight = function(){
+    //
+}
+
 module.exports = Player;
