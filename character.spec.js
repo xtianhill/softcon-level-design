@@ -24,11 +24,12 @@ describe('Character', function() {
 
     //test full constructor
     it('should create a new character with loc (1,1), maxhealth 20 health 0, status 0', function() {
-        testCharacter = Character(new Vector(1,1), 20, 0, 0);
-        expect(testCharacter.getLocation()).toEqual(vector(1,1));
+        testCharacter = Character(new Vector(1,1), 20, 0, 0, new Vector(10,10));
+        expect(testCharacter.getLocation()).toEqual(new Vector(1,1));
         expect(testCharacter.getMaxHealth()).toEqual(20);
         expect(testCharacter.getHealth()).toEqual(0);
         expect(testCharacter.getStatus()).toEqual(0);
+        expect(testCharacter.getHitbox()).toEqual(new Vector(1,1));
     });
 
     //test setLocation
