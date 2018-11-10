@@ -23,12 +23,17 @@ Engine.prototype.detectCollision = function(element1, element2){
 }
 
 Engine.prototype.draw = function(){
+<<<<<<< HEAD
     // draw the state of the game
+=======
+    // draw the state of the game 
+>>>>>>> 10ee85201db3947c3e617fe81d28668b96194fc9
     // draw every element at its position
 }
 
 Engine.prototype.loop = function(){
     // game loop
+<<<<<<< HEAD
     var progress = timestamp - lastRender
     update(progress);
     draw();
@@ -40,3 +45,14 @@ Engine.prototype.loop = function(){
 
 
 module.exports = Engine;
+=======
+
+    //update(progress);
+    //draw();
+
+    
+}
+
+
+module.exports = Engine;
+>>>>>>> 10ee85201db3947c3e617fe81d28668b96194fc9
