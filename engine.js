@@ -47,6 +47,31 @@ Engine.prototype.update = function(progress) {
     // use progress to ensure smooth animations
     // udpate any elements in level since last render
     // need to deal with effects, collision detection, etc etc
+    if (state.pressedKeys.left) {
+      state.x -= progress
+    }
+    if (state.pressedKeys.right) {
+      state.x += progress
+    }
+    if (state.pressedKeys.up) {
+      state.y -= progress
+    }
+    if (state.pressedKeys.down) {
+      state.y += progress
+    }
+// Flip position at boundaries
+    if (state.x > width) {
+      state.x -= width
+    }
+    else if (state.x < 0) {
+      state.x += width
+    }
+    if (state.y > height) {
+      state.y -= height
+    }
+    else if (state.y < 0) {
+      state.y += height
+    }
 }
 
 Engine.prototype.detectCollision = function(element1, element2){
