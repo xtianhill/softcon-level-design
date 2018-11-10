@@ -5,7 +5,7 @@ application.debug = True
 
 @application.route('/', methods=['GET'])
 def hello():
-    return '<p>Hello world</p>'
+    return '<p>Hello world: this should be different now</p>'
 
 if __name__ == "__main__":
     application.run()
