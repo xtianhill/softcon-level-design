@@ -1,4 +1,6 @@
 branch-defaults:
+  flask-app:
+    environment: softcon-leveldesign-flask-dev
   master:
     environment: softcon-leveldesign-flask-dev
     group_suffix: null
