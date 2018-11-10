@@ -4,6 +4,37 @@ function Engine(grid){
     this.grid = grid;
 }
 
+var state = {
+  x: (width/2)
+  y: (height/2)
+  pressedKeys:{
+    left : false,
+    right: false,
+    up: false,
+    down:false
+  }
+}
+
+var keyMap = {
+  68: 'right',
+  65: 'left',
+  87: 'up',
+  83: 'down'
+}
+
+function keydown(event) {
+  var key = keyMap[event.keyCode]
+  state.pressedKeys[key] = true
+}
+
+function keyup(event) {
+  var key = keyMap[event.keyCode]
+  state.pressedKeys[key] = false
+}
+
+window.addEventListener("keydown", keydown, false)
+window.addEventListener("keyup", keyup, false)
+
 Engine.prototype.setGrid = function(grid){
     this.grid = grid;
 }
@@ -24,7 +55,7 @@ Engine.prototype.detectCollision = function(element1, element2){
 
 Engine.prototype.draw = function(){
     // draw the state of the game
-    // draw the state of the game 
+    // draw the state of the game
     // draw every element at its position
 }
 
@@ -44,7 +75,7 @@ module.exports = Engine;
     //update(progress);
     //draw();
 
-    
+
 }
 
 module.exports = Engine;
