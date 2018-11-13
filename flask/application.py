@@ -18,7 +18,6 @@ def add_grid():
     try:
         result = db.session.add(db_grid)
         db.session.commit()
-        return Response('ok')
     except:
         db.session.rollback()
     finally:
