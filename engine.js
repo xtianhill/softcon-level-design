@@ -28,16 +28,24 @@ function update(progress) {
     var pc = elements[0];
 
     if (rightPressed){
-        pc.position.x = pc.position.x+1;
+      if (pc.position.x+1 < (width-pc.size.x)){
+        pc.position.x = pc.position.x+1
+      }
     }
     if (leftPressed){
-        pc.position.x = pc.position.x-1;
+      if(pc.position.x-1 > 0){
+          pc.position.x = pc.position.x-1;
+      }
     }
     if (downPressed){
-        pc.position.y = pc.position.y+1;
+      if(pc.position.y+1 < (height-pc.size.y)){
+          pc.position.y = pc.position.y+1;
+      }
     }
     if (upPressed){
-        pc.position.y = pc.position.y-1;
+      if(pc.position.y-1 > 0){
+          pc.position.y = pc.position.y-1;
+      }
     }
 
     for(i=1; i<elements.length; i++){
