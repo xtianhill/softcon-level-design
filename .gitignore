@@ -3,7 +3,7 @@
 # Edit at https://www.gitignore.io/?templates=visualstudiocode
 
 ### VisualStudioCode ###
-.vscode/*
+.vscode/
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
@@ -49,3 +49,5 @@ Temporary Items
 # End of https://www.gitignore.io/api/macos
 
 flask/flask-env/
+node_modules/
+node_modules/*
