@@ -17,7 +17,7 @@ def add_grid():
     db_grid = Grid(title, data)
     try:
         result = db.session.add(db_grid)
-        db.session.commit()
+        # db.session.commit()
     except:
         db.session.rollback()
     finally:
@@ -29,7 +29,8 @@ def get_all():
     result = ""
     try:
         result = Grid.query.all()
-        db.session.commit()
+        # db.session.commit()
+        db.session.expunge_all()
     except:
         db.session.rollback()
     finally:
@@ -42,7 +43,8 @@ def search_grid(search_title):
     result = ""
     try:
         result = Grid.query.filter(Grid.title == search_title).first()
-        db.session.commit()
+        # db.session.commit()
+        db.session.expunge_all()
     except:
         db.session.rollback()
     finally:
