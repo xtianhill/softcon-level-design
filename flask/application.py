@@ -33,4 +33,5 @@ def search_grid(search_title):
     return str(my_grid)
 
 if __name__ == "__main__":
+    # db.create_all()
     application.run()
