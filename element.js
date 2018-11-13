@@ -3,28 +3,19 @@ const Vector = require('./utility.js').vector;
 /*Element prototype */
 /*note: pos, scl, hitbox are vectors with x and y values */
 
-function Element(gpos, url, scl, hbox, ppos){
-	this.gridPosition = gpos; 
+function Element(pos, url, sz, hbox){
+	this.position = pos; 
 	this.sprite = url; //url to image file
-	this.scale = scl; //scale to resize image dimensions
+	this.size = sz; //scale to resize image dimensions
 	this.hitbox = hbox;
-	this.pointPosition = ppos;
 }
 
-Element.prototype.getGridPosition = function(){
-	return this.gridPosition;
+Element.prototype.getPosition = function(){
+	return this.position;
 }
 
-Element.prototype.setGridPosition = function(pos){
-	this.gridPosition = pos;
-}
-
-Element.prototype.getPointPosition = function(){
-	return this.pointPosition;
-}
-
-Element.prototype.setPointPosition = function(pos){
-	this.pointPositionosition = pos;
+Element.prototype.setPosition = function(pos){
+	this.position = pos;
 }
 
 Element.prototype.getSprite = function(){

@@ -1,7 +1,7 @@
 const Character = require('./character.js');
 
-function NPC(loc, max, hea, stat, msg, hbox){
-    Character.call(this, loc, max, hea, stat, hbox);
+function NPC(loc, max, hea, stat, msg, hbox, url, size){
+    Character.call(this, loc, max, hea, stat, hbox, url, size);
     this.message = msg;
 }
 
