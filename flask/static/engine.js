@@ -1,4 +1,5 @@
 /* basic engine prototype */
+const JSONtoElements = require('./parsing.js');
 const NPC = require('./npc.js');
 const Enemy = require('./enemy.js');
 const Player = require('./player.js');
@@ -22,58 +23,80 @@ var upPressed = false;
 
 var icon = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToe-PSAektDgBsXLsdybQW6F1wGDdpw2mbm3SaReRPuQ0ec0ns";
 var icon2 = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKH3Qd3RP33Q5XxcRMrLXYhYGRu_dxvpJCIBEU_MlAudC1ev-P8A";
-var elements =
-    [ new Player(new Vector(0,0), 10, 10, true, 'item', new Vector(50,50), icon2, new Vector(50,50))
-    , new NPC(new Vector(100,100), 10, 10, true, "y tho", new Vector(50,50), icon, new Vector(50,50)),
-    new Item(new Vector(100,50), icon, new Vector(50,50), new Vector(50,50), false, "damage")
-    ];
-
+// var elements =
+    // [ new Player(new Vector(0,0), 10, 10, true, 'item', ['item', 'item2'], new Vector(50,50), icon2, new Vector(50,50))
+    // , new NPC(new Vector(100,100), 10, 10, true, "y tho", new Vector(50,50), icon, new Vector(50,50)),
+    // new Item(new Vector(100,50), icon, new Vector(50,50), new Vector(50,50), false, "damage")
+    // ];
+var data = '{"objects":[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{"type":"Element","name":"Environment","top":25,"left":0,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Enemy","top":25,"left":150,"url":"https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png","scale":1},{"type":"Element","name":"Item","top":25,"left":100,"url":"https://66.media.tumblr.com/4a8e88c9194d00c4e2e14d62f2a9dc76/tumblr_pi5t840NIu1u9vozfo1_250.png","scale":1},{"type":"Element","name":"Player","top":25,"left":50,"url":"https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png","scale":1}],"background":"","backgroundImage":"https://d2ujflorbtfzji.cloudfront.net/package-screenshot/4b7e815a-669f-4023-ac73-6c7691fe9a9f_scaled.jpg","backgroundImageOpacity":1,"backgroundImageStretch":true}';
 // query database and get level info, then translate into list of elements
-
+var parsedJSON = JSONtoElements(data);
+var elements = parsedJSON.elements;
+var backgroundUrl = parsedJSON.backgroundUrl;
+console.log(elements);
 
 
 function update(progress) {
 
     var pc;
     for(i=0; i<elements.length; i++){
-        if(elements[i] instanceof player){
+        if(elements[i] instanceof Player){
             pc = elements[i];
         }
     }
-     
+
     xObstacles = []
     yObstacles = []
     for(i=1; i<elements.length; i++){
         if(detectXCollision(pc, elements[i]))
-            xObstacles.push(elements[i])
+		if(elements[i] instanceof Environment)
+           		xObstacles.push(elements[i]);
+	    	else
+			onCollision(pc, elements, i);
         if(detectYCollision(pc, elements[i]))
-            yObstacles.push(elements[i])
-
-    if (rightPressed){
+                if(elements[i] instanceof Environment)
+           		yObstacles.push(elements[i]);
+	    	else
+			onCollision(pc, elements, i);
+    }
+      if (rightPressed){
       if (pc.position.x+1 < (width-pc.size.x)){
-        newPos = pc.newXPos(step)
-        pc.moveX(newPos, xObstacles)
+        newPos = pc.newXPos(step);
+        pc.moveX(newPos, xObstacles);
       }
     } else if (leftPressed){
       if(pc.position.x-1 > 0){
-        newPos = pc.newXPos(step)
-        pc.moveX(newPos, xObstacles)
+        newPos = pc.newXPos(step);
+        pc.moveX(newPos, xObstacles);
       }
     } else if (upPressed){
       if(pc.position.y-1 > 0){
-        newPos = pc.newYPos(step)
-        pc.moveY(newPos, yObstacles, true)
+        newPos = pc.newYPos(step);
+        pc.moveY(newPos, yObstacles, true);
       }
     } else {
-        newPos = pc.newYPos(step)
-        pc.moveY(newPos, yObstacles, false)
+        newPos = pc.newYPos(step);
+        pc.moveY(newPos, yObstacles, false);
+    }
+    }
     }
 
-    for(i=1; i<elements.length; i++){
+function detectXCollision(element1, element2) {
+    if ((element1.position.x < element2.position.x + element2.size.x)  && (element1.position.x + element1.size.x  > element2.position.x)) {
+        return true;
+    }
+    return false;
+}
 
-        if(detectCollision(pc, elements[i]))
-        {
-            //if npc, show message
+function detectYCollision(element1, element2) {
+    if ((element1.position.y < element2.position.y + element2.size.y && element1.position.y + element1.size.y > element2.position.y) {
+        return true;
+    }
+    return false;
+}
+
+function onCollision(pc, elements, i) {
+	    //if npc, show message
             if(elements[i] instanceof NPC){
                //elements[i].displayMessage();
                console.log(elements[i].getMessage());
@@ -100,28 +123,7 @@ function update(progress) {
                 pc.inventory.push(elements[i]);
                 elements.splice(i,1);
             }
-
-            //if environment, set gravity to 0? then have falling occur later?
-            if(elements[i] instanceof Environment){
-                gravity=0;
-            }
-        }
     }
-}
-
-function detectXCollision(element1, element2) {
-    if ((element1.position.x < element2.position.x + element2.size.x)  && (element1.position.x + element1.size.x  > element2.position.x)) {
-        return true;
-    }
-    return false;
-}
-
-function detectYCollision(element1, element2) {
-    if ((element1.position.y < element2.position.y + element2.size.y && element1.position.y + element1.size.y > element2.position.y) {
-        return true;
-    }
-    return false;
-}
 
 function keyDownHandler(event) {
     console.log(event);
@@ -141,7 +143,6 @@ function keyDownHandler(event) {
 
 function keyUpHandler(event) {
     console.log("event", event);
-    //console.log
     if(event.keyCode == 68) {
         rightPressed = false;
     }
@@ -163,12 +164,16 @@ function imgInit(){
         elements[i].img.src = elements[i].sprite;
         console.log(elements[i].img);
     }
+    var tmp = backgroundUrl;
+    backgroundUrl = new Image;
+    backgroundUrl.src = tmp;
 }
 
 imgInit();
 
 function draw(){
     ctx.clearRect(0, 0, width, height);
+    ctx.drawImage(backgroundUrl, 0,0);
     for(i = 0; i<elements.length; i++){
         var curElement = elements[i];
         if (curElement.shouldDisplay){
@@ -178,6 +183,19 @@ function draw(){
         }
         ctx.drawImage(curElement.img,curElement.position.x,curElement.position.y,
             curElement.size.x,curElement.size.y);
+    }
+
+}
+function showInventory(){
+    var ul = document.getElementById('inventory');
+    var inventory = elements[0].inventory;
+    for (var i = 0; i < inventory.length; i++) {
+        var item = inventory[i];
+
+        var listItem = document.createElement("li");
+        listItem.textContent = '<img src="' + item.sprite + '" + />';
+
+        ul.appendChild(listItem);
     }
 }
 
@@ -193,3 +211,5 @@ function loop(timestamp) {
 
 var lastRender = 0;
 window.requestAnimationFrame(loop);
+
+module.exports.showInventory = showInventory;
