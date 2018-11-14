@@ -25,12 +25,13 @@ describe('Player', function() {
     });
     //test default constructor
 
-    it('should create a new player with loc (0,0), maxhealth 10 health 10, status 1, and null item', function() {
-        expect(testPlayer.getOwnedItem()).toBeNull();
+    it('should create a new player with loc (0,0), maxhealth 10 health 10, status 1, empty inventory, null equipped item', function() {
         expect(testPlayer.getLocation()).toEqual(new Vector(0,0));
         expect(testPlayer.getMaxHealth()).toEqual(10);
         expect(testPlayer.getHealth()).toEqual(10);
         expect(testPlayer.getStatus()).toEqual(1);
+        expect(testPlayer.getEquippedItem()).toBeNull();
+        expect(testPlayer.getInventory().toEqual([]));
     });
 
 

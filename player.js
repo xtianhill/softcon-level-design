@@ -50,7 +50,8 @@ Player.prototype.setEquippedItem = function(itm){
 
 Player.prototype.useItem = function(){
     if(this.equippedItem.getEffect() == "heal"){
-        this.health += 2;
+        this.health = this.maxHealth;
+        this.equippedItem= null;
     }
     if (this.equippedItem.getEffect() == "damage"){
         //swing sword or whatever
