@@ -1,4 +1,4 @@
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.engine = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 const Element = require('./element.js');
 //data: point location, int health, bool status
 //function void dechealth
@@ -160,13 +160,26 @@ const Element = require('./element.js');
 const Character = require('./character.js');
 const Environment = require('./environment.js');
 const Vector = require('./utility.js').vector;
-var gravity = -.5;
+var gravity = .5;
+var curSpeed = 0;
+
+
+var canvas = document.getElementById("c");
+var width = canvas.width;
+var height = canvas.height;
+var ctx = canvas.getContext("2d");
+document.addEventListener('keydown', keyDownHandler, false);
+document.addEventListener('keyup', keyUpHandler, false);
+var rightPressed = false;
+var leftPressed = false;
+var downPressed = false;
+var upPressed = false;
 
 var icon = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToe-PSAektDgBsXLsdybQW6F1wGDdpw2mbm3SaReRPuQ0ec0ns";
 var icon2 = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKH3Qd3RP33Q5XxcRMrLXYhYGRu_dxvpJCIBEU_MlAudC1ev-P8A";
 var elements =
     [ new Player(new Vector(0,0), 10, 10, true, 'item', new Vector(50,50), icon2, new Vector(50,50))
-    , new NPC(new Vector(100,0), 10, 10, true, "hello", new Vector(50,50), icon, new Vector(50,50))
+    , new NPC(new Vector(100,100), 10, 10, true, "y tho", new Vector(50,50), icon, new Vector(50,50))
     ];
 
 // query database and get level info, then translate into list of elements
@@ -198,14 +211,19 @@ function update(progress) {
       }
     }
 
+    //
+
     for(i=1; i<elements.length; i++){
 
         if(detectCollision(pc, elements[i]))
         {
             //if npc, show message
             if(elements[i] instanceof NPC){
-                //elements[i].displayMessage();
-
+               //elements[i].displayMessage();
+               console.log(elements[i].getMessage());
+                ctx.font = "12px Arial";
+                ctx.fillText(elements[i].getMessage(), 0, 0);
+                elements[i].shouldDisplay = true;
             }
 
             //if enemy, either damage w/item or lose health
@@ -233,7 +251,7 @@ function update(progress) {
 }
 
 function detectCollision(element1, element2) {
-    if (element1.position.x < element2.position.x + element2.size.x  && element1.position.x + element1.size.x  > element2.position.x &&
+    if ((element1.position.x < element2.position.x + element2.size.x)  && (element1.position.x + element1.size.x  > element2.position.x) &&
 		element1.position.y < element2.position.y + element2.size.y && element1.position.y + element1.size.y > element2.position.y) {
             console.log('hello');
         return true;
@@ -241,16 +259,7 @@ function detectCollision(element1, element2) {
     return false;
 }
 
-var canvas = document.getElementById("c");
-var width = canvas.width;
-var height = canvas.height;
-var ctx = canvas.getContext("2d");
-document.addEventListener('keydown', keyDownHandler, false);
-document.addEventListener('keyup', keyUpHandler, false);
-var rightPressed = false;
-var leftPressed = false;
-var downPressed = false;
-var upPressed = false;
+
 
 function keyDownHandler(event) {
     console.log(event);
@@ -300,6 +309,11 @@ function draw(){
     ctx.clearRect(0, 0, width, height);
     for(i = 0; i<elements.length; i++){
         var curElement = elements[i];
+        if (curElement.shouldDisplay){
+            ctx.font = "12px Arial";
+            ctx.fillText(curElement.getMessage(), 10, 10);
+            curElement.shouldDisplay = false;
+        }
         ctx.drawImage(curElement.img,curElement.position.x,curElement.position.y,
             curElement.size.x,curElement.size.y);
     }
@@ -393,14 +407,17 @@ NPC.prototype.setMessage = function(msg){
 }  
 
 
-NPC.prototype.displayMessage = function(){
-    //print message to the screen, return 1 on success or 0 if message is empty
-    if(this.message == null || this.message == ''){
-        return 0;
-    }
-    window.alert(this.message);
-    return 1;
-}  
+// NPC.prototype.displayMessage = function(){
+//     //print message to the screen, return 1 on success or 0 if message is empty
+//     if(this.message == null || this.message == ''){
+//         return 0;
+//     }
+//     out = canvas.getContext("2d");
+//     out.font = "12px Arial";
+//     out.fillText(this.message, 650, 100)
+    
+//     return 1;
+// }  
 
 
 module.exports = NPC;
@@ -470,5 +487,4 @@ function Vector(x,y){
 }
 
 module.exports.vector = Vector;
-},{}]},{},[4])(4)
-});
+},{}]},{},[4]);

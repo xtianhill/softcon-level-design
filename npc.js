@@ -25,14 +25,17 @@ NPC.prototype.setMessage = function(msg){
 }  
 
 
-NPC.prototype.displayMessage = function(){
-    //print message to the screen, return 1 on success or 0 if message is empty
-    if(this.message == null || this.message == ''){
-        return 0;
-    }
-    window.alert(this.message);
-    return 1;
-}  
+// NPC.prototype.displayMessage = function(){
+//     //print message to the screen, return 1 on success or 0 if message is empty
+//     if(this.message == null || this.message == ''){
+//         return 0;
+//     }
+//     out = canvas.getContext("2d");
+//     out.font = "12px Arial";
+//     out.fillText(this.message, 650, 100)
+    
+//     return 1;
+// }  
 
 
 module.exports = NPC;

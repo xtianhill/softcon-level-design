@@ -7,13 +7,26 @@ const Element = require('./element.js');
 const Character = require('./character.js');
 const Environment = require('./environment.js');
 const Vector = require('./utility.js').vector;
-var gravity = -.5;
+var gravity = .5;
+var curSpeed = 0;
+
+
+var canvas = document.getElementById("c");
+var width = canvas.width;
+var height = canvas.height;
+var ctx = canvas.getContext("2d");
+document.addEventListener('keydown', keyDownHandler, false);
+document.addEventListener('keyup', keyUpHandler, false);
+var rightPressed = false;
+var leftPressed = false;
+var downPressed = false;
+var upPressed = false;
 
 var icon = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToe-PSAektDgBsXLsdybQW6F1wGDdpw2mbm3SaReRPuQ0ec0ns";
 var icon2 = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKH3Qd3RP33Q5XxcRMrLXYhYGRu_dxvpJCIBEU_MlAudC1ev-P8A";
 var elements =
     [ new Player(new Vector(0,0), 10, 10, true, 'item', new Vector(50,50), icon2, new Vector(50,50))
-    , new NPC(new Vector(100,0), 10, 10, true, "hello", new Vector(50,50), icon, new Vector(50,50))
+    , new NPC(new Vector(100,100), 10, 10, true, "y tho", new Vector(50,50), icon, new Vector(50,50))
     ];
 
 // query database and get level info, then translate into list of elements
@@ -45,14 +58,19 @@ function update(progress) {
       }
     }
 
+    //
+
     for(i=1; i<elements.length; i++){
 
         if(detectCollision(pc, elements[i]))
         {
             //if npc, show message
             if(elements[i] instanceof NPC){
-                //elements[i].displayMessage();
-
+               //elements[i].displayMessage();
+               console.log(elements[i].getMessage());
+                ctx.font = "12px Arial";
+                ctx.fillText(elements[i].getMessage(), 0, 0);
+                elements[i].shouldDisplay = true;
             }
 
             //if enemy, either damage w/item or lose health
@@ -80,7 +98,7 @@ function update(progress) {
 }
 
 function detectCollision(element1, element2) {
-    if (element1.position.x < element2.position.x + element2.size.x  && element1.position.x + element1.size.x  > element2.position.x &&
+    if ((element1.position.x < element2.position.x + element2.size.x)  && (element1.position.x + element1.size.x  > element2.position.x) &&
 		element1.position.y < element2.position.y + element2.size.y && element1.position.y + element1.size.y > element2.position.y) {
             console.log('hello');
         return true;
@@ -88,16 +106,7 @@ function detectCollision(element1, element2) {
     return false;
 }
 
-var canvas = document.getElementById("c");
-var width = canvas.width;
-var height = canvas.height;
-var ctx = canvas.getContext("2d");
-document.addEventListener('keydown', keyDownHandler, false);
-document.addEventListener('keyup', keyUpHandler, false);
-var rightPressed = false;
-var leftPressed = false;
-var downPressed = false;
-var upPressed = false;
+
 
 function keyDownHandler(event) {
     console.log(event);
@@ -147,6 +156,11 @@ function draw(){
     ctx.clearRect(0, 0, width, height);
     for(i = 0; i<elements.length; i++){
         var curElement = elements[i];
+        if (curElement.shouldDisplay){
+            ctx.font = "12px Arial";
+            ctx.fillText(curElement.getMessage(), 10, 10);
+            curElement.shouldDisplay = false;
+        }
         ctx.drawImage(curElement.img,curElement.position.x,curElement.position.y,
             curElement.size.x,curElement.size.y);
     }
