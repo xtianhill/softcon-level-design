@@ -163,8 +163,6 @@ const Vector = require('./utility.js').vector;
 
 var gravity = -.5;
 
-
-
 var icon = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToe-PSAektDgBsXLsdybQW6F1wGDdpw2mbm3SaReRPuQ0ec0ns";
 var icon2 = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKH3Qd3RP33Q5XxcRMrLXYhYGRu_dxvpJCIBEU_MlAudC1ev-P8A";
 var elements = 
@@ -180,10 +178,7 @@ function update(progress) {
 //Hayley: I'm assuming that were isolating the player character: they're called pc here
     var pc = elements[0];
     if (leftPressed){
-        console.log('left pressed in update, position updated');
-        console.log(leftPressed);
         pc.position.x = pc.position.x+1;
-        //console.log(pc.position)
     }
     for(i=1; i<elements.length; i++){
 
@@ -241,13 +236,11 @@ var downPressed = false;
 var upPressed = false;
 
 function keyDownHandler(event) {
-    console.log("event", event);
-    //console.log
+    console.log(event);
     if(event.keyCode == 68) {
         rightPressed = true;
     }
     if(event.keyCode == 68) {
-        console.log('left pressed set');
         leftPressed = true;
     }
     if(event.keyCode == 40) {

@@ -6,11 +6,8 @@ const Item = require('./item.js');
 const Element = require('./element.js');
 const Character = require('./character.js');
 const Environment = require('./environment.js');
-const Vector = require('./utility.js').vector;
-
+const Utility = require('./utility.js')// .vector;
 var gravity = -.5;
-
-
 
 var icon = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToe-PSAektDgBsXLsdybQW6F1wGDdpw2mbm3SaReRPuQ0ec0ns";
 var icon2 = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKH3Qd3RP33Q5XxcRMrLXYhYGRu_dxvpJCIBEU_MlAudC1ev-P8A";
@@ -105,8 +102,7 @@ var downPressed = false;
 var upPressed = false;
 
 function keyDownHandler(event) {
-    console.log("event", event);
-    //console.log
+    console.log(event);
     if(event.keyCode == 68) {
         rightPressed = true;
     }
@@ -156,7 +152,6 @@ function draw(){
             curElement.size.x,curElement.size.y);
     }
 }
-
 
 function loop(timestamp) {
     // game loop
