@@ -46,9 +46,7 @@ Player.prototype.setEquippedItem = function(itm){
         this.inventory.push(this.equippedItem);
         this.equippedItem = itm;
         itm.collected = true;
-        return 1;
     }
-    else return 0;
 }
 
 Player.prototype.useItem = function(){
@@ -56,9 +54,10 @@ Player.prototype.useItem = function(){
         this.health = this.maxHealth;
         this.equippedItem= null;
     }
-    if (this.equippedItem.getEffect() == "damage"){
+    if (this.equippedItem.getEffect() == "damage"){ 
         //swing sword or whatever
     }
+    this.equippedItem.getEffect().activate();
 }
 
 Player.prototype.newXPos = function(step, dir) {
