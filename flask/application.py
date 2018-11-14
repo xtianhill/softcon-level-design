@@ -33,7 +33,7 @@ def add_grid():
         db_grid = Grid(title, data)
         result = db.session.add(db_grid)
         db.session.flush()
-        return 'OK'
+        return str(result)
     except:
         db.session.rollback()
     finally:
