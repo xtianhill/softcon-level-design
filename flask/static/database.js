@@ -9,12 +9,13 @@
 const AWS_URL = "http://softcon-leveldesign.us-east-1.elasticbeanstalk.com/";
 
 function storeGrid(grid) {
+    var grid123 = {width:100, height:100, title:"test grid 2", squares:[[element1, element2]]}
     console.log('grid is: '+ grid);
     $.ajax({
         type: "POST",
         url: AWS_URL + "api/v1/add-grid/",
         // The key needs to match your method's input parameter (case-sensitive).
-        data: JSON.stringify(grid),
+        data: JSON.stringify(grid123),
         contentType: "application/json",
         dataType: "json",
         success: function(data) {

@@ -10,6 +10,7 @@ var element2 = {xCoord:5, yCoord:5, sprite:""};
 
 var grid0 = {};
 var grid1 = {width:10, height:10, title:"test grid 1", squares:[[]]};
+var grid123 = {width:10, height:10, title:"test grid 1"};
 var grid2 = {width:100, height:100, title:"test grid 2", squares:[[element1, element2]]};
 
 var gridJSON0 = "{type:\"grid\",{}}";
