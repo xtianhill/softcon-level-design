@@ -88,9 +88,9 @@ function update(progress) {
             if(elements[i] instanceof Item){
                 if(!pc.getEquippedItem()){
                     pc.setEquippedItem(elements[i]);
-                    elements.splice(i,1);
                 }
                 pc.inventory.push(elements[i]);
+                elements.splice(i,1);
             }
 
             //if environment, set gravity to 0? then have falling occur later?
