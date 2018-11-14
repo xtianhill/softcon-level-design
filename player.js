@@ -2,9 +2,10 @@
 Note: location is a vector with x and y*/
 const Character = require('./character.js');
 
-function Player(loc, max, hea, stat, itm, hbox, url, size){
+function Player(loc, max, hea, stat, itm, inv, hbox, url, size){
     Character.call(this, loc, max, hea, stat, hbox, url, size);
-    this.ownedItem = itm;
+    this.equippedItem = itm;
+    this.inventory = inv;
 }
 
 Player.prototype = Object.create(Character.prototype);
@@ -14,14 +15,15 @@ Player.prototype.Player = function(){
     //create enemy with loc = (0,0), maxhealth = 10
     // health = 10, status = 1, item = null
 
-    Character.call(this, vector(0,0), 10, 10, 1, /*generic hitbox*/);
-    this.ownedItem = null;
+    Character.call(this, vector(0,0), 10, 10, 1, vector(50,50));
+    this.equippedItem = null;
+    this.inventory = [];
 }  
 
 //gets OwnedItem. 
-Player.prototype.getOwnedItem= function(){
+Player.prototype.getEquippedItem= function(){
     //return owned item
-    return this.ownedItem;
+    return this.equippedItem;
 }
 
 //set owned item and return 1. return 0 for non-item input.

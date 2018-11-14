@@ -26,7 +26,8 @@ var icon = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToe-PSAektDgBs
 var icon2 = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKH3Qd3RP33Q5XxcRMrLXYhYGRu_dxvpJCIBEU_MlAudC1ev-P8A";
 var elements =
     [ new Player(new Vector(0,0), 10, 10, true, 'item', new Vector(50,50), icon2, new Vector(50,50))
-    , new NPC(new Vector(100,100), 10, 10, true, "y tho", new Vector(50,50), icon, new Vector(50,50))
+    , new NPC(new Vector(100,100), 10, 10, true, "y tho", new Vector(50,50), icon, new Vector(50,50)),
+    new Item(new Vector(100,50), icon, new Vector(50,50), new Vector(50,50), false, "damage")
     ];
 
 // query database and get level info, then translate into list of elements
