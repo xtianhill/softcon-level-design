@@ -1,5 +1,6 @@
 /*Player Prototype
 Note: location is a vector with x and y*/
+const Item = require('./item.js');
 const Character = require('./character.js');
 
 function Player(loc, max, hea, stat, itm, inv, hbox, url, size){
@@ -39,7 +40,7 @@ Player.prototype.getEquippedItem= function(){
 Player.prototype.setEquippedItem = function(itm){
     //set owned item to itm
     // set item.collected to be true
-    if(itm instanceof item){
+    if(itm instanceof Item){
         this.inventory.push(this.equippedItem);
         this.equippedItem = itm;
         itm.collected = true;

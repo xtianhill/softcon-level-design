@@ -132,7 +132,7 @@ Enemy.prototype = Object.create(Character.prototype);
 Enemy.prototype.Enemy = function(){
     //create enemy with loc = (0,0), maxhealth = 10
     // health = 10, status = 1, damage = 1
-    Character.call(this, vector(0,0), 10, 10, 1, /*generic hitbox*/);
+    Character.call(this, vector(0,0), 10, 10, 1, new vector(50,50), null, new vector(50,50));
     this.damage = 1;
 }  
 
@@ -179,11 +179,11 @@ var upPressed = false;
 var icon = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToe-PSAektDgBsXLsdybQW6F1wGDdpw2mbm3SaReRPuQ0ec0ns";
 var icon2 = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKH3Qd3RP33Q5XxcRMrLXYhYGRu_dxvpJCIBEU_MlAudC1ev-P8A";
 // var elements =
-    [ new Player(new Vector(0,0), 10, 10, true, 'item', ['item', 'item2'], new Vector(50,50), icon2, new Vector(50,50))
-    , new NPC(new Vector(100,100), 10, 10, true, "y tho", new Vector(50,50), icon, new Vector(50,50)),
-    new Item(new Vector(100,50), icon, new Vector(50,50), new Vector(50,50), false, "damage")
-    ];
-var data = '{"objects":[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{"type":"Element","name":"Environment","top":25,"left":0,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Player","top":25,"left":50,"url":"https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png","scale":1},{"type":"Element","name":"Item","top":25,"left":100,"url":"https://66.media.tumblr.com/4a8e88c9194d00c4e2e14d62f2a9dc76/tumblr_pi5t840NIu1u9vozfo1_250.png","scale":1},{"type":"Element","name":"Enemy","top":25,"left":150,"url":"https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png","scale":1},{"type":"Element","name":"NPC","top":25,"left":200,"url":"https://66.media.tumblr.com/18b1dcddb1e6de2d56f2bbc16e368af5/tumblr_pi5sz2UwpH1u9vozfo1_250.png","scale":1}],"background":"","backgroundImage":"https://d2ujflorbtfzji.cloudfront.net/package-screenshot/4b7e815a-669f-4023-ac73-6c7691fe9a9f_scaled.jpg","backgroundImageOpacity":1,"backgroundImageStretch":true}'
+    // [ new Player(new Vector(0,0), 10, 10, true, 'item', ['item', 'item2'], new Vector(50,50), icon2, new Vector(50,50))
+    // , new NPC(new Vector(100,100), 10, 10, true, "y tho", new Vector(50,50), icon, new Vector(50,50)),
+    // new Item(new Vector(100,50), icon, new Vector(50,50), new Vector(50,50), false, "damage")
+    // ];
+var data = '{"objects":[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{"type":"Element","name":"Environment","top":25,"left":0,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Enemy","top":25,"left":150,"url":"https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png","scale":1},{"type":"Element","name":"Item","top":25,"left":100,"url":"https://66.media.tumblr.com/4a8e88c9194d00c4e2e14d62f2a9dc76/tumblr_pi5t840NIu1u9vozfo1_250.png","scale":1},{"type":"Element","name":"Player","top":25,"left":50,"url":"https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png","scale":1}],"background":"","backgroundImage":"https://d2ujflorbtfzji.cloudfront.net/package-screenshot/4b7e815a-669f-4023-ac73-6c7691fe9a9f_scaled.jpg","backgroundImageOpacity":1,"backgroundImageStretch":true}';
 // query database and get level info, then translate into list of elements
 var parsedJSON = JSONtoElements(data);
 var elements = parsedJSON.elements;
@@ -191,8 +191,12 @@ var backgroundUrl = parsedJSON.backgroundUrl;
 console.log(elements);
 function update(progress) {
 
-//Hayley: I'm assuming that were isolating the player character: they're called pc here
-    var pc = elements[0];
+    var pc;
+    for(i=0; i<elements.length; i++){
+        if(elements[i] instanceof Player){
+            pc = elements[i];
+        }
+    }
 
     if (rightPressed){
       if (pc.position.x+1 < (width-pc.size.x)){
@@ -260,7 +264,6 @@ function update(progress) {
 function detectCollision(element1, element2) {
     if ((element1.position.x < element2.position.x + element2.size.x)  && (element1.position.x + element1.size.x  > element2.position.x) &&
 		element1.position.y < element2.position.y + element2.size.y && element1.position.y + element1.size.y > element2.position.y) {
-            console.log('hello');
         return true;
     }
     return false;
@@ -368,11 +371,17 @@ function Environment(solid, pos, url, scale, hbox){
 
 Environment.prototype = Object.create(Element.prototype);
 
-Environment.prototype.getSolid = function(){
+Environment.prototype.Environment = function(){
+    Element.call(this, new vector(0,0), null, new vector(50,50), new vector (50,50));
+    this.solid= true;
 }
 
-Environment.prototype.setSolid = function(){
+Environment.prototype.getSolid = function(){
+    return this.solid;
+}
 
+Environment.prototype.setSolid = function(bool){
+    this.solid = bool;
 }
 
 module.exports = Environment;
@@ -524,6 +533,7 @@ module.exports = JSONtoElements;
 },{"./character.js":1,"./element.js":2,"./enemy.js":3,"./environment.js":5,"./item.js":6,"./npc.js":7,"./player.js":9,"./utility.js":10}],9:[function(require,module,exports){
 /*Player Prototype
 Note: location is a vector with x and y*/
+const Item = require('./item.js');
 const Character = require('./character.js');
 
 function Player(loc, max, hea, stat, itm, inv, hbox, url, size){
@@ -563,7 +573,7 @@ Player.prototype.getEquippedItem= function(){
 Player.prototype.setEquippedItem = function(itm){
     //set owned item to itm
     // set item.collected to be true
-    if(itm instanceof item){
+    if(itm instanceof Item){
         this.inventory.push(this.equippedItem);
         this.equippedItem = itm;
         itm.collected = true;
@@ -597,7 +607,7 @@ Player.prototype.moveRight = function(){
 
 module.exports = Player;
 
-},{"./character.js":1}],10:[function(require,module,exports){
+},{"./character.js":1,"./item.js":6}],10:[function(require,module,exports){
 /*Vector class */
 function Vector(x,y){
 	this.x=x;
