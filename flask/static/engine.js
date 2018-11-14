@@ -79,7 +79,7 @@ function update(progress) {
         pc.moveY(newPos, yObstacles, false);
     }
     }
-    }
+    
 
 function detectXCollision(element1, element2) {
     if ((element1.position.x < element2.position.x + element2.size.x)  && (element1.position.x + element1.size.x  > element2.position.x)) {
@@ -89,7 +89,7 @@ function detectXCollision(element1, element2) {
 }
 
 function detectYCollision(element1, element2) {
-    if ((element1.position.y < element2.position.y + element2.size.y && element1.position.y + element1.size.y > element2.position.y) {
+    if ((element1.position.y < element2.position.y + element2.size.y && element1.position.y + element1.size.y > element2.position.y)) {
         return true;
     }
     return false;
@@ -107,15 +107,17 @@ function onCollision(pc, elements, i) {
 
             //if enemy, either damage w/item or lose health
             if(elements[i] instanceof Enemy){
-                if(pc.getOwnedItem().getEffect() == "damage"){
-                    elements[i].decHealth(1);
-                } else{
-                    pc.decHealth(elements[i].getDamage());
+                if(pc.equippedItem != 0) {
+                    if(pc.equippedItem.getEffect() == "damage"){
+                        elements[i].decHealth(1);
+                    } else{
+                        pc.decHealth(elements[i].getDamage());
+                    }
                 }
-
             }
 
             //if item, pick up and remove from elements
+            console.log('whats up');
             if(elements[i] instanceof Item){
                 if(!pc.getEquippedItem()){
                     pc.setEquippedItem(elements[i]);

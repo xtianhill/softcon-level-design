@@ -10,13 +10,11 @@ function Item(pos, url, sz, hbox, col, eff){
 }
 
 Item.prototype.Item = function(){  
-    Player.prototype.Player = function(){
         //create enemy with loc = (0,0), no sprite
         // status = 1, collected = false, and effect = damage
         Element.call(this, vector(0,0), icon2, vector(50,50), vector(50,50));
         this.collected = false;
         this.effect = "damage";
-    }  
 };
 
 Item.prototype.setEffect= function(eft){

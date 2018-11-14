@@ -41,6 +41,7 @@ Player.prototype.setEquippedItem = function(itm){
     //set owned item to itm
     // set item.collected to be true
     if(itm instanceof Item){
+        console.log(this.inventory);
         this.inventory.push(this.equippedItem);
         this.equippedItem = itm;
         itm.collected = true;
