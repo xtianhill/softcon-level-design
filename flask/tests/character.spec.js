@@ -5,8 +5,8 @@
 //empty constructor tests
 //get/set message tests
 
-const Vector = require('./utility.js').vector;
-var Character = require('./character.js');
+const Vector = require('../static/utility.js').vector;
+var Character = require('../static/character.js');
 
 describe('Character', function() {
     let testCharacter;

@@ -1,5 +1,5 @@
-var Enemy = require('./enemy.js');
-const vector = require('./utility.js').vector;
+var Enemy = require('../static/enemy.js');
+const vector = require('../static/utility.js').vector;
 
 describe('Enemy', function() {
     let testEnemy;

@@ -1,4 +1,4 @@
-var Element = require('./element.js');
+var Element = require('../static/element.js');
 
 describe('Element', function() {
     let testElement;

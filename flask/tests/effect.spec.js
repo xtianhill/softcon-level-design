@@ -1,4 +1,4 @@
-const Effect = require('./effect.js');
+const Effect = require('../static/effect.js');
 
 describe('Effect', function(){
     let testEffect;
