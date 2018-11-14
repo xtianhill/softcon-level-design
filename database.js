@@ -36,11 +36,12 @@ function getByTitle(title) {
         contentType: "application/json",
         dataType: "json",
         success: function(data) {
-            alert(data);
+            alert("success! yassssssss");
+            console.log(data);
             return true;
         },
         failure: function(errMsg) {
-            alert(errMsg);
+            alert("you're straight :(");
             return false;
         }
     });
