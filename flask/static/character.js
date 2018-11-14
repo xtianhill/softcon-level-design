@@ -20,11 +20,6 @@ function Character(loc, max, hea, stat, hbox, url, size){
 
 Character.prototype = Object.create(Element.prototype);
 
-//empty constructor
-Character.prototype.Character = function(){
-    //create character with loc = (0,0), maxhealth = 10
-    // health = 10, status = 1
-}
 
 /* Example for how to create a function for a prototype. this is the javascript version
  of creating a method within a class*/
@@ -35,35 +30,35 @@ Character.prototype.decHealth = function(amount){
 
 //getters and setters
 Character.prototype.getLocation = function(){
-    //get location
+    return this.location;
 }
 
 Character.prototype.setLocation = function(x, y){
-    //set location to (x,y)
+    this.location = new Vector(x,y);
 }
 
 Character.prototype.getMaxHealth = function(){
-    //get maximum health
+    return this.maxHealth;
 }
 
 Character.prototype.setMaxHealth = function(amount){
-    //set maximum health to amount
+    this.maxHealth = amount;
 }
 
 Character.prototype.getHealth = function(){
-    //get current health
+    return this.health;
 }
 
 Character.prototype.setHealth = function(amount){
-    //set current health to amount
+    this.health= amount;
 }
 
 Character.prototype.getStatus = function(){
-    //get status
+    return this.status;
 }
 
 Character.prototype.setStatus = function(s){
-    //set status to s
+    this.status = s;
 }
 
 
