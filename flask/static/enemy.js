@@ -23,10 +23,12 @@ Enemy.prototype.getDamage = function(){
     return this.damage;
 }
 
-//set int damage and return 1. returns 0 if amount isn't an int.
+//set int damage
 Enemy.prototype.setDamage = function(amount){
     //set damage to amount
-    this.damage = amount;
+        this.damage = amount;
+        
+  
 }
 
 
