@@ -83,7 +83,7 @@ Player.prototype.moveX = function(newPos, obstacles) {
     }
 };
 
-Player.prototype.newXPos = function(step) {
+Player.prototype.newYPos = function(step) {
   var gravity = 30;
   var jumpSpeed = 17;
 
