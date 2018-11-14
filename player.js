@@ -3,8 +3,8 @@ Note: location is a vector with x and y*/
 const Item = require('./item.js');
 const Character = require('./character.js');
 
-function Player(loc, max, hea, stat, itm, inv, hbox, url, size){
-    Character.call(this, loc, max, hea, stat, hbox, url, size);
+function Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed){
+    Character.call(this, loc, max, hea, stat, hbox, url, size, speed);
     this.equippedItem = itm;
     this.inventory = inv;
 }
@@ -59,17 +59,94 @@ Player.prototype.useItem = function(){
     }
 }
 
-Player.prototype.moveLeft = function(){
-    currX= this.getLocation().x;
-    currY= this.getLocation().y;
-    this.setLocation(vector(x-.1,y));
+Player.prototype.newXPos = function(step, dir) {
+  var playerXSpeed = 7;
+  this.speed.x = 0;
+  if (dir == "right") this.speed.x -= playerXSpeed;
+  if (dir == "left") this.speed.x += playerXSpeed;
 
-}
+  var motion = new Vector(this.speed.x * step, 0);
+  var newPos = this.loc.plus(motion);
+  return newPos;
+};
 
-Player.prototype.moveRight = function(){
-    currX= this.getLocation().x;
-    currY= this.getLocation().y;
-    this.setLocation(vector(x+.1,y));
-}
+Player.prototype.moveX = function(newPos, obstacles) {
+
+  //obstacles is a list constructed by detect collision in update
+  if(obstacles != null) {
+        for element in obstacles{
+            //if environment, just stop
+            if(elements[i] instanceof Environment){
+                //if environment solid, do nothing
+                //if enviroment is not solid:
+                    this.loc = newPos;
+            }
+            else {
+            //if npc, show message
+            if(elements[i] instanceof NPC){
+               //...
+            }
+
+            //if enemy, either damage w/item or lose health
+            if(elements[i] instanceof Enemy){
+                //...
+            }
+
+            //if item, pick up and remove from elements
+            if(elements[i] instanceof Item){
+                //...
+            }
+        this.loc = newPos;
+        }
+        }
+    }
+};
+
+Player.prototype.newYPos = function(step) {
+  var gravity = 30;
+  var jumpSpeed = 17;
+
+  this.speed.y += step * gravity;
+  var motion = new Vector(0, this.speed.y * step);
+  var newPos = this.loc.plus(motion);
+
+  return newPos;
+};
+
+Player.prototype.moveY = function(newPos, obstacles, up) {
+
+  //obstacles is a list constructed by detect collision in update
+  if(obstacles != null) {
+        for element in obstacles{
+            //if environment, just stop
+            if(elements[i] instanceof Environment){
+                //if environment solid, do nothing
+                //if enviroment is not solid:
+                    if (up && this.speed.y > 0)
+                      this.speed.y = -jumpSpeed;
+                    else
+                       this.speed.y = 0;
+            }
+            else {
+            //if npc, show message
+            if(elements[i] instanceof NPC){
+               //...
+            }
+
+            //if enemy, either damage w/item or lose health
+            if(elements[i] instanceof Enemy){
+                //...
+            }
+
+            //if item, pick up and remove from elements
+            if(elements[i] instanceof Item){
+                //...
+            }
+        this.loc = newPos;
+        }
+        }
+    } else
+        this.loc = newPos;
+};
 
 module.exports = Player;
