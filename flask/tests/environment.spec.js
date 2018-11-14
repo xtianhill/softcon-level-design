@@ -1,5 +1,5 @@
-const Enviroment = require('./environment.js');
-const vector = require('./utility.js').vector;
+const Enviroment = require('../static/environment.js');
+const vector = require('../static/utility.js');
 
 describe('Environment', function(){
     let testEnvironment;
@@ -10,7 +10,7 @@ describe('Environment', function(){
         expect(testEnvironment.getSolid()).toBeTruthy();
         expect(testEnvironment.getPosition()).toEqual(new vector(1,1));
         expect(testEnvironment.getSprite()).toEqual(null);
-        expect(testEnvironment.getScale()).toEqual(new vector(50,10));
+        expect(testEnvironment.getSize()).toEqual(new vector(50,10));
         expect(testEnvironment.getHitbox()).toEqual(new vector(20,50));
     })
 

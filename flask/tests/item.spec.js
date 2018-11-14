@@ -3,7 +3,7 @@ var Item = require('../static/item.js');
 describe('Item', function(){
     let testItem;
     beforeEach(function(){
-        testItem = new Item(true, true);
+        testItem = new Item('pos', 'url', 'sz', 'hbox', true, true);
     });
     it('should construct an item', function(){
         expect(testItem.getCollected()).toBeTruthy();
