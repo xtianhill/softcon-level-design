@@ -2,7 +2,7 @@
 //empty constructor tests
 //get/set message tests
 // test displayMessage w/ full and empty NPC messages
-var Vector = require('../static/utility.js').vector;
+var Vector = require('../static/utility.js');
 var NPC = require('../static/npc.js');
 
 describe('NPC', function() {
@@ -20,7 +20,7 @@ describe('NPC', function() {
         expect(testNPC.getStatus()).toEqual(1);
         expect(testNPC.getHitbox()).toEqual(new Vector(50,50));
         expect(testNPC.getSprite()).toBeNull();
-        expect(testNPC.getScale()).toEqual(new Vector(50,50));
+        expect(testNPC.getSize()).toEqual(new Vector(50,50));
 
     });
 
