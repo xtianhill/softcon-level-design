@@ -37,7 +37,6 @@ function JSONtoElements(data){
                     var inv= [];
                     var spd = new Vector(0,0);
                     element = new Player(pos, max, hea, stat, itm, inv, hitbox, url, sz, spd);
-                    console.log("speed?", element.speed);
                 }
                 else if (temp.name == "NPC"){
                     var max = 10;

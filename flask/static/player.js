@@ -68,9 +68,7 @@ Player.prototype.newXPos = function(step, dir) {
   if (dir == "left") this.speed.x += playerXSpeed;
 
   var motion = new Vector(this.speed.x * step, 0);
-  console.log('motion', motion);
   var newPos = this.position.plus(motion);
-  console.log('newPos', newPos);
   return newPos;
 };
 
@@ -95,12 +93,10 @@ Player.prototype.newYPos = function(step) {
 };
 
 Player.prototype.moveY = function(newPos, obstacle, up) {
-    console.log('here we are', obstacle);
 
   if(obstacle.length != 0) {
       if(obstacle.isSolid)
           if (up && this.speed.y > 0){
-                console.log('yep');
                this.speed.y = -jumpSpeed;
           } else
                this.speed.y = 0;
