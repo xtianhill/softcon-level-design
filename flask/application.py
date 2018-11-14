@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, send_from_directory
 from flask_cors import CORS
 from application import db
 from grid import Grid
@@ -11,6 +11,11 @@ def hello():
 @application.route('/index', methods=['GET'])
 def index():
     return render_template('index.html')
+
+@application.route('/static/<path:path>')
+def send_js(path):
+    print str(path)
+    return send_from_directory('../static', path)
 
 @application.route('/api/v1/add-grid/', methods=['POST'])
 def add_grid():
