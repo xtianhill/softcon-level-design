@@ -11,9 +11,8 @@ function Vector(x,y){
 /*Character Prototype
 Note: location is a vector with x and y*/
 
-function Character(loc, max, hea, stat){
-    Element.call(this, loc, 'url', 'scale');
-    this.location=loc ; //position
+function Character(loc, max, hea, stat, hbox, url, size){
+    Element.call(this, loc, url, size, hbox);
     this.maxHealth = max; //maximum health
 	this.health=hea; //int health
 	this.status=stat; //true for alive, false for dead

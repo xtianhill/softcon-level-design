@@ -1,12 +1,13 @@
 const Vector = require('./utility.js').vector;
 
 /*Element prototype */
-/*note: pos, scl are vectors with x and y values */
+/*note: pos, scl, hitbox are vectors with x and y values */
 
-function Element(pos, url, scl){
-	this.position=pos; 
-	this.sprite=url; //url to image file
-	this.scale=scl; //scale to resize image dimensions
+function Element(pos, url, sz, hbox){
+	this.position = pos; 
+	this.sprite = url; //url to image file
+	this.size = sz; //scale to resize image dimensions
+	this.hitbox = hbox;
 }
 
 Element.prototype.getPosition = function(){
@@ -31,6 +32,14 @@ Element.prototype.getScale = function(){
 
 Element.prototype.setScale = function(scale){
 	this.scale = scale;
+}
+
+Element.prototype.getHitbox = function(){
+	return this.hitbox;
+}
+
+Element.prototype.setHitbox = function(hitbox){
+	this.hitbox = hitbox;
 }
 
 module.exports = Element;
