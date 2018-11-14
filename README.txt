@@ -11,6 +11,6 @@ node dependencies in the repository (including Jasmine). Then, run the following
 for each component: 
     * backend: "npm run-script backend-test"
 To run tests for prototypes, run the following for each spec file:
-   "jasmine filename.spec.js"
+   "jasmine flask/tests/<filename>.spec.js"
    (script to be written soon)
 and unit testing output will print to the console.

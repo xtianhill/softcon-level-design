@@ -2,7 +2,7 @@
   "name": "softcon-level-design",
   "version": "1.0.0",
   "description": "",
-  "main": "character.js",
+  "main": "static/app.js",
   "directories": {
     "test": "tests"
   },
@@ -13,9 +13,12 @@
     "jquery": "^3.3.1",
     "mysql": "^2.16.0"
   },
+  "spec_files": [
+    "test/**/*.spec.js"
+  ],
   "devDependencies": {},
   "scripts": {
-    "backend-test": "jasmine tests/database-test.js"
+    "backend-test": "jasmine ../tests/database.spec.js"
   },
   "repository": {
     "type": "git",

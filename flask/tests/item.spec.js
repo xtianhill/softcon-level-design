@@ -1,4 +1,4 @@
-var Item = require('./item.js');
+var Item = require('../static/item.js');
 
 describe('Item', function(){
     let testItem;
