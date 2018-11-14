@@ -23,13 +23,12 @@ def send_js(path):
 
 @application.route('/api/v1/add-grid/', methods=['POST'])
 def add_grid():
-    result = ""
     if not request.json:
         return 'ERROR: invalid input'
-    title = request.json['title']
-    data = request.json['data']
-    db_grid = Grid(title, data)
     try:
+        title = request.json['title']
+        data = request.json['data']
+        db_grid = Grid(title, data)
         result = db.session.add(db_grid)
         # db.session.commit()
     except:
