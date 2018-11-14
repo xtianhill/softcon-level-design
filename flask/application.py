@@ -3,6 +3,7 @@ from flask_cors import CORS
 from application import db
 from grid import Grid
 from application.__init__ import application
+import json
 
 @application.route('/', methods=['GET'])
 def hello():
@@ -26,10 +27,12 @@ def add_grid():
     if not request.json:
         return 'ERROR: invalid input'
     try:
-        title = request.json['title']
-        data = request.json['data']
+        my_json = json.loads(request)
+        title = my_json.json['title']
+        data = my_json.json['data']
         db_grid = Grid(title, data)
         result = db.session.add(db_grid)
+        return str(result)
         # db.session.commit()
     except:
         db.session.rollback()
