@@ -80,8 +80,6 @@ function update(progress) {
 }
 
 function detectCollision(element1, element2) {
-    //console.log(element1, element2);
-    // console.log(element1.position.x + ' < ' + (element2.position.x + element2.size.x));
     if (element1.position.x < element2.position.x + element2.size.x  && element1.position.x + element1.size.x  > element2.position.x &&
 		element1.position.y < element2.position.y + element2.size.y && element1.position.y + element1.size.y > element2.position.y) {
             console.log('hello');
@@ -146,6 +144,7 @@ function imgInit(){
 imgInit();
 
 function draw(){
+    ctx.clearRect(0, 0, width, height);
     for(i = 0; i<elements.length; i++){
         var curElement = elements[i];
         ctx.drawImage(curElement.img,curElement.position.x,curElement.position.y,
