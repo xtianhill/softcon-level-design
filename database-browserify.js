@@ -7,7 +7,7 @@
  * 
  */
 
-const AWS_URL = "http://softcon-leveldesign.us-east-1.elasticbeanstalk.com/";
+const AWS_URL = "https://softcon-leveldesign.us-east-1.elasticbeanstalk.com/";
 
 function storeGrid(grid) {
     console.log('grid is: '+ grid);
