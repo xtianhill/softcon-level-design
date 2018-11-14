@@ -15,7 +15,7 @@
   },
   "devDependencies": {},
   "scripts": {
-    "backend-test": "jasmine tests/database-test.js"
+    "backend-test": "jasmine flask/tests/database-test.js"
   },
   "repository": {
     "type": "git",
