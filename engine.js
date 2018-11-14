@@ -33,10 +33,15 @@ var elements =
 // query database and get level info, then translate into list of elements
 
 
+
 function update(progress) {
 
-//Hayley: I'm assuming that were isolating the player character: they're called pc here
-    var pc = elements[0];
+    var pc;
+    for(i=0; i<elements.length; i++){
+        if(elements[i] instanceof player){
+            pc = elements[i];
+        }
+    }
 
     if (rightPressed){
       if (pc.position.x+1 < (width-pc.size.x)){

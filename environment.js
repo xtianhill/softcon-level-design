@@ -9,11 +9,17 @@ function Environment(solid, pos, url, scale, hbox){
 
 Environment.prototype = Object.create(Element.prototype);
 
-Environment.prototype.getSolid = function(){
+Environment.prototype.Environment = function(){
+    Element.call(this, new vector(0,0), null, new vector(50,50), new vector (50,50));
+    this.solid= true;
 }
 
-Environment.prototype.setSolid = function(){
+Environment.prototype.getSolid = function(){
+    return this.solid;
+}
 
+Environment.prototype.setSolid = function(bool){
+    this.solid = bool;
 }
 
 module.exports = Environment;
