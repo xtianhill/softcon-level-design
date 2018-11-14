@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 from application import db
 from grid import Grid
@@ -7,6 +7,10 @@ from application.__init__ import application
 @application.route('/', methods=['GET'])
 def hello():
     return 'Level Design backend is running'
+
+@application.route('/index', methods=['GET'])
+def index():
+    return render_template('index.html')
 
 @application.route('/api/v1/add-grid/', methods=['POST'])
 def add_grid():
