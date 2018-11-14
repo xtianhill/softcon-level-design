@@ -32,13 +32,13 @@ def add_grid():
         data = my_json.json['data']
         db_grid = Grid(title, data)
         result = db.session.add(db_grid)
-        return str(my_json)
+        return 'OK'
         # db.session.commit()
     except:
         db.session.rollback()
     finally:
         db.session.close()
-    return request
+    return 'BAD'
 
 @application.route('/api/v1/query-all/', methods=['GET'])
 def get_all():
