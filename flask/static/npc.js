@@ -1,7 +1,7 @@
 const Character = require('./character.js');
 
-function NPC(loc, max, hea, stat, msg){
-    Character.call(this, loc, max, hea, stat);
+function NPC(loc, max, hea, stat, msg, hbox, url, size){
+    Character.call(this, loc, max, hea, stat, hbox, url, size);
     this.message = msg;
 }
 
@@ -11,20 +11,31 @@ NPC.prototype = Object.create(Character.prototype);
 NPC.prototype.NPC = function(){
     //create an NPC with loc = (0,0), maxhealth = 10
     // health = 10, status = 1, and no message
+    Character.call(this, vector(0,0), 10, 10, 1, /*generic hitbox*/);
+    this.message = "";
 }  
 
 
 NPC.prototype.getMessage = function(){
-    //get string message
+    return this.message;
 }
 
 NPC.prototype.setMessage = function(msg){
-    //set message to msg
+    this.message = msg;
 }  
 
 
-NPC.prototype.displayMessage = function(){
-    //print message to the screen, return 1 on success or 0 if message is empty
-}  
+// NPC.prototype.displayMessage = function(){
+//     //print message to the screen, return 1 on success or 0 if message is empty
+//     if(this.message == null || this.message == ''){
+//         return 0;
+//     }
+//     out = canvas.getContext("2d");
+//     out.font = "12px Arial";
+//     out.fillText(this.message, 650, 100)
+    
+//     return 1;
+// }  
+
 
 module.exports = NPC;
