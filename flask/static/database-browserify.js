@@ -47,12 +47,12 @@ function getByTitle(title) {
         contentType: "application/json",
         dataType: "json",
         success: function(data) {
-            alert("success! yassssssss");
+            alert("success! found item with title " + title + " in DB");
             console.log(data);
             return true;
         },
         failure: function(errMsg) {
-            alert("you're straight :(");
+            alert("failure: didn't find item in DB");
             return false;
         }
     });
