@@ -105,14 +105,10 @@ function draggable(object, pic, pos, name, url) {
             //its generic right now, but should be different for the element types
             // for ecxample, NPC needs "message"
             temp.toObject = function() {
-            return {type: "Element", 
-            name: name,
-            top:temp.top,
-            left: temp.left,
-            url: url,
-            scale: 1
+            return {type: "button", 
             };
 };
+
         if (name == "NPC"){
         var msg = prompt("Please enter a message for the npc:", "You are under attack!");
             //actually save the input here
@@ -128,9 +124,17 @@ function draggable(object, pic, pos, name, url) {
             var bool = prompt("Is this block solid? enter yes or no:", "yes");
         }*/
         });
-        
         object.on('mouseup', function() {
             // Remove an event handler
+            object.toObject = function() {
+            return {type: "Element", 
+            name: name,
+            top:object.top,
+            left: object.left,
+            url: url,
+            scale: 1
+            };
+  };
             this.off('mousedown');
             if(this.top <100) {
                canvas.remove(this);
@@ -163,7 +167,6 @@ document.body.onkeyup = function(e){
     canvas_.add(hello);
     canvas_.renderAll();
     }
-
 document.body.onkeydown = function(e){
     if (e.key == 'g') {
        hello.set({left: hello.left + 5,});
