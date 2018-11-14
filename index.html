@@ -1,8 +1,15 @@
 <!DOCTYPE html>    
+<httpProtocol>
+    <customHeaders>
+        <add name="Access-Control-Allow-Origin" value="*" />
+    </customHeaders>
+</httpProtocol>
 <head>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 		<script type="text/javascript" src="app.js"></script>
-		<link rel="stylesheet" href="app.css" type="text/css" />
+        <link rel="stylesheet" href="app.css" type="text/css" />
+
+	    <script type="text/javascript" src="database-browserify.js"></script>
 
     <meta charset="utf-8">
     <title>hello</title>
@@ -31,7 +38,28 @@
         <img src = "https://orig00.deviantart.net/83a1/f/2011/230/2/8/wildebeest_transparent_sprite_by_milfeyu-d472yim.png" id = "enemy" style= "display: none">
         <img src = "https://ubisafe.org/images/luigi-transparent-sprites.png" id ="npc" style= "display: none"> 
         <img src = "https://orig00.deviantart.net/1ba2/f/2013/348/b/d/garbage_by_pixel_placer-d6xybtp.png" id= "trash" style="display: none">
-  </body>  
+
+        <input id="test-db-search" type="button" value="clickme" onclick="getByTitle(test-title)"/>
+        <button onclick="getByTitle()">Click me</button>
+        <button onclick="database.getByTitle('test-title')">Get test-title</button>
+        <button onclick="database.getByTitle('cbh-title')">Get cbh-title</button>
+        <button onclick="database.getByTitle('vcbc')">Get vcbc</button>
+        <!-- '{\"title\":\"let\'s do molly\", \"data\":\"123456\"}' -->
+        <button onclick="database.storeGrid('{{\"title\":\"let\'s do molly\", \"data\":\"123456\"}}')>Store molly-grid</button>
+        
+        
+        <button onclick="myFunction()">Click me</button>
+
+        <script>
+        function myFunction() {
+            var title = prompt("Enter the grid title", "title");
+            var test_data = prompt("Enter the data", "my data ");
+            if(title != null) {
+                database.storeGrid(title);
+            }
+        }
+        </script>
+    </body>  
 	
 
 
