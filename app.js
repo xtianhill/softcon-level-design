@@ -1,8 +1,9 @@
 window.onload = function a()
 {
     //setup
+    var canvassrc = "https://d2ujflorbtfzji.cloudfront.net/package-screenshot/4b7e815a-669f-4023-ac73-6c7691fe9a9f_scaled.jpg";
 	var canvas = new fabric.Canvas('c', { selection: false});
-    canvas.backgroundColor="Purple";
+    canvas.setBackgroundImage(canvassrc);
     
     var json_data = JSON.stringify(canvas.toDatalessJSON()); //initializing to be used later
     
@@ -29,8 +30,8 @@ window.onload = function a()
 var menubox = new fabric.Rect({
         left: 0,
         top: 0,
-        fill:  "#eee",
-        width: window.innerWidth,
+        fill:  "#96B2E3",
+        width: 600,
         height: 200,    
         lockRotation: true,
         selectable: false,
@@ -41,11 +42,11 @@ menubox.toObject = function() {
 };
 
 //urls for all the buttons
-var groundsrc = 'https://www.mariowiki.com/images/thumb/5/5d/GoldbrickblockNSMB2.png/400px-GoldbrickblockNSMB2.png';
-var mariosrc = "http://icons.iconarchive.com/icons/ph03nyx/super-mario/128/Retro-Mario-icon.png"
-var coinsrc= "https://steemitimages.com/DQmYxhs85sAdtgfSjLaLx6e4ajKZYWUf1CZFsQ53qcarpyi/Bitcoin.png";
-var enemysrc= "https://orig00.deviantart.net/83a1/f/2011/230/2/8/wildebeest_transparent_sprite_by_milfeyu-d472yim.png";
-var npcsrc = "https://ubisafe.org/images/luigi-transparent-sprites.png";
+var groundsrc = "https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg";
+var playersrc = "https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png"
+var coinsrc= "https://66.media.tumblr.com/4a8e88c9194d00c4e2e14d62f2a9dc76/tumblr_pi5t840NIu1u9vozfo1_250.png";
+var enemysrc= "https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png";
+var npcsrc = "https://66.media.tumblr.com/18b1dcddb1e6de2d56f2bbc16e368af5/tumblr_pi5sz2UwpH1u9vozfo1_250.png";
 
 // function make a button, visually: calls draggable() to make it actually work. 
 function button(url, pos,pic, elementname){
@@ -69,7 +70,7 @@ function button(url, pos,pic, elementname){
 }
 
 button(groundsrc,0,ground, "Environment");
-button(mariosrc,50,mario, "Player");
+button(playersrc,50,player, "Player");
 button(coinsrc,100, coin, "Item");
 button(enemysrc,150,enemy, "Enemy");
 button(npcsrc,200,npc, "NPC");
@@ -178,8 +179,3 @@ document.body.onkeydown = function(e){
 }
 */
 }
-
-
-
-
-
