@@ -9,7 +9,7 @@ def hello():
     return 'Level Design backend is running'
 
 @application.route('/db_tests', methods=['GET'])
-def index():
+def db_test():
     return render_template('index2.html')
 
 @application.route('/index', methods=['GET'])
