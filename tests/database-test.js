@@ -1,4 +1,5 @@
-
+const storeGrid = require('../database.js').storeGrid;
+// const getByTitle = require('../database.js').getByTitle;
 
 /*
  * Tests for Grid.toJSON()

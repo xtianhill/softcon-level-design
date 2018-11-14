@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from application import db
 from grid import Grid
 from application.__init__ import application
