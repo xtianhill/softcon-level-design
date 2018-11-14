@@ -11,12 +11,6 @@ describe('Effect', function(){
         expect(testEffect.getEffect()).toEqual('fire');
     });
     
-    it('should construct an effect', function(){
-        testEffect = new Effect(true, 'fire');
-        expect(testEffect.getIsActive()).toBeTruthy();
-        expect(testEffect.getEffect()).toEqual('fire');
-    });
-    
     it('should activate the effect', function(){
         testEffect.activate();
         expect(testEffect.getIsActive()).toBeTruthy();

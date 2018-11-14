@@ -10,10 +10,10 @@
 //empty constructor tests
 //get/set message tests
 
-var Player = require('./player.js');
-var Item = require('./item.js');
-var Vector = require('./utility.js');
-var Effect = require('./effect.js');
+var Player = require('../static/player.js');
+var Item = require('../static/item.js');
+var Vector = require('../static/utility.js');
+var Effect = require('../static/effect.js');
 
 describe('Player', function() {
     let testPlayer;

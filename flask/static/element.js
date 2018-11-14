@@ -26,12 +26,12 @@ Element.prototype.setSprite = function(url){
 	this.sprite = url;
 }
 
-Element.prototype.getScale = function(){
-	return this.scale;
+Element.prototype.getSize = function(){
+	return this.size;
 }
 
-Element.prototype.setScale = function(scale){
-	this.scale = scale;
+Element.prototype.setSize = function(scale){
+	this.size = scale;
 }
 
 Element.prototype.getHitbox = function(){

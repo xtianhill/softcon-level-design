@@ -24,17 +24,18 @@ Character.prototype = Object.create(Element.prototype);
 /* Example for how to create a function for a prototype. this is the javascript version
  of creating a method within a class*/
 //decrement health function
-Character.prototype.decHealth = function(amount){
- 	//decrement health by amount
-}
+// not in iteration 1
+// Character.prototype.decHealth = function(amount){
+//  	//decrement health by amount
+// }
 
 //getters and setters
 Character.prototype.getLocation = function(){
-    return this.location;
+    return this.position;
 }
 
-Character.prototype.setLocation = function(x, y){
-    this.location = new Vector(x,y);
+Character.prototype.setLocation = function(pos){
+    this.position = pos;
 }
 
 Character.prototype.getMaxHealth = function(){
