@@ -103,7 +103,7 @@ Player.prototype.moveY = function(newPos, obstacles, up) {
             if(elements[i] instanceof Environment){
                 //if environment solid, do nothing
                 //if enviroment is not solid:
-                    if (keys.up && this.speed.y > 0)
+                    if (up && this.speed.y > 0)
                       this.speed.y = -jumpSpeed;
                     else
                        this.speed.y = 0;
