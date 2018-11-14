@@ -32,7 +32,7 @@ def add_grid():
         data = my_json.json['data']
         db_grid = Grid(title, data)
         result = db.session.add(db_grid)
-        return str(result)
+        return str(my_json)
         # db.session.commit()
     except:
         db.session.rollback()
