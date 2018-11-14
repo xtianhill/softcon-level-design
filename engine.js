@@ -6,7 +6,7 @@ const Item = require('./item.js');
 const Element = require('./element.js');
 const Character = require('./character.js');
 const Environment = require('./environment.js');
-const Utility = require('./utility.js')// .vector;
+const Vector = require('./utility.js').vector;
 var gravity = -.5;
 
 var icon = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToe-PSAektDgBsXLsdybQW6F1wGDdpw2mbm3SaReRPuQ0ec0ns";
