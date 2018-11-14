@@ -23,7 +23,7 @@ def add_grid():
         db.session.rollback()
     finally:
         db.session.close()
-    return str(result)
+    return request
 
 @application.route('/api/v1/query-all/', methods=['GET'])
 def get_all():
