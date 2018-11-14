@@ -1,4 +1,4 @@
-(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.engine = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 const Element = require('./element.js');
 //data: point location, int health, bool status
 //function void dechealth
@@ -116,13 +116,13 @@ Element.prototype.setHitbox = function(hitbox){
 }
 
 module.exports = Element;
-},{"./utility.js":9}],3:[function(require,module,exports){
+},{"./utility.js":10}],3:[function(require,module,exports){
 /*Enemy Prototype
 Note: location is a vector with x and y*/
 const Character = require('./character.js');
 
-function Enemy(loc, max, hea, stat, dmg, hbox){
-    Character.call(this, loc, max, hea, stat, hbox);
+function Enemy(loc, max, hea, stat, dmg, hbox, url, size){
+    Character.call(this, loc, max, hea, stat, hbox, url, size);
     this.damage = dmg;
 }
 
@@ -152,6 +152,7 @@ Enemy.prototype.setDamage = function(amount){
 module.exports = Enemy;
 },{"./character.js":1}],4:[function(require,module,exports){
 /* basic engine prototype */
+const JSONtoElements = require('./parsing.js');
 const NPC = require('./npc.js');
 const Enemy = require('./enemy.js');
 const Player = require('./player.js');
@@ -177,15 +178,17 @@ var upPressed = false;
 
 var icon = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToe-PSAektDgBsXLsdybQW6F1wGDdpw2mbm3SaReRPuQ0ec0ns";
 var icon2 = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKH3Qd3RP33Q5XxcRMrLXYhYGRu_dxvpJCIBEU_MlAudC1ev-P8A";
-var elements =
-    [ new Player(new Vector(0,0), 10, 10, true, 'item', new Vector(50,50), icon2, new Vector(50,50))
+// var elements =
+    [ new Player(new Vector(0,0), 10, 10, true, 'item', ['item', 'item2'], new Vector(50,50), icon2, new Vector(50,50))
     , new NPC(new Vector(100,100), 10, 10, true, "y tho", new Vector(50,50), icon, new Vector(50,50)),
     new Item(new Vector(100,50), icon, new Vector(50,50), new Vector(50,50), false, "damage")
     ];
-
+var data = '{"objects":[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{"type":"Element","name":"Environment","top":25,"left":0,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Player","top":25,"left":50,"url":"https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png","scale":1},{"type":"Element","name":"Item","top":25,"left":100,"url":"https://66.media.tumblr.com/4a8e88c9194d00c4e2e14d62f2a9dc76/tumblr_pi5t840NIu1u9vozfo1_250.png","scale":1},{"type":"Element","name":"Enemy","top":25,"left":150,"url":"https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png","scale":1},{"type":"Element","name":"NPC","top":25,"left":200,"url":"https://66.media.tumblr.com/18b1dcddb1e6de2d56f2bbc16e368af5/tumblr_pi5sz2UwpH1u9vozfo1_250.png","scale":1}],"background":"","backgroundImage":"https://d2ujflorbtfzji.cloudfront.net/package-screenshot/4b7e815a-669f-4023-ac73-6c7691fe9a9f_scaled.jpg","backgroundImageOpacity":1,"backgroundImageStretch":true}'
 // query database and get level info, then translate into list of elements
-
-
+var parsedJSON = JSONtoElements(data);
+var elements = parsedJSON.elements;
+var backgroundUrl = parsedJSON.backgroundUrl;
+console.log(elements);
 function update(progress) {
 
 //Hayley: I'm assuming that were isolating the player character: they're called pc here
@@ -239,7 +242,10 @@ function update(progress) {
 
             //if item, pick up and remove from elements
             if(elements[i] instanceof Item){
-                pc.setOwnedItem= elements[i];
+                if(!pc.getEquippedItem()){
+                    pc.setEquippedItem(elements[i]);
+                }
+                pc.inventory.push(elements[i]);
                 elements.splice(i,1);
             }
 
@@ -280,7 +286,6 @@ function keyDownHandler(event) {
 
 function keyUpHandler(event) {
     console.log("event", event);
-    //console.log
     if(event.keyCode == 68) {
         rightPressed = false;
     }
@@ -302,12 +307,16 @@ function imgInit(){
         elements[i].img.src = elements[i].sprite;
         console.log(elements[i].img);
     }
+    var tmp = backgroundUrl;
+    backgroundUrl = new Image;
+    backgroundUrl.src = tmp;
 }
 
 imgInit();
 
 function draw(){
     ctx.clearRect(0, 0, width, height);
+    ctx.drawImage(backgroundUrl, 0,0);
     for(i = 0; i<elements.length; i++){
         var curElement = elements[i];
         if (curElement.shouldDisplay){
@@ -317,6 +326,19 @@ function draw(){
         }
         ctx.drawImage(curElement.img,curElement.position.x,curElement.position.y,
             curElement.size.x,curElement.size.y);
+    }
+
+}
+function showInventory(){
+    var ul = document.getElementById('inventory');
+    var inventory = elements[0].inventory;
+    for (var i = 0; i < inventory.length; i++) {
+        var item = inventory[i];
+
+        var listItem = document.createElement("li");
+        listItem.textContent = '<img src="' + item.sprite + '" + />';
+
+        ul.appendChild(listItem);
     }
 }
 
@@ -332,7 +354,9 @@ function loop(timestamp) {
 
 var lastRender = 0;
 window.requestAnimationFrame(loop);
-},{"./character.js":1,"./element.js":2,"./enemy.js":3,"./environment.js":5,"./item.js":6,"./npc.js":7,"./player.js":8,"./utility.js":9}],5:[function(require,module,exports){
+
+module.exports.showInventory = showInventory;
+},{"./character.js":1,"./element.js":2,"./enemy.js":3,"./environment.js":5,"./item.js":6,"./npc.js":7,"./parsing.js":8,"./player.js":9,"./utility.js":10}],5:[function(require,module,exports){
 /*Environment prototype*/
 /*note: Environment has flag for whether its solid or not*/
 const Element = require('./element.js');
@@ -434,13 +458,78 @@ NPC.prototype.setMessage = function(msg){
 
 module.exports = NPC;
 },{"./character.js":1}],8:[function(require,module,exports){
+const NPC = require('./npc.js');
+const Enemy = require('./enemy.js');
+const Player = require('./player.js');
+const Item = require('./item.js');
+const Element = require('./element.js');
+const Character = require('./character.js');
+const Environment = require('./environment.js');
+const Vector = require('./utility.js').vector;
+
+function JSONtoElements(data){
+    var dataobj= JSON.parse(data);
+    i=0;
+    var elementarray= [];
+    var backgroundurl=dataobj.backgroundImage;
+        for (i=0; i<dataobj.objects.length; i++){
+            var temp= dataobj.objects[i];
+            if (temp.type =="Element"){
+                var pos = new Vector(temp.left, temp.top);
+                var sz = new Vector(50,50);
+                var url= temp.url;
+                var hitbox = new Vector(50,50);
+                var element;
+                if (temp.name == "Environment"){
+                    console.log(pos);
+                    element = new Environment(1,pos,url,sz,hitbox);
+                }
+                else if (temp.name == "Item"){
+                    var col=0;
+                    var eff="heal";
+                    element = new Item(pos, url, sz, hitbox, col, eff);
+                }
+                else if (temp.name == "Player"){
+                    var max = 10;
+                    var hea = 10;
+                    var stat = 1;
+                    var itm= 0;
+                    var inv= 0;
+                    var spd = 0;
+                    element = new Player(pos, max, hea, stat, itm, inv, hitbox, url, sz, spd);
+                }
+                else if (temp.name == "NPC"){
+                    var max = 10;
+                    var hea = 10;
+                    var stat= 1;
+                    var msg = "hi there";
+                    element = new NPC(pos, max, hea, stat, msg, hitbox, url, sz);
+                }
+                else if (temp.name == "Enemy"){
+                    var max = 10;
+                    var hea= 10;
+                    var stat = 1;
+                    var dmg= 1;
+                    element = new Enemy(pos, max, hea, stat, dmg, hitbox, url, sz);
+                }
+                elementarray.push(element);
+            }
+        }
+        return {"elements": elementarray,
+                "backgroundUrl": backgroundurl };
+    }
+module.exports = JSONtoElements;
+    
+    
+},{"./character.js":1,"./element.js":2,"./enemy.js":3,"./environment.js":5,"./item.js":6,"./npc.js":7,"./player.js":9,"./utility.js":10}],9:[function(require,module,exports){
 /*Player Prototype
 Note: location is a vector with x and y*/
 const Character = require('./character.js');
 
-function Player(loc, max, hea, stat, itm, hbox, url, size){
+function Player(loc, max, hea, stat, itm, inv, hbox, url, size){
     Character.call(this, loc, max, hea, stat, hbox, url, size);
-    this.ownedItem = itm;
+    this.equippedItem = itm;
+    this.inventory = inv;
 }
 
 Player.prototype = Object.create(Character.prototype);
@@ -450,22 +539,33 @@ Player.prototype.Player = function(){
     //create enemy with loc = (0,0), maxhealth = 10
     // health = 10, status = 1, item = null
 
-    Character.call(this, vector(0,0), 10, 10, 1, /*generic hitbox*/);
-    this.ownedItem = null;
+    Character.call(this, vector(0,0), 10, 10, 1, vector(50,50));
+    this.equippedItem = null;
+    this.inventory = [];
 }  
 
-//gets OwnedItem. 
-Player.prototype.getOwnedItem= function(){
-    //return owned item
-    return this.ownedItem;
+Player.prototype.getInventory= function(){
+    return this.inventory;
 }
 
-//set owned item and return 1. return 0 for non-item input.
-Player.prototype.setOwnedItem = function(itm){
+Player.prototype.setInventory = function(arr)
+{
+    this.inventory = arr;
+}
+
+//gets OwnedItem. 
+Player.prototype.getEquippedItem= function(){
+    //return owned item
+    return this.equippedItem;
+}
+
+//set owned item and return 1. return 0 for non-item input
+Player.prototype.setEquippedItem = function(itm){
     //set owned item to itm
     // set item.collected to be true
     if(itm instanceof item){
-        this.ownedItem = itm;
+        this.inventory.push(this.equippedItem);
+        this.equippedItem = itm;
         itm.collected = true;
         return 1;
     }
@@ -473,7 +573,13 @@ Player.prototype.setOwnedItem = function(itm){
 }
 
 Player.prototype.useItem = function(){
-    // if have an item, use its effect on whatever
+    if(this.equippedItem.getEffect() == "heal"){
+        this.health = this.maxHealth;
+        this.equippedItem= null;
+    }
+    if (this.equippedItem.getEffect() == "damage"){
+        //swing sword or whatever
+    }
 }
 
 Player.prototype.moveLeft = function(){
@@ -491,7 +597,7 @@ Player.prototype.moveRight = function(){
 
 module.exports = Player;
 
-},{"./character.js":1}],9:[function(require,module,exports){
+},{"./character.js":1}],10:[function(require,module,exports){
 /*Vector class */
 function Vector(x,y){
 	this.x=x;
@@ -499,4 +605,5 @@ function Vector(x,y){
 }
 
 module.exports.vector = Vector;
-},{}]},{},[4]);
+},{}]},{},[4])(4)
+});
