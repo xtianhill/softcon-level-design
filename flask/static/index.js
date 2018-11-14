@@ -67,7 +67,7 @@ Character.prototype.setStatus = function(s){
 module.exports = Character;
 
 },{"./element.js":2}],2:[function(require,module,exports){
-const Vector = require('./utility.js').vector;
+const Vector = require('./utility.js');
 
 /*Element prototype */
 /*note: pos, scl, hitbox are vectors with x and y values */
@@ -156,7 +156,7 @@ const Item = require('./item.js');
 const Element = require('./element.js');
 const Character = require('./character.js');
 const Environment = require('./environment.js');
-const Vector = require('./utility.js').vector;
+const Vector = require('./utility.js');
 var step = 0.05;
 
 var canvas = document.getElementById("c");
@@ -177,45 +177,50 @@ var icon2 = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKH3Qd3RP33Q5
     // , new NPC(new Vector(100,100), 10, 10, true, "y tho", new Vector(50,50), icon, new Vector(50,50)),
     // new Item(new Vector(100,50), icon, new Vector(50,50), new Vector(50,50), false, "damage")
     // ];
-var data = '{"objects":[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{"type":"Element","name":"Environment","top":25,"left":0,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Enemy","top":25,"left":150,"url":"https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png","scale":1},{"type":"Element","name":"Item","top":25,"left":100,"url":"https://66.media.tumblr.com/4a8e88c9194d00c4e2e14d62f2a9dc76/tumblr_pi5t840NIu1u9vozfo1_250.png","scale":1},{"type":"Element","name":"Player","top":25,"left":50,"url":"https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png","scale":1}],"background":"","backgroundImage":"https://d2ujflorbtfzji.cloudfront.net/package-screenshot/4b7e815a-669f-4023-ac73-6c7691fe9a9f_scaled.jpg","backgroundImageOpacity":1,"backgroundImageStretch":true}';
+var data = '{"objects":[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{"type":"Element","name":"Environment","top":100,"left":50,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Enemy","top":25,"left":150,"url":"https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png","scale":1},{"type":"Element","name":"Item","top":25,"left":100,"url":"https://66.media.tumblr.com/4a8e88c9194d00c4e2e14d62f2a9dc76/tumblr_pi5t840NIu1u9vozfo1_250.png","scale":1},{"type":"Element","name":"Player","top":25,"left":50,"url":"https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png","scale":1}],"background":"","backgroundImage":"https://d2ujflorbtfzji.cloudfront.net/package-screenshot/4b7e815a-669f-4023-ac73-6c7691fe9a9f_scaled.jpg","backgroundImageOpacity":1,"backgroundImageStretch":true}';
 // query database and get level info, then translate into list of elements
 var parsedJSON = JSONtoElements(data);
 var elements = parsedJSON.elements;
 var backgroundUrl = parsedJSON.backgroundUrl;
 console.log(elements);
 
+var pc;
+for(i=0; i<elements.length; i++){
+    if(elements[i] instanceof Player){
+        pc = elements[i];
+        elements.splice(i,1);
+    }
+}
 
 function update(progress) {
 
-    var pc;
+    xObstacles = [];
+    yObstacles = [];
+    console.log(elements);
     for(i=0; i<elements.length; i++){
-        if(elements[i] instanceof Player){
-            pc = elements[i];
-        }
-    }
-
-    xObstacles = []
-    yObstacles = []
-    for(i=1; i<elements.length; i++){
-        if(detectXCollision(pc, elements[i]))
+        
+        if(detectXCollision(pc, elements[i])){
 		if(elements[i] instanceof Environment)
            		xObstacles.push(elements[i]);
 	    	else
-			onCollision(pc, elements, i);
-        if(detectYCollision(pc, elements[i]))
-                if(elements[i] instanceof Environment)
-           		yObstacles.push(elements[i]);
-	    	else
-			onCollision(pc, elements, i);
+            onCollision(pc, elements, i);
+        }
+        if(detectYCollision(pc, elements[i]) && detectXCollision(pc, elements[i])){
+            if(elements[i] instanceof Environment){
+                yObstacles.push(elements[i]);
+            } else{
+                onCollision(pc, elements, i);
+            }
+        }
     }
-      if (rightPressed){
+    if (rightPressed){
       if (pc.position.x+1 < (width-pc.size.x)){
         newPos = pc.newXPos(step);
         pc.moveX(newPos, xObstacles);
       }
     } else if (leftPressed){
       if(pc.position.x-1 > 0){
-        newPos = pc.newXPos(step);
+        newPos = pc.newXPos(-1*step);
         pc.moveX(newPos, xObstacles);
       }
     } else if (upPressed){
@@ -223,11 +228,10 @@ function update(progress) {
         newPos = pc.newYPos(step);
         pc.moveY(newPos, yObstacles, true);
       }
-    } else {
-        newPos = pc.newYPos(step);
-        pc.moveY(newPos, yObstacles, false);
-    }
-    }
+    } 
+    newPos = pc.newYPos(step);
+    pc.moveY(newPos, yObstacles, false);
+}
     
 
 function detectXCollision(element1, element2) {
@@ -266,18 +270,17 @@ function onCollision(pc, elements, i) {
             }
 
             //if item, pick up and remove from elements
-            console.log('whats up');
-            if(elements[i] instanceof Item){
-                if(!pc.getEquippedItem()){
-                    pc.setEquippedItem(elements[i]);
-                }
-                pc.inventory.push(elements[i]);
-                elements.splice(i,1);
-            }
+       
+            // if(elements[i] instanceof Item){
+            //     if(!pc.getEquippedItem()){
+            //         pc.setEquippedItem(elements[i]);
+            //     }
+            //     pc.inventory.push(elements[i]);
+            //     elements.splice(i,1);
+            // }
     }
 
 function keyDownHandler(event) {
-    console.log(event);
     if(event.keyCode == 68) {
         rightPressed = true;
     }
@@ -293,7 +296,6 @@ function keyDownHandler(event) {
 }
 
 function keyUpHandler(event) {
-    console.log("event", event);
     if(event.keyCode == 68) {
         rightPressed = false;
     }
@@ -313,11 +315,14 @@ function imgInit(){
     for(i = 0; i<elements.length; i++){
         elements[i].img = new Image;
         elements[i].img.src = elements[i].sprite;
-        console.log(elements[i].img);
     }
     var tmp = backgroundUrl;
     backgroundUrl = new Image;
     backgroundUrl.src = tmp;
+
+    pc.img = new Image;
+    pc.img.src = pc.sprite;
+
 }
 
 imgInit();
@@ -325,6 +330,7 @@ imgInit();
 function draw(){
     ctx.clearRect(0, 0, width, height);
     ctx.drawImage(backgroundUrl, 0,0);
+    
     for(i = 0; i<elements.length; i++){
         var curElement = elements[i];
         if (curElement.shouldDisplay){
@@ -335,7 +341,8 @@ function draw(){
         ctx.drawImage(curElement.img,curElement.position.x,curElement.position.y,
             curElement.size.x,curElement.size.y);
     }
-
+    ctx.drawImage(pc.img,pc.position.x,pc.position.y,
+        pc.size.x,pc.size.y);
 }
 function showInventory(){
     var ul = document.getElementById('inventory');
@@ -478,7 +485,7 @@ const Item = require('./item.js');
 const Element = require('./element.js');
 const Character = require('./character.js');
 const Environment = require('./environment.js');
-const Vector = require('./utility.js').vector;
+const Vector = require('./utility.js');
 
 function JSONtoElements(data){
     var dataobj= JSON.parse(data);
@@ -507,9 +514,10 @@ function JSONtoElements(data){
                     var hea = 10;
                     var stat = 1;
                     var itm= 0;
-                    var inv= 0;
-                    var spd = 0;
+                    var inv= [];
+                    var spd = new Vector(0,0);
                     element = new Player(pos, max, hea, stat, itm, inv, hitbox, url, sz, spd);
+                    console.log("speed?", element.speed);
                 }
                 else if (temp.name == "NPC"){
                     var max = 10;
@@ -539,11 +547,13 @@ module.exports = JSONtoElements;
 Note: location is a vector with x and y*/
 const Item = require('./item.js');
 const Character = require('./character.js');
+const Vector = require('./utility.js');
 
 function Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed){
     Character.call(this, loc, max, hea, stat, hbox, url, size, speed);
     this.equippedItem = itm;
     this.inventory = inv;
+    this.speed = speed;
 }
 
 Player.prototype = Object.create(Character.prototype);
@@ -578,7 +588,6 @@ Player.prototype.setEquippedItem = function(itm){
     //set owned item to itm
     // set item.collected to be true
     if(itm instanceof Item){
-        console.log(this.inventory);
         this.inventory.push(this.equippedItem);
         this.equippedItem = itm;
         itm.collected = true;
@@ -599,12 +608,14 @@ Player.prototype.useItem = function(){
 
 Player.prototype.newXPos = function(step, dir) {
   var playerXSpeed = 7;
-  this.speed.x = 0;
+  this.speed.x = 7;
   if (dir == "right") this.speed.x -= playerXSpeed;
   if (dir == "left") this.speed.x += playerXSpeed;
 
   var motion = new Vector(this.speed.x * step, 0);
-  var newPos = this.loc.plus(motion);
+  console.log('motion', motion);
+  var newPos = this.position.plus(motion);
+  console.log('newPos', newPos);
   return newPos;
 };
 
@@ -613,45 +624,50 @@ Player.prototype.moveX = function(newPos, obstacle) {
   if(obstacle != null) {
       //if environment solid, do nothing
       if(!obstacle.isSolid)
-          this.loc = newPos;
+          this.position = newPos;
    }
    else
-       this.loc = newPos;
+       this.position = newPos;
 };
 
 Player.prototype.newYPos = function(step) {
   var gravity = 30;
   var jumpSpeed = 17;
-
   this.speed.y += step * gravity;
   var motion = new Vector(0, this.speed.y * step);
-  var newPos = this.loc.plus(motion);
-
+  var newPos = this.position.plus(motion);
   return newPos;
 };
 
 Player.prototype.moveY = function(newPos, obstacle, up) {
-  if(obstacle != null) {
-      //if environment solid, do nothing
+    console.log('here we are', obstacle);
+
+  if(obstacle.length != 0) {
       if(obstacle.isSolid)
-          if (up && this.speed.y > 0)
+          if (up && this.speed.y > 0){
+                console.log('yep');
                this.speed.y = -jumpSpeed;
-          else
+          } else
                this.speed.y = 0;
        } 
-   else
-       this.loc = newPos;
+   else {
+       this.position = newPos;
+   }
 };
 
 module.exports = Player;
 
-},{"./character.js":1,"./item.js":6}],10:[function(require,module,exports){
+},{"./character.js":1,"./item.js":6,"./utility.js":10}],10:[function(require,module,exports){
 /*Vector class */
 function Vector(x,y){
 	this.x=x;
 	this.y=y;
 }
 
-module.exports.vector = Vector;
+Vector.prototype.plus = function(vec) {
+	return new Vector (this.x + vec.x, this.y + vec.y);
+}
+
+module.exports = Vector;
 },{}]},{},[4])(4)
 });

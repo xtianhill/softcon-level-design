@@ -2,7 +2,7 @@
 //empty constructor tests
 //get/set message tests
 // test displayMessage w/ full and empty NPC messages
-var Vector = require('./utility.js').vector;
+var Vector = require('./utility.js');
 var NPC = require('./npc.js');
 
 describe('NPC', function() {

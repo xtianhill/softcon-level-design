@@ -1,4 +1,4 @@
-const Vector = require('./utility.js').vector;
+const Vector = require('./utility.js');
 
 /*Element prototype */
 /*note: pos, scl, hitbox are vectors with x and y values */

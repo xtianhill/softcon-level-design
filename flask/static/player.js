@@ -2,11 +2,13 @@
 Note: location is a vector with x and y*/
 const Item = require('./item.js');
 const Character = require('./character.js');
+const Vector = require('./utility.js');
 
 function Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed){
     Character.call(this, loc, max, hea, stat, hbox, url, size, speed);
     this.equippedItem = itm;
     this.inventory = inv;
+    this.speed = speed;
 }
 
 Player.prototype = Object.create(Character.prototype);
@@ -41,7 +43,6 @@ Player.prototype.setEquippedItem = function(itm){
     //set owned item to itm
     // set item.collected to be true
     if(itm instanceof Item){
-        console.log(this.inventory);
         this.inventory.push(this.equippedItem);
         this.equippedItem = itm;
         itm.collected = true;
@@ -62,12 +63,14 @@ Player.prototype.useItem = function(){
 
 Player.prototype.newXPos = function(step, dir) {
   var playerXSpeed = 7;
-  this.speed.x = 0;
+  this.speed.x = 7;
   if (dir == "right") this.speed.x -= playerXSpeed;
   if (dir == "left") this.speed.x += playerXSpeed;
 
   var motion = new Vector(this.speed.x * step, 0);
-  var newPos = this.loc.plus(motion);
+  console.log('motion', motion);
+  var newPos = this.position.plus(motion);
+  console.log('newPos', newPos);
   return newPos;
 };
 
@@ -76,34 +79,35 @@ Player.prototype.moveX = function(newPos, obstacle) {
   if(obstacle != null) {
       //if environment solid, do nothing
       if(!obstacle.isSolid)
-          this.loc = newPos;
+          this.position = newPos;
    }
    else
-       this.loc = newPos;
+       this.position = newPos;
 };
 
 Player.prototype.newYPos = function(step) {
   var gravity = 30;
   var jumpSpeed = 17;
-
   this.speed.y += step * gravity;
   var motion = new Vector(0, this.speed.y * step);
-  var newPos = this.loc.plus(motion);
-
+  var newPos = this.position.plus(motion);
   return newPos;
 };
 
 Player.prototype.moveY = function(newPos, obstacle, up) {
-  if(obstacle != null) {
-      //if environment solid, do nothing
+    console.log('here we are', obstacle);
+
+  if(obstacle.length != 0) {
       if(obstacle.isSolid)
-          if (up && this.speed.y > 0)
+          if (up && this.speed.y > 0){
+                console.log('yep');
                this.speed.y = -jumpSpeed;
-          else
+          } else
                this.speed.y = 0;
        } 
-   else
-       this.loc = newPos;
+   else {
+       this.position = newPos;
+   }
 };
 
 module.exports = Player;

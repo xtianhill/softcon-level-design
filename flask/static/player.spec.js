@@ -12,7 +12,7 @@
 
 var Player = require('./player.js');
 var Item = require('./item.js');
-var Vector = require('./utility.js').vector;
+var Vector = require('./utility.js');
 var Effect = require('./effect.js');
 
 describe('Player', function() {

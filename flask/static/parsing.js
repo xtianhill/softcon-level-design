@@ -5,7 +5,7 @@ const Item = require('./item.js');
 const Element = require('./element.js');
 const Character = require('./character.js');
 const Environment = require('./environment.js');
-const Vector = require('./utility.js').vector;
+const Vector = require('./utility.js');
 
 function JSONtoElements(data){
     var dataobj= JSON.parse(data);
@@ -34,9 +34,10 @@ function JSONtoElements(data){
                     var hea = 10;
                     var stat = 1;
                     var itm= 0;
-                    var inv= 0;
-                    var spd = 0;
+                    var inv= [];
+                    var spd = new Vector(0,0);
                     element = new Player(pos, max, hea, stat, itm, inv, hitbox, url, sz, spd);
+                    console.log("speed?", element.speed);
                 }
                 else if (temp.name == "NPC"){
                     var max = 10;

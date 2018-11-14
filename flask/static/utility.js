@@ -4,4 +4,8 @@ function Vector(x,y){
 	this.y=y;
 }
 
-module.exports.vector = Vector;
+Vector.prototype.plus = function(vec) {
+	return new Vector (this.x + vec.x, this.y + vec.y);
+}
+
+module.exports = Vector;

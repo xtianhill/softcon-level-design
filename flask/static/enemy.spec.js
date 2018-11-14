@@ -1,5 +1,5 @@
 var Enemy = require('./enemy.js');
-const Vector = require('./utility.js').vector;
+const Vector = require('./utility.js');
 
 describe('Enemy', function() {
     let testEnemy;
