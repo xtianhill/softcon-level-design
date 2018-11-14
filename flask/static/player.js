@@ -70,36 +70,15 @@ Player.prototype.newXPos = function(step, dir) {
   return newPos;
 };
 
-Player.prototype.moveX = function(newPos, obstacles) {
-
-  //obstacles is a list constructed by detect collision in update
-  if(obstacles != null) {
-        for element in obstacles{
-            //if environment, just stop
-            if(elements[i] instanceof Environment){
-                //if environment solid, do nothing
-                //if enviroment is not solid:
-                    this.loc = newPos;
-            }
-            else {
-            //if npc, show message
-            if(elements[i] instanceof NPC){
-               //...
-            }
-
-            //if enemy, either damage w/item or lose health
-            if(elements[i] instanceof Enemy){
-                //...
-            }
-
-            //if item, pick up and remove from elements
-            if(elements[i] instanceof Item){
-                //...
-            }
-        this.loc = newPos;
-        }
-        }
-    }
+Player.prototype.moveX = function(newPos, obstacle) {
+ 
+  if(obstacle != null) {
+      //if environment solid, do nothing
+      if(!obstacle.isSolid)
+          this.loc = newPos;
+   }
+   else
+       this.loc = newPos;
 };
 
 Player.prototype.newYPos = function(step) {
@@ -113,40 +92,17 @@ Player.prototype.newYPos = function(step) {
   return newPos;
 };
 
-Player.prototype.moveY = function(newPos, obstacles, up) {
-
-  //obstacles is a list constructed by detect collision in update
-  if(obstacles != null) {
-        for element in obstacles{
-            //if environment, just stop
-            if(elements[i] instanceof Environment){
-                //if environment solid, do nothing
-                //if enviroment is not solid:
-                    if (up && this.speed.y > 0)
-                      this.speed.y = -jumpSpeed;
-                    else
-                       this.speed.y = 0;
-            }
-            else {
-            //if npc, show message
-            if(elements[i] instanceof NPC){
-               //...
-            }
-
-            //if enemy, either damage w/item or lose health
-            if(elements[i] instanceof Enemy){
-                //...
-            }
-
-            //if item, pick up and remove from elements
-            if(elements[i] instanceof Item){
-                //...
-            }
-        this.loc = newPos;
-        }
-        }
-    } else
-        this.loc = newPos;
+Player.prototype.moveY = function(newPos, obstacle, up) {
+  if(obstacle != null) {
+      //if environment solid, do nothing
+      if(obstacle.isSolid)
+          if (up && this.speed.y > 0)
+               this.speed.y = -jumpSpeed;
+          else
+               this.speed.y = 0;
+       } 
+   else
+       this.loc = newPos;
 };
 
 module.exports = Player;
