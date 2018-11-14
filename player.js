@@ -20,18 +20,28 @@ Player.prototype.Player = function(){
     this.inventory = [];
 }  
 
+Player.prototype.getInventory= function(){
+    return this.inventory;
+}
+
+Player.prototype.setInventory = function(arr)
+{
+    this.inventory = arr;
+}
+
 //gets OwnedItem. 
 Player.prototype.getEquippedItem= function(){
     //return owned item
     return this.equippedItem;
 }
 
-//set owned item and return 1. return 0 for non-item input.
-Player.prototype.setOwnedItem = function(itm){
+//set owned item and return 1. return 0 for non-item input
+Player.prototype.setEquippedItem = function(itm){
     //set owned item to itm
     // set item.collected to be true
     if(itm instanceof item){
-        this.ownedItem = itm;
+        this.inventory.push(this.equippedItem);
+        this.equippedItem = itm;
         itm.collected = true;
         return 1;
     }
@@ -39,7 +49,12 @@ Player.prototype.setOwnedItem = function(itm){
 }
 
 Player.prototype.useItem = function(){
-    // if have an item, use its effect on whatever
+    if(this.equippedItem.getEffect() == "heal"){
+        this.health += 2;
+    }
+    if (this.equippedItem.getEffect() == "damage"){
+        //swing sword or whatever
+    }
 }
 
 Player.prototype.moveLeft = function(){
