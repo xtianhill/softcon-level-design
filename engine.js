@@ -8,9 +8,7 @@ const Element = require('./element.js');
 const Character = require('./character.js');
 const Environment = require('./environment.js');
 const Vector = require('./utility.js').vector;
-var gravity = .5;
-var curSpeed = 0;
-
+var step = 0.05;
 
 var canvas = document.getElementById("c");
 var width = canvas.width;
@@ -36,6 +34,8 @@ var parsedJSON = JSONtoElements(data);
 var elements = parsedJSON.elements;
 var backgroundUrl = parsedJSON.backgroundUrl;
 console.log(elements);
+
+
 function update(progress) {
 
     var pc;
@@ -45,34 +45,58 @@ function update(progress) {
         }
     }
 
-    if (rightPressed){
-      if (pc.position.x+1 < (width-pc.size.x)){
-        pc.position.x = pc.position.x+1
-      }
-    }
-    if (leftPressed){
-      if(pc.position.x-1 > 0){
-          pc.position.x = pc.position.x-1;
-      }
-    }
-    if (downPressed){
-      if(pc.position.y+1 < (height-pc.size.y)){
-          pc.position.y = pc.position.y+1;
-      }
-    }
-    if (upPressed){
-      if(pc.position.y-1 > 0){
-          pc.position.y = pc.position.y-1;
-      }
-    }
-
-    //
-
+    xObstacles = []
+    yObstacles = []
     for(i=1; i<elements.length; i++){
+        if(detectXCollision(pc, elements[i]))
+		if(elements[i] instanceof Environment)
+           		xObstacles.push(elements[i]);
+	    	else
+			onCollision(pc, elements, i);
+        if(detectYCollision(pc, elements[i]))
+                if(elements[i] instanceof Environment)
+           		yObstacles.push(elements[i]);
+	    	else
+			onCollision(pc, elements, i);
+    }
+      if (rightPressed){
+      if (pc.position.x+1 < (width-pc.size.x)){
+        newPos = pc.newXPos(step);
+        pc.moveX(newPos, xObstacles);
+      }
+    } else if (leftPressed){
+      if(pc.position.x-1 > 0){
+        newPos = pc.newXPos(step);
+        pc.moveX(newPos, xObstacles);
+      }
+    } else if (upPressed){
+      if(pc.position.y-1 > 0){
+        newPos = pc.newYPos(step);
+        pc.moveY(newPos, yObstacles, true);
+      }
+    } else {
+        newPos = pc.newYPos(step);
+        pc.moveY(newPos, yObstacles, false);
+    }
+    }
+    }
 
-        if(detectCollision(pc, elements[i]))
-        {
-            //if npc, show message
+function detectXCollision(element1, element2) {
+    if ((element1.position.x < element2.position.x + element2.size.x)  && (element1.position.x + element1.size.x  > element2.position.x)) {
+        return true;
+    }
+    return false;
+}
+
+function detectYCollision(element1, element2) {
+    if ((element1.position.y < element2.position.y + element2.size.y && element1.position.y + element1.size.y > element2.position.y) {
+        return true;
+    }
+    return false;
+}
+
+function onCollision(pc, elements, i) {
+	    //if npc, show message
             if(elements[i] instanceof NPC){
                //elements[i].displayMessage();
                console.log(elements[i].getMessage());
@@ -99,24 +123,7 @@ function update(progress) {
                 pc.inventory.push(elements[i]);
                 elements.splice(i,1);
             }
-
-            //if environment, set gravity to 0? then have falling occur later?
-            if(elements[i] instanceof Environment){
-                gravity=0;
-            }
-        }
     }
-}
-
-function detectCollision(element1, element2) {
-    if ((element1.position.x < element2.position.x + element2.size.x)  && (element1.position.x + element1.size.x  > element2.position.x) &&
-		element1.position.y < element2.position.y + element2.size.y && element1.position.y + element1.size.y > element2.position.y) {
-        return true;
-    }
-    return false;
-}
-
-
 
 function keyDownHandler(event) {
     console.log(event);
