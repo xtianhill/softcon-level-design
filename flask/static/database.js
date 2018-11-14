@@ -9,6 +9,8 @@
 const AWS_URL = "http://softcon-leveldesign.us-east-1.elasticbeanstalk.com/";
 
 function storeGrid(grid) {
+    var element1 = {xCoord:0, yCoord:0, sprite:""};
+    var element2 = {xCoord:5, yCoord:5, sprite:""};
     var grid123 = {width:100, height:100, title:"test grid 2", squares:[[element1, element2]]}
     var grid_to_send = {
         title : grid123.title,
