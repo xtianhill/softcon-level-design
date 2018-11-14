@@ -8,6 +8,10 @@ from application.__init__ import application
 def hello():
     return 'Level Design backend is running'
 
+@application.route('/db_tests', methods=['GET'])
+def index():
+    return render_template('index2.html')
+
 @application.route('/index', methods=['GET'])
 def index():
     return render_template('index.html')
