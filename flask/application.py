@@ -26,19 +26,19 @@ def send_js(path):
 def add_grid():
     if not request.json:
         return 'ERROR: invalid input'
+    my_json = request.get_json()
+    title = my_json["title"]
+    data = my_json["data"]
+    db_grid = Grid(title, data)
     try:
-        my_json = json.loads(request)
-        title = my_json.json['title']
-        data = my_json.json['data']
-        db_grid = Grid(title, data)
         result = db.session.add(db_grid)
-        db.session.flush()
-        return str(result)
+        db.session.commit()
+        return 'SUCCESS\n'
     except:
         db.session.rollback()
     finally:
         db.session.close()
-    return 'BAD'
+    return 'BAD\n'
 
 @application.route('/api/v1/query-all/', methods=['GET'])
 def get_all():
