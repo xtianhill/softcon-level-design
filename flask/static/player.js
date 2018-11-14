@@ -1,10 +1,12 @@
 /*Player Prototype
 Note: location is a vector with x and y*/
+const Item = require('./item.js');
 const Character = require('./character.js');
 
-function Player(loc, max, hea, stat, itm, hbox, url, size, speed){
+function Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed){
     Character.call(this, loc, max, hea, stat, hbox, url, size, speed);
-    this.ownedItem = itm;
+    this.equippedItem = itm;
+    this.inventory = inv;
 }
 
 Player.prototype = Object.create(Character.prototype);
@@ -14,22 +16,33 @@ Player.prototype.Player = function(){
     //create enemy with loc = (0,0), maxhealth = 10
     // health = 10, status = 1, item = null
 
-    Character.call(this, vector(0,0), 10, 10, 1, /*generic hitbox*/);
-    this.ownedItem = null;
+    Character.call(this, vector(0,0), 10, 10, 1, vector(50,50));
+    this.equippedItem = null;
+    this.inventory = [];
 }  
 
-//gets OwnedItem. 
-Player.prototype.getOwnedItem= function(){
-    //return owned item
-    return this.ownedItem;
+Player.prototype.getInventory= function(){
+    return this.inventory;
 }
 
-//set owned item and return 1. return 0 for non-item input.
-Player.prototype.setOwnedItem = function(itm){
+Player.prototype.setInventory = function(arr)
+{
+    this.inventory = arr;
+}
+
+//gets OwnedItem. 
+Player.prototype.getEquippedItem= function(){
+    //return owned item
+    return this.equippedItem;
+}
+
+//set owned item and return 1. return 0 for non-item input
+Player.prototype.setEquippedItem = function(itm){
     //set owned item to itm
     // set item.collected to be true
-    if(itm instanceof item){
-        this.ownedItem = itm;
+    if(itm instanceof Item){
+        this.inventory.push(this.equippedItem);
+        this.equippedItem = itm;
         itm.collected = true;
         return 1;
     }
@@ -37,7 +50,13 @@ Player.prototype.setOwnedItem = function(itm){
 }
 
 Player.prototype.useItem = function(){
-    // if have an item, use its effect on whatever
+    if(this.equippedItem.getEffect() == "heal"){
+        this.health = this.maxHealth;
+        this.equippedItem= null;
+    }
+    if (this.equippedItem.getEffect() == "damage"){
+        //swing sword or whatever
+    }
 }
 
 Player.prototype.newXPos = function(step, dir) {
