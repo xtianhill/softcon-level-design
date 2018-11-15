@@ -8,7 +8,7 @@ const Element = require('./element.js');
 const Character = require('./character.js');
 const Environment = require('./environment.js');
 const Vector = require('./utility.js');
-var step = 3;
+var step = 0.05;
 
 var canvas = document.getElementById("c");
 var width = canvas.width;
@@ -44,56 +44,83 @@ for(i=0; i<elements.length; i++){
 
 function update(progress) {
 
-    xObstacles = [];
-    yObstacles = [];
+    // find things that collide if moving left-right
+    xObstacle = null;
     for(i=0; i<elements.length; i++){
-        
-        if(detectXCollision(pc, elements[i])){
-		if(elements[i] instanceof Environment)
-           		xObstacles.push(elements[i]);
+        if(detectYCollision(pc.position, elements[i].position, pc.size, elements[i].size)
+            && detectXCollision(pc.position, elements[i].position, pc.size, elements[i].size)){
+		    if(elements[i] instanceof Environment)
+           		xObstacle = elements[i];
 	    	else
-            onCollision(pc, elements, i);
-        }
-        if(detectYCollision(pc, elements[i]) && detectXCollision(pc, elements[i])){
-            if(elements[i] instanceof Environment){
-                yObstacles.push(elements[i]);
-            } else{
                 onCollision(pc, elements, i);
-            }
         }
     }
+    
+    // move right or left as long as no wall is in the way
     if (rightPressed){
       if (pc.position.x+1 < (width-pc.size.x)){
-        newPos = pc.newXPos(step);
-        pc.moveX(newPos, xObstacles);
+        newXPos = pc.newXPos(step, "right");
+        pc.moveX(newXPos, xObstacle);
       }
     } else if (leftPressed){
       if(pc.position.x-1 > 0){
-        newPos = pc.newXPos(-1*step);
-        pc.moveX(newPos, xObstacles);
+        newXPos = pc.newXPos(step, "left");
+        pc.moveX(newXPos, xObstacle);
       }
-    } else if (upPressed){
+    }
+
+    // find collisions if trying to jump or landing on something
+    newYPos = pc.newYPos(step);
+    yObstacle = null;
+    for(i=0; i<elements.length; i++){
+            if(detectYCollision(newYPos, elements[i].position, pc.size, elements[i].size)
+                && detectXCollision(newYPos, elements[i].position, pc.size, elements[i].size)){
+                if(elements[i] instanceof Environment)
+                    yObstacle = elements[i];
+                else
+                    onCollision(pc, elements, i);
+            }
+        }
+
+    // jump or fall as long as no ground (or ceiling, hopefully) is in the way
+    if (upPressed){
       if(pc.position.y-1 > 0){
-        newPos = pc.newYPos(step);
-        pc.moveY(newPos, yObstacles, true);
-      }
+        pc.moveY(newYPos, yObstacle, true);
     } 
-    newPos = pc.newYPos(step);
-    pc.moveY(newPos, yObstacles, false);
+    } else {
+      pc.moveY(newYPos, yObstacle, false);
+  }
+
+  for(i=0; i<elements.length; i++){
+    if (elements[i] instanceof NPC || elements[i] instanceof Enemy) {
+        yObstacle = null;
+        for(j=0; j<elements.length; j++){
+            newPos = elements[i].newYPos(step);
+            if (i != j && detectYCollision(newPos, elements[j].position, elements[i].size, elements[j].size)
+                && detectXCollision(newPos, elements[j].position, elements[i].size, elements[j].size)) {
+                yObstacle = elements[j];
+            }
+        }
+        elements[i].moveY(newPos, yObstacle, false)
+        console.log(elements[i])
+        console.log(elements[i].speed.y)
+    }
+}
 }
     
-
-function detectXCollision(element1, element2) {
-    if ((element1.position.x < element2.position.x + element2.size.x)  && (element1.position.x + element1.size.x  > element2.position.x)) {
+function detectXCollision(pos1, pos2, size1, size2) {
+    if(pos1 == null || pos2 == null || size1 == null || size2 == null)
+        return false;
+    if ((pos1.x < pos2.x + size2.x)  && (pos1.x + size1.x  > pos2.x))
         return true;
-    }
     return false;
 }
 
-function detectYCollision(element1, element2) {
-    if ((element1.position.y < element2.position.y + element2.size.y && element1.position.y + element1.size.y > element2.position.y)) {
+function detectYCollision(pos1, pos2, size1, size2) {
+    if(pos1 == null || pos2 == null || size1 == null || size2 == null)
+        return false;
+    if ((pos1.y <  pos2.y + size2.y && pos1.y + size1.y > pos2.y))
         return true;
-    }
     return false;
 }
 

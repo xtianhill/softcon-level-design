@@ -1,8 +1,8 @@
 const Character = require('./character.js');
 const Vector = require('./utility.js').vector;
 
-function NPC(loc, max, hea, stat, msg, hbox, url, size){
-    Character.call(this, loc, max, hea, stat, hbox, url, size);
+function NPC(loc, max, hea, stat, msg, hbox, url, size, speed, mvspd, grav){
+    Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspd, grav);
     this.message = msg;
 }
 

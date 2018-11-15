@@ -36,21 +36,29 @@ function JSONtoElements(data){
                     var itm= 0;
                     var inv= [];
                     var spd = new Vector(0,0);
-                    element = new Player(pos, max, hea, stat, itm, inv, hitbox, url, sz, spd);
+                    var mvspd = 60;
+                    var grav = 40;
+                    element = new Player(pos, max, hea, stat, itm, inv, hitbox, url, sz, spd, mvspd, grav);
                 }
                 else if (temp.name == "NPC"){
                     var max = 10;
                     var hea = 10;
                     var stat= 1;
                     var msg = "hi there";
-                    element = new NPC(pos, max, hea, stat, msg, hitbox, url, sz);
+                    var spd = new Vector(0,0);
+                    var mvspd = 30;
+                    var grav = 50;
+                    element = new NPC(pos, max, hea, stat, msg, hitbox, url, sz, spd, mvspd, grav);
                 }
                 else if (temp.name == "Enemy"){
                     var max = 10;
                     var hea= 10;
                     var stat = 1;
                     var dmg= 1;
-                    element = new Enemy(pos, max, hea, stat, dmg, hitbox, url, sz);
+                    var spd = new Vector(0,0);
+                    var mvspd = 40;
+                    var grav = 3;
+                    element = new Enemy(pos, max, hea, stat, dmg, hitbox, url, sz, spd, mvspd, grav);
                 }
                 elementarray.push(element);
             }

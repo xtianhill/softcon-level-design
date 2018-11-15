@@ -12,11 +12,14 @@ function Vector(x,y){
 /*Character Prototype
 Note: location is a vector with x and y*/
 
-function Character(loc, max, hea, stat, hbox, url, size){
+function Character(loc, max, hea, stat, hbox, url, size, speed, mvspd, grav){
     Element.call(this, loc, url, size, hbox);
     this.maxHealth = max; //maximum health
-	this.health=hea; //int health
-	this.status=stat; //true for alive, false for dead
+	  this.health=hea; //int health
+	  this.status=stat; //true for alive, false for dead
+    this.speed = speed; //for moving
+    this.moveSpeed = mvspd; //tells how fast it moves
+    this.gravity = grav;
 }
 
 Character.prototype = Object.create(Element.prototype);
@@ -25,17 +28,18 @@ Character.prototype = Object.create(Element.prototype);
 /* Example for how to create a function for a prototype. this is the javascript version
  of creating a method within a class*/
 //decrement health function
-Character.prototype.decHealth = function(amount){
- 	//decrement health by amount
-}
+// not in iteration 1
+// Character.prototype.decHealth = function(amount){
+//  	//decrement health by amount
+// }
 
 //getters and setters
 Character.prototype.getLocation = function(){
-    return this.location;
+    return this.position;
 }
 
-Character.prototype.setLocation = function(x, y){
-    this.location = new Vector(x,y);
+Character.prototype.setLocation = function(pos){
+    this.position = pos;
 }
 
 Character.prototype.getMaxHealth = function(){
@@ -61,6 +65,47 @@ Character.prototype.getStatus = function(){
 Character.prototype.setStatus = function(s){
     this.status = s;
 }
+
+Character.prototype.newXPos = function(step, dir) {
+  this.speed.x = 0
+  if (dir == "right") this.speed.x = this.moveSpeed;
+  if (dir == "left")  this.speed.x -= this.moveSpeed;
+
+  var motion = new Vector(this.speed.x * step, 0);
+  var newPos = this.position.plus(motion);
+  return newPos;
+};
+
+Character.prototype.moveX = function(newPos, obstacle) {
+  if(obstacle != null) {
+      //if environment solid, do nothing
+      if(!obstacle.isSolid)
+          this.position = newPos;
+   }
+   else
+       this.position = newPos;
+};
+
+Character.prototype.newYPos = function(step) {
+  this.speed.y += step * this.gravity;
+
+  var motion = new Vector(0, this.speed.y * step);
+  var newPos = this.position.plus(motion);
+  return newPos;
+};
+
+Character.prototype.moveY = function(newPos, obstacle, up) {
+  var jumpSpeed = 70;
+  if(obstacle != null) {
+      if(obstacle.getSolid() == 1)
+          if (up && this.speed.y > 0){
+              this.speed.y = -jumpSpeed;
+          } else
+              this.speed.y = 0;
+       } 
+   else
+       this.position = newPos;
+};
 
 
 
@@ -95,12 +140,12 @@ Element.prototype.setSprite = function(url){
 	this.sprite = url;
 }
 
-Element.prototype.getScale = function(){
-	return this.scale;
+Element.prototype.getSize = function(){
+	return this.size;
 }
 
-Element.prototype.setScale = function(scale){
-	this.scale = scale;
+Element.prototype.setSize = function(scale){
+	this.size = scale;
 }
 
 Element.prototype.getHitbox = function(){
@@ -117,8 +162,8 @@ module.exports = Element;
 Note: location is a vector with x and y*/
 const Character = require('./character.js');
 
-function Enemy(loc, max, hea, stat, dmg, hbox, url, size){
-    Character.call(this, loc, max, hea, stat, hbox, url, size);
+function Enemy(loc, max, hea, stat, dmg, hbox, url, size, speed, mvspeed, grav){
+    Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspeed, grav);
     this.damage = dmg;
 }
 
@@ -196,56 +241,83 @@ for(i=0; i<elements.length; i++){
 
 function update(progress) {
 
-    xObstacles = [];
-    yObstacles = [];
+    // find things that collide if moving left-right
+    xObstacle = null;
     for(i=0; i<elements.length; i++){
-        
-        if(detectXCollision(pc, elements[i])){
-		if(elements[i] instanceof Environment)
-           		xObstacles.push(elements[i]);
+        if(detectYCollision(pc.position, elements[i].position, pc.size, elements[i].size)
+            && detectXCollision(pc.position, elements[i].position, pc.size, elements[i].size)){
+		    if(elements[i] instanceof Environment)
+           		xObstacle = elements[i];
 	    	else
-            onCollision(pc, elements, i);
-        }
-        if(detectYCollision(pc, elements[i]) && detectXCollision(pc, elements[i])){
-            if(elements[i] instanceof Environment){
-                yObstacles.push(elements[i]);
-            } else{
                 onCollision(pc, elements, i);
-            }
         }
     }
+    
+    // move right or left as long as no wall is in the way
     if (rightPressed){
       if (pc.position.x+1 < (width-pc.size.x)){
-        newPos = pc.newXPos(step);
-        pc.moveX(newPos, xObstacles);
+        newXPos = pc.newXPos(step, "right");
+        pc.moveX(newXPos, xObstacle);
       }
     } else if (leftPressed){
       if(pc.position.x-1 > 0){
-        newPos = pc.newXPos(-1*step);
-        pc.moveX(newPos, xObstacles);
+        newXPos = pc.newXPos(step, "left");
+        pc.moveX(newXPos, xObstacle);
       }
-    } else if (upPressed){
+    }
+
+    // find collisions if trying to jump or landing on something
+    newYPos = pc.newYPos(step);
+    yObstacle = null;
+    for(i=0; i<elements.length; i++){
+            if(detectYCollision(newYPos, elements[i].position, pc.size, elements[i].size)
+                && detectXCollision(newYPos, elements[i].position, pc.size, elements[i].size)){
+                if(elements[i] instanceof Environment)
+                    yObstacle = elements[i];
+                else
+                    onCollision(pc, elements, i);
+            }
+        }
+
+    // jump or fall as long as no ground (or ceiling, hopefully) is in the way
+    if (upPressed){
       if(pc.position.y-1 > 0){
-        newPos = pc.newYPos(step);
-        pc.moveY(newPos, yObstacles, true);
-      }
+        pc.moveY(newYPos, yObstacle, true);
     } 
-    newPos = pc.newYPos(step);
-    pc.moveY(newPos, yObstacles, false);
+    } else {
+      pc.moveY(newYPos, yObstacle, false);
+  }
+
+  for(i=0; i<elements.length; i++){
+    if (elements[i] instanceof NPC || elements[i] instanceof Enemy) {
+        yObstacle = null;
+        for(j=0; j<elements.length; j++){
+            newPos = elements[i].newYPos(step);
+            if (i != j && detectYCollision(newPos, elements[j].position, elements[i].size, elements[j].size)
+                && detectXCollision(newPos, elements[j].position, elements[i].size, elements[j].size)) {
+                yObstacle = elements[j];
+            }
+        }
+        elements[i].moveY(newPos, yObstacle, false)
+        console.log(elements[i])
+        console.log(elements[i].speed.y)
+    }
+}
 }
     
-
-function detectXCollision(element1, element2) {
-    if ((element1.position.x < element2.position.x + element2.size.x)  && (element1.position.x + element1.size.x  > element2.position.x)) {
+function detectXCollision(pos1, pos2, size1, size2) {
+    if(pos1 == null || pos2 == null || size1 == null || size2 == null)
+        return false;
+    if ((pos1.x < pos2.x + size2.x)  && (pos1.x + size1.x  > pos2.x))
         return true;
-    }
     return false;
 }
 
-function detectYCollision(element1, element2) {
-    if ((element1.position.y < element2.position.y + element2.size.y && element1.position.y + element1.size.y > element2.position.y)) {
+function detectYCollision(pos1, pos2, size1, size2) {
+    if(pos1 == null || pos2 == null || size1 == null || size2 == null)
+        return false;
+    if ((pos1.y <  pos2.y + size2.y && pos1.y + size1.y > pos2.y))
         return true;
-    }
     return false;
 }
 
@@ -439,8 +511,8 @@ module.exports = Item;
 const Character = require('./character.js');
 const Vector = require('./utility.js').vector;
 
-function NPC(loc, max, hea, stat, msg, hbox, url, size){
-    Character.call(this, loc, max, hea, stat, hbox, url, size);
+function NPC(loc, max, hea, stat, msg, hbox, url, size, speed, mvspd, grav){
+    Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspd, grav);
     this.message = msg;
 }
 
@@ -511,21 +583,29 @@ function JSONtoElements(data){
                     var itm= 0;
                     var inv= [];
                     var spd = new Vector(0,0);
-                    element = new Player(pos, max, hea, stat, itm, inv, hitbox, url, sz, spd);
+                    var mvspd = 60;
+                    var grav = 40;
+                    element = new Player(pos, max, hea, stat, itm, inv, hitbox, url, sz, spd, mvspd, grav);
                 }
                 else if (temp.name == "NPC"){
                     var max = 10;
                     var hea = 10;
                     var stat= 1;
                     var msg = "hi there";
-                    element = new NPC(pos, max, hea, stat, msg, hitbox, url, sz);
+                    var spd = new Vector(0,0);
+                    var mvspd = 30;
+                    var grav = 50;
+                    element = new NPC(pos, max, hea, stat, msg, hitbox, url, sz, spd, mvspd, grav);
                 }
                 else if (temp.name == "Enemy"){
                     var max = 10;
                     var hea= 10;
                     var stat = 1;
                     var dmg= 1;
-                    element = new Enemy(pos, max, hea, stat, dmg, hitbox, url, sz);
+                    var spd = new Vector(0,0);
+                    var mvspd = 40;
+                    var grav = 3;
+                    element = new Enemy(pos, max, hea, stat, dmg, hitbox, url, sz, spd, mvspd, grav);
                 }
                 elementarray.push(element);
             }
@@ -543,11 +623,10 @@ const Item = require('./item.js');
 const Character = require('./character.js');
 const Vector = require('./utility.js');
 
-function Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed){
-    Character.call(this, loc, max, hea, stat, hbox, url, size, speed);
+function Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed, mvspd, grav){
+    Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspd, grav);
     this.equippedItem = itm;
     this.inventory = inv;
-    this.speed = speed;
 }
 
 Player.prototype = Object.create(Character.prototype);
@@ -555,9 +634,9 @@ Player.prototype = Object.create(Character.prototype);
 //empty constructor. void
 Player.prototype.Player = function(){
     //create enemy with loc = (0,0), maxhealth = 10
-    // health = 10, status = 1, item = null
+    // health = 10, status = 1, item = null, size 50x50, speed 10x10
 
-    Character.call(this, vector(0,0), 10, 10, 1, vector(50,50));
+    Character.call(this, vector(0,0), 10, 10, 1, vector(50,50), vector(33,13));
     this.equippedItem = null;
     this.inventory = [];
 }  
@@ -585,9 +664,7 @@ Player.prototype.setEquippedItem = function(itm){
         this.inventory.push(this.equippedItem);
         this.equippedItem = itm;
         itm.collected = true;
-        return 1;
     }
-    else return 0;
 }
 
 Player.prototype.useItem = function(){
@@ -595,55 +672,11 @@ Player.prototype.useItem = function(){
         this.health = this.maxHealth;
         this.equippedItem= null;
     }
-    if (this.equippedItem.getEffect() == "damage"){
+    if (this.equippedItem.getEffect() == "damage"){ 
         //swing sword or whatever
     }
+    this.equippedItem.getEffect().activate();
 }
-
-Player.prototype.newXPos = function(step, dir) {
-  var playerXSpeed = 7;
-  this.speed.x = 7;
-  if (dir == "right") this.speed.x -= playerXSpeed;
-  if (dir == "left") this.speed.x += playerXSpeed;
-
-  var motion = new Vector(this.speed.x * step, 0);
-  var newPos = this.position.plus(motion);
-  return newPos;
-};
-
-Player.prototype.moveX = function(newPos, obstacle) {
- 
-  if(obstacle != null) {
-      //if environment solid, do nothing
-      if(!obstacle.isSolid)
-          this.position = newPos;
-   }
-   else
-       this.position = newPos;
-};
-
-Player.prototype.newYPos = function(step) {
-  var gravity = 30;
-  var jumpSpeed = 17;
-  this.speed.y += step * gravity;
-  var motion = new Vector(0, this.speed.y * step);
-  var newPos = this.position.plus(motion);
-  return newPos;
-};
-
-Player.prototype.moveY = function(newPos, obstacle, up) {
-
-  if(obstacle.length != 0) {
-      if(obstacle.isSolid)
-          if (up && this.speed.y > 0){
-               this.speed.y = -jumpSpeed;
-          } else
-               this.speed.y = 0;
-       } 
-   else {
-       this.position = newPos;
-   }
-};
 
 module.exports = Player;
 

@@ -2,8 +2,8 @@
 Note: location is a vector with x and y*/
 const Character = require('./character.js');
 
-function Enemy(loc, max, hea, stat, dmg, hbox, url, size){
-    Character.call(this, loc, max, hea, stat, hbox, url, size);
+function Enemy(loc, max, hea, stat, dmg, hbox, url, size, speed, mvspeed, grav){
+    Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspeed, grav);
     this.damage = dmg;
 }
 
