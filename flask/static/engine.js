@@ -8,7 +8,7 @@ const Element = require('./element.js');
 const Character = require('./character.js');
 const Environment = require('./environment.js');
 const Vector = require('./utility.js');
-var step = 0.05;
+var step = 0.3;
 
 var canvas = document.getElementById("c");
 var width = canvas.width;
