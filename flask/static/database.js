@@ -72,6 +72,9 @@ function validJSON(myJSON) {
         if(myTitle.length == 0 || myData.length == 0) {
             return false;
         }
+        if(typeof myData != 'string') {
+            return false;
+        }
     }
     catch(err) {
         return false;
