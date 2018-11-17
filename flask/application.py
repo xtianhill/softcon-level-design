@@ -102,10 +102,12 @@ def get_all_titles():
 @application.route('/api/v1/query-all/', methods=['GET'])
 def get_all():
     try:
-        grids_json = json.dumps(Grid.query.all())
+        grids = Grid.query.all()
+        grids_string = str(grids)
         db.session.expunge_all()
-        response = Response(grids_json, status=HTTP_OK, mimetype='application/json')
-    except:
+        response = Response(grids_string, status=HTTP_OK, mimetype='application/json')
+    except Exception as e:
+        print e
         db.session.rollback()
         response = Response(status=HTTP_BADREQUEST)
     finally:
