@@ -8,27 +8,21 @@
 
 const AWS_URL = "http://softcon-leveldesign.us-east-1.elasticbeanstalk.com/";
 
-function storeGrid(grid) {
-    var element1 = {xCoord:0, yCoord:0, sprite:""};
-    var element2 = {xCoord:5, yCoord:5, sprite:""};
-    var grid123 = {width:100, height:100, title:"test grid 2", squares:[[element1, element2]]}
-    var grid_to_send = {
-        title : grid123.title,
-        data : JSON.stringify(grid123)
-    };
-    console.log('grid123 is: ' + JSON.stringify(grid123)),
-    console.log('grid_to_send is: ' + JSON.stringify(grid_to_send)),
+function storeGrid(gridJSON) {
+    if(!validJSON(gridJSON)) {
+        return false;
+    }
     $.ajax({
         type: "POST",
         url: AWS_URL + "api/v1/add-grid/",
         // The key needs to match your method's input parameter (case-sensitive).
-        data: JSON.stringify(grid_to_send),
+        data: JSON.stringify(gridJSON),
         contentType: "application/json",
         dataType: "json",
         success: function(data) {
             alert("success! yassssssss");
             console.log(data);
-            return true;
+            return data;
         },
         failure: function(errMsg) {
             alert("you're straight :(");
@@ -48,11 +42,22 @@ function getByTitle(title) {
         success: function(data) {
             alert("success! found item with title " + title + " in DB");
             console.log(data);
-            return true;
+            return data;
         },
         failure: function(errMsg) {
             alert("failure: didn't find item in DB");
             return false;
+        }
+    });
+}
+
+function getAllTitles() {
+    $.ajax({
+        type: "GET",
+        url: AWS_URL + "/api/v1/query-all-titles/",
+        contentType: "application/json",
+        success: function(data) {
+            
         }
     });
 }
@@ -76,4 +81,5 @@ function validJSON(myJSON) {
 
 module.exports.storeGrid = storeGrid;
 module.exports.getByTitle = getByTitle;
+module.exports.getAllTitles = getAllTitles;
 module.exports.validJSON = validJSON;

@@ -1,13 +1,27 @@
-from flask import Flask, request, jsonify, render_template, send_from_directory
+from flask import Flask, request, jsonify, render_template, send_from_directory, Response
 from flask_cors import CORS
 from application import db
 from grid import Grid
 from application.__init__ import application
+from sqlalchemy import exc
 import json
+
+HTTP_OK = 200
+HTTP_CREATED = 201
+HTTP_BADREQUEST = 400
+HTTP_CONFLICT = 409
+
+def validate_json(my_json):
+    try:
+        my_json["title"]
+        my_json["data"]
+    except:
+        return False
+    return True
 
 @application.route('/', methods=['GET'])
 def hello():
-    return 'Level Design backend is running'
+    return Response("SUCCESS: backend is running", status=200)
 
 @application.route('/db_tests', methods=['GET'])
 def db_test():
@@ -19,39 +33,81 @@ def index():
 
 @application.route('/static/<path:path>')
 def send_js(path):
-    print str(path)
     return send_from_directory('../static', path)
 
 @application.route('/api/v1/add-grid/', methods=['POST'])
 def add_grid():
     if not request.json:
-        return 'ERROR: invalid input'
+        return Response(request.form, status=HTTP_BADREQUEST)
+    if not validate_json(request.get_json()):
+        return Response(request.form, status=HTTP_BADREQUEST)
     my_json = request.get_json()
-    title = my_json["title"]
-    data = my_json["data"]
-    db_grid = Grid(title, data)
+    my_title = my_json["title"]
+    my_data = my_json["data"]
+    my_grid = Grid(my_title, my_data)
     try:
-        result = db.session.add(db_grid)
+        exists = db.session.query(Grid.title).filter_by(title=my_title).scalar() is not None
+        if exists:
+            raise exc.DataError("", "", "", False, 0)
+        db.session.add(my_grid)
         db.session.commit()
-        return 'SUCCESS\n'
-    except:
+        response = Response(my_json, status=HTTP_CREATED, mimetype='application/json') 
+    except exc.DataError:
         db.session.rollback()
+        response = Response(my_json, status=HTTP_CONFLICT, mimetype='application/json')
     finally:
         db.session.close()
-    return 'BAD\n'
+    return response
+
+@application.route('/api/v1/update-grid/', methods=['POST'])
+def update_grid():
+    if not request.json:
+        return Response(request.form, status=HTTP_BADREQUEST)
+    if not validate_json(request.get_json()):
+        return Response(request.form, status=HTTP_BADREQUEST)
+    my_json = request.get_json()
+    my_title = my_json["title"]
+    new_data = my_json["data"]
+    try:
+        exists = db.session.query(Grid.title).filter_by(title=my_title).scalar() is not None
+        if not exists:
+            raise exc.DataError("", "", "", False, 0)
+        my_grid = Grid.query.filter_by(title=my_title).first()
+        my_grid.data = new_data
+        db.session.commit()
+        response = Response(my_json, status=HTTP_CREATED, mimetype='application/json') 
+    except exc.DataError:
+        db.session.rollback()
+        response = Response(my_json, status=HTTP_CONFLICT, mimetype='application/json')
+    finally:
+        db.session.close()
+    return response
+
+@application.route('/api/v1/query-all-titles/', methods=['GET'])
+def get_all_titles():
+    try:
+        titles_query = db.session.query(Grid.title).all()
+        all_titles = json.dumps(titles_query)
+        db.session.expunge_all()
+        response = Response(all_titles, status=HTTP_OK, mimetype='application/json')
+    except Exception as e:
+        print e
+        db.session.rollback()
+        response = Response(status=HTTP_BADREQUEST)
+    finally:
+        db.session.close()
+    return response
 
 @application.route('/api/v1/query-all/', methods=['GET'])
 def get_all():
     result = ""
     try:
         result = Grid.query.all()
-        # db.session.commit()
         db.session.expunge_all()
     except:
         db.session.rollback()
     finally:
         db.session.close()
-    # res = Grid.query.all()
     return str(result)
 
 @application.route('/api/v1/search-grid/<search_title>', methods=['GET'])
@@ -59,7 +115,6 @@ def search_grid(search_title):
     result = ""
     try:
         result = Grid.query.filter(Grid.title == search_title).first()
-        # db.session.commit()
         db.session.expunge_all()
     except:
         db.session.rollback()
@@ -67,6 +122,21 @@ def search_grid(search_title):
         db.session.close()
     return str(result)
 
+@application.route('/api/v1/delete-grid/<delete_title>', methods=['GET'])
+def delete_grid(delete_title):
+    try:
+        exists = db.session.query(Grid.title).filter_by(title=delete_title).scalar() is not None
+        if not exists:
+            raise exc.DataError("", "", "", False, 0)
+        Grid.query.filter_by(title=delete_title).delete()
+        db.session.commit()
+        response = Response(delete_title, status=HTTP_OK)
+    except exc.DataError:
+        db.session.rollback()
+        response = Response(delete_title, status=HTTP_CONFLICT)
+    finally:
+        db.session.close()
+    return response
+
 if __name__ == "__main__":
-    # db.create_all()
     application.run()
