@@ -57,5 +57,23 @@ function getByTitle(title) {
     });
 }
 
+function validJSON(myJSON) {
+    if(myJSON.type == 'string') {
+        myJSON = JSON.parse(myJSON);
+    }
+    try {
+        var myTitle = myJSON["title"]
+        var myData = myJSON["data"]
+        if(myTitle.length == 0 || myData.length == 0) {
+            return false;
+        }
+    }
+    catch(err) {
+        return false;
+    }
+    return true;
+}
+
 module.exports.storeGrid = storeGrid;
 module.exports.getByTitle = getByTitle;
+module.exports.validJSON = validJSON;
