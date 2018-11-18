@@ -4,10 +4,14 @@ const Vector = require('./utility.js');
 /*note: pos, scl, hitbox are vectors with x and y values */
 
 function Element(pos, url, sz, hbox){
-	this.position = pos; 
-	this.sprite = url; //url to image file
-	this.size = sz; //scale to resize image dimensions
-	this.hitbox = hbox;
+	if(((pos instanceof Vector) && (typeof url === 'string')) && ((sz instanceof Vector) && (hbox instanceof Vector))){
+		this.position = pos; 
+		this.sprite = url; //url to image file
+		this.scale = sz; //scale to resize image dimensions
+		this.hitbox = hbox;
+	} else {
+		return {};
+	}
 }
 
 Element.prototype.getPosition = function(){
@@ -15,7 +19,9 @@ Element.prototype.getPosition = function(){
 }
 
 Element.prototype.setPosition = function(pos){
-	this.position = pos;
+	if(pos instanceof Vector){
+		this.position = pos;
+	}
 }
 
 Element.prototype.getSprite = function(){
@@ -23,23 +29,29 @@ Element.prototype.getSprite = function(){
 }
 
 Element.prototype.setSprite = function(url){
-	this.sprite = url;
+	if(typeof url === 'string'){
+		this.sprite = url;
+	}
 }
 
 Element.prototype.getSize = function(){
-	return this.size;
+	return this.scale;
 }
 
-Element.prototype.setSize = function(scale){
-	this.size = scale;
+Element.prototype.setSize = function(scl){
+	if (scl instanceof Vector){
+		this.scale = scl;
+	}
 }
 
 Element.prototype.getHitbox = function(){
 	return this.hitbox;
 }
 
-Element.prototype.setHitbox = function(hitbox){
-	this.hitbox = hitbox;
+Element.prototype.setHitbox = function(hbx){
+	if(hbx instanceof Vector){
+		this.hitbox = hbx;
+	}
 }
 
 module.exports = Element;

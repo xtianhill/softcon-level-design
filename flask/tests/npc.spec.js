@@ -10,7 +10,7 @@ describe('NPC', function() {
     beforeEach(function(){
         testNPC = new NPC(new Vector(10,10),15, 15, 1, "hi", new Vector(50,50), null, new Vector(50,50));
     })
-    //test default constructor
+    //test constructor
 
     it('should create a new with given stats', function() {
         expect(testNPC.getMessage()).toEqual("hi");
@@ -24,16 +24,26 @@ describe('NPC', function() {
 
     });
 
+    it('should set message to null due to invalid input', function(){
+        testNPC = new NPC(new Vector(10,10),15, 15, 1, 2, new Vector(50,50), null, new Vector(50,50)); 
+        expect(testNPC).toEqual({});
+    });
 
-    //test setDamage
+
+    //test get setMessage
 
     it('should set the NPCs message to sup', function() {
         testNPC.setMessage('sup');
         expect(testNPC.getMessage()).toEqual('sup');
     });
 
+    it('should not set message to 2 and return null', function() {
+        expect(testNPC.setMessage(2)).toBeNull();
+        expect(testNPC.getMessage()).toEqual('hi');
+    });
 
-    //test getDamage
+
+    //test getMessage
     it('should return the NPCs message', function() {
         expect(testNPC.getMessage()).toEqual('hi');
         testNPC.setMessage('okay');
