@@ -9,6 +9,7 @@ import json
 HTTP_OK = 200
 HTTP_CREATED = 201
 HTTP_BADREQUEST = 400
+HTTP_NOTFOUND = 404
 HTTP_CONFLICT = 409
 
 def validate_json(my_json):
@@ -80,7 +81,7 @@ def update_grid():
             response = Response(my_json, status=HTTP_CREATED, mimetype='application/json') 
         except exc.DataError:
             db.session.rollback()
-            response = Response(my_json, status=HTTP_CONFLICT, mimetype='application/json')
+            response = Response(my_json, status=HTTP_NOTFOUND, mimetype='application/json')
         finally:
             db.session.close()
     return response
@@ -117,10 +118,16 @@ def get_all():
 @application.route('/api/v1/search-grid/<search_title>', methods=['GET'])
 def search_grid(search_title):
     try:
-        result_json = json.dumps(Grid.query.filter(Grid.title == search_title).first())
+        result = Grid.query.filter(Grid.title == search_title).first()
         db.session.expunge_all()
+        result_json = json.dumps(result.data)
         response = Response(result_json, status=HTTP_OK, mimetype='application/json')
-    except:
+    except AttributeError as e:
+        print e
+        db.session.rollback()
+        response = Response(status=HTTP_NOTFOUND)
+    except Exception as e:
+        print e
         db.session.rollback()
         response = Response(status=HTTP_BADREQUEST)
     finally:
@@ -138,7 +145,7 @@ def delete_grid(delete_title):
         response = Response(delete_title, status=HTTP_OK)
     except exc.DataError:
         db.session.rollback()
-        response = Response(delete_title, status=HTTP_CONFLICT)
+        response = Response(delete_title, status=HTTP_NOTFOUND)
     finally:
         db.session.close()
     return response
