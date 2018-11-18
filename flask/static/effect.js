@@ -4,6 +4,12 @@ function Effect(title){
 }
 
 Effect.prototype.Effect = function(bool, title){
+    if(typeof bool != "boolean"){
+      return null;
+    }
+    if (title != "damage" || "heal"){
+      return null;
+    }
     this.isActive = bool;
     this.effect = title;
 }
