@@ -1,24 +1,25 @@
 const Element = require('./element.js');
+const Vector = require('./utility.js');
 //data: point location, int health, bool status
 //function void dechealth
 
-/*Vector class */
-function Vector(x,y){
-	this.x=x;
-	this.y=y;
-}
 
 /*Character Prototype
 Note: location is a vector with x and y*/
 
-function Character(loc, max, hea, stat, hbox, url, size, speed, mvspd, grav){
-    Element.call(this, loc, url, size, hbox);
-    this.maxHealth = max; //maximum health
-	  this.health=hea; //int health
-	  this.status=stat; //true for alive, false for dead
-    this.speed = speed; //for moving
-    this.moveSpeed = mvspd; //tells how fast it moves
-    this.gravity = grav;
+function Character(loc, max, hea, stat, hbox, url, size, spd, mvspd, grav){
+
+    if((spd instanceof Vector) && (typeof mvspd === "number") && (typeof grav === "number")&&  (typeof stat === "boolean") && (typeof max === "number") && (typeof hea ==="number")){
+        Element.call(this, loc, url, size, hbox);
+        this.maxHealth = max; //maximum health
+	    this.health=hea; //int health
+	    this.status =stat; //true for alive, false for dead
+        this.speed = spd; //for moving
+        this.moveSpeed = mvspd; //tells how fast it moves
+        this.gravity = grav;
+    }
+    else return {};
+    
 }
 
 Character.prototype = Object.create(Element.prototype);
@@ -31,14 +32,14 @@ Character.prototype = Object.create(Element.prototype);
 // Character.prototype.decHealth = function(amount){
 //  	//decrement health by amount
 // }
-
-//getters and setters
-Character.prototype.getLocation = function(){
-    return this.position;
+Character.prototype.getPosition = function(){
+	return this.position;
 }
 
-Character.prototype.setLocation = function(pos){
-    this.position = pos;
+Character.prototype.setPosition = function(pos){
+	if(pos instanceof Vector){
+		this.position = pos;
+	}
 }
 
 Character.prototype.getMaxHealth = function(){
@@ -46,7 +47,9 @@ Character.prototype.getMaxHealth = function(){
 }
 
 Character.prototype.setMaxHealth = function(amount){
-    this.maxHealth = amount;
+    if(typeof amount === "number"){
+        this.maxHealth = amount;
+    }
 }
 
 Character.prototype.getHealth = function(){
@@ -54,7 +57,9 @@ Character.prototype.getHealth = function(){
 }
 
 Character.prototype.setHealth = function(amount){
-    this.health= amount;
+    if(typeof amount === "number"){
+        this.health= amount;
+    }
 }
 
 Character.prototype.getStatus = function(){
@@ -62,7 +67,39 @@ Character.prototype.getStatus = function(){
 }
 
 Character.prototype.setStatus = function(s){
-    this.status = s;
+    if(typeof s === 'boolean'){
+        this.status = s;
+    }
+}
+
+Character.prototype.getSpeed = function(){
+    return this.speed;
+}
+
+Character.prototype.setSpeed = function(spd){
+    if(spd instanceof Vector){
+        this.speed =spd;
+    }
+}
+
+Character.prototype.getMovementSpeed = function() {
+    return this.moveSpeed;
+}
+
+Character.prototype.setMovementSpeed = function(ms){
+    if(typeof ms === "number"){
+        this.moveSpeed = ms;
+    }
+}
+
+Character.prototype.getGravity = function () {
+    return this.gravity;
+}
+
+Character.prototype.setGravity = function(g) {
+    if(typeof g === "number"){
+        this.gravity = g;
+    }
 }
 
 Character.prototype.newXPos = function(step, dir) {
@@ -78,7 +115,7 @@ Character.prototype.newXPos = function(step, dir) {
 Character.prototype.moveX = function(newPos, obstacle) {
   if(obstacle != null) {
       //if environment solid, do nothing
-      if(!obstacle.isSolid)
+      if(!obstacle.getSolid())
           this.position = newPos;
    }
    else
@@ -96,12 +133,14 @@ Character.prototype.newYPos = function(step) {
 Character.prototype.moveY = function(newPos, obstacle, up) {
   var jumpSpeed = 70;
   if(obstacle != null) {
-      if(obstacle.getSolid() == 1)
+      if(obstacle.getSolid() == true)
           if (up && this.speed.y > 0){
               this.speed.y = -jumpSpeed;
           } else
               this.speed.y = 0;
-       } 
+        else   
+            this.position=newPos;
+        } 
    else
        this.position = newPos;
 };
