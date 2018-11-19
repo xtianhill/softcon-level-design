@@ -3,8 +3,14 @@ Note: location is a vector with x and y*/
 const Character = require('./character.js');
 
 function Enemy(loc, max, hea, stat, dmg, hbox, url, size, speed, mvspeed, grav){
-    Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspeed, grav);
-    this.damage = dmg;
+    t = typeof dmg
+    if (t === "number") {
+        Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspeed, grav);
+        this.damage = dmg;
+    }
+    else {
+        return {}
+    }
 }
 
 Enemy.prototype = Object.create(Character.prototype);
@@ -26,9 +32,13 @@ Enemy.prototype.getDamage = function(){
 //set int damage
 Enemy.prototype.setDamage = function(amount){
     //set damage to amount
-        this.damage = amount;
-        
-  
+        t = typeof amount
+        if (t === "number"){
+            this.damage = amount;
+        }
+        else{
+            return {}
+        }
 }
 
 
