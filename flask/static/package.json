@@ -10,7 +10,9 @@
     "jasmine": "^3.3.0",
     "mysql": "^2.16.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "jasmine-ajax": "^3.4.0"
+  },
   "scripts": {
     "backend-test": "jasmine tests/database-test.js"
   },
