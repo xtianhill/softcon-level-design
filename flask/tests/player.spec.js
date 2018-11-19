@@ -37,6 +37,13 @@ describe('Player', function() {
         expect(testPlayer.getStatus()).toEqual(0);
     });
 
+    //test setInventory and getInventory
+    it('should test setInventory', function() {
+        testPlayer.setInventory(["sword", "dried fruit", "water bottle", "hat"]);
+        expect(testPlayer.getInventory()).toEqual(["sword", "dried fruit", "water bottle", "hat"]);
+    })
+
+
     //test setEquippedItem
 
     it('should set the Players owned item to testitem', function() {
@@ -58,5 +65,16 @@ describe('Player', function() {
         testPlayer.useItem();
         expect(testItem.getEffect().getIsActive()).toBeTruthy();
     });
+
+    //test heal effect in useItem
+    it('should test heal', function() {
+        testItem.setEffect(new Effect('heal'));
+        testPlayer.setEquippedItem(testItem);
+        testPlayer.useItem();
+        expect(testPlayer.getHealth()).toEqual(testPlayer.getMaxHealth());
+        expect(testPlayer.getHealth()).toEqual(20);
+        expect(testPlayer.getEquippedItem()).toEqual(null);
+    });
+
 
 });
