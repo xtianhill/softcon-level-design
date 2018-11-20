@@ -77,13 +77,14 @@ Character.prototype.newXPos = function(step, dir) {
 
 Character.prototype.moveX = function(newPos, obstacle) {
   if(obstacle != null) {
-      //if environment solid, do nothing
-      if(!obstacle.isSolid)
+      if(obstacle.getSolid() == 0){
           this.position = newPos;
+        }
    }
-   else
+   else{
        this.position = newPos;
-};
+     }
+}
 
 Character.prototype.newYPos = function(step) {
   this.speed.y += step * this.gravity;
@@ -97,6 +98,7 @@ Character.prototype.moveY = function(newPos, obstacle, up) {
   var jumpSpeed = 70;
   if(obstacle != null) {
       if(obstacle.getSolid() == 1)
+          newPos.x = this.position.x
           if (up && this.speed.y > 0){
               this.speed.y = -jumpSpeed;
           } else
