@@ -14,8 +14,8 @@ Note: location is a vector with x and y*/
 function Character(loc, max, hea, stat, hbox, url, size, speed, mvspd, grav){
     Element.call(this, loc, url, size, hbox);
     this.maxHealth = max; //maximum health
-	  this.health=hea; //int health
-	  this.status=stat; //true for alive, false for dead
+	this.health=hea; //int health
+	this.status=stat; //true for alive, false for dead
     this.speed = speed; //for moving
     this.moveSpeed = mvspd; //tells how fast it moves
     this.gravity = grav;

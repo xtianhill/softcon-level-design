@@ -22,7 +22,7 @@ describe('Player', function() {
     
     beforeEach(function(){
         testItem = new Item('pos', 'url', 'sz', 'hbox', true, new Effect('fire'));
-        testPlayer = new Player(new Vector(1,1), 20, 0, 0, testItem, [], 'hbox', 'rul', 'size', 'speed');
+        testPlayer = new Player(new Vector(1,1), 20, 0, 0, testItem, [testItem], 'hbox', 'rul', 'size', 'speed');
 
     });
 
@@ -74,6 +74,18 @@ describe('Player', function() {
         expect(testPlayer.getHealth()).toEqual(testPlayer.getMaxHealth());
         expect(testPlayer.getHealth()).toEqual(20);
         expect(testPlayer.getEquippedItem()).toEqual(null);
+    });
+
+    // set items position to be relative to the player, add the item to inventory, 
+    // and set equipped item
+    it('should pick up item', function(){
+        var newItem = new Item(new Vector(0,0), 'url', 'sz', 'hbox', true, new Effect('fire'));
+        testPlayer.pickUpItem(newItem);
+        expect(testPlayer.equippedItem).toEqual(newItem);
+        expect(testPlayer.equippedItem.pos.x).toEqual(11);
+        expect(testPlayer.equippedItem.pos.y).toEqual(6);
+        expect(testPlayer.inventory).toEqual([testItem, newItem]);
+
     });
 
 

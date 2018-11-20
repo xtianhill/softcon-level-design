@@ -234,6 +234,7 @@ function draw(){
     ctx.drawImage(pc.img,pc.position.x,pc.position.y,
         pc.size.x,pc.size.y);
 }
+
 function showInventory(){
     var ul = document.getElementById('inventory');
     var inventory = elements[0].inventory;
