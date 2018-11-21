@@ -1,3 +1,4 @@
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.enemy = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 /*
 |------------------------------------------------------------------------------
 | Character Class
@@ -176,9 +177,163 @@ Character.prototype.moveY = function(newPos, obstacle, up) {
               this.speed.y = -jumpSpeed;
           } else
               this.speed.y = 0;
-      }
-    } else
+      } else
           this.position = newPos;
+   }
 };
 
 module.exports = Character;
+
+},{"./element.js":2,"./utility.js":4}],2:[function(require,module,exports){
+const Vector = require('./utility.js');
+
+/*Element prototype */
+/*note: pos, scl, hitbox are vectors with x and y values */
+
+function Element(pos, url, sz, hbox){
+	if(((pos instanceof Vector) && (typeof url === 'string')) && ((sz instanceof Vector) && (hbox instanceof Vector))){
+		this.position = pos; 
+		this.sprite = url; //url to image file
+		this.scale = sz; //scale to resize image dimensions
+		this.hitbox = hbox;
+	} else {
+		return {};
+	}
+}
+
+Element.prototype.getPosition = function(){
+	return this.position;
+}
+
+Element.prototype.setPosition = function(pos){
+	if(pos instanceof Vector){
+		this.position = pos;
+	}
+}
+
+Element.prototype.getSprite = function(){
+	return this.sprite;
+}
+
+Element.prototype.setSprite = function(url){
+	if(typeof url === 'string'){
+		this.sprite = url;
+	}
+}
+
+Element.prototype.getSize = function(){
+	return this.scale;
+}
+
+Element.prototype.setSize = function(scl){
+	if (scl instanceof Vector){
+		this.scale = scl;
+	}
+}
+
+Element.prototype.getHitbox = function(){
+	return this.hitbox;
+}
+
+Element.prototype.setHitbox = function(hbx){
+	if(hbx instanceof Vector){
+		this.hitbox = hbx;
+	}
+}
+
+module.exports = Element;
+},{"./utility.js":4}],3:[function(require,module,exports){
+/*Enemy Prototype
+Note: location is a vector with x and y*/
+const Character = require('./character.js');
+
+function Enemy(loc, max, hea, stat, dmg, hbox, url, size, speed, mvspeed, grav){
+    t = typeof dmg
+    if (t === "number") {
+        Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspeed, grav);
+        this.damage = dmg;
+    }
+    else {
+        return {}
+    }
+}
+
+Enemy.prototype = Object.create(Character.prototype);
+
+//empty constructor. void
+Enemy.prototype.Enemy = function(){
+    //create enemy with loc = (0,0), maxhealth = 10
+    // health = 10, status = 1, damage = 1
+    Character.call(this, vector(0,0), 10, 10, 1, new vector(50,50), null, new vector(50,50));
+    this.damage = 1;
+}  
+
+//gets damage. return int damage
+Enemy.prototype.getDamage = function(){
+    //get damage amount
+    return this.damage;
+}
+
+//set int damage
+Enemy.prototype.setDamage = function(amount){
+    //set damage to amount
+        t = typeof amount
+        if (t === "number"){
+            this.damage = amount;
+        }
+        else{
+            return {}
+        }
+}
+
+
+module.exports = Enemy;
+
+},{"./character.js":1}],4:[function(require,module,exports){
+/*Vector class */
+function Vector(x,y){
+	this.x=x;
+	this.y=y;
+}
+
+Vector.prototype.plus = function(vec) {
+	return new Vector (this.x + vec.x, this.y + vec.y);
+}
+
+module.exports = Vector;
+},{}],5:[function(require,module,exports){
+var Enemy = require('../static/enemy.js');
+const Vector = require('../static/utility.js');
+
+describe('Enemy', function() {
+    let testEnemy;
+    beforeEach(function(){
+        testEnemy = new Enemy(new Vector(1,1), 20, 0, 0, 5, new Vector(10,10), new Vector(10,10));
+    });
+
+    //test constructor
+
+    it('should create a new enemy with create enemy with loc (1,1), maxhealth 20 health 0, status 0, damage 5', function() {
+        expect(testEnemy.getDamage()).toEqual(5);
+        expect(testEnemy.getLocation()).toEqual(new Vector(1,1));
+        expect(testEnemy.getMaxHealth()).toEqual(20);
+        expect(testEnemy.getHealth()).toEqual(0);
+        expect(testEnemy.getStatus()).toEqual(0);
+    });
+
+    //test setDamage
+    it('should set the enemys damage level', function() {
+        testEnemy.setDamage(5);
+        expect(testEnemy.getDamage()).toEqual(5);
+    });
+
+    //test getDamage
+    it('should return the enemys damage level', function() {
+        expect(testEnemy.getDamage()).toEqual(5);
+        testEnemy.setDamage(4);
+        expect(testEnemy.getDamage()).toEqual(4);
+    });
+
+});
+},{"../static/enemy.js":3,"../static/utility.js":4}]},{},[5])(5)
+});
