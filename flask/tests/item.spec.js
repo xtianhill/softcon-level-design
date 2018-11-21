@@ -39,15 +39,31 @@ describe('Item', function(){
     |--------------------------------------------------------------------------
     */
     // setEffect and getEffect tests
-    it('should set and get effect', function(){
+    it('should set and get effect with valid input', function() {
+        testItem.setEffect("airbender");
+        expect(testItem.getEffect()).toBeTruthy();
+    })
+
+
+    it('should fail to set effect due to invalid input', function(){
     	testItem.setEffect(false);
     	expect(testItem.getEffect()).toBeFalsy();
     });
 
+    it('should fail to set effect due to invalid input', function() {
+        testItem.setEffect(300);
+        expect(testItem.getEffect()).toBeFalsy();
+    });
+
     // setCollected and getCollected tests
-    it('should set and get collected', function(){
+    it('should set and get collected with valid input', function(){
     	testItem.setCollected(false);
     	expect(testItem.getCollected()).toBeFalsy();
     });
+
+    it('should fail to set collected due to invalid input', function() {
+        testItem.setCollected("hooray");
+        expect(testItem.getCollected()).toBeFalsy();
+    })
 
 });

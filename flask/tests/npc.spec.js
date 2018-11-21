@@ -11,7 +11,9 @@
 | This file contains tests for the NPC class.
 | We test valid and invalid input for each method. Thorough testing on
 | the constructor is used to verify input to all methods that are not
-| setter methods.
+| setter methods. Since NPC is
+| a subclass of Character, any constructor input or setter methods that are
+| input-validated in Character are not re-tested here.
 |
 |------------------------------------------------------------------------------
 */
@@ -63,19 +65,23 @@ describe('NPC', function() {
         expect(testNPC.getMessage()).toEqual('sup');
     });
 
-    it('should not set message to 2 and return null', function() {
+    it('should not set message to 2 and return null due to invalid input', function() {
         expect(testNPC.setMessage(2)).toBeNull();
         expect(testNPC.getMessage()).toEqual('hi');
     });
 
 
-    it('should return the NPCs message', function() {
+    it('should test setMessage and getMessage with valid input', function() {
         expect(testNPC.getMessage()).toEqual('hi');
         testNPC.setMessage('okay');
         expect(testNPC.getMessage()).toEqual('okay');
     });
 
-   
+
+    it('should fail to set the message due to invalid input', function() {
+        testNPC.setMessage(false);
+        expect(testNPC.getMessage()).toEqual('okay');
+    });
     
 
 });
