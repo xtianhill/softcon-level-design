@@ -1,3 +1,7 @@
+
+/* Becase engine.js is a script that runs the game, and interacts directly with the html, 
+the functions that needed to be unit tested are included here and then exposed */
+
 /* basic engine prototype */
 const JSONtoElements = require('./parsing.js');
 const NPC = require('./npc.js');
@@ -10,46 +14,6 @@ const Environment = require('./environment.js');
 const Vector = require('./utility.js');
 
 var gameState;
-
-
-function initialize(){
-    var step = 0.05;
-    var canvas = document.getElementById("c");
-    var width = canvas.width;
-    var height = canvas.height;
-    var ctx = canvas.getContext("2d");
-    document.addEventListener('keydown', function(e) {keyDownHandler(e, gameState)}, false);
-    document.addEventListener('keyup', function(e) {keyUpHandler(e, gameState)}, false);
-    var rightPressed = false;
-    var leftPressed = false;
-    var downPressed = false;
-    var upPressed = false;
-    var data = '{"objects":[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{"type":"Element","name":"Environment","top":350,"left":100,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":350,"left":150,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":350,"left":200,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":350,"left":350,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Player","top":150,"left":100,"url":"https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png","scale":1},{"type":"button"},{"type":"Element","name":"Enemy","top":150,"left":550,"url":"https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png","scale":1},{"type":"Element","name":"NPC","top":300,"left":200,"url":"https://66.media.tumblr.com/18b1dcddb1e6de2d56f2bbc16e368af5/tumblr_pi5sz2UwpH1u9vozfo1_250.png","scale":1},{"type":"Element","name":"Item","top":150,"left":500,"url":"https://66.media.tumblr.com/4a8e88c9194d00c4e2e14d62f2a9dc76/tumblr_pi5t840NIu1u9vozfo1_250.png","scale":1},{"type":"button"},{"type":"button"},{"type":"button"},{"type":"button"}],"background":"","backgroundImage":"https://d2ujflorbtfzji.cloudfront.net/package-screenshot/4b7e815a-669f-4023-ac73-6c7691fe9a9f_scaled.jpg","backgroundImageOpacity":1,"backgroundImageStretch":true}';
-    // query database and get level info, then translate into list of elements
-    var parsedJSON = JSONtoElements(data);
-    var elements = parsedJSON.elements;
-    var backgroundUrl = parsedJSON.backgroundUrl;
-
-    var pc;
-    for(i=0; i<elements.length; i++){
-        if(elements[i] instanceof Player){
-            pc = elements[i];
-            elements.splice(i,1);
-        }
-    }
-    gameState = { canvas: canvas
-        , width: width
-        , height: height
-        , ctx: ctx
-        , rightPressed: rightPressed
-        , leftPressed: leftPressed
-        , downPressed: downPressed
-        , upPressed: upPressed
-        , elements: elements
-        , pc: pc
-        , step: step
-        , backgroundUrl: backgroundUrl};
-}
 
 // GAME STATE
 
@@ -140,7 +104,6 @@ function detectCollision(pos1, pos2, element1, element2) {
     right2 = pos2.x + (0.5 * size2.x) + (0.5 * box2.x);
     top2 = pos2.y + (0.5 * size2.y) - (0.5 * box2.y);
     bottom2 = pos2.y + (0.5 * size2.y) + (0.5 * box2.y);
-
     if (right1 > left2 && //right edge of self, left edge of other
         left1 < right2 && //left edge of self, right edge of other
         bottom1 > top2 && //bottom edge of self, top edge of other
@@ -254,24 +217,16 @@ function showInventory(elements){
         ul.appendChild(listItem);
     }
 }
-
 function testWinConditions(gameState){
     // to be written
 }
 
-function loop(timestamp) {
-    // game loop
-    
-    update(gameState);
-    draw(gameState.ctx, gameState.elements, gameState.pc, gameState.backgroundUrl);
-
-    window.requestAnimationFrame(loop);
-}
-
-initialize();
-imgInit(gameState);
-window.requestAnimationFrame(loop);
-
 module.exports.showInventory = showInventory;
-
-
+module.exports.draw = draw;
+module.exports.imgInit = imgInit;
+module.exports.keyUpHandler = keyUpHandler;
+module.exports.keyDownHandler = keyDownHandler;
+module.exports.onCollision = onCollision;
+module.exports.detectCollision = detectCollision;
+module.exports.testWinConditions = testWinConditions;
+module.exports.update = update;

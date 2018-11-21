@@ -41,5 +41,7 @@ Enemy.prototype.setDamage = function(amount){
         }
 }
 
-
+Enemy.prototype.decHealth = function(){
+    // decrease an enemies health if attacked with damage effect
+}
 module.exports = Enemy;

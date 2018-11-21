@@ -3,100 +3,187 @@
 | Tests for Engine
 |------------------------------------------------------------------------------
 |
-| This file contains tests for the Engine.
-|
+| This file contains tests for the Engine. Since the engine file is a script
+| that interats directly with the browser, this file tests the exposed functions
+| on engine-test-class. 
 |------------------------------------------------------------------------------
 */
 
+const keyUpHandler = require('../static/engine-test-class.js').keyUpHandler;
+const keyDownHandler = require('../static/engine-test-class.js').keyDownHandler;
+const onCollision = require('../static/engine-test-class.js').onCollision;
+const detectCollision = require('../static/engine-test-class.js').detectCollision;
+const testWinConditions = require('../static/engine-test-class.js').testWinConditions;
 
-const rewire = require('rewire'),
-    engine = rewire('../static/engine.js');
+const Player = require('../static/player.js');
+const Item = require('../static/item.js');
+const Enemy = require('../static/enemy.js');
+const NPC = require('../static/npc.js');
+const Vector = require('../static/utility.js');
 
 describe('Engine Tests', function(){
 
-    let elements, winConditions;
+    let gameState, testItem;
 
     beforeEach(function(){
-        var data = '{"objects":[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{"type":"Element","name":"Environment","top":350,"left":100,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":350,"left":150,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":350,"left":200,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":350,"left":350,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Player","top":150,"left":100,"url":"https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png","scale":1},{"type":"button"},{"type":"Element","name":"Enemy","top":150,"left":550,"url":"https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png","scale":1},{"type":"Element","name":"NPC","top":300,"left":200,"url":"https://66.media.tumblr.com/18b1dcddb1e6de2d56f2bbc16e368af5/tumblr_pi5sz2UwpH1u9vozfo1_250.png","scale":1},{"type":"Element","name":"Item","top":150,"left":500,"url":"https://66.media.tumblr.com/4a8e88c9194d00c4e2e14d62f2a9dc76/tumblr_pi5t840NIu1u9vozfo1_250.png","scale":1},{"type":"button"},{"type":"button"},{"type":"button"},{"type":"button"}],"background":"","backgroundImage":"https://d2ujflorbtfzji.cloudfront.net/package-screenshot/4b7e815a-669f-4023-ac73-6c7691fe9a9f_scaled.jpg","backgroundImageOpacity":1,"backgroundImageStretch":true}';
-        var parsedJSON = JSONtoElements(data);
-        elements = parsedJSON.elements;
+        var vec = new Vector(5,5);
+        testItem = new Item('pos', 'testingUrl', 'sz', 'hbox', 'col', 'damage');
+        testItem2 = new Item('pos', 'secondTestingUrl', 'sz', 'hbox', 'col', 'damage');
+        var elements = [new Player(vec, 0, 0, true, testItem2, [testItem, testItem2], vec, 'p_url', vec, vec, 0, 0),
+            new Enemy(new Vector(20,20), 0, 0, true, 10, vec, 'e_url', vec, vec, 0, 0),
+            new NPC(vec, 0, 0, true, 'message!', vec, 'n_url', vec, vec, 0, 0),
+            testItem];
+
+        gameState = { canvas: 'canvas'
+                    , width: 500
+                    , height: 500
+                    , ctx: {fillText: function(){}}
+                    , rightPressed: false
+                    , leftPressed: false
+                    , downPressed: false
+                    , upPressed: false
+                    , elements: elements
+                    , pc: elements[0]
+                    , step: .05
+                    , backgroundUrl: 'backgroundUrl'
+                    , winConditions: [false, false, false, false]
+                    , gameOver: false
+                };
+        gameState.elements[2].hasBeenTalkedTo = false;
 
     });
 
-    // GAME STATE TESTS
+    /*
+    |--------------------------------------------------------------------------
+    | Key Handler Tests
+    |--------------------------------------------------------------------------
+    */
 
-    // on collision tests
-    it('should make player call pickUpItem when colliding with item', function(){
+    it('should set correct direction for key presses', function(){
+        // key presses
+        var event = {keyCode: 68};
+        keyDownHandler(event, gameState);
+        expect(gameState.rightPressed).toBeTruthy();
+        event.keyCode = 83;
+        keyDownHandler(event, gameState);
+        expect(gameState.downPressed).toBeTruthy();
+        event.keyCode = 87;
+        keyDownHandler(event, gameState);
+        expect(gameState.upPressed).toBeTruthy();
+        event.keyCode = 65;
+        keyDownHandler(event, gameState);
+        expect(gameState.leftPressed).toBeTruthy();
+
+        // key unpresses
+        event.keyCode = 68;
+        keyUpHandler(event, gameState);
+        expect(gameState.rightPressed).toBeFalsy();
+        event.keyCode = 83;
+        keyUpHandler(event, gameState);
+        expect(gameState.downPressed).toBeFalsy();
+        event.keyCode = 87;
+        keyUpHandler(event, gameState);
+        expect(gameState.upPressed).toBeFalsy();
+        event.keyCode = 65;
+        keyUpHandler(event, gameState);
+        expect(gameState.leftPressed).toBeFalsy();
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Collision Detection Tests
+    |--------------------------------------------------------------------------
+    */
+
+    it('should return true if there is a collision', function(){
+        expect(detectCollision(gameState.elements[0].position, 
+            gameState.elements[2].position,gameState.elements[0],gameState.elements[2])).toBeTruthy();
         
+        gameState.elements[2].position = new Vector(2,2);
+        expect(detectCollision(gameState.elements[0].position, 
+            gameState.elements[2].position,gameState.elements[0],gameState.elements[2])).toBeTruthy();
+
+        gameState.elements[2].position = new Vector(1,2);  
+        expect(detectCollision(gameState.elements[0].position, 
+            gameState.elements[2].position,gameState.elements[0],gameState.elements[2])).toBeTruthy();
+
+        gameState.elements[2].position = new Vector(2,1);
+        expect(detectCollision(gameState.elements[0].position, 
+            gameState.elements[2].position,gameState.elements[0],gameState.elements[2])).toBeTruthy();
+    });
+
+    it('should return false if there isnt a collision', function(){
+        expect(detectCollision(gameState.elements[0].position, 
+            gameState.elements[1].position,gameState.elements[0],gameState.elements[1])).toBeFalsy();
+        gameState.elements[1].position = new Vector(6,0);
+        expect(detectCollision(gameState.elements[0].position, 
+            gameState.elements[1].position,gameState.elements[0],gameState.elements[1])).toBeFalsy();
+        gameState.elements[1].position = new Vector(0,6);
+        expect(detectCollision(gameState.elements[0].position, 
+            gameState.elements[1].position,gameState.elements[0],gameState.elements[1])).toBeFalsy();
+
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Element Interaction (onCollision) Tests (iteration 2)
+    |--------------------------------------------------------------------------
+    */
+
+    it('should make player call pickUpItem when colliding with item', function(){
+        onCollision(gameState, 3);
+        spyOn(gameState.elements[0], 'pickUpItem');
+        expect(gameState.elements[0].pickUpItem).toHaveBeenCalled();
+
     });
 
     it('should decrease enemies health when attacked', function(){
-
+        onCollision(gameState, 1);
+        
+        spyOn(gameState.elements[1], 'decHealth');
+        expect(gameState.elements[1].decHealth).toHaveBeenCalled();
     });
 
     it('should call display message if collision with npc', function(){
-
+        onCollision(gameState, 2);
+        expect(gameState.elements[2].hasBeenTalkedTo).toBeTruthy();
     });
 
-    // show inventory tests
-    it('should generate list of items to be displayed in html', function(){
+    /*
+    |--------------------------------------------------------------------------
+    | Win Condition Tests (iteration 2)
+    |--------------------------------------------------------------------------
+    */
 
-    });
-
-    // test draw function
-    it('should call drawImage for each element in the list with its position as parameters', function(){
-
-    });
-
-    // test image init
-    it('should create img objects for each element and set source to sprite', function(){
-
-    });
-
-    // test key handlers
-    it('should set correct direction for key presses', function(){
-        var event = {keyCode: 68};
-        var private_keyHandlerDown = engine.__get__('keyHandlerDown');
-        var private_rightPressed = engine.__get__('rightPressed');
-        var private_leftPressed = engine.__get__('leftPressed');
-        var private_downPressed = engine.__get__('downPressed');
-        var private_upPressed = engine.__get__('upPressed');
-        engine.private_keyHandlerDown(event);
-        expect(private_rightPressed).toEqual('true');
-    });
-
-    // test detectCollisions
-    it('should return true if there is an x collision', function(){
-
-    });
-
-    it('should return true if there is an y collision', function(){
-
-    });
-
-    // test win conditions
     it('should set npc condition to true if all npcs have displayed message', function(){
-
+        testWinConditions(gameState);
+        expect(gameState.winConditions[0]).toBeTruthy();
     });
 
     it('should set enemy condition to true if all enemies are dead', function(){
-
+        gameState.elements[1].setStatus(false);
+        testWinConditions(gameState);
+        expect(gameState.winConditions[1]).toBeTruthy();
     });
 
     it('should set item condition to true if all items picked up', function(){
-
+        gameState.elements[0].pickUpItem(gameState.elements[3]);
+        testWinConditions(gameState);
+        expect(gameState.winConditions[2]).toBeTruthy();
     });
 
     it('should set distance condition to true if you reach end of level', function(){
-
+        gameState.elements[0].pos = new Vector(30,30);
+        gameState.endPoint = new Vector(30,30);
+        testWinConditions(gameState);
+        expect(gameState.winConditions[3]).toBeTruthy();
     });
 
     it('should end game when all conditions met', function(){
-
+        gameState.winConditions = [true, true, true, true];
+        testWinConditions(gameState);
+        expect(gameState.gameOver).toBeTruthy();
     });
-
-
-
 
 
 });

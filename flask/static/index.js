@@ -300,49 +300,49 @@ const Element = require('./element.js');
 const Character = require('./character.js');
 const Environment = require('./environment.js');
 const Vector = require('./utility.js');
-var step = 0.05;
 
-var canvas = document.getElementById("c");
-var width = canvas.width;
-var height = canvas.height;
-var ctx = canvas.getContext("2d");
-document.addEventListener('keydown', function(e) {keyDownHandler(e, gameState)}, false);
-document.addEventListener('keyup', function(e) {keyUpHandler(e, gameState)}, false);
-var rightPressed = false;
-var leftPressed = false;
-var downPressed = false;
-var upPressed = false;
-var icon = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToe-PSAektDgBsXLsdybQW6F1wGDdpw2mbm3SaReRPuQ0ec0ns";
-var icon2 = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKH3Qd3RP33Q5XxcRMrLXYhYGRu_dxvpJCIBEU_MlAudC1ev-P8A";
+var gameState;
 
-var data = '{"objects":[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{"type":"Element","name":"Environment","top":350,"left":100,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":350,"left":150,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":350,"left":200,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":350,"left":350,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Player","top":150,"left":100,"url":"https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png","scale":1},{"type":"button"},{"type":"Element","name":"Enemy","top":150,"left":550,"url":"https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png","scale":1},{"type":"Element","name":"NPC","top":300,"left":200,"url":"https://66.media.tumblr.com/18b1dcddb1e6de2d56f2bbc16e368af5/tumblr_pi5sz2UwpH1u9vozfo1_250.png","scale":1},{"type":"Element","name":"Item","top":150,"left":500,"url":"https://66.media.tumblr.com/4a8e88c9194d00c4e2e14d62f2a9dc76/tumblr_pi5t840NIu1u9vozfo1_250.png","scale":1},{"type":"button"},{"type":"button"},{"type":"button"},{"type":"button"}],"background":"","backgroundImage":"https://d2ujflorbtfzji.cloudfront.net/package-screenshot/4b7e815a-669f-4023-ac73-6c7691fe9a9f_scaled.jpg","backgroundImageOpacity":1,"backgroundImageStretch":true}';
-// query database and get level info, then translate into list of elements
-var parsedJSON = JSONtoElements(data);
-var elements = parsedJSON.elements;
-var backgroundUrl = parsedJSON.backgroundUrl;
+function initialize(){
+    var step = 0.05;
+    var canvas = document.getElementById("c");
+    var width = canvas.width;
+    var height = canvas.height;
+    var ctx = canvas.getContext("2d");
+    document.addEventListener('keydown', function(e) {keyDownHandler(e, gameState)}, false);
+    document.addEventListener('keyup', function(e) {keyUpHandler(e, gameState)}, false);
+    var rightPressed = false;
+    var leftPressed = false;
+    var downPressed = false;
+    var upPressed = false;
+    var data = '{"objects":[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{"type":"Element","name":"Environment","top":350,"left":100,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":350,"left":150,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":350,"left":200,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":350,"left":350,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Player","top":150,"left":100,"url":"https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png","scale":1},{"type":"button"},{"type":"Element","name":"Enemy","top":150,"left":550,"url":"https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png","scale":1},{"type":"Element","name":"NPC","top":300,"left":200,"url":"https://66.media.tumblr.com/18b1dcddb1e6de2d56f2bbc16e368af5/tumblr_pi5sz2UwpH1u9vozfo1_250.png","scale":1},{"type":"Element","name":"Item","top":150,"left":500,"url":"https://66.media.tumblr.com/4a8e88c9194d00c4e2e14d62f2a9dc76/tumblr_pi5t840NIu1u9vozfo1_250.png","scale":1},{"type":"button"},{"type":"button"},{"type":"button"},{"type":"button"}],"background":"","backgroundImage":"https://d2ujflorbtfzji.cloudfront.net/package-screenshot/4b7e815a-669f-4023-ac73-6c7691fe9a9f_scaled.jpg","backgroundImageOpacity":1,"backgroundImageStretch":true}';
+    // query database and get level info, then translate into list of elements
+    var parsedJSON = JSONtoElements(data);
+    var elements = parsedJSON.elements;
+    var backgroundUrl = parsedJSON.backgroundUrl;
 
-var pc;
-for(i=0; i<elements.length; i++){
-    if(elements[i] instanceof Player){
-        pc = elements[i];
-        elements.splice(i,1);
+    var pc;
+    for(i=0; i<elements.length; i++){
+        if(elements[i] instanceof Player){
+            pc = elements[i];
+            elements.splice(i,1);
+        }
     }
+    gameState = { canvas: canvas
+        , width: width
+        , height: height
+        , ctx: ctx
+        , rightPressed: rightPressed
+        , leftPressed: leftPressed
+        , downPressed: downPressed
+        , upPressed: upPressed
+        , elements: elements
+        , pc: pc
+        , step: step
+        , backgroundUrl: backgroundUrl};
 }
 
 // GAME STATE
-
-var gameState = { canvas: canvas
-    , width: width
-    , height: height
-    , ctx: ctx
-    , rightPressed: rightPressed
-    , leftPressed: leftPressed
-    , downPressed: downPressed
-    , upPressed: upPressed
-    , elements: elements
-    , pc: pc
-    , step: step
-    , backgroundUrl: backgroundUrl};
 
 function update(gameState) {
     // move right or left as long as no wall is in the way
@@ -515,8 +515,6 @@ function imgInit(gameState){
     gameState.pc.img.src = pc.sprite;
 }
 
-imgInit(gameState);
-console.log("game state", gameState);
 function draw(ctx, elements, pc, backgroundUrl){
     ctx.clearRect(0, 0, width, height);
     ctx.drawImage(backgroundUrl, 0,0);
@@ -557,9 +555,19 @@ function loop(timestamp) {
     window.requestAnimationFrame(loop);
 }
 
+initialize();
+imgInit(gameState);
 window.requestAnimationFrame(loop);
 
 module.exports.showInventory = showInventory;
+module.exports.draw = draw;
+module.exports.imgInit = imgInit;
+module.exports.keyUpHandler = keyUpHandler;
+module.exports.keyDownHandler = keyDownHandler;
+module.exports.onCollision = onCollision;
+module.exports.detectCollision = detectCollision;
+module.exports.update = update;
+
 
 
 },{"./character.js":1,"./element.js":2,"./enemy.js":3,"./environment.js":5,"./item.js":6,"./npc.js":7,"./parsing.js":8,"./player.js":9,"./utility.js":10}],5:[function(require,module,exports){
