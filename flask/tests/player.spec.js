@@ -1,27 +1,17 @@
-
-
-//test getItAr
-//test setItAr
-
-//test 
-
-//full constructor tests
-//empty constructor tests
-//get/set message tests
-
-
 /*
 |------------------------------------------------------------------------------
 | Tests for Player Class
 |------------------------------------------------------------------------------
 |
 | This file contains tests for the Player class.
-| We test input for each method. Thorough testing on
-| the constructor is used to verify input to all methods that are not
-| setter methods.
+| We test input for each method. Thorough testing on the constructor is used
+| to verify input to all methods that are not setter methods. Since Player is
+| a subclass of Character, any constructor input or setter methods that are
+| input-validated in Character are not re-tested here.
 |
 |------------------------------------------------------------------------------
 */
+
 var Player = require('../static/player.js');
 var Item = require('../static/item.js');
 var Vector = require('../static/utility.js');
@@ -29,24 +19,26 @@ var Effect = require('../static/effect.js');
 
 describe('Player', function() {
     let testPlayer;
-    
     let testItem;
-    
+
      /*
     |--------------------------------------------------------------------------
     | Constructor Tests
     |--------------------------------------------------------------------------
     */
-    // Default Constructor Test
-    beforeEach(function(){
-        testItem = new Item('pos', 'url', 'sz', 'hbox', true, new Effect('fire'));
-        testPlayer = new Player(new Vector(1,1), 20, 0, 0, testItem, [testItem], 'hbox', 'rul', 'size', 'speed');
 
+    // Default Constructor Test
+    Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed, mvspd, grav)
+    beforeEach(function(){
+        testItem = new Item(new Vector(2,2), 'dummy_url', new Vector(2,2),
+                            new Vector(2,2), true, new Effect('heal'));
+        testPlayer = new Player(new Vector(1,1), 20, 0, 0, testItem, [testItem],
+                                new Vector(12,12), 'dummy_url', new Vector(3,3),
+                                new Vector(0,0), 50, 80);
     });
 
     // Test full constructor
     it('should create a new player with loc (1,1), maxhealth 20 health 0, status 0, item testItem', function() {
-        
         expect(testPlayer.getEquippedItem()).toEqual(testItem);
         expect(testPlayer.getLocation()).toEqual(new Vector(1,1));
         expect(testPlayer.getMaxHealth()).toEqual(20);
@@ -54,6 +46,19 @@ describe('Player', function() {
         expect(testPlayer.getStatus()).toEqual(0);
     });
 
+    it('should return an empty object due to invalid equippedItem', function() {
+      testPlayer = new Player(new Vector(1,1), 20, 0, 0, testItem, [testItem],
+                              new Vector(12,12), 'dummy_url', new Vector(3,3),
+                              new Vector(0,0), 50, 80);
+        expect(testPlayer).toEqual({});
+    });
+
+    it('should return an empty object due to invalid equippedItem', function() {
+      testPlayer = new Player(new Vector(1,1), 20, 0, 0, testItem, [testItem],
+                              new Vector(12,12), 'dummy_url', new Vector(3,3),
+                              new Vector(0,0), 50, 80);
+        expect(testPlayer).toEqual({});
+    });
 
     /*
     |--------------------------------------------------------------------------
@@ -98,7 +103,7 @@ describe('Player', function() {
         expect(testPlayer.getEquippedItem()).toEqual(null);
     });
 
-    // set items position to be relative to the player, add the item to inventory, 
+    // set items position to be relative to the player, add the item to inventory,
     // and set equipped item
     it('should pick up item', function(){
         var newItem = new Item(new Vector(0,0), 'url', 'sz', 'hbox', true, new Effect('fire'));

@@ -401,18 +401,6 @@ Vector.prototype.plus = function(vec) {
 
 module.exports = Vector;
 },{}],7:[function(require,module,exports){
-
-
-//test getItAr
-//test setItAr
-
-//test 
-
-//full constructor tests
-//empty constructor tests
-//get/set message tests
-
-
 /*
 |------------------------------------------------------------------------------
 | Tests for Player Class
@@ -432,9 +420,9 @@ var Effect = require('../static/effect.js');
 
 describe('Player', function() {
     let testPlayer;
-    
+
     let testItem;
-    
+
      /*
     |--------------------------------------------------------------------------
     | Constructor Tests
@@ -449,7 +437,7 @@ describe('Player', function() {
 
     // Test full constructor
     it('should create a new player with loc (1,1), maxhealth 20 health 0, status 0, item testItem', function() {
-        
+
         expect(testPlayer.getEquippedItem()).toEqual(testItem);
         expect(testPlayer.getLocation()).toEqual(new Vector(1,1));
         expect(testPlayer.getMaxHealth()).toEqual(20);
@@ -501,7 +489,7 @@ describe('Player', function() {
         expect(testPlayer.getEquippedItem()).toEqual(null);
     });
 
-    // set items position to be relative to the player, add the item to inventory, 
+    // set items position to be relative to the player, add the item to inventory,
     // and set equipped item
     it('should pick up item', function(){
         var newItem = new Item(new Vector(0,0), 'url', 'sz', 'hbox', true, new Effect('fire'));
@@ -515,5 +503,6 @@ describe('Player', function() {
 
 
 });
+
 },{"../static/effect.js":2,"../static/item.js":4,"../static/player.js":5,"../static/utility.js":6}]},{},[7])(7)
 });
