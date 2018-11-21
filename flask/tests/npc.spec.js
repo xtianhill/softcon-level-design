@@ -2,16 +2,38 @@
 //empty constructor tests
 //get/set message tests
 // test displayMessage w/ full and empty NPC messages
+
+/*
+|------------------------------------------------------------------------------
+| Tests for NPC Class
+|------------------------------------------------------------------------------
+|
+| This file contains tests for the NPC class.
+| We test valid and invalid input for each method. Thorough testing on
+| the constructor is used to verify input to all methods that are not
+| setter methods.
+|
+|------------------------------------------------------------------------------
+*/
+
+
 var Vector = require('../static/utility.js');
 var NPC = require('../static/npc.js');
 
 describe('NPC', function() {
     let testNPC;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Constructor Tests
+    |--------------------------------------------------------------------------
+    */
+    // Default Constructor Test
     beforeEach(function(){
         testNPC = new NPC(new Vector(10,10),15, 15, 1, "hi", new Vector(50,50), null, new Vector(50,50));
     })
-    //test constructor
 
+    // Full Constructor Tests
     it('should create a new with given stats', function() {
         expect(testNPC.getMessage()).toEqual("hi");
         expect(testNPC.getPosition()).toEqual(new Vector(10,10));
@@ -30,8 +52,12 @@ describe('NPC', function() {
     });
 
 
-    //test get setMessage
-
+/*
+    |--------------------------------------------------------------------------
+    | Setter and Getter Tests
+    |--------------------------------------------------------------------------
+    */
+    // setMessage and getMessage tests
     it('should set the NPCs message to sup', function() {
         testNPC.setMessage('sup');
         expect(testNPC.getMessage()).toEqual('sup');
@@ -43,7 +69,6 @@ describe('NPC', function() {
     });
 
 
-    //test getMessage
     it('should return the NPCs message', function() {
         expect(testNPC.getMessage()).toEqual('hi');
         testNPC.setMessage('okay');
