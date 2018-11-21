@@ -18,23 +18,31 @@ describe('Environment', function(){
 
     /*
     |--------------------------------------------------------------------------
+    | beforeEach: makes an instance of the class to use for tests. Makes a new
+    | version of this test instance before every test, clearing out any
+    | modifications to the default data.
+    |--------------------------------------------------------------------------
+    */
+
+    beforeEach(function(){
+        testEnvironment = new Enviroment(true, new vector(1,1), null, new vector(50,10), new vector(20,50));
+    });
+
+    /*
+    |--------------------------------------------------------------------------
     | Constructor Tests
     |--------------------------------------------------------------------------
     */
 
-    // Default Constructor Test
-    beforeEach(function(){
-        testEnvironment = new Enviroment(true, new vector(1,1), null, new vector(50,10), new vector(20,50));
-    })
-
     // Full Constructor Tests
-    it('should construct an environment', function(){
+    it('should construct a solid environment', function(){
         expect(testEnvironment.getSolid()).toBeTruthy();
-        expect(testEnvironment.getPosition()).toEqual(new vector(1,1));
-        expect(testEnvironment.getSprite()).toEqual(null);
-        expect(testEnvironment.getSize()).toEqual(new vector(50,10));
-        expect(testEnvironment.getHitbox()).toEqual(new vector(20,50));
-    })
+    });
+
+    it('should fail to construct an environment due to invalid input for solid', function(){
+        testEnvironment = new Enviroment("apple", new vector(1,1), null, new vector(50,10), new vector(20,50));
+        expect(testEnvironment).toEqual({});
+    });
 
     /*
     |--------------------------------------------------------------------------
@@ -46,10 +54,10 @@ describe('Environment', function(){
     it('should correctly set and get solid', function(){
         testEnvironment.setSolid(false);
         expect(testEnvironment.getSolid()).toBeFalsy();
-    })
-
-    it('should fail to set solid', function() {
-        testEnvironment.setSolid("hello");
-        expect(testEnemy.getSolid()).toEqual(1);
     });
-})
+
+    it('should fail to set solid due to invalid input', function() {
+        testEnvironment.setSolid("hello");
+        expect(testEnemy.getSolid()).toBeTruthy();
+    });
+});

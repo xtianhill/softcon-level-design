@@ -19,13 +19,21 @@ describe('Element', function() {
 
     /*
     |--------------------------------------------------------------------------
-    | Constructor Tests
+    | beforeEach: makes an instance of the class to use for tests. Makes a new
+    | version of this test instance before every test, clearing out any
+    | modifications to the default data.
     |--------------------------------------------------------------------------
     */
-    // Default Constructor Test
+
     beforeEach(function() {
         testElement = new Element(new Vector(0,0), "dummyUrl", new Vector(50,50), new Vector(50,50));
       });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Constructor Tests
+    |--------------------------------------------------------------------------
+    */
 
     // Full Constructor Tests
     it('should have constructed an element with given specifications', function() {
@@ -35,6 +43,7 @@ describe('Element', function() {
         expect(testElement.getHitbox()).toEqual(new Vector(50,50));
     });
 
+    // Invalid Input Constructor Tests
     it('should return an empty object due to invalid position', function() {
         testElement= new Element(4, "dummyUrl", new Vector(50,50), new Vector(50,50));
         expect(testElement).toEqual({});

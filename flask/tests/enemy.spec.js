@@ -19,13 +19,21 @@ describe('Enemy', function() {
 
     /*
     |--------------------------------------------------------------------------
-    | Constructor Tests
+    | beforeEach: makes an instance of the class to use for tests. Makes a new
+    | version of this test instance before every test, clearing out any
+    | modifications to the default data.
     |--------------------------------------------------------------------------
     */
-    // Default Constructor Test
+
     beforeEach(function(){
         testEnemy = new Enemy(new Vector(1,1), 20, 0, 0, 5, new Vector(10,10), new Vector(10,10));
     });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Constructor Tests
+    |--------------------------------------------------------------------------
+    */
 
     // Full Constructor Tests
     it('should create a new enemy with create enemy with loc (1,1), maxhealth 20 health 0, status 0, damage 5', function() {
@@ -36,6 +44,7 @@ describe('Enemy', function() {
         expect(testEnemy.getStatus()).toEqual(0);
     });
 
+    // Invalid Input Constructor Tests
     it('should return an empty object due to invalid damage', function() {
         testEnemy = new Enemy(new Vector(0,0), 20, 0, 0, "bad",
                                         new Vector(10,10),
@@ -43,19 +52,17 @@ describe('Enemy', function() {
         expect(testEnemy).toEqual({});
     });
 
-
-     /*
+    /*
     |--------------------------------------------------------------------------
     | Getter and Setter Tests
     |--------------------------------------------------------------------------
     */
-    // test setDamage
+    // test setDamage and getDamage
     it('should set the damage level of the Enemy', function() {
         testEnemy.setDamage(5);
         expect(testEnemy.getDamage()).toEqual(5);
     });
 
-    // test getDamage
     it('should return the damage level of the Enemy', function() {
         expect(testEnemy.getDamage()).toEqual(5);
         testEnemy.setDamage(4);

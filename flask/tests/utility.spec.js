@@ -20,16 +20,23 @@ describe('Utility', function(){
 
     /*
     |--------------------------------------------------------------------------
-    | Constructor Tests
+    | beforeEach: makes an instance of the class to use for tests. Makes a new
+    | version of this test instance before every test, clearing out any
+    | modifications to the default data.
     |--------------------------------------------------------------------------
     */
 
-    // Default Constructor Test
     beforeEach(function(){
         testVector0 = new Vector(0, 0);
         testVector1 = new Vector(6, 9);
         testVector2 = new Vector(12, 18);
     })
+
+    /*
+    |--------------------------------------------------------------------------
+    | Constructor Tests
+    |--------------------------------------------------------------------------
+    */
 
     // Full Constructor Tests
     it('should create new vectors with values (0,0), (6,9), (12, 18)', function(){
@@ -48,7 +55,7 @@ describe('Utility', function(){
 
     /*
     |--------------------------------------------------------------------------
-    | Constructor Tests
+    | Plus Tests
     |--------------------------------------------------------------------------
     */
 

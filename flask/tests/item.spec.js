@@ -17,19 +17,38 @@ describe('Item', function(){
 
     /*
     |--------------------------------------------------------------------------
-    | Constructor Tests
+    | beforeEach: makes an instance of the class to use for tests. Makes a new
+    | version of this test instance before every test, clearing out any
+    | modifications to the default data.
     |--------------------------------------------------------------------------
     */
 
-    // Default Constructor Test
     beforeEach(function(){
-        testItem = new Item('pos', 'url', 'sz', 'hbox', true, true);
+        testItem = new Item('pos', 'url', 'sz', 'hbox', true, new Effect('heal'));
     });
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Constructor Tests
+    |--------------------------------------------------------------------------
+    */
 
     // Full Constructor Tests
     it('should construct an item', function(){
         expect(testItem.getCollected()).toBeTruthy();
         expect(testItem.getEffect()).toBeTruthy();
+    });
+
+    // Invalid Input Constructor Tests
+    it('should fail to construct an item due to invalid input for collected', function(){
+        testItem = new Item('pos', 'url', 'sz', 'hbox', 19, new Effect('heal'));
+        expect(testItem).toEqual({});
+    });
+
+    it('should fail to construct an item due to invalid input for effect', function(){
+        testItem = new Item('pos', 'url', 'sz', 'hbox', true, "wrong");
+        expect(testItem).toEqual({});
     });
 
     /*
@@ -38,21 +57,20 @@ describe('Item', function(){
     |--------------------------------------------------------------------------
     */
 
-    // setEffect and getEffect tests
+    // setEffect and getEffect Tests
     it('should set and get effect with valid input', function() {
-        testItem.setEffect(new Effect('heal'));
-        expect(testItem.getEffect()).toEqual('heal');;
+        testItem.setEffect(new Effect('damage'));
+        expect(testItem.getEffect()).toEqual('damage');;
     })
-
 
     it('should fail to set effect due to invalid input', function(){
     	testItem.setEffect(false);
-    	expect(testItem.getEffect()).toBeFalsy();
+    	expect(testItem.getEffect()).toEqual('heal');
     });
 
     it('should fail to set effect due to invalid input', function() {
         testItem.setEffect(300);
-        expect(testItem.getEffect()).toBeFalsy();
+        expect(testItem.getEffect()).toEqual('heal');
     });
 
     // setCollected and getCollected tests
@@ -63,7 +81,7 @@ describe('Item', function(){
 
     it('should fail to set collected due to invalid input', function() {
         testItem.setCollected("hooray");
-        expect(testItem.getCollected()).toBeFalsy();
+        expect(testItem.getCollected()).toBeTruthy();
     })
 
 });
