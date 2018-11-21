@@ -1,4 +1,17 @@
 
+/*
+|------------------------------------------------------------------------------
+| Tests for Parser
+|------------------------------------------------------------------------------
+|
+| This file contains tests for the Parser.
+| We test valid and invalid input for each method. Thorough testing on
+| the constructor is used to verify input to all methods that are not
+| setter methods.
+|
+|------------------------------------------------------------------------------
+*/
+
 const JSONtoElements = require('../static/parsing.js')
 const NPC = require('../static/npc.js');
 const Enemy = require('../static/enemy.js');
