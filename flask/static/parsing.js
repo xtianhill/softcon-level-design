@@ -21,7 +21,6 @@ function JSONtoElements(data){
                 var hitbox = new Vector(50,50);
                 var element;
                 if (temp.name == "Environment"){
-                    console.log(pos);
                     element = new Environment(1,pos,url,sz,hitbox);
                 }
                 else if (temp.name == "Item"){
@@ -32,7 +31,7 @@ function JSONtoElements(data){
                 else if (temp.name == "Player"){
                     var max = 10;
                     var hea = 10;
-                    var stat = 1;
+                    var stat = true;
                     var itm= 0;
                     var inv= [];
                     var hitbox = new Vector(19,50);
@@ -44,7 +43,7 @@ function JSONtoElements(data){
                 else if (temp.name == "NPC"){
                     var max = 10;
                     var hea = 10;
-                    var stat= 1;
+                    var stat= true;
                     var msg = "hi there";
                     var spd = new Vector(0,0);
                     var mvspd = 30;
@@ -54,7 +53,7 @@ function JSONtoElements(data){
                 else if (temp.name == "Enemy"){
                     var max = 10;
                     var hea= 10;
-                    var stat = 1;
+                    var stat = true;
                     var dmg= 1;
                     var spd = new Vector(0,0);
                     var mvspd = 40;

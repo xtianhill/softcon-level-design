@@ -1,104 +1,138 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.engine = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+/*
+|------------------------------------------------------------------------------
+| Character Class
+|------------------------------------------------------------------------------
+|
+| This file contains the Character prototype (the javascript equivalent of a
+| class). Character is the super of Player, NPC, and Enemy. It contains data
+| about character status (e.g. health, speed), as well as methods for moving
+| and interacting with the game's physics.
+|
+|------------------------------------------------------------------------------
+*/
+
 const Element = require('./element.js');
 const Vector = require('./utility.js');
-//data: point location, int health, bool status
-//function void dechealth
-
-
-/*Character Prototype
-Note: location is a vector with x and y*/
 
 function Character(loc, max, hea, stat, hbox, url, size, spd, mvspd, grav){
-    if((spd instanceof Vector) && (typeof mvspd === "number") && (typeof grav === "number")&&  (typeof stat === "boolean") && (typeof max === "number") && (typeof hea ==="number")){
+
+    if((spd instanceof Vector) && (typeof mvspd === "number") &&
+      (typeof grav === "number")&&  (typeof stat === "boolean") &&
+      (typeof max === "number") && (typeof hea ==="number")){
         Element.call(this, loc, url, size, hbox);
         this.maxHealth = max; //maximum health
-	    this.health=hea; //int health
-	    this.status =stat; //true for alive, false for dead
+	      this.health=hea; //int health
+	      this.status =stat; //true for alive, false for dead
         this.speed = spd; //for moving
         this.moveSpeed = mvspd; //tells how fast it moves
         this.gravity = grav;
     }
     else return {};
-
 }
 
 Character.prototype = Object.create(Element.prototype);
 
-//decrement health function
-// not in iteration 1
-// Character.prototype.decHealth = function(amount){
-//  	//decrement health by amount
-// }
+/*
+|--------------------------------------------------------------------------
+| Getter and setter functions for the Character prototype (the javascript
+| version of class methods).
+|--------------------------------------------------------------------------
+*/
+
+// Getter for position
 Character.prototype.getPosition = function(){
 	return this.position;
 }
 
+// Setter for position
 Character.prototype.setPosition = function(pos){
 	if(pos instanceof Vector){
 		this.position = pos;
 	}
 }
 
+// Getter for maxHealth
 Character.prototype.getMaxHealth = function(){
     return this.maxHealth;
 }
 
+// Setter for maxHealth
 Character.prototype.setMaxHealth = function(amount){
     if(typeof amount === "number"){
         this.maxHealth = amount;
     }
 }
 
+// Getter for health
 Character.prototype.getHealth = function(){
     return this.health;
 }
 
+// Setter for health
 Character.prototype.setHealth = function(amount){
     if(typeof amount === "number"){
         this.health= amount;
     }
 }
 
+// Getter for status
 Character.prototype.getStatus = function(){
     return this.status;
 }
 
+// Setter for status
 Character.prototype.setStatus = function(s){
     if(typeof s === 'boolean'){
         this.status = s;
     }
 }
 
+// Getter for speed
 Character.prototype.getSpeed = function(){
     return this.speed;
 }
 
+// Setter for speed
 Character.prototype.setSpeed = function(spd){
     if(spd instanceof Vector){
         this.speed =spd;
     }
 }
 
+// Getter for movementSpeed
 Character.prototype.getMovementSpeed = function() {
     return this.moveSpeed;
 }
 
+// Setter for movementSpeed
 Character.prototype.setMovementSpeed = function(ms){
     if(typeof ms === "number"){
         this.moveSpeed = ms;
     }
 }
 
+// Getter for gravity
 Character.prototype.getGravity = function () {
     return this.gravity;
 }
 
+// Setter for gravity
 Character.prototype.setGravity = function(g) {
     if(typeof g === "number"){
         this.gravity = g;
     }
 }
 
+/*
+|--------------------------------------------------------------------------
+| Movement-related functions for the Character prototype, wherein much of
+| the physics calculations are performed.
+|--------------------------------------------------------------------------
+*/
+
+// Calculates the hypothetical next x position of a Character given a direction
+// in which the character is trying to move.
 Character.prototype.newXPos = function(step, dir) {
   this.speed.x = 0
   if (dir == "right") this.speed.x = this.moveSpeed;
@@ -109,6 +143,8 @@ Character.prototype.newXPos = function(step, dir) {
   return newPos;
 };
 
+// Checks if a hypothetical next x position of a Character is legal, and if so,
+// updates its position.
 Character.prototype.moveX = function(newPos, obstacle) {
   if(obstacle != null) {
       if(obstacle.getSolid() == 0){
@@ -120,8 +156,8 @@ Character.prototype.moveX = function(newPos, obstacle) {
      }
 }
 
+// Calculates the hypothetical next y position of a character based on gravity
 Character.prototype.newYPos = function(step) {
-    console.log(this);
   this.speed.y += step * this.gravity;
 
   var motion = new Vector(0, this.speed.y * step);
@@ -129,6 +165,9 @@ Character.prototype.newYPos = function(step) {
   return newPos;
 };
 
+// Checks if a hypothetical next y position of a Character is legal, and if so,
+// updates its position; if it hits the ground stops its motion; if it is on
+// ground and jumps, updates its speed to allow the jump on the next game loop.
 Character.prototype.moveY = function(newPos, obstacle, up) {
   var jumpSpeed = 70;
   if(obstacle != null) {
@@ -138,15 +177,10 @@ Character.prototype.moveY = function(newPos, obstacle, up) {
               this.speed.y = -jumpSpeed;
           } else
               this.speed.y = 0;
-        }
-        else
-            this.position=newPos;
-        }
-   else
-       this.position = newPos;
+      }
+    } else
+          this.position = newPos;
 };
-
-
 
 module.exports = Character;
 
@@ -160,7 +194,7 @@ function Element(pos, url, sz, hbox){
 	if(((pos instanceof Vector) && (typeof url === 'string')) && ((sz instanceof Vector) && (hbox instanceof Vector))){
 		this.position = pos; 
 		this.sprite = url; //url to image file
-		this.scale = sz; //scale to resize image dimensions
+		this.size = sz; //scale to resize image dimensions
 		this.hitbox = hbox;
 	} else {
 		return {};
@@ -188,12 +222,12 @@ Element.prototype.setSprite = function(url){
 }
 
 Element.prototype.getSize = function(){
-	return this.scale;
+	return this.size;
 }
 
 Element.prototype.setSize = function(scl){
 	if (scl instanceof Vector){
-		this.scale = scl;
+		this.size = scl;
 	}
 }
 
@@ -272,8 +306,8 @@ var canvas = document.getElementById("c");
 var width = canvas.width;
 var height = canvas.height;
 var ctx = canvas.getContext("2d");
-document.addEventListener('keydown', keyDownHandler, false);
-document.addEventListener('keyup', keyUpHandler, false);
+document.addEventListener('keydown', function(e) {keyDownHandler(e, gameState)}, false);
+document.addEventListener('keyup', function(e) {keyUpHandler(e, gameState)}, false);
 var rightPressed = false;
 var leftPressed = false;
 var downPressed = false;
@@ -311,7 +345,6 @@ var gameState = { canvas: canvas
     , backgroundUrl: backgroundUrl};
 
 function update(gameState) {
-    console.log("HEY A PC", gameState.pc.getSpeed());
     // move right or left as long as no wall is in the way
     newXPos = null;
     if (gameState.rightPressed){
@@ -335,7 +368,7 @@ function update(gameState) {
                 if(gameState.elements[i] instanceof Environment)
                     xObstacle = gameState.elements[i];
                 else
-                    onCollision(gameState.pc, gameState.elements, i);
+                    onCollision(gameState, i);
             }
         }
         
@@ -355,13 +388,12 @@ function update(gameState) {
                 if(gameState.elements[i] instanceof Environment)
                     yObstacle = gameState.elements[i];
                 else
-                    onCollision(gameState.pc, gameState.elements, i);
+                    onCollision(gameState, i);
             }
         }
     }
-
     // jump or fall as long as no ground (or ceiling, hopefully) is in the way
-    if (upPressed){
+    if (gameState.upPressed){
       if(gameState.pc.position.y-1 > 0){
         gameState.pc.moveY(newYPos, yObstacle, true);
     } 
@@ -408,22 +440,22 @@ function detectCollision(pos1, pos2, element1, element2) {
     return false;
 }
 
-function onCollision(pc, elements, i, ctx) {
+function onCollision(gameState, i) {
 	    //if npc, show message
-            if(elements[i] instanceof NPC){
+            if(gameState.elements[i] instanceof NPC){
                //elements[i].displayMessage();
-                ctx.font = "12px Arial";
-                ctx.fillText(elements[i].getMessage(), 0, 0);
-                elements[i].shouldDisplay = true;
+               gameState.ctx.font = "12px Arial";
+               gameState.ctx.fillText(gameState.elements[i].getMessage(), 0, 0);
+               gameState.elements[i].shouldDisplay = true;
             }
 
             //if enemy, either damage w/item or lose health
-            if(elements[i] instanceof Enemy){
-                if(pc.equippedItem != 0) {
-                    if(pc.equippedItem.getEffect() == "damage"){
-                        elements[i].decHealth(1);
+            if(gameState.elements[i] instanceof Enemy){
+                if(gameState.pc.equippedItem != 0) {
+                    if(gameState.pc.equippedItem.getEffect() == "damage"){
+                        gameState.elements[i].decHealth(1);
                     } else{
-                        pc.decHealth(elements[i].getDamage());
+                        gameState.pc.decHealth(elements[i].getDamage());
                     }
                 }
             }
@@ -439,53 +471,52 @@ function onCollision(pc, elements, i, ctx) {
             // }
     }
 
-function keyDownHandler(event) {
+function keyDownHandler(event, gameState) {
     if(event.keyCode == 68) {
-        rightPressed = true;
+        gameState.rightPressed = true;
     }
     if(event.keyCode == 65) {
-        leftPressed = true;
+        gameState.leftPressed = true;
     }
     if(event.keyCode == 83) {
-    	downPressed = true;
+    	gameState.downPressed = true;
     }
     if(event.keyCode == 87) {
-    	upPressed = true;
+    	gameState.upPressed = true;
     }
 }
 
-function keyUpHandler(event) {
+function keyUpHandler(event, gameState) {
     if(event.keyCode == 68) {
-        rightPressed = false;
+        gameState.rightPressed = false;
     }
     if(event.keyCode == 65) {
-        leftPressed = false;
+        gameState.leftPressed = false;
     }
     if(event.keyCode == 83) {
-    	downPressed = false;
+    	gameState.downPressed = false;
     }
     else if(event.keyCode == 87) {
-    	upPressed = false;
+    	gameState.upPressed = false;
     }
 }
 
 // need to create all the images given urls - this could/should happen within translation function
-function imgInit(elements, backgroundUrl){
-    for(i = 0; i<elements.length; i++){
-        elements[i].img = new Image;
-        elements[i].img.src = elements[i].sprite;
+function imgInit(gameState){
+    for(i = 0; i<gameState.elements.length; i++){
+        gameState.elements[i].img = new Image;
+        gameState.elements[i].img.src = elements[i].sprite;
     }
     var tmp = backgroundUrl;
-    backgroundUrl = new Image;
-    backgroundUrl.src = tmp;
+    gameState.backgroundUrl = new Image;
+    gameState.backgroundUrl.src = tmp;
 
-    pc.img = new Image;
-    pc.img.src = pc.sprite;
-
+    gameState.pc.img = new Image;
+    gameState.pc.img.src = pc.sprite;
 }
 
-imgInit(gameState.elements, gameState.backgroundUrl, gameState.pc);
-
+imgInit(gameState);
+console.log("game state", gameState);
 function draw(ctx, elements, pc, backgroundUrl){
     ctx.clearRect(0, 0, width, height);
     ctx.drawImage(backgroundUrl, 0,0);
@@ -653,7 +684,6 @@ function JSONtoElements(data){
                 var hitbox = new Vector(50,50);
                 var element;
                 if (temp.name == "Environment"){
-                    console.log(pos);
                     element = new Environment(1,pos,url,sz,hitbox);
                 }
                 else if (temp.name == "Item"){
@@ -664,7 +694,7 @@ function JSONtoElements(data){
                 else if (temp.name == "Player"){
                     var max = 10;
                     var hea = 10;
-                    var stat = 1;
+                    var stat = true;
                     var itm= 0;
                     var inv= [];
                     var hitbox = new Vector(19,50);
@@ -676,7 +706,7 @@ function JSONtoElements(data){
                 else if (temp.name == "NPC"){
                     var max = 10;
                     var hea = 10;
-                    var stat= 1;
+                    var stat= true;
                     var msg = "hi there";
                     var spd = new Vector(0,0);
                     var mvspd = 30;
@@ -686,7 +716,7 @@ function JSONtoElements(data){
                 else if (temp.name == "Enemy"){
                     var max = 10;
                     var hea= 10;
-                    var stat = 1;
+                    var stat = true;
                     var dmg= 1;
                     var spd = new Vector(0,0);
                     var mvspd = 40;
@@ -710,7 +740,6 @@ const Character = require('./character.js');
 const Vector = require('./utility.js');
 
 function Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed, mvspd, grav){
-    console.log('hello????');
     Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspd, grav);
     this.equippedItem = itm;
     this.inventory = inv;
