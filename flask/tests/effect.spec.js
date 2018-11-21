@@ -27,13 +27,22 @@ describe('Effect', function(){
 
 
     beforeEach(function(){
-        testEffect = new Effect('fire');
+        testEffect = new Effect('heal');
     })
     it('should construct a default effect', function(){
-        expect(testEffect.getIsActive()).toBeFalsy();
-        expect(testEffect.getEffect()).toEqual('fire');
+        expect((testEffect).getIsActive()).toBeFalsy();
+        expect((testEffect).getEffect()).toEqual('heal');
     });
 
+    it('should return null Effect because of integer input for title', function(){
+      testEffect= new Effect(4);
+      expect(testEffect).toEqual({});
+    })
+
+    it ('should return null Effect because of bad string input for title', function(){
+      testEffect= new Effect('twerk');
+      expect(testEffect).toEqual({});
+    })
     /*
     |--------------------------------------------------------------------------
     | Activation Method Tests
@@ -46,9 +55,9 @@ describe('Effect', function(){
     });
 
     it('should deactivate the effect', function(){
-        testEffect.activate();
-        testEffect.deactivate();
-        expect(testEffect.getIsActive().toBeFalsy);
+        (testEffect).activate();
+        (testEffect).deactivate();
+        expect((testEffect).getIsActive().toBeFalsy());
     });
 
     /*
@@ -58,7 +67,7 @@ describe('Effect', function(){
     */
 
     it('should get and set the title', function(){
-        testEffect.setEffect('ice!');
-        expect(testEffect.getEffect()).toEqual('ice!');
+        testEffect.setEffect('damage');
+        expect(testEffect.getEffect()).toEqual('damage');
     });
 });
