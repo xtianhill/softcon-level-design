@@ -100,12 +100,9 @@ function update(gameState) {
             }
         }
     }
-
     // jump or fall as long as no ground (or ceiling, hopefully) is in the way
-    if (upPressed){
-        console.log('what up');
+    if (gameState.upPressed){
       if(gameState.pc.position.y-1 > 0){
-          console.log('nothing much');
         gameState.pc.moveY(newYPos, yObstacle, true);
     } 
     } else {
