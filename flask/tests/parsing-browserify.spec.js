@@ -286,7 +286,9 @@ Enemy.prototype.setDamage = function(amount){
         }
 }
 
-
+Enemy.prototype.decHealth = function(){
+    // decrease an enemies health if attacked with damage effect
+}
 module.exports = Enemy;
 
 },{"./character.js":1}],4:[function(require,module,exports){
@@ -462,7 +464,7 @@ function JSONtoElements(data){
         }
         return {"elements": elementarray,
                 "backgroundUrl": backgroundurl };
-    }
+}
 module.exports = JSONtoElements;
     
     
@@ -477,20 +479,19 @@ function Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed, mvspd, gr
     Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspd, grav);
     this.equippedItem = itm;
     this.inventory = inv;
-    console.log(this.speed);
 }
 
 Player.prototype = Object.create(Character.prototype);
 
 //empty constructor. void
-// Player.prototype.Player = function(){
-//     //create enemy with loc = (0,0), maxhealth = 10
-//     // health = 10, status = 1, item = null, size 50x50, speed 10x10
+Player.prototype.Player = function(){
+    //create enemy with loc = (0,0), maxhealth = 10
+    // health = 10, status = 1, item = null, size 50x50, speed 10x10
 
-//     Character.call(this, vector(0,0), 10, 10, 1, vector(50,50), vector(33,13));
-//     this.equippedItem = null;
-//     this.inventory = [];
-// }  
+    Character.call(this, vector(0,0), 10, 10, 1, vector(50,50), vector(33,13));
+    this.equippedItem = null;
+    this.inventory = [];
+}  
 
 Player.prototype.getInventory= function(){
     return this.inventory;

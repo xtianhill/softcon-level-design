@@ -336,7 +336,6 @@ function Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed, mvspd, gr
     Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspd, grav);
     this.equippedItem = itm;
     this.inventory = inv;
-    console.log(this.speed);
 }
 
 Player.prototype = Object.create(Character.prototype);
