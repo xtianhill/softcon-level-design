@@ -1,3 +1,4 @@
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.npc = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 /*
 |------------------------------------------------------------------------------
 | Character Class
@@ -182,3 +183,170 @@ Character.prototype.moveY = function(newPos, obstacle, up) {
 };
 
 module.exports = Character;
+
+},{"./element.js":2,"./utility.js":4}],2:[function(require,module,exports){
+const Vector = require('./utility.js');
+
+/*Element prototype */
+/*note: pos, scl, hitbox are vectors with x and y values */
+
+function Element(pos, url, sz, hbox){
+	if(((pos instanceof Vector) && (typeof url === 'string')) && ((sz instanceof Vector) && (hbox instanceof Vector))){
+		this.position = pos; 
+		this.sprite = url; //url to image file
+		this.scale = sz; //scale to resize image dimensions
+		this.hitbox = hbox;
+	} else {
+		return {};
+	}
+}
+
+Element.prototype.getPosition = function(){
+	return this.position;
+}
+
+Element.prototype.setPosition = function(pos){
+	if(pos instanceof Vector){
+		this.position = pos;
+	}
+}
+
+Element.prototype.getSprite = function(){
+	return this.sprite;
+}
+
+Element.prototype.setSprite = function(url){
+	if(typeof url === 'string'){
+		this.sprite = url;
+	}
+}
+
+Element.prototype.getSize = function(){
+	return this.scale;
+}
+
+Element.prototype.setSize = function(scl){
+	if (scl instanceof Vector){
+		this.scale = scl;
+	}
+}
+
+Element.prototype.getHitbox = function(){
+	return this.hitbox;
+}
+
+Element.prototype.setHitbox = function(hbx){
+	if(hbx instanceof Vector){
+		this.hitbox = hbx;
+	}
+}
+
+module.exports = Element;
+},{"./utility.js":4}],3:[function(require,module,exports){
+const Character = require('./character.js');
+const Vector = require('./utility.js').vector;
+
+function NPC(loc, max, hea, stat, msg, hbox, url, size, speed, mvspd, grav){
+    
+    if(typeof msg === "string"){
+        Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspd, grav);
+        this.message = msg;
+    }
+    else return {};
+}
+
+NPC.prototype = Object.create(Character.prototype); 
+
+
+NPC.prototype.getMessage = function(){
+    return this.message;
+    
+}
+
+NPC.prototype.setMessage = function(msg){
+    //disallow non-string message
+    if(typeof msg == "string"){
+        this.message = msg;
+        return;
+    }   
+    else 
+        return null;
+}
+
+
+
+module.exports = NPC;
+
+},{"./character.js":1,"./utility.js":4}],4:[function(require,module,exports){
+/*Vector class */
+function Vector(x,y){
+	this.x=x;
+	this.y=y;
+}
+
+Vector.prototype.plus = function(vec) {
+	return new Vector (this.x + vec.x, this.y + vec.y);
+}
+
+module.exports = Vector;
+},{}],5:[function(require,module,exports){
+//full constructor tests
+//empty constructor tests
+//get/set message tests
+// test displayMessage w/ full and empty NPC messages
+var Vector = require('../static/utility.js');
+var NPC = require('../static/npc.js');
+
+describe('NPC', function() {
+    let testNPC;
+    beforeEach(function(){
+        testNPC = new NPC(new Vector(10,10),15, 15, 1, "hi", new Vector(50,50), null, new Vector(50,50));
+    })
+    //test constructor
+
+    it('should create a new with given stats', function() {
+        expect(testNPC.getMessage()).toEqual("hi");
+        expect(testNPC.getPosition()).toEqual(new Vector(10,10));
+        expect(testNPC.getMaxHealth()).toEqual(15);
+        expect(testNPC.getHealth()).toEqual(15);
+        expect(testNPC.getStatus()).toEqual(1);
+        expect(testNPC.getHitbox()).toEqual(new Vector(50,50));
+        expect(testNPC.getSprite()).toBeNull();
+        expect(testNPC.getSize()).toEqual(new Vector(50,50));
+
+    });
+
+    it('should set message to null due to invalid input', function(){
+        testNPC = new NPC(new Vector(10,10),15, 15, 1, 2, new Vector(50,50), null, new Vector(50,50)); 
+        expect(testNPC).toEqual({});
+    });
+
+
+    //test get setMessage
+
+    it('should set the NPCs message to sup', function() {
+        testNPC.setMessage('sup');
+        expect(testNPC.getMessage()).toEqual('sup');
+    });
+
+    it('should not set message to 2 and return null', function() {
+        expect(testNPC.setMessage(2)).toBeNull();
+        expect(testNPC.getMessage()).toEqual('hi');
+    });
+
+
+    //test getMessage
+    it('should return the NPCs message', function() {
+        expect(testNPC.getMessage()).toEqual('hi');
+        testNPC.setMessage('okay');
+        expect(testNPC.getMessage()).toEqual('okay');
+    });
+
+   
+    
+
+});
+
+
+},{"../static/npc.js":3,"../static/utility.js":4}]},{},[5])(5)
+});
