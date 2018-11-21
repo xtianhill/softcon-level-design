@@ -194,7 +194,7 @@ function Element(pos, url, sz, hbox){
 	if(((pos instanceof Vector) && (typeof url === 'string')) && ((sz instanceof Vector) && (hbox instanceof Vector))){
 		this.position = pos; 
 		this.sprite = url; //url to image file
-		this.scale = sz; //scale to resize image dimensions
+		this.size = sz; //scale to resize image dimensions
 		this.hitbox = hbox;
 	} else {
 		return {};
@@ -222,12 +222,12 @@ Element.prototype.setSprite = function(url){
 }
 
 Element.prototype.getSize = function(){
-	return this.scale;
+	return this.size;
 }
 
 Element.prototype.setSize = function(scl){
 	if (scl instanceof Vector){
-		this.scale = scl;
+		this.size = scl;
 	}
 }
 
@@ -248,8 +248,12 @@ module.exports = Element;
 const Element = require('./element.js');
 
 function Environment(solid, pos, url, scale, hbox){
-    Element.call(this, pos, url, scale, hbox);
-    this.solid = solid;
+  if (typeof solid == "boolean") {
+      Element.call(this, pos, url, scale, hbox);
+      this.solid = solid;
+  }
+  else
+      return {};
 }
 
 Environment.prototype = Object.create(Element.prototype);
@@ -264,10 +268,13 @@ Environment.prototype.getSolid = function(){
 }
 
 Environment.prototype.setSolid = function(bool){
-    this.solid = bool;
+  if (typeof solid == "boolean"){
+      this.solid = bool;
+  }
 }
 
 module.exports = Environment;
+
 },{"./element.js":2}],4:[function(require,module,exports){
 /*Vector class */
 function Vector(x,y){
@@ -303,17 +310,24 @@ describe('Character', function() {
 
     /*
     |--------------------------------------------------------------------------
-    | Constructor Tests
+    | beforeEach: makes an instance of the class to use for tests. Makes a new
+    | version of this test instance before every test, clearing out any
+    | modifications to the default data.
     |--------------------------------------------------------------------------
     */
 
-    // Default Constructor Test
     beforeEach(function(){
         testCharacter = new Character(new Vector(1,1), 20, 10, true,
                                       new Vector(50,50), 'url',
                                       new Vector(50,50),
                                       new Vector(0,0), 60, 40);
     });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Constructor Tests
+    |--------------------------------------------------------------------------
+    */
 
     // Full Constructor Tests
     it('should create a new character with fiven specs', function() {
@@ -329,6 +343,7 @@ describe('Character', function() {
         expect(testCharacter.getGravity()).toEqual(40);
     });
 
+    // Invalid Input Constructor Tests
     it('should return an empty object due to invalid max health', function() {
         testCharacter = new Character(new Vector(0,0), "bad", 10,
                                       true, new Vector(50,50),

@@ -31,27 +31,53 @@ describe('Utility', function(){
     let testVector1;
     let testVector2;
 
-     /*
+    /*
     |--------------------------------------------------------------------------
-    | Constructor Tests
+    | beforeEach: makes an instance of the class to use for tests. Makes a new
+    | version of this test instance before every test, clearing out any
+    | modifications to the default data.
     |--------------------------------------------------------------------------
     */
-    // Default Constructor Test
+
     beforeEach(function(){
         testVector0 = new Vector(0, 0);
         testVector1 = new Vector(6, 9);
         testVector2 = new Vector(12, 18);
     })
 
+    /*
+    |--------------------------------------------------------------------------
+    | Constructor Tests
+    |--------------------------------------------------------------------------
+    */
+
     // Full Constructor Tests
-    it('should construct a 0,0 vector', function(){
-        expect(testVector0.x).toEqual(0);
-        expect(testVector1.y).toEqual(9);
+    it('should create new vectors with values (0,0), (6,9), (12, 18)', function(){
+        expect(testVector0).toEqual(new Vector(0, 0));
+        expect(testVector1).toEqual(new Vector(6, 9));
+        expect(testVector2).toEqual(new Vector(12, 18));
     });
-    it('should add two vectors', function() {
+
+    it('should fail to create a vectors with invalid input', function(){
+        testVector = new Vector('ten', testVector0);
+        expect(testVector).toEqual({});
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Plus Tests
+    |--------------------------------------------------------------------------
+    */
+
+    it('should add vectors', function() {
         expect(testVector0.plus(testVector0)).toEqual(testVector0);
         expect(testVector0.plus(testVector1)).toEqual(testVector1);
         expect(testVector1.plus(testVector1)).toEqual(testVector2);
+    });
+
+    it('should fail to add vectors due to invalid input', function() {
+        expect(testVector0.plus(5)).toEqual({});
+        expect(testVector0.plus("testVector1")).toEqual({});
     });
 });
 

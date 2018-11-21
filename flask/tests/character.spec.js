@@ -20,16 +20,24 @@ describe('Character', function() {
 
     /*
     |--------------------------------------------------------------------------
-    | Constructor Tests
+    | beforeEach: makes an instance of the class to use for tests. Makes a new
+    | version of this test instance before every test, clearing out any
+    | modifications to the default data.
     |--------------------------------------------------------------------------
     */
-   
+
     beforeEach(function(){
         testCharacter = new Character(new Vector(1,1), 20, 10, true,
                                       new Vector(50,50), 'url',
                                       new Vector(50,50),
                                       new Vector(0,0), 60, 40);
     });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Constructor Tests
+    |--------------------------------------------------------------------------
+    */
 
     // Full Constructor Tests
     it('should create a new character with fiven specs', function() {
@@ -45,6 +53,7 @@ describe('Character', function() {
         expect(testCharacter.getGravity()).toEqual(40);
     });
 
+    // Invalid Input Constructor Tests
     it('should return an empty object due to invalid max health', function() {
         testCharacter = new Character(new Vector(0,0), "bad", 10,
                                       true, new Vector(50,50),

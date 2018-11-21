@@ -194,7 +194,7 @@ function Element(pos, url, sz, hbox){
 	if(((pos instanceof Vector) && (typeof url === 'string')) && ((sz instanceof Vector) && (hbox instanceof Vector))){
 		this.position = pos; 
 		this.sprite = url; //url to image file
-		this.scale = sz; //scale to resize image dimensions
+		this.size = sz; //scale to resize image dimensions
 		this.hitbox = hbox;
 	} else {
 		return {};
@@ -222,12 +222,12 @@ Element.prototype.setSprite = function(url){
 }
 
 Element.prototype.getSize = function(){
-	return this.scale;
+	return this.size;
 }
 
 Element.prototype.setSize = function(scl){
 	if (scl instanceof Vector){
-		this.scale = scl;
+		this.size = scl;
 	}
 }
 
@@ -315,23 +315,29 @@ module.exports = Vector;
 |------------------------------------------------------------------------------
 */
 
-
-
 var Enemy = require('../static/enemy.js');
 const Vector = require('../static/utility.js');
 
 describe('Enemy', function() {
     let testEnemy;
 
-     /*
+    /*
+    |--------------------------------------------------------------------------
+    | beforeEach: makes an instance of the class to use for tests. Makes a new
+    | version of this test instance before every test, clearing out any
+    | modifications to the default data.
+    |--------------------------------------------------------------------------
+    */
+
+    beforeEach(function(){
+        testEnemy = new Enemy(new Vector(1,1), 20, 0, 0, 5, new Vector(10,10), new Vector(10,10));
+    });
+
+    /*
     |--------------------------------------------------------------------------
     | Constructor Tests
     |--------------------------------------------------------------------------
     */
-    // Default Constructor Test
-    beforeEach(function(){
-        testEnemy = new Enemy(new Vector(1,1), 20, 0, 0, 5, new Vector(10,10), new Vector(10,10));
-    });
 
     // Full Constructor Tests
     it('should create a new enemy with create enemy with loc (1,1), maxhealth 20 health 0, status 0, damage 5', function() {
@@ -342,24 +348,7 @@ describe('Enemy', function() {
         expect(testEnemy.getStatus()).toEqual(0);
     });
 
-    it('should return an empty object due to invalid max health', function() {
-        testEnemy = new Enemy(new Vector(0,0), "bad", 0, 0, 5,
-                                      new Vector(10,10),
-                                      new Vector(10,10));
-        expect(testEnemy).toEqual({});
-    });
-    it('should return an empty object due to invalid health', function() {
-        testEnemy = new Enemy(new Vector(0,0), 20, "bad", 0, 5,
-                                        new Vector(10,10),
-                                        new Vector(10,10));
-        expect(testEnemy).toEqual({});
-    });
-    it('should return an empty object due to invalid status', function() {
-        testEnemy = new Enemy(new Vector(0,0), 20, 0, "bad", 5,
-                                        new Vector(10,10),
-                                        new Vector(10,10));
-        expect(testEnemy).toEqual({});
-    });
+    // Invalid Input Constructor Tests
     it('should return an empty object due to invalid damage', function() {
         testEnemy = new Enemy(new Vector(0,0), 20, 0, 0, "bad",
                                         new Vector(10,10),
@@ -367,23 +356,26 @@ describe('Enemy', function() {
         expect(testEnemy).toEqual({});
     });
 
-
-     /*
+    /*
     |--------------------------------------------------------------------------
     | Getter and Setter Tests
     |--------------------------------------------------------------------------
     */
-    // test setDamage
-    it('should set the enemys damage level', function() {
+    // test setDamage and getDamage
+    it('should set the damage level of the Enemy', function() {
         testEnemy.setDamage(5);
         expect(testEnemy.getDamage()).toEqual(5);
     });
 
-    // test getDamage
-    it('should return the enemys damage level', function() {
+    it('should return the damage level of the Enemy', function() {
         expect(testEnemy.getDamage()).toEqual(5);
         testEnemy.setDamage(4);
         expect(testEnemy.getDamage()).toEqual(4);
+    });
+
+    it('should fail to set the damage level of the Enemy due to invalid input', function() {
+        testEnemy.setDamage("hello");
+        expect(testEnemy.getDamage()).toEqual(5);
     });
 
 });

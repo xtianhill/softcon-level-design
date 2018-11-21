@@ -240,7 +240,7 @@ function Element(pos, url, sz, hbox){
 	if(((pos instanceof Vector) && (typeof url === 'string')) && ((sz instanceof Vector) && (hbox instanceof Vector))){
 		this.position = pos; 
 		this.sprite = url; //url to image file
-		this.scale = sz; //scale to resize image dimensions
+		this.size = sz; //scale to resize image dimensions
 		this.hitbox = hbox;
 	} else {
 		return {};
@@ -268,12 +268,12 @@ Element.prototype.setSprite = function(url){
 }
 
 Element.prototype.getSize = function(){
-	return this.scale;
+	return this.size;
 }
 
 Element.prototype.setSize = function(scl){
 	if (scl instanceof Vector){
-		this.scale = scl;
+		this.size = scl;
 	}
 }
 
@@ -336,19 +336,20 @@ function Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed, mvspd, gr
     Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspd, grav);
     this.equippedItem = itm;
     this.inventory = inv;
+    console.log(this.speed);
 }
 
 Player.prototype = Object.create(Character.prototype);
 
 //empty constructor. void
-Player.prototype.Player = function(){
-    //create enemy with loc = (0,0), maxhealth = 10
-    // health = 10, status = 1, item = null, size 50x50, speed 10x10
+// Player.prototype.Player = function(){
+//     //create enemy with loc = (0,0), maxhealth = 10
+//     // health = 10, status = 1, item = null, size 50x50, speed 10x10
 
-    Character.call(this, vector(0,0), 10, 10, 1, vector(50,50), vector(33,13));
-    this.equippedItem = null;
-    this.inventory = [];
-}  
+//     Character.call(this, vector(0,0), 10, 10, 1, vector(50,50), vector(33,13));
+//     this.equippedItem = null;
+//     this.inventory = [];
+// }  
 
 Player.prototype.getInventory= function(){
     return this.inventory;
@@ -431,13 +432,14 @@ describe('Player', function() {
     let testPlayer;
     let testItem;
 
-     /*
+    /*
     |--------------------------------------------------------------------------
-    | Constructor Tests
+    | beforeEach: makes an instance of the class to use for tests. Makes a new
+    | version of this test instance before every test, clearing out any
+    | modifications to the default data.
     |--------------------------------------------------------------------------
     */
 
-    // Default Constructor Test
     beforeEach(function(){
         testItem = new Item(new Vector(2,2), 'dummy_url', new Vector(2,2),
                             new Vector(2,2), true, new Effect('heal'));
@@ -448,7 +450,13 @@ describe('Player', function() {
                                 new Vector(0,0), 50, 80);
     });
 
-    // Test full constructor
+    /*
+    |--------------------------------------------------------------------------
+    | Constructor Tests
+    |--------------------------------------------------------------------------
+    */
+
+    // Test Full Constructor
     it('should create a new player with loc (1,1), maxhealth 20 health 0, status 0, item testItem', function() {
         expect(testPlayer.getEquippedItem()).toEqual(testItem);
         expect(testPlayer.getLocation()).toEqual(new Vector(1,1));
@@ -457,6 +465,7 @@ describe('Player', function() {
         expect(testPlayer.getStatus()).toEqual(0);
     });
 
+    // Test Invalid Input Constructor
     it('should return an empty object due to invalid equippedItem', function() {
         testPlayer = new Player(new Vector(1,1), 20, 0, 0, "fake_item", [testItem],
                               new Vector(12,12), 'dummy_url', new Vector(3,3),

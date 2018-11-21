@@ -21,13 +21,14 @@ describe('Player', function() {
     let testPlayer;
     let testItem;
 
-     /*
+    /*
     |--------------------------------------------------------------------------
-    | Constructor Tests
+    | beforeEach: makes an instance of the class to use for tests. Makes a new
+    | version of this test instance before every test, clearing out any
+    | modifications to the default data.
     |--------------------------------------------------------------------------
     */
 
-    // Default Constructor Test
     beforeEach(function(){
         testItem = new Item(new Vector(2,2), 'dummy_url', new Vector(2,2),
                             new Vector(2,2), true, new Effect('heal'));
@@ -38,7 +39,13 @@ describe('Player', function() {
                                 new Vector(0,0), 50, 80);
     });
 
-    // Test full constructor
+    /*
+    |--------------------------------------------------------------------------
+    | Constructor Tests
+    |--------------------------------------------------------------------------
+    */
+
+    // Test Full Constructor
     it('should create a new player with loc (1,1), maxhealth 20 health 0, status 0, item testItem', function() {
         expect(testPlayer.getEquippedItem()).toEqual(testItem);
         expect(testPlayer.getLocation()).toEqual(new Vector(1,1));
@@ -47,6 +54,7 @@ describe('Player', function() {
         expect(testPlayer.getStatus()).toEqual(0);
     });
 
+    // Test Invalid Input Constructor
     it('should return an empty object due to invalid equippedItem', function() {
         testPlayer = new Player(new Vector(1,1), 20, 0, 0, "fake_item", [testItem],
                               new Vector(12,12), 'dummy_url', new Vector(3,3),
