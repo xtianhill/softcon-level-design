@@ -38,7 +38,7 @@ describe('Environment', function(){
 
     /*
     |--------------------------------------------------------------------------
-    | Constructor Tests
+    | Setter and getter tests
     |--------------------------------------------------------------------------
     */
 
@@ -46,6 +46,10 @@ describe('Environment', function(){
     it('should correctly set and get solid', function(){
         testEnvironment.setSolid(false);
         expect(testEnvironment.getSolid()).toBeFalsy();
-
     })
+
+    it('should fail to set solid', function() {
+        testEnvironment.setSolid("hello");
+        expect(testEnemy.getSolid()).toEqual(1);
+    });
 })

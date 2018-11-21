@@ -11,15 +11,13 @@
 |------------------------------------------------------------------------------
 */
 
-
-
 var Enemy = require('../static/enemy.js');
 const Vector = require('../static/utility.js');
 
 describe('Enemy', function() {
     let testEnemy;
 
-     /*
+    /*
     |--------------------------------------------------------------------------
     | Constructor Tests
     |--------------------------------------------------------------------------
@@ -62,6 +60,11 @@ describe('Enemy', function() {
         expect(testEnemy.getDamage()).toEqual(5);
         testEnemy.setDamage(4);
         expect(testEnemy.getDamage()).toEqual(4);
+    });
+
+    it('should fail to set the damage level of the Enemy due to invalid input', function() {
+        testEnemy.setDamage("hello");
+        expect(testEnemy.getDamage()).toEqual(5);
     });
 
 });
