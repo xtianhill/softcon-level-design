@@ -14,8 +14,8 @@ var canvas = document.getElementById("c");
 var width = canvas.width;
 var height = canvas.height;
 var ctx = canvas.getContext("2d");
-document.addEventListener('keydown', keyDownHandler, false);
-document.addEventListener('keyup', keyUpHandler, false);
+document.addEventListener('keydown', function(e) {keyDownHandler(e, gameState)}, false);
+document.addEventListener('keyup', function(e) {keyUpHandler(e, gameState)}, false);
 var rightPressed = false;
 var leftPressed = false;
 var downPressed = false;
@@ -53,7 +53,6 @@ var gameState = { canvas: canvas
     , backgroundUrl: backgroundUrl};
 
 function update(gameState) {
-    console.log("HEY A PC", gameState.pc.getSpeed());
     // move right or left as long as no wall is in the way
     newXPos = null;
     if (gameState.rightPressed){
@@ -77,7 +76,7 @@ function update(gameState) {
                 if(gameState.elements[i] instanceof Environment)
                     xObstacle = gameState.elements[i];
                 else
-                    onCollision(gameState.pc, gameState.elements, i);
+                    onCollision(gameState, i);
             }
         }
         
@@ -97,14 +96,16 @@ function update(gameState) {
                 if(gameState.elements[i] instanceof Environment)
                     yObstacle = gameState.elements[i];
                 else
-                    onCollision(gameState.pc, gameState.elements, i);
+                    onCollision(gameState, i);
             }
         }
     }
 
     // jump or fall as long as no ground (or ceiling, hopefully) is in the way
     if (upPressed){
+        console.log('what up');
       if(gameState.pc.position.y-1 > 0){
+          console.log('nothing much');
         gameState.pc.moveY(newYPos, yObstacle, true);
     } 
     } else {
@@ -150,22 +151,22 @@ function detectCollision(pos1, pos2, element1, element2) {
     return false;
 }
 
-function onCollision(pc, elements, i, ctx) {
+function onCollision(gameState, i) {
 	    //if npc, show message
-            if(elements[i] instanceof NPC){
+            if(gameState.elements[i] instanceof NPC){
                //elements[i].displayMessage();
-                ctx.font = "12px Arial";
-                ctx.fillText(elements[i].getMessage(), 0, 0);
-                elements[i].shouldDisplay = true;
+               gameState.ctx.font = "12px Arial";
+               gameState.ctx.fillText(gameState.elements[i].getMessage(), 0, 0);
+               gameState.elements[i].shouldDisplay = true;
             }
 
             //if enemy, either damage w/item or lose health
-            if(elements[i] instanceof Enemy){
-                if(pc.equippedItem != 0) {
-                    if(pc.equippedItem.getEffect() == "damage"){
-                        elements[i].decHealth(1);
+            if(gameState.elements[i] instanceof Enemy){
+                if(gameState.pc.equippedItem != 0) {
+                    if(gameState.pc.equippedItem.getEffect() == "damage"){
+                        gameState.elements[i].decHealth(1);
                     } else{
-                        pc.decHealth(elements[i].getDamage());
+                        gameState.pc.decHealth(elements[i].getDamage());
                     }
                 }
             }
@@ -181,53 +182,52 @@ function onCollision(pc, elements, i, ctx) {
             // }
     }
 
-function keyDownHandler(event) {
+function keyDownHandler(event, gameState) {
     if(event.keyCode == 68) {
-        rightPressed = true;
+        gameState.rightPressed = true;
     }
     if(event.keyCode == 65) {
-        leftPressed = true;
+        gameState.leftPressed = true;
     }
     if(event.keyCode == 83) {
-    	downPressed = true;
+    	gameState.downPressed = true;
     }
     if(event.keyCode == 87) {
-    	upPressed = true;
+    	gameState.upPressed = true;
     }
 }
 
-function keyUpHandler(event) {
+function keyUpHandler(event, gameState) {
     if(event.keyCode == 68) {
-        rightPressed = false;
+        gameState.rightPressed = false;
     }
     if(event.keyCode == 65) {
-        leftPressed = false;
+        gameState.leftPressed = false;
     }
     if(event.keyCode == 83) {
-    	downPressed = false;
+    	gameState.downPressed = false;
     }
     else if(event.keyCode == 87) {
-    	upPressed = false;
+    	gameState.upPressed = false;
     }
 }
 
 // need to create all the images given urls - this could/should happen within translation function
-function imgInit(elements, backgroundUrl){
-    for(i = 0; i<elements.length; i++){
-        elements[i].img = new Image;
-        elements[i].img.src = elements[i].sprite;
+function imgInit(gameState){
+    for(i = 0; i<gameState.elements.length; i++){
+        gameState.elements[i].img = new Image;
+        gameState.elements[i].img.src = elements[i].sprite;
     }
     var tmp = backgroundUrl;
-    backgroundUrl = new Image;
-    backgroundUrl.src = tmp;
+    gameState.backgroundUrl = new Image;
+    gameState.backgroundUrl.src = tmp;
 
-    pc.img = new Image;
-    pc.img.src = pc.sprite;
-
+    gameState.pc.img = new Image;
+    gameState.pc.img.src = pc.sprite;
 }
 
-imgInit(gameState.elements, gameState.backgroundUrl, gameState.pc);
-
+imgInit(gameState);
+console.log("game state", gameState);
 function draw(ctx, elements, pc, backgroundUrl){
     ctx.clearRect(0, 0, width, height);
     ctx.drawImage(backgroundUrl, 0,0);

@@ -157,7 +157,6 @@ Character.prototype.moveX = function(newPos, obstacle) {
 
 // Calculates the hypothetical next y position of a character based on gravity
 Character.prototype.newYPos = function(step) {
-    console.log(this);
   this.speed.y += step * this.gravity;
 
   var motion = new Vector(0, this.speed.y * step);

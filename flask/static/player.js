@@ -5,7 +5,6 @@ const Character = require('./character.js');
 const Vector = require('./utility.js');
 
 function Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed, mvspd, grav){
-    console.log('hello????');
     Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspd, grav);
     this.equippedItem = itm;
     this.inventory = inv;
