@@ -177,9 +177,9 @@ Character.prototype.moveY = function(newPos, obstacle, up) {
               this.speed.y = -jumpSpeed;
           } else
               this.speed.y = 0;
-      } else
+      }
+    } else
           this.position = newPos;
-   }
 };
 
 module.exports = Character;

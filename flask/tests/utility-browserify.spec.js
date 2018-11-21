@@ -13,7 +13,7 @@ module.exports = Vector;
 },{}],2:[function(require,module,exports){
 const Vector = require('../static/utility.js');
 
-describe('Effect', function(){
+describe('Utility', function(){
     let testVector0;
     let testVector1;
     let testVector2;
@@ -33,5 +33,6 @@ describe('Effect', function(){
         expect(testVector1.plus(testVector1)).toEqual(testVector2);
     });
 });
+
 },{"../static/utility.js":1}]},{},[2])(2)
 });

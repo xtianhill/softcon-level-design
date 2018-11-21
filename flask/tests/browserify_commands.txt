@@ -8,4 +8,6 @@ browserify item.spec.js -o item-browserify.spec.js --s item
 browserify environment.spec.js -o environment-browserify.spec.js --s environment
 browserify engine.spec.js -o engine-browserify.spec.js --s engine
 browserify database.spec.js -o database-browserify.spec.js --s database
+browserify effect.spec.js -o effect-browserify.spec.js --s effect
+browserify enemy.spec.js -o enemy-browserify.spec.js --s enemy
 
