@@ -37,7 +37,33 @@ describe('Enemy', function() {
         expect(testEnemy.getHealth()).toEqual(0);
         expect(testEnemy.getStatus()).toEqual(0);
     });
-
+    
+    it('should return an empty object due to invalid max health', function() {
+        testEnemy = new Enemy(new Vector(0,0), "bad", 0, 0, 5,
+                                      new Vector(10,10),
+                                      new Vector(10,10));
+        expect(testEnemy).toEqual({});
+    });
+    it('should return an empty object due to invalid health', function() {
+        testEnemy = new Enemy(new Vector(0,0), 20, "bad", 0, 5,
+                                        new Vector(10,10),
+                                        new Vector(10,10));
+        expect(testEnemy).toEqual({});
+    });
+    it('should return an empty object due to invalid status', function() {
+        testEnemy = new Enemy(new Vector(0,0), 20, 0, "bad", 5
+                                        new Vector(10,10),
+                                        new Vector(10,10));
+        expect(testEnemy).toEqual({});
+    });
+    it('should return an empty object due to invalid damage', function() {
+        testEnemy = new Enemy(new Vector(0,0), 20, 0, 0, "bad"
+                                        new Vector(10,10),
+                                        new Vector(10,10));
+        expect(testEnemy).toEqual({});
+    });
+    
+    
      /*
     |--------------------------------------------------------------------------
     | Getter and Setter Tests
