@@ -24,14 +24,22 @@ const Vector = require('../static/utility.js');
 
 
 describe('Parsing', function() {
-	var json1 = { "Player" : "player1", "Player" : "player2" };
-	var JSON2 = 2;
-	var JSON3 = 3;
+	let JSON1 = '{}';
+	let JSON2 = '{"objects":[{},{"type":"Element","name":"Environment","top":25,"left":0,"url":"https://www.mariowiki.com/images/thumb/5/5d/GoldbrickblockNSMB2.png/400px-GoldbrickblockNSMB2.png","scale":1}], "backgroundImage:""fakeurl"}';
 
 //testing JSONtoElements
-it('should test this function', function() {
 	//console.log(Parsing);
-	(JSONtoElements(json1));
-})
+	it('should return an empty array and empty backgroundurl given an empty JSON', function(){
+			var returned= JSONtoElements(JSON1);
+			expect((returned).elements).toEqual([]);
+			expect((returned).backgroundUrl).toEqual('');
+	});
+
+	it('should return an array with one environment element in it and background image fakeurl', function(){
+		var returned = JSONtoElements(JSON2);
+		//expect((returned).elements)[0] copmare environment elements somehow?
+		expect((returned).backgroundUrl).toEqual('fakeurl');
+	});
+
 
 });
