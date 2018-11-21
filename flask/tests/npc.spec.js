@@ -38,18 +38,11 @@ describe('NPC', function() {
     // Full Constructor Tests
     it('should create a new with given stats', function() {
         expect(testNPC.getMessage()).toEqual("hi");
-        expect(testNPC.getPosition()).toEqual(new Vector(10,10));
-        expect(testNPC.getMaxHealth()).toEqual(15);
-        expect(testNPC.getHealth()).toEqual(15);
-        expect(testNPC.getStatus()).toEqual(1);
-        expect(testNPC.getHitbox()).toEqual(new Vector(50,50));
-        expect(testNPC.getSprite()).toBeNull();
-        expect(testNPC.getSize()).toEqual(new Vector(50,50));
 
     });
 
     it('should set message to null due to invalid input', function(){
-        testNPC = new NPC(new Vector(10,10),15, 15, 1, 2, new Vector(50,50), null, new Vector(50,50)); 
+        testNPC = new NPC(new Vector(10,10),15, 15, 1, 2, new Vector(50,50), null, new Vector(50,50));
         expect(testNPC).toEqual({});
     });
 
@@ -82,7 +75,6 @@ describe('NPC', function() {
         testNPC.setMessage(false);
         expect(testNPC.getMessage()).toEqual('okay');
     });
-    
+
 
 });
-
