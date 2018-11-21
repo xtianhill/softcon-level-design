@@ -37,12 +37,18 @@ describe('Effect', function(){
     it('should return null Effect because of integer input for title', function(){
       testEffect= new Effect(4);
       expect(testEffect).toEqual({});
-    })
+    });
 
     it ('should return null Effect because of bad string input for title', function(){
       testEffect= new Effect('twerk');
       expect(testEffect).toEqual({});
-    })
+    });
+
+    it ('should return null Effect because of bad booleam input', function(){
+      testEffect = new Effect('hello', 'heal');
+      expect(testEffect).toEqual({});
+    });
+
     /*
     |--------------------------------------------------------------------------
     | Activation Method Tests
@@ -50,14 +56,14 @@ describe('Effect', function(){
     */
 
     it('should activate the effect', function(){
-        testEffect.activate();
-        expect(testEffect.getIsActive()).toBeTruthy();
+        (testEffect).activate();
+        expect((testEffect).getIsActive()).toBeTruthy();
     });
 
     it('should deactivate the effect', function(){
         (testEffect).activate();
         (testEffect).deactivate();
-        expect((testEffect).getIsActive().toBeFalsy());
+        expect((testEffect).getIsActive()).toBeFalsy();
     });
 
     /*
@@ -67,7 +73,7 @@ describe('Effect', function(){
     */
 
     it('should get and set the title', function(){
-        testEffect.setEffect('damage');
-        expect(testEffect.getEffect()).toEqual('damage');
+        (testEffect).setEffect('damage');
+        expect((testEffect).getEffect()).toEqual('damage');
     });
 });
