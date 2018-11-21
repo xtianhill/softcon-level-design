@@ -399,15 +399,8 @@ describe('REST API Tests', function() {
     describe('getAllTitles() tests', function() {
         it('', function() {
             spyOn($, "ajax");
-
-        });
-        it('', function() {
-            spyOn($, "ajax");
-
-        });
-        it('', function() {
-            spyOn($, "ajax");
-
+            expect(Database.getAllTitles()).toBeTruthy();
+            expect($.ajax).toHaveBeenCalled();
         });
     });
 });

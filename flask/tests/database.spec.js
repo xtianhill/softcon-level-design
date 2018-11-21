@@ -97,7 +97,7 @@ describe('REST API Tests', function() {
             spyOn($, "ajax");
             expect(Database.storeGrid(newTestGrid, testCB)).toBeTruthy();
             expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/add-grid/");
-            expect(Database.storeGrid(newTestGrid, testCB)).toBelFalsy();
+            expect(Database.storeGrid(newTestGrid, testCB)).toBeFalsy();
             expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/add-grid/");
         });
         it('should test adding a bad grid', function() {
@@ -203,15 +203,8 @@ describe('REST API Tests', function() {
     describe('getAllTitles() tests', function() {
         it('', function() {
             spyOn($, "ajax");
-
-        });
-        it('', function() {
-            spyOn($, "ajax");
-
-        });
-        it('', function() {
-            spyOn($, "ajax");
-
+            expect(Database.getAllTitles()).toBeTruthy();
+            expect($.ajax).toHaveBeenCalled();
         });
     });
 });
