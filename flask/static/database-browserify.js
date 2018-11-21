@@ -9,30 +9,52 @@
 
 const AWS_URL = "http://softcon-leveldesign.us-east-1.elasticbeanstalk.com/";
 
-function storeGrid(gridJSON) {
-    var success = false;
-    console.log('gridJSON is: ' + gridJSON);
+function storeGrid(gridJSON, cb) {
+    console.log('gridJSON title: ' + gridJSON.title);
+    console.log('gridJSON data: ' + gridJSON.data);
     if(!validJSON(gridJSON)) {
-        return success;
+        console.log('invalid json given');
+        return false;
     }
+    // debugger;
+    // return $.ajax({
+    //     type: "POST",
+    //     url: AWS_URL + "api/v1/add-grid/",
+    //     data: data,
+    //     contentType: "application/json",
+    //     dataType: "json",
+    //     async: false,
+    //     // success: cb,
+    //     success: function(data) {
+    //         console.log("success: stored the following grid in DB: " + data);
+    //         alert("Success: stored the following grid in DB");
+    //         cb(data);
+    //         return data;
+    //         // ajaxSuccessful = true;
+    //     },
+    //     failure: function(errMsg) {
+    //         console.log("failure: couldn't store grid");
+    //         alert("failure: couldn't store grid");
+    //         return false;
+    //         // ajaxSuccessful = true;
+    //     },
+    //     error: function(errMsg) {
+    //         console.log('error occurred:' + errMsg);
+    //         return false;
+    //         // ajaxSuccessful = false;
+    //     },
+    //     complete: function() {
+    //         console.log('storeGrid finished');
+    //     }
+    // });
     $.ajax({
-        type: "POST",
+        type: 'POST',
         url: AWS_URL + "api/v1/add-grid/",
-        data: JSON.stringify(gridJSON),
-        contentType: "application/json",
+        data: gridJSON,
+        success: cb,
         dataType: "json",
-        success: function(data) {
-            console.log("success: stored the following grid in DB: " + data);
-            alert("Success: stored the following grid in DB");
-            success = true;
-        },
-        failure: function(errMsg) {
-            console.log("failure: couldn't store grid");
-            alert("failure: couldn't store grid");
-            success = false;
-        }
-    });
-    return success;
+        async: false
+      });
 }
 
 function isRunning() {
@@ -53,9 +75,10 @@ function isRunning() {
 
 function deleteGrid(title) {
     console.log('title is: '+ title);
-    var success;
+    var success = false;
     $.ajax({
         type: "GET",
+        async: false,
         url: AWS_URL + "api/v1/delete-grid/" + title,
         success: function(data) {
             console.log("success: deleted grid wwith title " + title + " in DB");
@@ -63,9 +86,9 @@ function deleteGrid(title) {
         },
         failure: function(errMsg) {
             alert("failure: didn't delete item with title: " + title);
-            success = false;
         }
     });
+    return success;
 }
 
 function updateGrid(gridJSON) {
