@@ -23,8 +23,7 @@ describe('Character', function() {
     | Constructor Tests
     |--------------------------------------------------------------------------
     */
-
-    // Default Constructor Test
+   
     beforeEach(function(){
         testCharacter = new Character(new Vector(1,1), 20, 10, true,
                                       new Vector(50,50), 'url',

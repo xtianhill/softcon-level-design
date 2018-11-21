@@ -1,45 +1,42 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.engine = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 const Element = require('./element.js');
+const Vector = require('./utility.js');
 //data: point location, int health, bool status
 //function void dechealth
 
-/*Vector class */
-function Vector(x,y){
-	this.x=x;
-	this.y=y;
-}
 
 /*Character Prototype
 Note: location is a vector with x and y*/
 
-function Character(loc, max, hea, stat, hbox, url, size, speed, mvspd, grav){
-    Element.call(this, loc, url, size, hbox);
-    this.maxHealth = max; //maximum health
-	  this.health=hea; //int health
-	  this.status=stat; //true for alive, false for dead
-    this.speed = speed; //for moving
-    this.moveSpeed = mvspd; //tells how fast it moves
-    this.gravity = grav;
+function Character(loc, max, hea, stat, hbox, url, size, spd, mvspd, grav){
+    if((spd instanceof Vector) && (typeof mvspd === "number") && (typeof grav === "number")&&  (typeof stat === "boolean") && (typeof max === "number") && (typeof hea ==="number")){
+        Element.call(this, loc, url, size, hbox);
+        this.maxHealth = max; //maximum health
+	    this.health=hea; //int health
+	    this.status =stat; //true for alive, false for dead
+        this.speed = spd; //for moving
+        this.moveSpeed = mvspd; //tells how fast it moves
+        this.gravity = grav;
+    }
+    else return {};
+
 }
 
 Character.prototype = Object.create(Element.prototype);
 
-
-/* Example for how to create a function for a prototype. this is the javascript version
- of creating a method within a class*/
 //decrement health function
 // not in iteration 1
 // Character.prototype.decHealth = function(amount){
 //  	//decrement health by amount
 // }
-
-//getters and setters
-Character.prototype.getLocation = function(){
-    return this.position;
+Character.prototype.getPosition = function(){
+	return this.position;
 }
 
-Character.prototype.setLocation = function(pos){
-    this.position = pos;
+Character.prototype.setPosition = function(pos){
+	if(pos instanceof Vector){
+		this.position = pos;
+	}
 }
 
 Character.prototype.getMaxHealth = function(){
@@ -47,7 +44,9 @@ Character.prototype.getMaxHealth = function(){
 }
 
 Character.prototype.setMaxHealth = function(amount){
-    this.maxHealth = amount;
+    if(typeof amount === "number"){
+        this.maxHealth = amount;
+    }
 }
 
 Character.prototype.getHealth = function(){
@@ -55,7 +54,9 @@ Character.prototype.getHealth = function(){
 }
 
 Character.prototype.setHealth = function(amount){
-    this.health= amount;
+    if(typeof amount === "number"){
+        this.health= amount;
+    }
 }
 
 Character.prototype.getStatus = function(){
@@ -63,7 +64,39 @@ Character.prototype.getStatus = function(){
 }
 
 Character.prototype.setStatus = function(s){
-    this.status = s;
+    if(typeof s === 'boolean'){
+        this.status = s;
+    }
+}
+
+Character.prototype.getSpeed = function(){
+    return this.speed;
+}
+
+Character.prototype.setSpeed = function(spd){
+    if(spd instanceof Vector){
+        this.speed =spd;
+    }
+}
+
+Character.prototype.getMovementSpeed = function() {
+    return this.moveSpeed;
+}
+
+Character.prototype.setMovementSpeed = function(ms){
+    if(typeof ms === "number"){
+        this.moveSpeed = ms;
+    }
+}
+
+Character.prototype.getGravity = function () {
+    return this.gravity;
+}
+
+Character.prototype.setGravity = function(g) {
+    if(typeof g === "number"){
+        this.gravity = g;
+    }
 }
 
 Character.prototype.newXPos = function(step, dir) {
@@ -88,6 +121,7 @@ Character.prototype.moveX = function(newPos, obstacle) {
 }
 
 Character.prototype.newYPos = function(step) {
+    console.log(this);
   this.speed.y += step * this.gravity;
 
   var motion = new Vector(0, this.speed.y * step);
@@ -98,13 +132,16 @@ Character.prototype.newYPos = function(step) {
 Character.prototype.moveY = function(newPos, obstacle, up) {
   var jumpSpeed = 70;
   if(obstacle != null) {
-      if(obstacle.getSolid() == 1)
+      if(obstacle.getSolid() == 1){
           newPos.x = this.position.x
           if (up && this.speed.y > 0){
               this.speed.y = -jumpSpeed;
           } else
               this.speed.y = 0;
-       } 
+        }
+        else
+            this.position=newPos;
+        }
    else
        this.position = newPos;
 };
@@ -113,17 +150,21 @@ Character.prototype.moveY = function(newPos, obstacle, up) {
 
 module.exports = Character;
 
-},{"./element.js":2}],2:[function(require,module,exports){
+},{"./element.js":2,"./utility.js":10}],2:[function(require,module,exports){
 const Vector = require('./utility.js');
 
 /*Element prototype */
 /*note: pos, scl, hitbox are vectors with x and y values */
 
 function Element(pos, url, sz, hbox){
-	this.position = pos; 
-	this.sprite = url; //url to image file
-	this.size = sz; //scale to resize image dimensions
-	this.hitbox = hbox;
+	if(((pos instanceof Vector) && (typeof url === 'string')) && ((sz instanceof Vector) && (hbox instanceof Vector))){
+		this.position = pos; 
+		this.sprite = url; //url to image file
+		this.scale = sz; //scale to resize image dimensions
+		this.hitbox = hbox;
+	} else {
+		return {};
+	}
 }
 
 Element.prototype.getPosition = function(){
@@ -131,7 +172,9 @@ Element.prototype.getPosition = function(){
 }
 
 Element.prototype.setPosition = function(pos){
-	this.position = pos;
+	if(pos instanceof Vector){
+		this.position = pos;
+	}
 }
 
 Element.prototype.getSprite = function(){
@@ -139,23 +182,29 @@ Element.prototype.getSprite = function(){
 }
 
 Element.prototype.setSprite = function(url){
-	this.sprite = url;
+	if(typeof url === 'string'){
+		this.sprite = url;
+	}
 }
 
 Element.prototype.getSize = function(){
-	return this.size;
+	return this.scale;
 }
 
-Element.prototype.setSize = function(scale){
-	this.size = scale;
+Element.prototype.setSize = function(scl){
+	if (scl instanceof Vector){
+		this.scale = scl;
+	}
 }
 
 Element.prototype.getHitbox = function(){
 	return this.hitbox;
 }
 
-Element.prototype.setHitbox = function(hitbox){
-	this.hitbox = hitbox;
+Element.prototype.setHitbox = function(hbx){
+	if(hbx instanceof Vector){
+		this.hitbox = hbx;
+	}
 }
 
 module.exports = Element;
@@ -229,14 +278,9 @@ var rightPressed = false;
 var leftPressed = false;
 var downPressed = false;
 var upPressed = false;
-
 var icon = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToe-PSAektDgBsXLsdybQW6F1wGDdpw2mbm3SaReRPuQ0ec0ns";
 var icon2 = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKH3Qd3RP33Q5XxcRMrLXYhYGRu_dxvpJCIBEU_MlAudC1ev-P8A";
-// var elements =
-    // [ new Player(new Vector(0,0), 10, 10, true, 'item', ['item', 'item2'], new Vector(50,50), icon2, new Vector(50,50))
-    // , new NPC(new Vector(100,100), 10, 10, true, "y tho", new Vector(50,50), icon, new Vector(50,50)),
-    // new Item(new Vector(100,50), icon, new Vector(50,50), new Vector(50,50), false, "damage")
-    // ];
+
 var data = '{"objects":[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{"type":"Element","name":"Environment","top":350,"left":100,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":350,"left":150,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":350,"left":200,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":350,"left":350,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Player","top":150,"left":100,"url":"https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png","scale":1},{"type":"button"},{"type":"Element","name":"Enemy","top":150,"left":550,"url":"https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png","scale":1},{"type":"Element","name":"NPC","top":300,"left":200,"url":"https://66.media.tumblr.com/18b1dcddb1e6de2d56f2bbc16e368af5/tumblr_pi5sz2UwpH1u9vozfo1_250.png","scale":1},{"type":"Element","name":"Item","top":150,"left":500,"url":"https://66.media.tumblr.com/4a8e88c9194d00c4e2e14d62f2a9dc76/tumblr_pi5t840NIu1u9vozfo1_250.png","scale":1},{"type":"button"},{"type":"button"},{"type":"button"},{"type":"button"}],"background":"","backgroundImage":"https://d2ujflorbtfzji.cloudfront.net/package-screenshot/4b7e815a-669f-4023-ac73-6c7691fe9a9f_scaled.jpg","backgroundImageOpacity":1,"backgroundImageStretch":true}';
 // query database and get level info, then translate into list of elements
 var parsedJSON = JSONtoElements(data);
@@ -251,75 +295,91 @@ for(i=0; i<elements.length; i++){
     }
 }
 
-function update(progress) {
-    
+// GAME STATE
+
+var gameState = { canvas: canvas
+    , width: width
+    , height: height
+    , ctx: ctx
+    , rightPressed: rightPressed
+    , leftPressed: leftPressed
+    , downPressed: downPressed
+    , upPressed: upPressed
+    , elements: elements
+    , pc: pc
+    , step: step
+    , backgroundUrl: backgroundUrl};
+
+function update(gameState) {
+    console.log("HEY A PC", gameState.pc.getSpeed());
     // move right or left as long as no wall is in the way
     newXPos = null;
-    if (rightPressed){
-        newXPos = pc.newXPos(step, "right");
-        if(newXPos.x + (0.5 * pc.size.x) - (0.5 * pc.hitbox.x) < 0
-           || newXPos.x + (0.5 * pc.size.x) + (0.5 * pc.hitbox.x) > width)
+    if (gameState.rightPressed){
+        newXPos = gameState.pc.newXPos(gameState.step, "right");
+        if(newXPos.x + (0.5 * gameState.pc.size.x) - (0.5 * gameState.pc.hitbox.x) < 0
+           || newXPos.x + (0.5 * gameState.pc.size.x) + (0.5 * gameState.pc.hitbox.x) > gameState.width)
            newXPos = null;
     }
-    else if (leftPressed){
-        newXPos = pc.newXPos(step, "left");
-        if(newXPos.x + (0.5 * pc.size.x) - (0.5 * pc.hitbox.x) < 0
-           || newXPos.x + (0.5 * pc.size.x) + (0.5 * pc.hitbox.x) > width)
+    else if (gameState.leftPressed){
+        newXPos = gameState.pc.newXPos(step, "left");
+        if(newXPos.x + (0.5 * gameState.pc.size.x) - (0.5 * gameState.pc.hitbox.x) < 0
+           || newXPos.x + (0.5 * gameState.pc.size.x) + (0.5 * gameState.pc.hitbox.x) > gameState.width)
            newXPos = null;
     }
     
     // find things that collide if moving left-right
     xObstacle = null;
     if(newXPos != null){
-        for(i=0; i<elements.length; i++){
-            if(detectCollision(newXPos, elements[i].position, pc, elements[i])){
-                if(elements[i] instanceof Environment)
-                    xObstacle = elements[i];
+        for(i=0; i<gameState.elements.length; i++){
+            if(detectCollision(newXPos, gameState.elements[i].position, gameState.pc, gameState.elements[i])){
+                if(gameState.elements[i] instanceof Environment)
+                    xObstacle = gameState.elements[i];
                 else
-                    onCollision(pc, elements, i);
+                    onCollision(gameState.pc, gameState.elements, i);
             }
         }
-    pc.moveX(newXPos, xObstacle);
+        
+    gameState.pc.moveX(newXPos, xObstacle);
     }
     
     // find collisions if trying to jump or landing on something
-    newYPos = pc.newYPos(step);
-    if(newYPos.y + (0.5 * pc.size.y) - (0.5 * pc.hitbox.y) < 0)
+    newYPos = gameState.pc.newYPos(step);
+    if(newYPos.y + (0.5 * gameState.pc.size.y) - (0.5 * gameState.pc.hitbox.y) < 0)
         newYPos = null;
-    else if(newYPos.y + (0.5 * pc.size.y) + (0.5 * pc.hitbox.y) > height)
+    else if(newYPos.y + (0.5 * gameState.pc.size.y) + (0.5 * gameState.pc.hitbox.y) > height)
         newYPos = newYPos; //player.die()
     yObstacle = null;
     if(newYPos != null){
-        for(i=0; i<elements.length; i++){
-           if(detectCollision(newYPos, elements[i].position, pc, elements[i])){
-                if(elements[i] instanceof Environment)
-                    yObstacle = elements[i];
+        for(i=0; i<gameState.elements.length; i++){
+           if(detectCollision(newYPos, gameState.elements[i].position, gameState.pc, gameState.elements[i])){
+                if(gameState.elements[i] instanceof Environment)
+                    yObstacle = gameState.elements[i];
                 else
-                    onCollision(pc, elements, i);
+                    onCollision(gameState.pc, gameState.elements, i);
             }
         }
     }
 
     // jump or fall as long as no ground (or ceiling, hopefully) is in the way
     if (upPressed){
-      if(pc.position.y-1 > 0){
-        pc.moveY(newYPos, yObstacle, true);
+      if(gameState.pc.position.y-1 > 0){
+        gameState.pc.moveY(newYPos, yObstacle, true);
     } 
     } else {
-      pc.moveY(newYPos, yObstacle, false);
+        gameState.pc.moveY(newYPos, yObstacle, false);
   }
 
   //physics for npcs and enemies
-  for(i=0; i<elements.length; i++){
-    if (elements[i] instanceof NPC || elements[i] instanceof Enemy) {
+  for(i=0; i<gameState.elements.length; i++){
+    if (gameState.elements[i] instanceof NPC || gameState.elements[i] instanceof Enemy) {
         yObstacle = null;
-        for(j=0; j<elements.length; j++){
-            newPos = elements[i].newYPos(step);
-            if (i != j && detectCollision(newPos, elements[j].position, elements[i], elements[j])){
-                yObstacle = elements[j];
+        for(j=0; j<gameState.elements.length; j++){
+            newPos = gameState.elements[i].newYPos(step);
+            if (i != j && detectCollision(newPos, gameState.elements[j].position, gameState.elements[i], gameState.elements[j])){
+                yObstacle = gameState.elements[j];
             }
         }
-        elements[i].moveY(newPos, yObstacle, false)
+        gameState.elements[i].moveY(newPos, yObstacle, false)
     }
 }
 }
@@ -332,7 +392,7 @@ function detectCollision(pos1, pos2, element1, element2) {
     if(pos1 == null || pos2 == null || box1 == null || box2 == null)
         return false;
     left1 = pos1.x + (0.5 * size1.x) - (0.5 * box1.x);
-    right1 = pos1.x + (0.5 * size1.x) + (0.5 * box1.x) - 2;
+    right1 = pos1.x + (0.5 * size1.x) + (0.5 * box1.x);
     top1 = pos1.y + (0.5 * size1.y) - (0.5 * box1.y);
     bottom1 = pos1.y + (0.5 * size1.y) + (0.5 * box1.y);
     left2 = pos2.x + (0.5 * size2.x) - (0.5 * box2.x);
@@ -348,7 +408,7 @@ function detectCollision(pos1, pos2, element1, element2) {
     return false;
 }
 
-function onCollision(pc, elements, i) {
+function onCollision(pc, elements, i, ctx) {
 	    //if npc, show message
             if(elements[i] instanceof NPC){
                //elements[i].displayMessage();
@@ -410,7 +470,7 @@ function keyUpHandler(event) {
 }
 
 // need to create all the images given urls - this could/should happen within translation function
-function imgInit(){
+function imgInit(elements, backgroundUrl){
     for(i = 0; i<elements.length; i++){
         elements[i].img = new Image;
         elements[i].img.src = elements[i].sprite;
@@ -424,9 +484,9 @@ function imgInit(){
 
 }
 
-imgInit();
+imgInit(gameState.elements, gameState.backgroundUrl, gameState.pc);
 
-function draw(){
+function draw(ctx, elements, pc, backgroundUrl){
     ctx.clearRect(0, 0, width, height);
     ctx.drawImage(backgroundUrl, 0,0);
     
@@ -443,7 +503,8 @@ function draw(){
     ctx.drawImage(pc.img,pc.position.x,pc.position.y,
         pc.size.x,pc.size.y);
 }
-function showInventory(){
+
+function showInventory(elements){
     var ul = document.getElementById('inventory');
     var inventory = elements[0].inventory;
     for (var i = 0; i < inventory.length; i++) {
@@ -458,18 +519,17 @@ function showInventory(){
 
 function loop(timestamp) {
     // game loop
-    var progress = timestamp - lastRender;
-    update();
-    draw();
+    
+    update(gameState);
+    draw(gameState.ctx, gameState.elements, gameState.pc, gameState.backgroundUrl);
 
-    lastRender = timestamp;
     window.requestAnimationFrame(loop);
 }
 
-var lastRender = 0;
 window.requestAnimationFrame(loop);
 
 module.exports.showInventory = showInventory;
+
 
 },{"./character.js":1,"./element.js":2,"./enemy.js":3,"./environment.js":5,"./item.js":6,"./npc.js":7,"./parsing.js":8,"./player.js":9,"./utility.js":10}],5:[function(require,module,exports){
 /*Environment prototype*/
@@ -539,33 +599,31 @@ const Character = require('./character.js');
 const Vector = require('./utility.js').vector;
 
 function NPC(loc, max, hea, stat, msg, hbox, url, size, speed, mvspd, grav){
-    Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspd, grav);
-    this.message = msg;
+    
+    if(typeof msg === "string"){
+        Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspd, grav);
+        this.message = msg;
+    }
+    else return {};
 }
 
-NPC.prototype = Object.create(Character.prototype);
-
-//empty constructor
-NPC.prototype.NPC = function(){
-    //create an NPC with loc = (0,0), maxhealth = 10
-    // health = 10, status = 1, and no message
-    Character.call(this, new Vector(0,0), 10, 10, 1, new Vector(50,50), null, new Vector(50,50));
-    this.message = "";
-}  
+NPC.prototype = Object.create(Character.prototype); 
 
 
 NPC.prototype.getMessage = function(){
-    if(this.message != null)
-        return this.message;
-    else 
-    {
-        return 0;
-    }
+    return this.message;
+    
 }
 
 NPC.prototype.setMessage = function(msg){
-    this.message = msg;
-}  
+    //disallow non-string message
+    if(typeof msg == "string"){
+        this.message = msg;
+        return;
+    }   
+    else 
+        return null;
+}
 
 
 
@@ -652,22 +710,24 @@ const Character = require('./character.js');
 const Vector = require('./utility.js');
 
 function Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed, mvspd, grav){
+    console.log('hello????');
     Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspd, grav);
     this.equippedItem = itm;
     this.inventory = inv;
+    console.log(this.speed);
 }
 
 Player.prototype = Object.create(Character.prototype);
 
 //empty constructor. void
-Player.prototype.Player = function(){
-    //create enemy with loc = (0,0), maxhealth = 10
-    // health = 10, status = 1, item = null, size 50x50, speed 10x10
+// Player.prototype.Player = function(){
+//     //create enemy with loc = (0,0), maxhealth = 10
+//     // health = 10, status = 1, item = null, size 50x50, speed 10x10
 
-    Character.call(this, vector(0,0), 10, 10, 1, vector(50,50), vector(33,13));
-    this.equippedItem = null;
-    this.inventory = [];
-}  
+//     Character.call(this, vector(0,0), 10, 10, 1, vector(50,50), vector(33,13));
+//     this.equippedItem = null;
+//     this.inventory = [];
+// }  
 
 Player.prototype.getInventory= function(){
     return this.inventory;
@@ -706,6 +766,10 @@ Player.prototype.useItem = function(){
     else {
         this.equippedItem.getEffect().activate();
     }
+}
+
+Player.prototype.pickUpItem = function(){
+    // to be called when player collides with item
 }
 
 module.exports = Player;
