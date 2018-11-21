@@ -1,17 +1,24 @@
 function Effect(title){
+    if (title == 'heal' || title == 'damage'){
     this.effect = title;
     this.isActive = false;
+  }
+  else{
+    return {};
+  }
 }
 
 Effect.prototype.Effect = function(bool, title){
-    if(typeof bool != "boolean"){
-      return null;
-    }
-    if (title != "damage" || "heal"){
-      return null;
-    }
+    /*if(typeof bool != "boolean"){
+      return {};
+    }*/
+    if (title == 'heal' || title == 'damage'){
     this.isActive = bool;
     this.effect = title;
+  }
+  else{
+    return {};
+  }
 }
 
 Effect.prototype.activate = function(){
