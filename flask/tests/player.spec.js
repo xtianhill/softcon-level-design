@@ -28,10 +28,11 @@ describe('Player', function() {
     */
 
     // Default Constructor Test
-    Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed, mvspd, grav)
     beforeEach(function(){
         testItem = new Item(new Vector(2,2), 'dummy_url', new Vector(2,2),
                             new Vector(2,2), true, new Effect('heal'));
+        testItem2 = new Item(new Vector(2,2), 'dummy_url', new Vector(2,2),
+                            new Vector(2,2), true, new Effect('damage'));
         testPlayer = new Player(new Vector(1,1), 20, 0, 0, testItem, [testItem],
                                 new Vector(12,12), 'dummy_url', new Vector(3,3),
                                 new Vector(0,0), 50, 80);
@@ -47,14 +48,14 @@ describe('Player', function() {
     });
 
     it('should return an empty object due to invalid equippedItem', function() {
-      testPlayer = new Player(new Vector(1,1), 20, 0, 0, testItem, [testItem],
+        testPlayer = new Player(new Vector(1,1), 20, 0, 0, "fake_item", [testItem],
                               new Vector(12,12), 'dummy_url', new Vector(3,3),
                               new Vector(0,0), 50, 80);
         expect(testPlayer).toEqual({});
     });
 
-    it('should return an empty object due to invalid equippedItem', function() {
-      testPlayer = new Player(new Vector(1,1), 20, 0, 0, testItem, [testItem],
+    it('should return an empty object due to invalid Inventory', function() {
+        testPlayer = new Player(new Vector(1,1), 20, 0, 0, testItem, [10,13,15],
                               new Vector(12,12), 'dummy_url', new Vector(3,3),
                               new Vector(0,0), 50, 80);
         expect(testPlayer).toEqual({});
@@ -65,55 +66,69 @@ describe('Player', function() {
     | Setter and Getter Tests
     |--------------------------------------------------------------------------
     */
+
     //test setInventory and getInventory
-    it('should test setInventory', function() {
-        testPlayer.setInventory(["sword", "dried fruit", "water bottle", "hat"]);
-        expect(testPlayer.getInventory()).toEqual(["sword", "dried fruit", "water bottle", "hat"]);
+    it('should set Inventory to a test Item and get Inventory', function() {
+        testPlayer.setInventory([testItem2]);
+        expect(testPlayer.getInventory()).toEqual([testItem2]);
     })
 
+    it('should fail to set Inventory due to an Inventory composed of non-Items', function() {
+        testPlayer.setInventory(["sword", "dried fruit", "water bottle", "hat"]);
+        expect(testPlayer.getInventory()).toEqual([testItem]);
+    })
+
+    it('should fail to set Inventory due to an Inventory that is not a list', function() {
+        testPlayer.setInventory("sword");
+        expect(testPlayer.getInventory()).toEqual([testItem]);
+    })
 
     //test setEquippedItem
-    it('should set the Players owned item to testitem', function() {
-        testPlayer.setEquippedItem(testItem);
-        expect(testPlayer.getEquippedItem()).toEqual(testItem);
+    it('should set equippedItem to testItem2', function() {
+        testPlayer.setEquippedItem(testItem2);
+        expect(testPlayer.getEquippedItem()).toEqual(testItem2);
     });
 
-    //test getEquippedItem
-    it('should not set item if type isnt item', function() {
+    it('should fail to set equippedItem due to invalid input', function() {
         testPlayer.setEquippedItem('blah');
         expect(testPlayer.getEquippedItem()).toEqual(testItem);
     });
 
-    // test useItem -> dont know if effects will be functions, or just have titles that useItem
-    // will switch between at this point, so.. for now will say it activates effect
-    it('should use item', function(){
-        testItem.setEffect(new Effect('fire'));
+    /*
+    |--------------------------------------------------------------------------
+    | Use Item Tests
+    |--------------------------------------------------------------------------
+    */
+
+    // test damage effect in useItem
+    it('should active the effect of equippedItem', function(){
+        testEnemy = new Enemy(new Vector(1,1), 20, 0, 0, 5, new Vector(10,10),
+                              new Vector(10,10));
         testPlayer.setEquippedItem(testItem);
         testPlayer.useItem();
+        expect(testEnemy.getHealth()).toEqual(testEnemy.getMaxHealth());
+        expect(testEnemy.getHealth()).toEqual(20);
+        expect(testEnemy.getEquippedItem()).toEqual(null);
         expect(testItem.getEffect().getIsActive()).toBeTruthy();
     });
 
     //test heal effect in useItem
     it('should test heal', function() {
-        testItem.setEffect(new Effect('heal'));
         testPlayer.setEquippedItem(testItem);
         testPlayer.useItem();
         expect(testPlayer.getHealth()).toEqual(testPlayer.getMaxHealth());
         expect(testPlayer.getHealth()).toEqual(20);
         expect(testPlayer.getEquippedItem()).toEqual(null);
+        expect(testItem.getEffect().getIsActive()).toBeTruthy();
     });
 
     // set items position to be relative to the player, add the item to inventory,
     // and set equipped item
     it('should pick up item', function(){
-        var newItem = new Item(new Vector(0,0), 'url', 'sz', 'hbox', true, new Effect('fire'));
-        testPlayer.pickUpItem(newItem);
-        expect(testPlayer.equippedItem).toEqual(newItem);
-        expect(testPlayer.equippedItem.pos.x).toEqual(11);
-        expect(testPlayer.equippedItem.pos.y).toEqual(6);
-        expect(testPlayer.inventory).toEqual([testItem, newItem]);
-
+        testPlayer.pickUpItem(testItem2);
+        expect(testPlayer.getEquippedItem().toEqual(testItem2));
+        expect(testPlayer.getEquippedItem().getPosition().x).toEqual(11);
+        expect(testPlayer.getEquippedItem().getPosition().y).toEqual(6);
+        expect(testPlayer.getInventory()).toEqual([testItem, testItem2]);
     });
-
-
 });

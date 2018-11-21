@@ -97,7 +97,7 @@ describe('Element', function() {
     beforeEach(function() {
         testElement = new Element(new Vector(0,0), "dummyUrl", new Vector(50,50), new Vector(50,50));
       });
-    
+
     // Full Constructor Tests
     it('should have constructed an element with given specifications', function() {
         expect(testElement.getPosition()).toEqual(new Vector(0,0));
@@ -110,7 +110,7 @@ describe('Element', function() {
         testElement= new Element(4, "dummyUrl", new Vector(50,50), new Vector(50,50));
         expect(testElement).toEqual({});
     });
-    
+
     it('should return an empty object due to invalid url', function() {
         testElement= new Element(new Vector(0,0), 4, new Vector(50,50), new Vector(50,50));
         expect(testElement).toEqual({});
@@ -125,7 +125,6 @@ describe('Element', function() {
         testElement= new Element(new Vector(0,0), "dummyUrl", new Vector(50,50), 3);
         expect(testElement).toEqual({});
     });
-    
 
     /*
     |--------------------------------------------------------------------------
@@ -178,5 +177,6 @@ describe('Element', function() {
     });
 
 });
+
 },{"../static/element.js":1,"../static/utility.js":2}]},{},[3])(3)
 });
