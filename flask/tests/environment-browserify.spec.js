@@ -8,7 +8,7 @@ function Element(pos, url, sz, hbox){
 	if(((pos instanceof Vector) && (typeof url === 'string')) && ((sz instanceof Vector) && (hbox instanceof Vector))){
 		this.position = pos; 
 		this.sprite = url; //url to image file
-		this.scale = sz; //scale to resize image dimensions
+		this.size = sz; //scale to resize image dimensions
 		this.hitbox = hbox;
 	} else {
 		return {};
@@ -36,12 +36,12 @@ Element.prototype.setSprite = function(url){
 }
 
 Element.prototype.getSize = function(){
-	return this.scale;
+	return this.size;
 }
 
 Element.prototype.setSize = function(scl){
 	if (scl instanceof Vector){
-		this.scale = scl;
+		this.size = scl;
 	}
 }
 
@@ -62,8 +62,12 @@ module.exports = Element;
 const Element = require('./element.js');
 
 function Environment(solid, pos, url, scale, hbox){
-    Element.call(this, pos, url, scale, hbox);
-    this.solid = solid;
+  if (typeof solid == "boolean") {
+      Element.call(this, pos, url, scale, hbox);
+      this.solid = solid;
+  }
+  else
+      return {};
 }
 
 Environment.prototype = Object.create(Element.prototype);
@@ -78,10 +82,13 @@ Environment.prototype.getSolid = function(){
 }
 
 Environment.prototype.setSolid = function(bool){
-    this.solid = bool;
+  if (typeof solid == "boolean"){
+      this.solid = bool;
+  }
 }
 
 module.exports = Environment;
+
 },{"./element.js":1}],3:[function(require,module,exports){
 /*Vector class */
 function Vector(x,y){
@@ -101,9 +108,8 @@ module.exports = Vector;
 |------------------------------------------------------------------------------
 |
 | This file contains tests for the Environment class.
-| We test input for each method. Thorough testing on
-| the constructor is used to verify input to all methods that are not
-| setter methods.
+| We test input for each method. Thorough testing on the constructor
+| is used to verify input to all methods that are not setter methods.
 |
 |------------------------------------------------------------------------------
 */
@@ -116,30 +122,49 @@ describe('Environment', function(){
 
     /*
     |--------------------------------------------------------------------------
+    | beforeEach: makes an instance of the class to use for tests. Makes a new
+    | version of this test instance before every test, clearing out any
+    | modifications to the default data.
+    |--------------------------------------------------------------------------
+    */
+
+    beforeEach(function(){
+        testEnvironment = new Enviroment(true, new vector(1,1), null, new vector(50,10), new vector(20,50));
+    });
+
+    /*
+    |--------------------------------------------------------------------------
     | Constructor Tests
     |--------------------------------------------------------------------------
     */
-    // Default Constructor Test
-    beforeEach(function(){
-        testEnvironment = new Enviroment(true, new vector(1,1), null, new vector(50,10), new vector(20,50));
-    })
 
     // Full Constructor Tests
-    it('should construct an environment', function(){
+    it('should construct a solid environment', function(){
         expect(testEnvironment.getSolid()).toBeTruthy();
-        expect(testEnvironment.getPosition()).toEqual(new vector(1,1));
-        expect(testEnvironment.getSprite()).toEqual(null);
-        expect(testEnvironment.getSize()).toEqual(new vector(50,10));
-        expect(testEnvironment.getHitbox()).toEqual(new vector(20,50));
-    })
+    });
+
+    it('should fail to construct an environment due to invalid input for solid', function(){
+        testEnvironment = new Enviroment("apple", new vector(1,1), null, new vector(50,10), new vector(20,50));
+        expect(testEnvironment).toEqual({});
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Setter and getter tests
+    |--------------------------------------------------------------------------
+    */
 
     // setSolid and getSolid tests
     it('should correctly set and get solid', function(){
         testEnvironment.setSolid(false);
         expect(testEnvironment.getSolid()).toBeFalsy();
+    });
 
-    })
-})
+    it('should fail to set solid due to invalid input', function() {
+        testEnvironment.setSolid("hello");
+        expect(testEnemy.getSolid()).toBeTruthy();
+    });
+});
 
 },{"../static/environment.js":2,"../static/utility.js":3}]},{},[4])(4)
 });

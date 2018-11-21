@@ -40,12 +40,9 @@ describe('Utility', function(){
 
     // Full Constructor Tests
     it('should create new vectors with values (0,0), (6,9), (12, 18)', function(){
-        expect(testVector0.x).toEqual(0);
-        expect(testVector0.y).toEqual(0);
-        expect(testVector0.x).toEqual(6);
-        expect(testVector1.y).toEqual(9);
-        expect(testVector0.x).toEqual(12);
-        expect(testVector1.y).toEqual(18);
+        expect(testVector0).toEqual(new Vector(0, 0));
+        expect(testVector1).toEqual(new Vector(6, 9));
+        expect(testVector2).toEqual(new Vector(12, 18));
     });
 
     it('should fail to create a vectors with invalid input', function(){

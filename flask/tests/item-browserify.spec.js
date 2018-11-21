@@ -8,7 +8,7 @@ function Element(pos, url, sz, hbox){
 	if(((pos instanceof Vector) && (typeof url === 'string')) && ((sz instanceof Vector) && (hbox instanceof Vector))){
 		this.position = pos; 
 		this.sprite = url; //url to image file
-		this.scale = sz; //scale to resize image dimensions
+		this.size = sz; //scale to resize image dimensions
 		this.hitbox = hbox;
 	} else {
 		return {};
@@ -36,12 +36,12 @@ Element.prototype.setSprite = function(url){
 }
 
 Element.prototype.getSize = function(){
-	return this.scale;
+	return this.size;
 }
 
 Element.prototype.setSize = function(scl){
 	if (scl instanceof Vector){
-		this.scale = scl;
+		this.size = scl;
 	}
 }
 
@@ -120,25 +120,43 @@ module.exports = Vector;
 */
 
 var Item = require('../static/item.js');
-
 describe('Item', function(){
     let testItem;
+
+    /*
+    |--------------------------------------------------------------------------
+    | beforeEach: makes an instance of the class to use for tests. Makes a new
+    | version of this test instance before every test, clearing out any
+    | modifications to the default data.
+    |--------------------------------------------------------------------------
+    */
+
+    beforeEach(function(){
+        testItem = new Item('pos', 'url', 'sz', 'hbox', true, new Effect('heal'));
+    });
+
 
     /*
     |--------------------------------------------------------------------------
     | Constructor Tests
     |--------------------------------------------------------------------------
     */
-    // Default Constructor Test
-    beforeEach(function(){
-        testItem = new Item('pos', 'url', 'sz', 'hbox', true, true);
-    });
 
     // Full Constructor Tests
     it('should construct an item', function(){
         expect(testItem.getCollected()).toBeTruthy();
         expect(testItem.getEffect()).toBeTruthy();
+    });
 
+    // Invalid Input Constructor Tests
+    it('should fail to construct an item due to invalid input for collected', function(){
+        testItem = new Item('pos', 'url', 'sz', 'hbox', 19, new Effect('heal'));
+        expect(testItem).toEqual({});
+    });
+
+    it('should fail to construct an item due to invalid input for effect', function(){
+        testItem = new Item('pos', 'url', 'sz', 'hbox', true, "wrong");
+        expect(testItem).toEqual({});
     });
 
     /*
@@ -146,21 +164,21 @@ describe('Item', function(){
     | Getter and Setter Tests
     |--------------------------------------------------------------------------
     */
-    // setEffect and getEffect tests
-    it('should set and get effect with valid input', function() {
-        testItem.setEffect("airbender");
-        expect(testItem.getEffect()).toBeTruthy();
-    })
 
+    // setEffect and getEffect Tests
+    it('should set and get effect with valid input', function() {
+        testItem.setEffect(new Effect('damage'));
+        expect(testItem.getEffect()).toEqual('damage');;
+    })
 
     it('should fail to set effect due to invalid input', function(){
     	testItem.setEffect(false);
-    	expect(testItem.getEffect()).toBeFalsy();
+    	expect(testItem.getEffect()).toEqual('heal');
     });
 
     it('should fail to set effect due to invalid input', function() {
         testItem.setEffect(300);
-        expect(testItem.getEffect()).toBeFalsy();
+        expect(testItem.getEffect()).toEqual('heal');
     });
 
     // setCollected and getCollected tests
@@ -171,9 +189,10 @@ describe('Item', function(){
 
     it('should fail to set collected due to invalid input', function() {
         testItem.setCollected("hooray");
-        expect(testItem.getCollected()).toBeFalsy();
+        expect(testItem.getCollected()).toBeTruthy();
     })
 
 });
+
 },{"../static/item.js":2}]},{},[4])(4)
 });

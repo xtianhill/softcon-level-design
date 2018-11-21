@@ -194,7 +194,7 @@ function Element(pos, url, sz, hbox){
 	if(((pos instanceof Vector) && (typeof url === 'string')) && ((sz instanceof Vector) && (hbox instanceof Vector))){
 		this.position = pos; 
 		this.sprite = url; //url to image file
-		this.scale = sz; //scale to resize image dimensions
+		this.size = sz; //scale to resize image dimensions
 		this.hitbox = hbox;
 	} else {
 		return {};
@@ -222,12 +222,12 @@ Element.prototype.setSprite = function(url){
 }
 
 Element.prototype.getSize = function(){
-	return this.scale;
+	return this.size;
 }
 
 Element.prototype.setSize = function(scl){
 	if (scl instanceof Vector){
-		this.scale = scl;
+		this.size = scl;
 	}
 }
 
@@ -290,11 +290,6 @@ Vector.prototype.plus = function(vec) {
 
 module.exports = Vector;
 },{}],5:[function(require,module,exports){
-//full constructor tests
-//empty constructor tests
-//get/set message tests
-// test displayMessage w/ full and empty NPC messages
-
 /*
 |------------------------------------------------------------------------------
 | Tests for NPC Class
@@ -310,7 +305,6 @@ module.exports = Vector;
 |------------------------------------------------------------------------------
 */
 
-
 var Vector = require('../static/utility.js');
 var NPC = require('../static/npc.js');
 
@@ -319,38 +313,38 @@ describe('NPC', function() {
 
     /*
     |--------------------------------------------------------------------------
+    | beforeEach: makes an instance of the class to use for tests. Makes a new
+    | version of this test instance before every test, clearing out any
+    | modifications to the default data.
+    |--------------------------------------------------------------------------
+    */
+
+    beforeEach(function(){
+        testNPC = new NPC(new Vector(10,10),15, 15, 1, "hi", new Vector(50,50), null, new Vector(50,50));
+    });
+
+    /*
+    |--------------------------------------------------------------------------
     | Constructor Tests
     |--------------------------------------------------------------------------
     */
-    // Default Constructor Test
-    beforeEach(function(){
-        testNPC = new NPC(new Vector(10,10),15, 15, 1, "hi", new Vector(50,50), null, new Vector(50,50));
-    })
 
     // Full Constructor Tests
-    it('should create a new with given stats', function() {
+    it('should construct a new NPC', function() {
         expect(testNPC.getMessage()).toEqual("hi");
-        expect(testNPC.getPosition()).toEqual(new Vector(10,10));
-        expect(testNPC.getMaxHealth()).toEqual(15);
-        expect(testNPC.getHealth()).toEqual(15);
-        expect(testNPC.getStatus()).toEqual(1);
-        expect(testNPC.getHitbox()).toEqual(new Vector(50,50));
-        expect(testNPC.getSprite()).toBeNull();
-        expect(testNPC.getSize()).toEqual(new Vector(50,50));
-
     });
 
-    it('should set message to null due to invalid input', function(){
-        testNPC = new NPC(new Vector(10,10),15, 15, 1, 2, new Vector(50,50), null, new Vector(50,50)); 
+    it('should fail to construct a new NPC due to invalid input', function(){
+        testNPC = new NPC(new Vector(10,10),15, 15, 1, 2, new Vector(50,50), null, new Vector(50,50));
         expect(testNPC).toEqual({});
     });
 
-
-/*
+    /*
     |--------------------------------------------------------------------------
     | Setter and Getter Tests
     |--------------------------------------------------------------------------
     */
+
     // setMessage and getMessage tests
     it('should set the NPCs message to sup', function() {
         testNPC.setMessage('sup');
@@ -362,22 +356,12 @@ describe('NPC', function() {
         expect(testNPC.getMessage()).toEqual('hi');
     });
 
-
     it('should test setMessage and getMessage with valid input', function() {
         expect(testNPC.getMessage()).toEqual('hi');
         testNPC.setMessage('okay');
         expect(testNPC.getMessage()).toEqual('okay');
     });
-
-
-    it('should fail to set the message due to invalid input', function() {
-        testNPC.setMessage(false);
-        expect(testNPC.getMessage()).toEqual('okay');
-    });
-    
-
 });
-
 
 },{"../static/npc.js":3,"../static/utility.js":4}]},{},[5])(5)
 });
