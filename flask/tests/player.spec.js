@@ -1,5 +1,4 @@
-//test default constructor
-// test constructor
+
 
 //test getItAr
 //test setItAr
@@ -10,6 +9,19 @@
 //empty constructor tests
 //get/set message tests
 
+
+/*
+|------------------------------------------------------------------------------
+| Tests for Player Class
+|------------------------------------------------------------------------------
+|
+| This file contains tests for the Player class.
+| We test input for each method. Thorough testing on
+| the constructor is used to verify input to all methods that are not
+| setter methods.
+|
+|------------------------------------------------------------------------------
+*/
 var Player = require('../static/player.js');
 var Item = require('../static/item.js');
 var Vector = require('../static/utility.js');
@@ -20,14 +32,19 @@ describe('Player', function() {
     
     let testItem;
     
+     /*
+    |--------------------------------------------------------------------------
+    | Constructor Tests
+    |--------------------------------------------------------------------------
+    */
+    // Default Constructor Test
     beforeEach(function(){
         testItem = new Item('pos', 'url', 'sz', 'hbox', true, new Effect('fire'));
         testPlayer = new Player(new Vector(1,1), 20, 0, 0, testItem, [testItem], 'hbox', 'rul', 'size', 'speed');
 
     });
 
-    //test full constructor
-
+    // Test full constructor
     it('should create a new player with loc (1,1), maxhealth 20 health 0, status 0, item testItem', function() {
         
         expect(testPlayer.getEquippedItem()).toEqual(testItem);
@@ -37,6 +54,12 @@ describe('Player', function() {
         expect(testPlayer.getStatus()).toEqual(0);
     });
 
+
+    /*
+    |--------------------------------------------------------------------------
+    | Setter and Getter Tests
+    |--------------------------------------------------------------------------
+    */
     //test setInventory and getInventory
     it('should test setInventory', function() {
         testPlayer.setInventory(["sword", "dried fruit", "water bottle", "hat"]);
@@ -45,7 +68,6 @@ describe('Player', function() {
 
 
     //test setEquippedItem
-
     it('should set the Players owned item to testitem', function() {
         testPlayer.setEquippedItem(testItem);
         expect(testPlayer.getEquippedItem()).toEqual(testItem);
