@@ -1,3 +1,21 @@
+/*
+|------------------------------------------------------------------------------
+| Tests for Database
+|------------------------------------------------------------------------------
+|
+| This file contains tests for the Database.
+| We test valid and invalid input for information to be stored in the Databse.
+| The two necessary fields for JSONs to be stored in the Database are  
+| "title" and "data", so the existence and validity of these fields are tested.
+|
+|------------------------------------------------------------------------------
+*/
+
+/*
+    |--------------------------------------------------------------------------
+    | Valid JSON Tests
+    |--------------------------------------------------------------------------
+    */
 const Database = require('../static/database-browserify.js');
 // const jasmine = require('../../node_modules/jasmine-core/lib/jasmine-core/');
 // const jasmine = require('../../node_modules/jasmine-ajax');
@@ -39,6 +57,14 @@ describe('Valid JSON Tests', function() {
     });
 });
 
+
+/*
+    |--------------------------------------------------------------------------
+    | Tests for Storing Information in the Database and
+    | Retrieving Information from the Database
+    |--------------------------------------------------------------------------
+    */
+
 describe('REST API Tests', function() {
     /*
      * The beforeEach and afterEach functions act as helpers to setup and
@@ -51,6 +77,8 @@ describe('REST API Tests', function() {
     afterEach(function() {
         jasmine.Ajax.uninstall();
     });
+
+    // tests to make sure the database is running
     describe('isRunning() tests', function() {
         it('should test if the backend is running with barebones AJAX call', function() {
             var doneFn = jasmine.createSpy("success");
@@ -79,6 +107,8 @@ describe('REST API Tests', function() {
             expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL);
         });
     });
+
+    // testing adding different grids to the database
     describe('storeGrid() tests', function() {
         it('should test adding a grid which is *not* in the database', function() {
             var testGrid = {
@@ -110,6 +140,8 @@ describe('REST API Tests', function() {
             expect($.ajax).not.toHaveBeenCalled();
         });
     });
+
+    // testing deleting different grids from database
     describe('deleteGrid() tests', function() {
         it('should test deleting a grid which *is* in the database', function() {
             spyOn($, "ajax");
@@ -135,6 +167,8 @@ describe('REST API Tests', function() {
             expect($.ajax).not.toHaveBeenCalled();
         });
     });
+
+    // testing updating different grids in database
     describe('updateGrid() tests', function() {
         it('should update a grid which *is* in the database', function() {
             spyOn($, "ajax");
@@ -172,6 +206,8 @@ describe('REST API Tests', function() {
             expect($.ajax).not.toHaveBeenCalled();
         });
     });
+
+    // testing retrieving different grids from database
     describe('getByTitle() tests', function() {
         it('should retrieve a grid which *is* in the database', function() {
             spyOn($, "ajax");

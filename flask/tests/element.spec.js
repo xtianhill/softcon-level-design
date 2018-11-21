@@ -1,13 +1,33 @@
+/*
+|------------------------------------------------------------------------------
+| Tests for Element Class
+|------------------------------------------------------------------------------
+|
+| This file contains tests for the Element class.
+| We test valid and invalid input for each method. Thorough testing on
+| the constructor is used to verify input to all methods that are not
+| setter methods.
+|
+|------------------------------------------------------------------------------
+*/
+
 const Element = require('../static/element.js');
 const Vector = require('../static/utility.js');
 
 describe('Element', function() {
     let testElement;
-    
+
+    /*
+    |--------------------------------------------------------------------------
+    | Constructor Tests
+    |--------------------------------------------------------------------------
+    */
+    // Default Constructor Test
     beforeEach(function() {
         testElement = new Element(new Vector(0,0), "dummyUrl", new Vector(50,50), new Vector(50,50));
       });
     
+    // Full Constructor Tests
     it('should have constructed an element with given specifications', function() {
         expect(testElement.getPosition()).toEqual(new Vector(0,0));
         expect(testElement.getSprite()).toEqual('dummyUrl');
@@ -36,6 +56,13 @@ describe('Element', function() {
     });
     
 
+    /*
+    |--------------------------------------------------------------------------
+    | Getter and Setter Tests
+    |--------------------------------------------------------------------------
+    */
+
+    // setPosition and getPosition tests
     it('should set position and get position', function() {
         testElement.setPosition(new Vector(10,10));
         expect(testElement.getPosition()).toEqual(new Vector(10,10));
@@ -46,6 +73,7 @@ describe('Element', function() {
         expect(testElement.getPosition()).toEqual(new Vector(0,0));
     });
 
+    // setSprite and getSprite tests
     it('should set sprite and get sprite', function() {
         testElement.setSprite("aSprite");
         expect(testElement.getSprite()).toEqual("aSprite");
@@ -56,6 +84,7 @@ describe('Element', function() {
         expect(testElement.getSprite()).toEqual("dummyUrl");
     });
 
+    // setSize and getSize tests
     it('should set size and get size', function() {
         testElement.setSize(new Vector(10,10));
         expect(testElement.getSize()).toEqual(new Vector(10,10));
@@ -66,6 +95,7 @@ describe('Element', function() {
         expect(testElement.getSize()).toEqual(new Vector(50,50));
     });
 
+    // setHitbox and getHitbox tests
     it('should set hitbox and get hitbox', function() {
         testElement.setHitbox(new Vector(10,10));
         expect(testElement.getHitbox()).toEqual(new Vector(10,10));
