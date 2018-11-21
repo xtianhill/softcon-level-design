@@ -13,7 +13,7 @@
 
 const Vector = require('../static/utility.js');
 
-describe('Effect', function(){
+describe('Utility', function(){
     let testVector0;
     let testVector1;
     let testVector2;
