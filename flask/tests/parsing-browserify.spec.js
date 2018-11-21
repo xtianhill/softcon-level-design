@@ -194,7 +194,7 @@ function Element(pos, url, sz, hbox){
 	if(((pos instanceof Vector) && (typeof url === 'string')) && ((sz instanceof Vector) && (hbox instanceof Vector))){
 		this.position = pos; 
 		this.sprite = url; //url to image file
-		this.scale = sz; //scale to resize image dimensions
+		this.size = sz; //scale to resize image dimensions
 		this.hitbox = hbox;
 	} else {
 		return {};
@@ -222,12 +222,12 @@ Element.prototype.setSprite = function(url){
 }
 
 Element.prototype.getSize = function(){
-	return this.scale;
+	return this.size;
 }
 
 Element.prototype.setSize = function(scl){
 	if (scl instanceof Vector){
-		this.scale = scl;
+		this.size = scl;
 	}
 }
 
@@ -411,7 +411,6 @@ function JSONtoElements(data){
                 var hitbox = new Vector(50,50);
                 var element;
                 if (temp.name == "Environment"){
-                    console.log(pos);
                     element = new Environment(1,pos,url,sz,hitbox);
                 }
                 else if (temp.name == "Item"){
@@ -422,7 +421,7 @@ function JSONtoElements(data){
                 else if (temp.name == "Player"){
                     var max = 10;
                     var hea = 10;
-                    var stat = 1;
+                    var stat = true;
                     var itm= 0;
                     var inv= [];
                     var hitbox = new Vector(19,50);
@@ -434,7 +433,7 @@ function JSONtoElements(data){
                 else if (temp.name == "NPC"){
                     var max = 10;
                     var hea = 10;
-                    var stat= 1;
+                    var stat= true;
                     var msg = "hi there";
                     var spd = new Vector(0,0);
                     var mvspd = 30;
@@ -444,7 +443,7 @@ function JSONtoElements(data){
                 else if (temp.name == "Enemy"){
                     var max = 10;
                     var hea= 10;
-                    var stat = 1;
+                    var stat = true;
                     var dmg= 1;
                     var spd = new Vector(0,0);
                     var mvspd = 40;
@@ -471,19 +470,20 @@ function Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed, mvspd, gr
     Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspd, grav);
     this.equippedItem = itm;
     this.inventory = inv;
+    console.log(this.speed);
 }
 
 Player.prototype = Object.create(Character.prototype);
 
 //empty constructor. void
-Player.prototype.Player = function(){
-    //create enemy with loc = (0,0), maxhealth = 10
-    // health = 10, status = 1, item = null, size 50x50, speed 10x10
+// Player.prototype.Player = function(){
+//     //create enemy with loc = (0,0), maxhealth = 10
+//     // health = 10, status = 1, item = null, size 50x50, speed 10x10
 
-    Character.call(this, vector(0,0), 10, 10, 1, vector(50,50), vector(33,13));
-    this.equippedItem = null;
-    this.inventory = [];
-}  
+//     Character.call(this, vector(0,0), 10, 10, 1, vector(50,50), vector(33,13));
+//     this.equippedItem = null;
+//     this.inventory = [];
+// }  
 
 Player.prototype.getInventory= function(){
     return this.inventory;
@@ -569,16 +569,25 @@ const Vector = require('../static/utility.js');
 
 
 describe('Parsing', function() {
-	var json1 = { "Player" : "player1", "Player" : "player2" };
-	var JSON2 = 2;
-	var JSON3 = 3;
+	let JSON1 = '{}';
+	let JSON2 = '{"objects":[{},{"type":"Element","name":"Environment","top":25,"left":0,"url":"https://www.mariowiki.com/images/thumb/5/5d/GoldbrickblockNSMB2.png/400px-GoldbrickblockNSMB2.png","scale":1}], "backgroundImage:""fakeurl"}';
 
 //testing JSONtoElements
-it('should test this function', function() {
 	//console.log(Parsing);
-	(JSONtoElements(json1));
-})
+	it('should return an empty array and empty backgroundurl given an empty JSON', function(){
+			var returned= JSONtoElements(JSON1);
+			expect((returned).elements).toEqual([]);
+			expect((returned).backgroundUrl).toEqual('');
+	});
+
+	it('should return an array with one environment element in it and background image fakeurl', function(){
+		var returned = JSONtoElements(JSON2);
+		//expect((returned).elements)[0] copmare environment elements somehow?
+		expect((returned).backgroundUrl).toEqual('fakeurl');
+	});
+
 
 });
+
 },{"../static/character.js":1,"../static/element.js":2,"../static/enemy.js":3,"../static/environment.js":4,"../static/item.js":5,"../static/npc.js":6,"../static/parsing.js":7,"../static/player.js":8,"../static/utility.js":9}]},{},[10])(10)
 });

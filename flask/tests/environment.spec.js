@@ -4,9 +4,8 @@
 |------------------------------------------------------------------------------
 |
 | This file contains tests for the Environment class.
-| We test input for each method. Thorough testing on
-| the constructor is used to verify input to all methods that are not
-| setter methods.
+| We test input for each method. Thorough testing on the constructor
+| is used to verify input to all methods that are not setter methods.
 |
 |------------------------------------------------------------------------------
 */
@@ -22,6 +21,7 @@ describe('Environment', function(){
     | Constructor Tests
     |--------------------------------------------------------------------------
     */
+
     // Default Constructor Test
     beforeEach(function(){
         testEnvironment = new Enviroment(true, new vector(1,1), null, new vector(50,10), new vector(20,50));
@@ -35,6 +35,12 @@ describe('Environment', function(){
         expect(testEnvironment.getSize()).toEqual(new vector(50,10));
         expect(testEnvironment.getHitbox()).toEqual(new vector(20,50));
     })
+
+    /*
+    |--------------------------------------------------------------------------
+    | Constructor Tests
+    |--------------------------------------------------------------------------
+    */
 
     // setSolid and getSolid tests
     it('should correctly set and get solid', function(){

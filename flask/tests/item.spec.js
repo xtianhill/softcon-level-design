@@ -12,7 +12,6 @@
 */
 
 var Item = require('../static/item.js');
-
 describe('Item', function(){
     let testItem;
 
@@ -21,6 +20,7 @@ describe('Item', function(){
     | Constructor Tests
     |--------------------------------------------------------------------------
     */
+
     // Default Constructor Test
     beforeEach(function(){
         testItem = new Item('pos', 'url', 'sz', 'hbox', true, true);
@@ -30,7 +30,6 @@ describe('Item', function(){
     it('should construct an item', function(){
         expect(testItem.getCollected()).toBeTruthy();
         expect(testItem.getEffect()).toBeTruthy();
-
     });
 
     /*
@@ -38,10 +37,11 @@ describe('Item', function(){
     | Getter and Setter Tests
     |--------------------------------------------------------------------------
     */
+
     // setEffect and getEffect tests
     it('should set and get effect with valid input', function() {
-        testItem.setEffect("airbender");
-        expect(testItem.getEffect()).toBeTruthy();
+        testItem.setEffect(new Effect('heal'));
+        expect(testItem.getEffect()).toEqual('heal');;
     })
 
 
