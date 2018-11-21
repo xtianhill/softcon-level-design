@@ -61,4 +61,8 @@ Player.prototype.useItem = function(){
     }
 }
 
+Player.prototype.pickUpItem = function(){
+    // to be called when player collides with item
+}
+
 module.exports = Player;

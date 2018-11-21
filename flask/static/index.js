@@ -78,13 +78,14 @@ Character.prototype.newXPos = function(step, dir) {
 
 Character.prototype.moveX = function(newPos, obstacle) {
   if(obstacle != null) {
-      //if environment solid, do nothing
-      if(!obstacle.isSolid)
+      if(obstacle.getSolid() == 0){
           this.position = newPos;
+        }
    }
-   else
+   else{
        this.position = newPos;
-};
+     }
+}
 
 Character.prototype.newYPos = function(step) {
   this.speed.y += step * this.gravity;
@@ -98,6 +99,7 @@ Character.prototype.moveY = function(newPos, obstacle, up) {
   var jumpSpeed = 70;
   if(obstacle != null) {
       if(obstacle.getSolid() == 1)
+          newPos.x = this.position.x
           if (up && this.speed.y > 0){
               this.speed.y = -jumpSpeed;
           } else
@@ -163,8 +165,14 @@ Note: location is a vector with x and y*/
 const Character = require('./character.js');
 
 function Enemy(loc, max, hea, stat, dmg, hbox, url, size, speed, mvspeed, grav){
-    Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspeed, grav);
-    this.damage = dmg;
+    t = typeof dmg
+    if (t === "number") {
+        Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspeed, grav);
+        this.damage = dmg;
+    }
+    else {
+        return {}
+    }
 }
 
 Enemy.prototype = Object.create(Character.prototype);
@@ -186,9 +194,13 @@ Enemy.prototype.getDamage = function(){
 //set int damage
 Enemy.prototype.setDamage = function(amount){
     //set damage to amount
-        this.damage = amount;
-        
-  
+        t = typeof amount
+        if (t === "number"){
+            this.damage = amount;
+        }
+        else{
+            return {}
+        }
 }
 
 
@@ -240,44 +252,53 @@ for(i=0; i<elements.length; i++){
 }
 
 function update(progress) {
-
-    // find things that collide if moving left-right
-    xObstacle = null;
-    for(i=0; i<elements.length; i++){
-        if(detectYCollision(pc.position, elements[i].position, pc.size, elements[i].size)
-            && detectXCollision(pc.position, elements[i].position, pc.size, elements[i].size)){
-		    if(elements[i] instanceof Environment)
-           		xObstacle = elements[i];
-	    	else
-                onCollision(pc, elements, i);
-        }
-    }
     
     // move right or left as long as no wall is in the way
+    newXPos = null;
     if (rightPressed){
-      if (pc.position.x+1 < (width-pc.size.x)){
         newXPos = pc.newXPos(step, "right");
-        pc.moveX(newXPos, xObstacle);
-      }
-    } else if (leftPressed){
-      if(pc.position.x-1 > 0){
-        newXPos = pc.newXPos(step, "left");
-        pc.moveX(newXPos, xObstacle);
-      }
+        if(newXPos.x + (0.5 * pc.size.x) - (0.5 * pc.hitbox.x) < 0
+           || newXPos.x + (0.5 * pc.size.x) + (0.5 * pc.hitbox.x) > width)
+           newXPos = null;
     }
-
+    else if (leftPressed){
+        newXPos = pc.newXPos(step, "left");
+        if(newXPos.x + (0.5 * pc.size.x) - (0.5 * pc.hitbox.x) < 0
+           || newXPos.x + (0.5 * pc.size.x) + (0.5 * pc.hitbox.x) > width)
+           newXPos = null;
+    }
+    
+    // find things that collide if moving left-right
+    xObstacle = null;
+    if(newXPos != null){
+        for(i=0; i<elements.length; i++){
+            if(detectCollision(newXPos, elements[i].position, pc, elements[i])){
+                if(elements[i] instanceof Environment)
+                    xObstacle = elements[i];
+                else
+                    onCollision(pc, elements, i);
+            }
+        }
+    pc.moveX(newXPos, xObstacle);
+    }
+    
     // find collisions if trying to jump or landing on something
     newYPos = pc.newYPos(step);
+    if(newYPos.y + (0.5 * pc.size.y) - (0.5 * pc.hitbox.y) < 0)
+        newYPos = null;
+    else if(newYPos.y + (0.5 * pc.size.y) + (0.5 * pc.hitbox.y) > height)
+        newYPos = newYPos; //player.die()
     yObstacle = null;
-    for(i=0; i<elements.length; i++){
-            if(detectYCollision(newYPos, elements[i].position, pc.size, elements[i].size)
-                && detectXCollision(newYPos, elements[i].position, pc.size, elements[i].size)){
+    if(newYPos != null){
+        for(i=0; i<elements.length; i++){
+           if(detectCollision(newYPos, elements[i].position, pc, elements[i])){
                 if(elements[i] instanceof Environment)
                     yObstacle = elements[i];
                 else
                     onCollision(pc, elements, i);
             }
         }
+    }
 
     // jump or fall as long as no ground (or ceiling, hopefully) is in the way
     if (upPressed){
@@ -288,35 +309,41 @@ function update(progress) {
       pc.moveY(newYPos, yObstacle, false);
   }
 
+  //physics for npcs and enemies
   for(i=0; i<elements.length; i++){
     if (elements[i] instanceof NPC || elements[i] instanceof Enemy) {
         yObstacle = null;
         for(j=0; j<elements.length; j++){
             newPos = elements[i].newYPos(step);
-            if (i != j && detectYCollision(newPos, elements[j].position, elements[i].size, elements[j].size)
-                && detectXCollision(newPos, elements[j].position, elements[i].size, elements[j].size)) {
+            if (i != j && detectCollision(newPos, elements[j].position, elements[i], elements[j])){
                 yObstacle = elements[j];
             }
         }
         elements[i].moveY(newPos, yObstacle, false)
-        console.log(elements[i])
-        console.log(elements[i].speed.y)
     }
 }
 }
-    
-function detectXCollision(pos1, pos2, size1, size2) {
-    if(pos1 == null || pos2 == null || size1 == null || size2 == null)
-        return false;
-    if ((pos1.x < pos2.x + size2.x)  && (pos1.x + size1.x  > pos2.x))
-        return true;
-    return false;
-}
 
-function detectYCollision(pos1, pos2, size1, size2) {
-    if(pos1 == null || pos2 == null || size1 == null || size2 == null)
+function detectCollision(pos1, pos2, element1, element2) {
+    box1 = element1.hitbox;
+    size1 = element1.size;
+    box2 = element2.hitbox;
+    size2 = element2.size;
+    if(pos1 == null || pos2 == null || box1 == null || box2 == null)
         return false;
-    if ((pos1.y <  pos2.y + size2.y && pos1.y + size1.y > pos2.y))
+    left1 = pos1.x + (0.5 * size1.x) - (0.5 * box1.x);
+    right1 = pos1.x + (0.5 * size1.x) + (0.5 * box1.x) - 2;
+    top1 = pos1.y + (0.5 * size1.y) - (0.5 * box1.y);
+    bottom1 = pos1.y + (0.5 * size1.y) + (0.5 * box1.y);
+    left2 = pos2.x + (0.5 * size2.x) - (0.5 * box2.x);
+    right2 = pos2.x + (0.5 * size2.x) + (0.5 * box2.x);
+    top2 = pos2.y + (0.5 * size2.y) - (0.5 * box2.y);
+    bottom2 = pos2.y + (0.5 * size2.y) + (0.5 * box2.y);
+
+    if (right1 > left2 && //right edge of self, left edge of other
+        left1 < right2 && //left edge of self, right edge of other
+        bottom1 > top2 && //bottom edge of self, top edge of other
+        top1 < bottom2)   //top edge of self, bottom edge of other
         return true;
     return false;
 }
@@ -582,6 +609,7 @@ function JSONtoElements(data){
                     var stat = 1;
                     var itm= 0;
                     var inv= [];
+                    var hitbox = new Vector(19,50);
                     var spd = new Vector(0,0);
                     var mvspd = 60;
                     var grav = 40;
@@ -668,14 +696,16 @@ Player.prototype.setEquippedItem = function(itm){
 }
 
 Player.prototype.useItem = function(){
-    if(this.equippedItem.getEffect() == "heal"){
+    if((this.equippedItem.getEffect())["effect"] == "heal"){
         this.health = this.maxHealth;
         this.equippedItem= null;
     }
-    if (this.equippedItem.getEffect() == "damage"){ 
+    else if ((this.equippedItem.getEffect())["effect"] == "damage"){ 
         //swing sword or whatever
     }
-    this.equippedItem.getEffect().activate();
+    else {
+        this.equippedItem.getEffect().activate();
+    }
 }
 
 module.exports = Player;

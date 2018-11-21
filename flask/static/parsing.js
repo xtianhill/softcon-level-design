@@ -35,6 +35,7 @@ function JSONtoElements(data){
                     var stat = 1;
                     var itm= 0;
                     var inv= [];
+                    var hitbox = new Vector(19,50);
                     var spd = new Vector(0,0);
                     var mvspd = 60;
                     var grav = 40;

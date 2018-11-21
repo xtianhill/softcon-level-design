@@ -14,8 +14,8 @@ Note: location is a vector with x and y*/
 function Character(loc, max, hea, stat, hbox, url, size, speed, mvspd, grav){
     Element.call(this, loc, url, size, hbox);
     this.maxHealth = max; //maximum health
-	  this.health=hea; //int health
-	  this.status=stat; //true for alive, false for dead
+	this.health=hea; //int health
+	this.status=stat; //true for alive, false for dead
     this.speed = speed; //for moving
     this.moveSpeed = mvspd; //tells how fast it moves
     this.gravity = grav;
@@ -77,13 +77,14 @@ Character.prototype.newXPos = function(step, dir) {
 
 Character.prototype.moveX = function(newPos, obstacle) {
   if(obstacle != null) {
-      //if environment solid, do nothing
-      if(!obstacle.isSolid)
+      if(obstacle.getSolid() == 0){
           this.position = newPos;
+        }
    }
-   else
+   else{
        this.position = newPos;
-};
+     }
+}
 
 Character.prototype.newYPos = function(step) {
   this.speed.y += step * this.gravity;
@@ -97,6 +98,7 @@ Character.prototype.moveY = function(newPos, obstacle, up) {
   var jumpSpeed = 70;
   if(obstacle != null) {
       if(obstacle.getSolid() == 1)
+          newPos.x = this.position.x
           if (up && this.speed.y > 0){
               this.speed.y = -jumpSpeed;
           } else
