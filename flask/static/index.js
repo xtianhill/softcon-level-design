@@ -272,7 +272,7 @@ Enemy.prototype.Enemy = function(){
     // health = 10, status = 1, damage = 1
     Character.call(this, vector(0,0), 10, 10, 1, new vector(50,50), null, new vector(50,50));
     this.damage = 1;
-}  
+}
 
 //gets damage. return int damage
 Enemy.prototype.getDamage = function(){
@@ -584,12 +584,13 @@ module.exports.showInventory = showInventory;
 const Element = require('./element.js');
 
 function Environment(solid, pos, url, scale, hbox){
-  if (typeof solid == "boolean") {
+  if (solid == 1 || solid == 0) {
       Element.call(this, pos, url, scale, hbox);
       this.solid = solid;
   }
-  else
+  else{
       return {};
+    }
 }
 
 Environment.prototype = Object.create(Element.prototype);
@@ -604,7 +605,7 @@ Environment.prototype.getSolid = function(){
 }
 
 Environment.prototype.setSolid = function(bool){
-  if (typeof solid == "boolean"){
+  if (solid == 1 || solid == 0){
       this.solid = bool;
   }
 }
@@ -746,7 +747,6 @@ function JSONtoElements(data){
                     var grav = 3;
                     element = new Enemy(pos, max, hea, stat, dmg, hitbox, url, sz, spd, mvspd, grav);
                 }
-                console.log('element', element);
                 elementarray.push(element);
             }
         }
@@ -754,8 +754,7 @@ function JSONtoElements(data){
                 "backgroundUrl": backgroundurl };
     }
 module.exports = JSONtoElements;
-    
-    
+
 },{"./character.js":1,"./element.js":2,"./enemy.js":3,"./environment.js":5,"./item.js":6,"./npc.js":7,"./player.js":9,"./utility.js":10}],9:[function(require,module,exports){
 /*Player Prototype
 Note: location is a vector with x and y*/

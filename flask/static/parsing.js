@@ -60,7 +60,6 @@ function JSONtoElements(data){
                     var grav = 3;
                     element = new Enemy(pos, max, hea, stat, dmg, hitbox, url, sz, spd, mvspd, grav);
                 }
-                console.log('element', element);
                 elementarray.push(element);
             }
         }
@@ -68,5 +67,3 @@ function JSONtoElements(data){
                 "backgroundUrl": backgroundurl };
     }
 module.exports = JSONtoElements;
-    
-    
