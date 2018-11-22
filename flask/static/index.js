@@ -253,12 +253,15 @@ module.exports = Element;
 Note: location is a vector with x and y*/
 const Character = require('./character.js');
 
-function Enemy(loc, max, hea, stat, dmg, hbox, url, size, speed, mvspeed, grav, dir){
+function Enemy(loc, max, hea, stat, dmg, hbox, url, size, speed, mvspeed, grav, dir, range, startLoc){
     t = typeof dmg
+    t2 = typeof range
     if (t === "number" && (dir === "right" || dir === "left" || dir === "still")) {
         Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspeed, grav);
         this.damage = dmg;
         this.direction = dir;
+        this.range = range;
+        this.startPos = startLoc;
     }
     else {
         return {}
@@ -273,6 +276,8 @@ Enemy.prototype.Enemy = function(){
     // health = 10, status = 1, damage = 1
     Character.call(this, vector(0,0), 10, 10, 1, new vector(50,50), null, new vector(50,50));
     this.damage = 1;
+    this.direction = "left";
+    this.shouldFall = 1;
 }
 
 //gets damage. return int damage
@@ -293,6 +298,14 @@ Enemy.prototype.setDamage = function(amount){
         }
 }
 
+Enemy.prototype.getRange = function(){
+    return this.range;
+}
+
+Enemy.prototype.setRange = function(rng){
+    this.range = rng;
+}
+
 //gets direction
 Enemy.prototype.getDirection = function(){
     return this.direction;
@@ -301,7 +314,7 @@ Enemy.prototype.getDirection = function(){
 Enemy.prototype.changeDirection = function(){
     if(this.direction == "right")
         this.direction = "left";
-    if(this.direction == "left")
+    else if(this.direction == "left")
         this.direction = "right";
 }
 
@@ -348,7 +361,7 @@ function initialize(){
     var leftPressed = false;
     var downPressed = false;
     var upPressed = false;
-    var data = '{"objects":[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{"type":"Element","name":"Player","top":250,"left":100,"url":"https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png","scale":1},{"type":"Element","name":"Enemy","top":350,"left":250,"url":"https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png","scale":1},{},{"type":"Element","name":"Environment","top":400,"left":150,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":350,"left":100,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"button"},{"type":"Element","name":"Environment","top":400,"left":200,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"button"},{"type":"Element","name":"Environment","top":400,"left":250,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"button"},{"type":"button"}],"background":"","backgroundImage":"https://d2ujflorbtfzji.cloudfront.net/package-screenshot/4b7e815a-669f-4023-ac73-6c7691fe9a9f_scaled.jpg","backgroundImageOpacity":1,"backgroundImageStretch":true}';
+    var data = '{"objects":[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{"type":"Element","name":"Player","top":250,"left":100,"url":"https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png","scale":1},{"type":"Element","name":"Enemy","top":350,"left":200,"url":"https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png","scale":1},{},{"type":"Element","name":"Environment","top":400,"left":150,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":350,"left":100,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"button"},{"type":"Element","name":"Environment","top":400,"left":200,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"button"},{"type":"Element","name":"Environment","top":400,"left":250,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"button"},{"type":"button"}],"background":"","backgroundImage":"https://d2ujflorbtfzji.cloudfront.net/package-screenshot/4b7e815a-669f-4023-ac73-6c7691fe9a9f_scaled.jpg","backgroundImageOpacity":1,"backgroundImageStretch":true}';
     // query database and get level info, then translate into list of elements
     var parsedJSON = JSONtoElements(data);
     var elements = parsedJSON.elements;
@@ -444,7 +457,7 @@ function update(gameState) {
                 yObstacle = gameState.elements[j];
             }
         }
-        gameState.elements[i].moveY(newYPos, yObstacle, false)
+        gameState.elements[i].moveY(newYPos, yObstacle, false);
     }
     if (gameState.elements[i] instanceof Enemy) {
       newXPos = gameState.elements[i].newXPos(gameState.step, gameState.elements[i].direction);
@@ -456,6 +469,11 @@ function update(gameState) {
                   gameState.elements[i].changeDirection();
                   break;
                 }
+              if(gameState.elements[i].startPos.x - newXPos.x > gameState.elements[i].range
+                  || newXPos.x - gameState.elements[i].startPos.x > gameState.elements[i].range){
+                  gameState.elements[i].changeDirection();
+                  break;
+                  }
           gameState.elements[i].moveX(newXPos, null);
       }
     }
@@ -780,8 +798,10 @@ function JSONtoElements(data){
                     var spd = new Vector(0,0);
                     var mvspd = 15;
                     var grav = 60;
-                    var dir = "still"
-                    element = new Enemy(pos, max, hea, stat, dmg, hitbox, url, sz, spd, mvspd, grav, dir);
+                    var dir = "left";
+                    var range = 35;
+                    var startLoc = pos;
+                    element = new Enemy(pos, max, hea, stat, dmg, hitbox, url, sz, spd, mvspd, grav, dir, range, startLoc);
                 }
                 elementarray.push(element);
             }

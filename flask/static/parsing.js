@@ -58,8 +58,10 @@ function JSONtoElements(data){
                     var spd = new Vector(0,0);
                     var mvspd = 15;
                     var grav = 60;
-                    var dir = "left"
-                    element = new Enemy(pos, max, hea, stat, dmg, hitbox, url, sz, spd, mvspd, grav, dir);
+                    var dir = "left";
+                    var range = 35;
+                    var startLoc = pos;
+                    element = new Enemy(pos, max, hea, stat, dmg, hitbox, url, sz, spd, mvspd, grav, dir, range, startLoc);
                 }
                 elementarray.push(element);
             }
