@@ -56,9 +56,10 @@ function JSONtoElements(data){
                     var stat = true;
                     var dmg= 1;
                     var spd = new Vector(0,0);
-                    var mvspd = 40;
-                    var grav = 3;
-                    element = new Enemy(pos, max, hea, stat, dmg, hitbox, url, sz, spd, mvspd, grav);
+                    var mvspd = 15;
+                    var grav = 60;
+                    var dir = "left"
+                    element = new Enemy(pos, max, hea, stat, dmg, hitbox, url, sz, spd, mvspd, grav, dir);
                 }
                 elementarray.push(element);
             }

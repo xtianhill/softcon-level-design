@@ -2,11 +2,12 @@
 Note: location is a vector with x and y*/
 const Character = require('./character.js');
 
-function Enemy(loc, max, hea, stat, dmg, hbox, url, size, speed, mvspeed, grav){
+function Enemy(loc, max, hea, stat, dmg, hbox, url, size, speed, mvspeed, grav, dir){
     t = typeof dmg
     if (t === "number") {
         Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspeed, grav);
         this.damage = dmg;
+        this.direction = dir;
     }
     else {
         return {}
@@ -37,7 +38,30 @@ Enemy.prototype.setDamage = function(amount){
             this.damage = amount;
         }
         else{
-            return {}
+            return null;
+        }
+}
+
+//gets direction
+Enemy.prototype.getDirection = function(){
+    return this.direction;
+}
+
+Enemy.prototype.changeDirection = function(){
+    if(this.direction == "right")
+        this.direction = "left";
+    if(this.direction == "left")
+        this.direction = "right";
+}
+
+//set int damage
+Enemy.prototype.setDirection = function(dir){
+    //set damage to amount
+        if (dir == "right" || dir == "left"){
+            this.direction = dir;
+        }
+        else{
+            return null;
         }
 }
 

@@ -1,5 +1,5 @@
 
-/* Becase engine.js is a script that runs the game, and interacts directly with the html, 
+/* Becase engine.js is a script that runs the game, and interacts directly with the html,
 the functions that needed to be unit tested are included here and then exposed */
 
 /* basic engine prototype */
@@ -32,7 +32,7 @@ function update(gameState) {
            || newXPos.x + (0.5 * gameState.pc.size.x) + (0.5 * gameState.pc.hitbox.x) > gameState.width)
            newXPos = null;
     }
-    
+
     // find things that collide if moving left-right
     xObstacle = null;
     if(newXPos != null){
@@ -44,10 +44,10 @@ function update(gameState) {
                     onCollision(gameState, i);
             }
         }
-        
+
     gameState.pc.moveX(newXPos, xObstacle);
     }
-    
+
     // find collisions if trying to jump or landing on something
     newYPos = gameState.pc.newYPos(gameState.step);
     if(newYPos.y + (0.5 * gameState.pc.size.y) - (0.5 * gameState.pc.hitbox.y) < 0)
@@ -69,7 +69,7 @@ function update(gameState) {
     if (gameState.upPressed){
       if(gameState.pc.position.y-1 > 0){
         gameState.pc.moveY(newYPos, yObstacle, true);
-    } 
+    }
     } else {
         gameState.pc.moveY(newYPos, yObstacle, false);
   }
@@ -133,7 +133,7 @@ function onCollision(gameState, i) {
             }
 
             //if item, pick up and remove from elements
-       
+
             // if(elements[i] instanceof Item){
             //     if(!pc.getEquippedItem()){
             //         pc.setEquippedItem(elements[i]);
@@ -190,7 +190,7 @@ function imgInit(gameState){
 function draw(ctx, elements, pc, backgroundUrl){
     ctx.clearRect(0, 0, width, height);
     ctx.drawImage(backgroundUrl, 0,0);
-    
+
     for(i = 0; i<elements.length; i++){
         var curElement = elements[i];
         if (curElement.shouldDisplay){

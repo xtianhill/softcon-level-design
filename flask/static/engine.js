@@ -24,7 +24,7 @@ function initialize(){
     var leftPressed = false;
     var downPressed = false;
     var upPressed = false;
-    var data = '{"objects":[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{"type":"Element","name":"Environment","top":350,"left":100,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":350,"left":150,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":350,"left":200,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":350,"left":350,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Player","top":150,"left":100,"url":"https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png","scale":1},{"type":"button"},{"type":"Element","name":"Enemy","top":150,"left":550,"url":"https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png","scale":1},{"type":"Element","name":"NPC","top":300,"left":200,"url":"https://66.media.tumblr.com/18b1dcddb1e6de2d56f2bbc16e368af5/tumblr_pi5sz2UwpH1u9vozfo1_250.png","scale":1},{"type":"Element","name":"Item","top":150,"left":500,"url":"https://66.media.tumblr.com/4a8e88c9194d00c4e2e14d62f2a9dc76/tumblr_pi5t840NIu1u9vozfo1_250.png","scale":1},{"type":"button"},{"type":"button"},{"type":"button"},{"type":"button"}],"background":"","backgroundImage":"https://d2ujflorbtfzji.cloudfront.net/package-screenshot/4b7e815a-669f-4023-ac73-6c7691fe9a9f_scaled.jpg","backgroundImageOpacity":1,"backgroundImageStretch":true}';
+    var data = '{"objects":[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{"type":"Element","name":"Player","top":250,"left":100,"url":"https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png","scale":1},{"type":"Element","name":"Enemy","top":350,"left":250,"url":"https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png","scale":1},{},{"type":"Element","name":"Environment","top":400,"left":150,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":350,"left":100,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"button"},{"type":"Element","name":"Environment","top":400,"left":200,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"button"},{"type":"Element","name":"Environment","top":400,"left":250,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"button"},{"type":"button"}],"background":"","backgroundImage":"https://d2ujflorbtfzji.cloudfront.net/package-screenshot/4b7e815a-669f-4023-ac73-6c7691fe9a9f_scaled.jpg","backgroundImageOpacity":1,"backgroundImageStretch":true}';
     // query database and get level info, then translate into list of elements
     var parsedJSON = JSONtoElements(data);
     var elements = parsedJSON.elements;
@@ -68,7 +68,7 @@ function update(gameState) {
            || newXPos.x + (0.5 * gameState.pc.size.x) + (0.5 * gameState.pc.hitbox.x) > gameState.width)
            newXPos = null;
     }
-    
+
     // find things that collide if moving left-right
     xObstacle = null;
     if(newXPos != null){
@@ -80,10 +80,10 @@ function update(gameState) {
                     onCollision(gameState, i);
             }
         }
-        
+
     gameState.pc.moveX(newXPos, xObstacle);
     }
-    
+
     // find collisions if trying to jump or landing on something
     newYPos = gameState.pc.newYPos(gameState.step);
     if(newYPos.y + (0.5 * gameState.pc.size.y) - (0.5 * gameState.pc.hitbox.y) < 0)
@@ -105,7 +105,7 @@ function update(gameState) {
     if (gameState.upPressed){
       if(gameState.pc.position.y-1 > 0){
         gameState.pc.moveY(newYPos, yObstacle, true);
-    } 
+    }
     } else {
         gameState.pc.moveY(newYPos, yObstacle, false);
   }
@@ -113,14 +113,27 @@ function update(gameState) {
   //physics for npcs and enemies
   for(i=0; i<gameState.elements.length; i++){
     if (gameState.elements[i] instanceof NPC || gameState.elements[i] instanceof Enemy) {
+        newYPos = gameState.elements[i].newYPos(gameState.step);
         yObstacle = null;
         for(j=0; j<gameState.elements.length; j++){
-            newPos = gameState.elements[i].newYPos(gameState.step);
-            if (i != j && detectCollision(newPos, gameState.elements[j].position, gameState.elements[i], gameState.elements[j])){
+            if (i != j && detectCollision(newYPos, gameState.elements[j].position, gameState.elements[i], gameState.elements[j])){
                 yObstacle = gameState.elements[j];
             }
         }
-        gameState.elements[i].moveY(newPos, yObstacle, false)
+        gameState.elements[i].moveY(newYPos, yObstacle, false)
+    }
+    if (gameState.elements[i] instanceof Enemy) {
+      newXPos = gameState.elements[i].newXPos(gameState.step, gameState.elements[i].direction);
+      for(j=0; j<gameState.elements.length; j++){
+          xObstacle = null;
+          if(i != j && detectCollision(newXPos, gameState.elements[j].position, gameState.elements[i], gameState.elements[j]))
+              if(gameState.elements[j] instanceof Environment){
+                  xObstacle = gameState.elements[j];
+                  gameState.elements[i].changeDirection();
+                  break;
+                }
+          gameState.elements[i].moveX(newXPos, null);
+      }
     }
 }
 }
@@ -170,7 +183,7 @@ function onCollision(gameState, i) {
             }
 
             //if item, pick up and remove from elements
-       
+
             // if(elements[i] instanceof Item){
             //     if(!pc.getEquippedItem()){
             //         pc.setEquippedItem(elements[i]);
@@ -227,7 +240,7 @@ function imgInit(gameState){
 function draw(gameState){
     gameState.ctx.clearRect(0, 0, gameState.width, gameState.height);
     gameState.ctx.drawImage(gameState.backgroundUrl, 0,0);
-    
+
     for(i = 0; i<gameState.elements.length; i++){
         var curElement = gameState.elements[i];
         if (curElement.shouldDisplay){
@@ -265,7 +278,7 @@ imgInit(gameState);
 
 function loop(timestamp) {
     // game loop
-    
+
     update(gameState);
     draw(gameState);
 
@@ -275,5 +288,3 @@ function loop(timestamp) {
 window.requestAnimationFrame(loop);
 
 module.exports.showInventory = showInventory;
-
-
