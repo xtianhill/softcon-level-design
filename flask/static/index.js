@@ -15,6 +15,12 @@
 const Element = require('./element.js');
 const Vector = require('./utility.js');
 
+/*
+|------------------------------------------------------------------------------
+| Constructor
+|------------------------------------------------------------------------------
+*/
+
 function Character(loc, max, hea, stat, hbox, url, size, spd, mvspd, grav){
 
     if((spd instanceof Vector) && (typeof mvspd === "number") &&
@@ -34,10 +40,10 @@ function Character(loc, max, hea, stat, hbox, url, size, spd, mvspd, grav){
 Character.prototype = Object.create(Element.prototype);
 
 /*
-|--------------------------------------------------------------------------
-| Getter and setter functions for the Character prototype (the javascript
-| version of class methods).
-|--------------------------------------------------------------------------
+|------------------------------------------------------------------------------
+| Getter and setter functions (functions are the javascript version of
+| class methods).
+|------------------------------------------------------------------------------
 */
 
 // Getter for position
@@ -125,10 +131,10 @@ Character.prototype.setGravity = function(g) {
 }
 
 /*
-|--------------------------------------------------------------------------
+|------------------------------------------------------------------------------
 | Movement-related functions for the Character prototype, wherein much of
 | the physics calculations are performed.
-|--------------------------------------------------------------------------
+|------------------------------------------------------------------------------
 */
 
 // Calculates the hypothetical next x position of a Character given a direction
@@ -286,7 +292,9 @@ Enemy.prototype.setDamage = function(amount){
         }
 }
 
-
+Enemy.prototype.decHealth = function(){
+    // decrease an enemies health if attacked with damage effect
+}
 module.exports = Enemy;
 
 },{"./character.js":1}],4:[function(require,module,exports){
@@ -302,6 +310,7 @@ const Environment = require('./environment.js');
 const Vector = require('./utility.js');
 
 var gameState;
+
 
 function initialize(){
     var step = 0.05;
@@ -354,7 +363,7 @@ function update(gameState) {
            newXPos = null;
     }
     else if (gameState.leftPressed){
-        newXPos = gameState.pc.newXPos(step, "left");
+        newXPos = gameState.pc.newXPos(gameState.step, "left");
         if(newXPos.x + (0.5 * gameState.pc.size.x) - (0.5 * gameState.pc.hitbox.x) < 0
            || newXPos.x + (0.5 * gameState.pc.size.x) + (0.5 * gameState.pc.hitbox.x) > gameState.width)
            newXPos = null;
@@ -376,10 +385,10 @@ function update(gameState) {
     }
     
     // find collisions if trying to jump or landing on something
-    newYPos = gameState.pc.newYPos(step);
+    newYPos = gameState.pc.newYPos(gameState.step);
     if(newYPos.y + (0.5 * gameState.pc.size.y) - (0.5 * gameState.pc.hitbox.y) < 0)
         newYPos = null;
-    else if(newYPos.y + (0.5 * gameState.pc.size.y) + (0.5 * gameState.pc.hitbox.y) > height)
+    else if(newYPos.y + (0.5 * gameState.pc.size.y) + (0.5 * gameState.pc.hitbox.y) > gameState.height)
         newYPos = newYPos; //player.die()
     yObstacle = null;
     if(newYPos != null){
@@ -406,7 +415,7 @@ function update(gameState) {
     if (gameState.elements[i] instanceof NPC || gameState.elements[i] instanceof Enemy) {
         yObstacle = null;
         for(j=0; j<gameState.elements.length; j++){
-            newPos = gameState.elements[i].newYPos(step);
+            newPos = gameState.elements[i].newYPos(gameState.step);
             if (i != j && detectCollision(newPos, gameState.elements[j].position, gameState.elements[i], gameState.elements[j])){
                 yObstacle = gameState.elements[j];
             }
@@ -505,32 +514,32 @@ function keyUpHandler(event, gameState) {
 function imgInit(gameState){
     for(i = 0; i<gameState.elements.length; i++){
         gameState.elements[i].img = new Image;
-        gameState.elements[i].img.src = elements[i].sprite;
+        gameState.elements[i].img.src = gameState.elements[i].sprite;
     }
-    var tmp = backgroundUrl;
+    var tmp = gameState.backgroundUrl;
     gameState.backgroundUrl = new Image;
     gameState.backgroundUrl.src = tmp;
 
     gameState.pc.img = new Image;
-    gameState.pc.img.src = pc.sprite;
+    gameState.pc.img.src = gameState.pc.sprite;
 }
 
-function draw(ctx, elements, pc, backgroundUrl){
-    ctx.clearRect(0, 0, width, height);
-    ctx.drawImage(backgroundUrl, 0,0);
+function draw(gameState){
+    gameState.ctx.clearRect(0, 0, gameState.width, gameState.height);
+    gameState.ctx.drawImage(gameState.backgroundUrl, 0,0);
     
-    for(i = 0; i<elements.length; i++){
-        var curElement = elements[i];
+    for(i = 0; i<gameState.elements.length; i++){
+        var curElement = gameState.elements[i];
         if (curElement.shouldDisplay){
-            ctx.font = "12px Arial";
-            ctx.fillText(curElement.getMessage(), curElement.position.x, curElement.position.y-10);
+            gameState.ctx.font = "12px Arial";
+            gameState.ctx.fillText(curElement.getMessage(), curElement.position.x, curElement.position.y-10);
             curElement.shouldDisplay = false;
         }
-        ctx.drawImage(curElement.img,curElement.position.x,curElement.position.y,
+        gameState.ctx.drawImage(curElement.img,curElement.position.x,curElement.position.y,
             curElement.size.x,curElement.size.y);
     }
-    ctx.drawImage(pc.img,pc.position.x,pc.position.y,
-        pc.size.x,pc.size.y);
+    gameState.ctx.drawImage(gameState.pc.img,gameState.pc.position.x,gameState.pc.position.y,
+        gameState.pc.size.x,gameState.pc.size.y);
 }
 
 function showInventory(elements){
@@ -546,27 +555,26 @@ function showInventory(elements){
     }
 }
 
+function testWinConditions(gameState){
+    // to be written
+}
+
+
+initialize();
+imgInit(gameState);
+
 function loop(timestamp) {
     // game loop
     
     update(gameState);
-    draw(gameState.ctx, gameState.elements, gameState.pc, gameState.backgroundUrl);
+    draw(gameState);
 
     window.requestAnimationFrame(loop);
 }
 
-initialize();
-imgInit(gameState);
 window.requestAnimationFrame(loop);
 
 module.exports.showInventory = showInventory;
-module.exports.draw = draw;
-module.exports.imgInit = imgInit;
-module.exports.keyUpHandler = keyUpHandler;
-module.exports.keyDownHandler = keyDownHandler;
-module.exports.onCollision = onCollision;
-module.exports.detectCollision = detectCollision;
-module.exports.update = update;
 
 
 
@@ -576,8 +584,12 @@ module.exports.update = update;
 const Element = require('./element.js');
 
 function Environment(solid, pos, url, scale, hbox){
-    Element.call(this, pos, url, scale, hbox);
-    this.solid = solid;
+  if (typeof solid == "boolean") {
+      Element.call(this, pos, url, scale, hbox);
+      this.solid = solid;
+  }
+  else
+      return {};
 }
 
 Environment.prototype = Object.create(Element.prototype);
@@ -592,10 +604,13 @@ Environment.prototype.getSolid = function(){
 }
 
 Environment.prototype.setSolid = function(bool){
-    this.solid = bool;
+  if (typeof solid == "boolean"){
+      this.solid = bool;
+  }
 }
 
 module.exports = Environment;
+
 },{"./element.js":2}],6:[function(require,module,exports){
 /* Item Prototype */
 
@@ -731,6 +746,7 @@ function JSONtoElements(data){
                     var grav = 3;
                     element = new Enemy(pos, max, hea, stat, dmg, hitbox, url, sz, spd, mvspd, grav);
                 }
+                console.log('element', element);
                 elementarray.push(element);
             }
         }
@@ -751,20 +767,19 @@ function Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed, mvspd, gr
     Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspd, grav);
     this.equippedItem = itm;
     this.inventory = inv;
-    console.log(this.speed);
 }
 
 Player.prototype = Object.create(Character.prototype);
 
 //empty constructor. void
-// Player.prototype.Player = function(){
-//     //create enemy with loc = (0,0), maxhealth = 10
-//     // health = 10, status = 1, item = null, size 50x50, speed 10x10
+Player.prototype.Player = function(){
+    //create enemy with loc = (0,0), maxhealth = 10
+    // health = 10, status = 1, item = null, size 50x50, speed 10x10
 
-//     Character.call(this, vector(0,0), 10, 10, 1, vector(50,50), vector(33,13));
-//     this.equippedItem = null;
-//     this.inventory = [];
-// }  
+    Character.call(this, vector(0,0), 10, 10, 1, vector(50,50), vector(33,13));
+    this.equippedItem = null;
+    this.inventory = [];
+}  
 
 Player.prototype.getInventory= function(){
     return this.inventory;

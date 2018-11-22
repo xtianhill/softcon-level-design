@@ -214,32 +214,32 @@ function keyUpHandler(event, gameState) {
 function imgInit(gameState){
     for(i = 0; i<gameState.elements.length; i++){
         gameState.elements[i].img = new Image;
-        gameState.elements[i].img.src = elements[i].sprite;
+        gameState.elements[i].img.src = gameState.elements[i].sprite;
     }
-    var tmp = backgroundUrl;
+    var tmp = gameState.backgroundUrl;
     gameState.backgroundUrl = new Image;
     gameState.backgroundUrl.src = tmp;
 
     gameState.pc.img = new Image;
-    gameState.pc.img.src = pc.sprite;
+    gameState.pc.img.src = gameState.pc.sprite;
 }
 
-function draw(ctx, elements, pc, backgroundUrl){
-    ctx.clearRect(0, 0, width, height);
-    ctx.drawImage(backgroundUrl, 0,0);
+function draw(gameState){
+    gameState.ctx.clearRect(0, 0, gameState.width, gameState.height);
+    gameState.ctx.drawImage(gameState.backgroundUrl, 0,0);
     
-    for(i = 0; i<elements.length; i++){
-        var curElement = elements[i];
+    for(i = 0; i<gameState.elements.length; i++){
+        var curElement = gameState.elements[i];
         if (curElement.shouldDisplay){
-            ctx.font = "12px Arial";
-            ctx.fillText(curElement.getMessage(), curElement.position.x, curElement.position.y-10);
+            gameState.ctx.font = "12px Arial";
+            gameState.ctx.fillText(curElement.getMessage(), curElement.position.x, curElement.position.y-10);
             curElement.shouldDisplay = false;
         }
-        ctx.drawImage(curElement.img,curElement.position.x,curElement.position.y,
+        gameState.ctx.drawImage(curElement.img,curElement.position.x,curElement.position.y,
             curElement.size.x,curElement.size.y);
     }
-    ctx.drawImage(pc.img,pc.position.x,pc.position.y,
-        pc.size.x,pc.size.y);
+    gameState.ctx.drawImage(gameState.pc.img,gameState.pc.position.x,gameState.pc.position.y,
+        gameState.pc.size.x,gameState.pc.size.y);
 }
 
 function showInventory(elements){
@@ -259,17 +259,19 @@ function testWinConditions(gameState){
     // to be written
 }
 
+
+initialize();
+imgInit(gameState);
+
 function loop(timestamp) {
     // game loop
     
     update(gameState);
-    draw(gameState.ctx, gameState.elements, gameState.pc, gameState.backgroundUrl);
+    draw(gameState);
 
     window.requestAnimationFrame(loop);
 }
 
-initialize();
-imgInit(gameState);
 window.requestAnimationFrame(loop);
 
 module.exports.showInventory = showInventory;
