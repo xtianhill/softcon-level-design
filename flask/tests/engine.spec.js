@@ -5,7 +5,8 @@
 |
 | This file contains tests for the Engine. Since the engine file is a script
 | that interats directly with the browser, this file tests the exposed functions
-| on engine-test-class. 
+| on engine-test-class.
+
 |------------------------------------------------------------------------------
 */
 
@@ -96,30 +97,30 @@ describe('Engine Tests', function(){
     */
 
     it('should return true if there is a collision', function(){
-        expect(detectCollision(gameState.elements[0].position, 
-            gameState.elements[2].position,gameState.elements[0],gameState.elements[2])).toBeTruthy();
-        
-        gameState.elements[2].position = new Vector(2,2);
-        expect(detectCollision(gameState.elements[0].position, 
+        expect(detectCollision(gameState.elements[0].position,
             gameState.elements[2].position,gameState.elements[0],gameState.elements[2])).toBeTruthy();
 
-        gameState.elements[2].position = new Vector(1,2);  
-        expect(detectCollision(gameState.elements[0].position, 
+        gameState.elements[2].position = new Vector(2,2);
+        expect(detectCollision(gameState.elements[0].position,
+            gameState.elements[2].position,gameState.elements[0],gameState.elements[2])).toBeTruthy();
+
+        gameState.elements[2].position = new Vector(1,2);
+        expect(detectCollision(gameState.elements[0].position,
             gameState.elements[2].position,gameState.elements[0],gameState.elements[2])).toBeTruthy();
 
         gameState.elements[2].position = new Vector(2,1);
-        expect(detectCollision(gameState.elements[0].position, 
+        expect(detectCollision(gameState.elements[0].position,
             gameState.elements[2].position,gameState.elements[0],gameState.elements[2])).toBeTruthy();
     });
 
     it('should return false if there isnt a collision', function(){
-        expect(detectCollision(gameState.elements[0].position, 
+        expect(detectCollision(gameState.elements[0].position,
             gameState.elements[1].position,gameState.elements[0],gameState.elements[1])).toBeFalsy();
         gameState.elements[1].position = new Vector(6,0);
-        expect(detectCollision(gameState.elements[0].position, 
+        expect(detectCollision(gameState.elements[0].position,
             gameState.elements[1].position,gameState.elements[0],gameState.elements[1])).toBeFalsy();
         gameState.elements[1].position = new Vector(0,6);
-        expect(detectCollision(gameState.elements[0].position, 
+        expect(detectCollision(gameState.elements[0].position,
             gameState.elements[1].position,gameState.elements[0],gameState.elements[1])).toBeFalsy();
 
     });
@@ -139,7 +140,7 @@ describe('Engine Tests', function(){
 
     it('should decrease enemies health when attacked', function(){
         onCollision(gameState, 1);
-        
+
         spyOn(gameState.elements[1], 'decHealth');
         expect(gameState.elements[1].decHealth).toHaveBeenCalled();
     });
