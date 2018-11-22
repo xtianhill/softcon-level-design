@@ -4,7 +4,7 @@ const Character = require('./character.js');
 
 function Enemy(loc, max, hea, stat, dmg, hbox, url, size, speed, mvspeed, grav, dir){
     t = typeof dmg
-    if (t === "number") {
+    if (t === "number" && (dir === "right" || dir === "left" || dir === "still")) {
         Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspeed, grav);
         this.damage = dmg;
         this.direction = dir;
@@ -57,7 +57,7 @@ Enemy.prototype.changeDirection = function(){
 //set int damage
 Enemy.prototype.setDirection = function(dir){
     //set damage to amount
-        if (dir == "right" || dir == "left"){
+        if (dir == "right" || dir == "left" || dir == "still"){
             this.direction = dir;
         }
         else{
