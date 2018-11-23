@@ -1,6 +1,109 @@
 README (with nice formatting):
-https://docs.google.com/document/d/1QcECvqFfoQWCoPCV4m_iU49NZZy4AurCyq78N7t2oe0/edit?usp=sharing
+https://docs.google.com/document/d/1L92fzM5cJ2UfKXFGMYAqnKL7D4wrc8WgGPYlPnLmvuE/edit?usp=sharing
 
+Unit Test Cases
+How to Run: Open “SpecRunner.html” from the top-level directory in Google Chrome. The results for each test will render in the web page. This webpage has options, like to display all tests or just those that failed, and to randomize order of test execution.
+
+Milestone 4a: 
+ 
+Marjorie Antohi, Molly O’Donnell, Hayley Gray, Oliver Hahn, 
+Julia Hanson, Christian Hill, Eri Rogers, Radhika Kaicker
+
+Iteration 2 plan:
+
+High Level Summary
+Our goals for iteration 2 are, overall, similar to those we stated in the original design document: “Create Level and Play Level will be fully fleshed out with more options for game creation and more complex object interactions” and “Share Level, Search for Level, and Use Link to Play” will be implemented. Below we have described these and other additional goals with greater specificity. 
+
+Connecting Create Level, Play Level, and the Database
+At the end of Iteration 1, we implemented the structures needed to allow levels to be saved  from Create Level→ Database and loaded from Database→ Play level but didn’t link them together--this is our first goal for iteration 2. Linking the components together requires an additional menu in the Create Level editor with buttons for saving a created game with a title and playing a game by searching for it by title.
+
+Adding more configurable options in Create Level
+We plan to make many more elements of gameplay configurable in Create Level for iteration 2. Users will be able to: 
+Upload a sprite from an image url
+Choose effects for each item and terrain element (heal or damage)
+Give items a list of “targets” they can be used on
+Set the win conditions for their game 
+Choose the width of their canvas (within a range)
+Give their level a title 
+Test their level 
+Adding this level of customization requires some changes to the design of the user interface, namely additional buttons or drop down menus for each game element that allow the user to specify the attributes of each element they add to their game.
+
+UI changes
+We also plan to change the following for the UI in create level:
+-Instead of dragging and dropping elements into the grid (iteration 1), a user will be able to select elements from the menu and then “stamp” them in their desired location. This facilitates easier addition of multiple blocks of the same type.
+-Users will not be able to drag two items on top of one another (a bug from iteration 1)
+-Users will be limited to adding one Player character to their game per game
+
+Added gameplay complexity 
+We plan to make gameplay more complex and visually engaging in iteration 2 by implementing the following features:
+Side scrolling/camera view for moving around in a level whose width is larger than the screen
+Moving enemies (walking back and forth)
+More object interactions:  collision detection for using an item to trigger an effect on a target
+More types of terrain with effects (heal or damage)
+Items and Item inventory: 
+making items move with the player on the screen
+modify screen when item is picked up and when a new picked up but the player has nonempty inventory
+the ability to select which item from the inventory a player would like to use 
+The ability to die (for players, npcs, and enemies)
+The ability to win (for a player)
+
+Sharing and using link to play; Database updates 
+-Share level/use link to play
+-Null input checking and HTTP responses. The database will check inputs (as in, search title, add grid, update grid, etc.) and make sure that they are valid and well-formed.
+-The database will also return HTTP response codes indicating the status of each request made to the database. For instance, if search title is given a title that doesn’t exist in the database, it will return a 404 “Not Found” HTTP response; if add grid is given a title that already exists in the database, it will return a 409 “Conflict” response; etc.
+-The database now will have functionality to display all grids stored, allowing users to list and try out all levels available.
+
+What we aren’t doing (that was in original design document)
+Right now, we don’t have plans to add music or sound effects.
+
+How the work will be divided among all pairs of people in your team.
+In the previous iteration, people were flexible to work on different teams as needed, and in this iteration we anticipate that even more fluidity will be needed as different tasks arise. Within that flexibility, we will loosely be working in the following teams:
+Julia, Eri
+Julia: making make level ui changes listed above, linking MakeLevel, PlayLevel, and the database together with a Homepage UI
+Eri: Side scrolling/camera view for moving around in a level whose width is larger than the screen, along with the ability to create such levels in the UI; other PlayLevel features as necessary (particularly physics-related additions such as moving enemies or animated objects)
+Molly, Oliver, Hayley, Radhika
+Molly: Implementing an inventory, item interactions, such as attacking and healing, win and lose conditions, character death, health and controls in the UI of the game
+Oliver: Type validation for all methods and unit test updates. In the next iteration, more type validation for methods and unit test updating as well as working on polishing game physics.
+Hayley: Type validation for all methods and unit test updates
+Radhika: Type validation for all methods and unit test updates
+Christian and Marjorie
+Christian: adding null-input checking to database, adding HTTP response codes, connecting controller and view components, checking that valid JSONs are being sent to DB in API calls, further database unit tests.
+Marjorie: Type validation and unit test updates for the database
+
+Unit Test Cases
+How to Run: Open “SpecRunner.html” from the top-level directory in Google Chrome. The results for each test will render in the web page. This webpage has options, like to display all tests or just those that failed, and to randomize order of test execution.
+Alternatively, enter the “tests” directory, and run the following for each spec file: “jasmine <filename>.spec.js” Unit testing output will print to the console. 
+
+General information
+Depencies/requirements/things we used:
+Jasmine (Javascript unit testing framework)
+Browserify (converts Node.js javascript files to browser-compatible formats)
+JQuery (Javascript AJAX library)
+Flask (Python webserver)
+Amazon AWS (Elastic Beanstalk, MySQL Database Instance)
+Directory structure
+Softcon-level-design: (top level directory)
+Flask: holds the flask server files, the game content files and the elastic beanstalk configuration to deploy to web-server.
+Application: holds the files necessary to create the Flask web-server on the Elastic Beanstalk instance
+Flask-env: holds the Python dependencies for the Flask web-server that Elastic Beanstalk needs
+Static: holds the javascript files
+Templates: holds the HTML files served by the web-server
+Tests: holds the unit testing files
+Application.py: handles the application and routing logic of the flask webserver
+Config.py: configuration information for the flask webserver
+Models.py: defines a model for use in the MySQL database
+Requirements.txt: lists the python dependencies necessary for the Flask webserver
+Node_modules: holds dependencies relevant to the project structure (jasmine, SQLAlchemy, etc.).
+Spec: holds configuration and default files for Jasmine.
+SpecRunner.html: HTML file which runs and pretty-prints unit testing results and output.
+Test-db.html: a test database file served by the Elastic Beanstalk web-server.
+
+Notes
+A note about the testing files: the test files (e.x. database.spec.js): there are other files in the same directory (such as database-browserify.spec.js) that are included in the SpecRunner.html testing suite. These files were created with the browserify utility to create a more compatible testing format for Jasmine’s AJAX testing functionality -- it otherwise has no effect on functionality or performance.
+We were unable to complete the isolate unit tests for the Flask webserver due to difficulties with the Flask unit testing framework. The Flask unit testing framework proved to be difficult to build correctly and include in our project; however, our group was able to perform other tests on the Flask webserver, such as the “curl” requests mentioned in the previous unit testing milestone.
+A comment we received on the previous unit test milestone suggested that we use multiple instances of the classes in our unit tests. In order to keep the code concise but thorough, we use a forEach() constructor that runs at the start of every unit test. This prevents any carryover of the data in the test object from test to test within a file, providing a fresh instance of the class, while also keeping the code short and easy to read. 
+
+-------------------------------------------
 Milestone 3b
 Christian Hill, Hayley Grey, Eri Rogers, Julia Hanson, Oliver Hahn, Molly O’Donnell, Marjorie Antohi
 

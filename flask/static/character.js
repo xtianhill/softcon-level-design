@@ -14,6 +14,12 @@
 const Element = require('./element.js');
 const Vector = require('./utility.js');
 
+/*
+|------------------------------------------------------------------------------
+| Constructor
+|------------------------------------------------------------------------------
+*/
+
 function Character(loc, max, hea, stat, hbox, url, size, spd, mvspd, grav){
 
     if((spd instanceof Vector) && (typeof mvspd === "number") &&
@@ -33,10 +39,10 @@ function Character(loc, max, hea, stat, hbox, url, size, spd, mvspd, grav){
 Character.prototype = Object.create(Element.prototype);
 
 /*
-|--------------------------------------------------------------------------
-| Getter and setter functions for the Character prototype (the javascript
-| version of class methods).
-|--------------------------------------------------------------------------
+|------------------------------------------------------------------------------
+| Getter and setter functions (functions are the javascript version of
+| class methods).
+|------------------------------------------------------------------------------
 */
 
 // Getter for position
@@ -124,10 +130,10 @@ Character.prototype.setGravity = function(g) {
 }
 
 /*
-|--------------------------------------------------------------------------
+|------------------------------------------------------------------------------
 | Movement-related functions for the Character prototype, wherein much of
 | the physics calculations are performed.
-|--------------------------------------------------------------------------
+|------------------------------------------------------------------------------
 */
 
 // Calculates the hypothetical next x position of a Character given a direction

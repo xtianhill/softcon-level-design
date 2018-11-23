@@ -8,7 +8,7 @@ function Element(pos, url, sz, hbox){
 	if(((pos instanceof Vector) && (typeof url === 'string')) && ((sz instanceof Vector) && (hbox instanceof Vector))){
 		this.position = pos; 
 		this.sprite = url; //url to image file
-		this.scale = sz; //scale to resize image dimensions
+		this.size = sz; //scale to resize image dimensions
 		this.hitbox = hbox;
 	} else {
 		return {};
@@ -36,12 +36,12 @@ Element.prototype.setSprite = function(url){
 }
 
 Element.prototype.getSize = function(){
-	return this.scale;
+	return this.size;
 }
 
 Element.prototype.setSize = function(scl){
 	if (scl instanceof Vector){
-		this.scale = scl;
+		this.size = scl;
 	}
 }
 
@@ -90,14 +90,22 @@ describe('Element', function() {
 
     /*
     |--------------------------------------------------------------------------
-    | Constructor Tests
+    | beforeEach: makes an instance of the class to use for tests. Makes a new
+    | version of this test instance before every test, clearing out any
+    | modifications to the default data.
     |--------------------------------------------------------------------------
     */
-    // Default Constructor Test
+
     beforeEach(function() {
         testElement = new Element(new Vector(0,0), "dummyUrl", new Vector(50,50), new Vector(50,50));
       });
-    
+
+    /*
+    |--------------------------------------------------------------------------
+    | Constructor Tests
+    |--------------------------------------------------------------------------
+    */
+
     // Full Constructor Tests
     it('should have constructed an element with given specifications', function() {
         expect(testElement.getPosition()).toEqual(new Vector(0,0));
@@ -106,11 +114,12 @@ describe('Element', function() {
         expect(testElement.getHitbox()).toEqual(new Vector(50,50));
     });
 
+    // Invalid Input Constructor Tests
     it('should return an empty object due to invalid position', function() {
         testElement= new Element(4, "dummyUrl", new Vector(50,50), new Vector(50,50));
         expect(testElement).toEqual({});
     });
-    
+
     it('should return an empty object due to invalid url', function() {
         testElement= new Element(new Vector(0,0), 4, new Vector(50,50), new Vector(50,50));
         expect(testElement).toEqual({});
@@ -125,7 +134,6 @@ describe('Element', function() {
         testElement= new Element(new Vector(0,0), "dummyUrl", new Vector(50,50), 3);
         expect(testElement).toEqual({});
     });
-    
 
     /*
     |--------------------------------------------------------------------------
@@ -178,5 +186,6 @@ describe('Element', function() {
     });
 
 });
+
 },{"../static/element.js":1,"../static/utility.js":2}]},{},[3])(3)
 });

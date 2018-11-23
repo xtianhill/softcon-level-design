@@ -1,3 +1,7 @@
+
+/* Becase engine.js is a script that runs the game, and interacts directly with the html,
+the functions that needed to be unit tested are included here and then exposed */
+
 /* basic engine prototype */
 const JSONtoElements = require('./parsing.js');
 const NPC = require('./npc.js');
@@ -10,46 +14,6 @@ const Environment = require('./environment.js');
 const Vector = require('./utility.js');
 
 var gameState;
-
-
-function initialize(){
-    var step = 0.05;
-    var canvas = document.getElementById("c");
-    var width = canvas.width;
-    var height = canvas.height;
-    var ctx = canvas.getContext("2d");
-    document.addEventListener('keydown', function(e) {keyDownHandler(e, gameState)}, false);
-    document.addEventListener('keyup', function(e) {keyUpHandler(e, gameState)}, false);
-    var rightPressed = false;
-    var leftPressed = false;
-    var downPressed = false;
-    var upPressed = false;
-    var data = '{"objects":[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{"type":"Element","name":"Player","top":250,"left":100,"url":"https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png","scale":1},{"type":"Element","name":"Enemy","top":350,"left":200,"url":"https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png","scale":1},{},{"type":"Element","name":"Environment","top":400,"left":150,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":350,"left":100,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"button"},{"type":"Element","name":"Environment","top":400,"left":200,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"button"},{"type":"Element","name":"Environment","top":400,"left":250,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"button"},{"type":"button"}],"background":"","backgroundImage":"https://d2ujflorbtfzji.cloudfront.net/package-screenshot/4b7e815a-669f-4023-ac73-6c7691fe9a9f_scaled.jpg","backgroundImageOpacity":1,"backgroundImageStretch":true}';
-    // query database and get level info, then translate into list of elements
-    var parsedJSON = JSONtoElements(data);
-    var elements = parsedJSON.elements;
-    var backgroundUrl = parsedJSON.backgroundUrl;
-
-    var pc;
-    for(i=0; i<elements.length; i++){
-        if(elements[i] instanceof Player){
-            pc = elements[i];
-            elements.splice(i,1);
-        }
-    }
-    gameState = { canvas: canvas
-        , width: width
-        , height: height
-        , ctx: ctx
-        , rightPressed: rightPressed
-        , leftPressed: leftPressed
-        , downPressed: downPressed
-        , upPressed: upPressed
-        , elements: elements
-        , pc: pc
-        , step: step
-        , backgroundUrl: backgroundUrl};
-}
 
 // GAME STATE
 
@@ -113,32 +77,14 @@ function update(gameState) {
   //physics for npcs and enemies
   for(i=0; i<gameState.elements.length; i++){
     if (gameState.elements[i] instanceof NPC || gameState.elements[i] instanceof Enemy) {
-        newYPos = gameState.elements[i].newYPos(gameState.step);
         yObstacle = null;
         for(j=0; j<gameState.elements.length; j++){
-            if (i != j && detectCollision(newYPos, gameState.elements[j].position, gameState.elements[i], gameState.elements[j])){
+            newPos = gameState.elements[i].newYPos(gameState.step);
+            if (i != j && detectCollision(newPos, gameState.elements[j].position, gameState.elements[i], gameState.elements[j])){
                 yObstacle = gameState.elements[j];
             }
         }
-        gameState.elements[i].moveY(newYPos, yObstacle, false);
-    }
-    if (gameState.elements[i] instanceof Enemy) {
-      newXPos = gameState.elements[i].newXPos(gameState.step, gameState.elements[i].direction);
-      for(j=0; j<gameState.elements.length; j++){
-          xObstacle = null;
-          if(i != j && detectCollision(newXPos, gameState.elements[j].position, gameState.elements[i], gameState.elements[j]))
-              if(gameState.elements[j] instanceof Environment){
-                  xObstacle = gameState.elements[j];
-                  gameState.elements[i].changeDirection();
-                  break;
-                }
-              if(gameState.elements[i].startPos.x - newXPos.x > gameState.elements[i].range
-                  || newXPos.x - gameState.elements[i].startPos.x > gameState.elements[i].range){
-                  gameState.elements[i].changeDirection();
-                  break;
-                  }
-          gameState.elements[i].moveX(newXPos, null);
-      }
+        gameState.elements[i].moveY(newPos, yObstacle, false)
     }
 }
 }
@@ -158,7 +104,6 @@ function detectCollision(pos1, pos2, element1, element2) {
     right2 = pos2.x + (0.5 * size2.x) + (0.5 * box2.x);
     top2 = pos2.y + (0.5 * size2.y) - (0.5 * box2.y);
     bottom2 = pos2.y + (0.5 * size2.y) + (0.5 * box2.y);
-
     if (right1 > left2 && //right edge of self, left edge of other
         left1 < right2 && //left edge of self, right edge of other
         bottom1 > top2 && //bottom edge of self, top edge of other
@@ -232,32 +177,32 @@ function keyUpHandler(event, gameState) {
 function imgInit(gameState){
     for(i = 0; i<gameState.elements.length; i++){
         gameState.elements[i].img = new Image;
-        gameState.elements[i].img.src = gameState.elements[i].sprite;
+        gameState.elements[i].img.src = elements[i].sprite;
     }
-    var tmp = gameState.backgroundUrl;
+    var tmp = backgroundUrl;
     gameState.backgroundUrl = new Image;
     gameState.backgroundUrl.src = tmp;
 
     gameState.pc.img = new Image;
-    gameState.pc.img.src = gameState.pc.sprite;
+    gameState.pc.img.src = pc.sprite;
 }
 
-function draw(gameState){
-    gameState.ctx.clearRect(0, 0, gameState.width, gameState.height);
-    gameState.ctx.drawImage(gameState.backgroundUrl, 0,0);
+function draw(ctx, elements, pc, backgroundUrl){
+    ctx.clearRect(0, 0, width, height);
+    ctx.drawImage(backgroundUrl, 0,0);
 
-    for(i = 0; i<gameState.elements.length; i++){
-        var curElement = gameState.elements[i];
+    for(i = 0; i<elements.length; i++){
+        var curElement = elements[i];
         if (curElement.shouldDisplay){
-            gameState.ctx.font = "12px Arial";
-            gameState.ctx.fillText(curElement.getMessage(), curElement.position.x, curElement.position.y-10);
+            ctx.font = "12px Arial";
+            ctx.fillText(curElement.getMessage(), curElement.position.x, curElement.position.y-10);
             curElement.shouldDisplay = false;
         }
-        gameState.ctx.drawImage(curElement.img,curElement.position.x,curElement.position.y,
+        ctx.drawImage(curElement.img,curElement.position.x,curElement.position.y,
             curElement.size.x,curElement.size.y);
     }
-    gameState.ctx.drawImage(gameState.pc.img,gameState.pc.position.x,gameState.pc.position.y,
-        gameState.pc.size.x,gameState.pc.size.y);
+    ctx.drawImage(pc.img,pc.position.x,pc.position.y,
+        pc.size.x,pc.size.y);
 }
 
 function showInventory(elements){
@@ -272,24 +217,16 @@ function showInventory(elements){
         ul.appendChild(listItem);
     }
 }
-
 function testWinConditions(gameState){
     // to be written
 }
 
-
-initialize();
-imgInit(gameState);
-
-function loop(timestamp) {
-    // game loop
-
-    update(gameState);
-    draw(gameState);
-
-    window.requestAnimationFrame(loop);
-}
-
-window.requestAnimationFrame(loop);
-
 module.exports.showInventory = showInventory;
+module.exports.draw = draw;
+module.exports.imgInit = imgInit;
+module.exports.keyUpHandler = keyUpHandler;
+module.exports.keyDownHandler = keyDownHandler;
+module.exports.onCollision = onCollision;
+module.exports.detectCollision = detectCollision;
+module.exports.testWinConditions = testWinConditions;
+module.exports.update = update;

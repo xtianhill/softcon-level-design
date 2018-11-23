@@ -3,8 +3,13 @@
 const Element = require('./element.js');
 
 function Environment(solid, pos, url, scale, hbox){
-    Element.call(this, pos, url, scale, hbox);
-    this.solid = solid;
+  if (solid == 1 || solid == 0) {
+      Element.call(this, pos, url, scale, hbox);
+      this.solid = solid;
+  }
+  else{
+      return {};
+    }
 }
 
 Environment.prototype = Object.create(Element.prototype);
@@ -19,7 +24,9 @@ Environment.prototype.getSolid = function(){
 }
 
 Environment.prototype.setSolid = function(bool){
-    this.solid = bool;
+  if (solid == 1 || solid == 0){
+      this.solid = bool;
+  }
 }
 
 module.exports = Environment;

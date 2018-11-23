@@ -11,8 +11,6 @@
 |------------------------------------------------------------------------------
 */
 
-
-//Type Checking and throw exception
 const Effect = require('../static/effect.js');
 
 describe('Effect', function(){
@@ -20,35 +18,42 @@ describe('Effect', function(){
 
     /*
     |--------------------------------------------------------------------------
-    | Constructor Tests
+    | beforeEach: makes an instance of the class to use for tests. Makes a new
+    | version of this test instance before every test, clearing out any
+    | modifications to the default data.
     |--------------------------------------------------------------------------
     */
-    // Default Constructor Test
-
 
     beforeEach(function(){
-        testEffect = new Effect('fire');
+        testEffect = new Effect('heal');
     })
-    it('should construct a default effect', function(){
-        expect(testEffect.getIsActive()).toBeFalsy();
-        expect(testEffect.getEffect()).toEqual('fire');
-    });
 
     /*
     |--------------------------------------------------------------------------
-    | Activation Method Tests
+    | Constructor Tests
     |--------------------------------------------------------------------------
     */
 
-    it('should activate the effect', function(){
-        testEffect.activate();
-        expect(testEffect.getIsActive()).toBeTruthy();
+    // test full constructor
+    it('should construct a default effect', function(){
+        expect((testEffect).getIsActive()).toBeFalsy();
+        expect((testEffect).getEffect()).toEqual('heal');
     });
 
-    it('should deactivate the effect', function(){
-        testEffect.activate();
-        testEffect.deactivate();
-        expect(testEffect.getIsActive().toBeFalsy);
+    // test invalid input
+    it('should return null Effect because of integer input for title', function(){
+      testEffect= new Effect(4);
+      expect(testEffect).toEqual({});
+    });
+
+    it ('should return null Effect because of bad string input for title', function(){
+      testEffect= new Effect('twerk');
+      expect(testEffect).toEqual({});
+    });
+
+    it ('should return null Effect because of bad booleam input', function(){
+      testEffect = new Effect('hello', 'heal');
+      expect(testEffect).toEqual({});
     });
 
     /*
@@ -58,7 +63,34 @@ describe('Effect', function(){
     */
 
     it('should get and set the title', function(){
-        testEffect.setEffect('ice!');
-        expect(testEffect.getEffect()).toEqual('ice!');
+        testEffect.setEffect('damage');
+        expect((testEffect).getEffect()).toEqual('damage');
+    });
+
+    it('should fail to set the title because of bad string input for title', function(){
+        testEffect.setEffect('fake_news');
+        expect((testEffect).getEffect()).toEqual('heal');
+    });
+
+    it('should fail to set the title because of invalid input', function(){
+        testEffect.setEffect(800);
+        expect((testEffect).getEffect()).toEqual('heal');
+    });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Activation Method Tests
+    |--------------------------------------------------------------------------
+    */
+
+    it('should activate the effect', function(){
+        (testEffect).activate();
+        expect((testEffect).getIsActive()).toBeTruthy();
+    });
+
+    it('should deactivate the effect', function(){
+        (testEffect).activate();
+        (testEffect).deactivate();
+        expect((testEffect).getIsActive()).toBeFalsy();
     });
 });
