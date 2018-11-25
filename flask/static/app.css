@@ -13,12 +13,16 @@
 
 .myButton {
     font-family : 'Press Start 2P';
-    font-size:11px;
-	   padding:16px 31px;
+    font-size:12px;
+	   padding:11px 11px;
 	   text-decoration:none;
     display:inline-block;
     background-color:#ffffff;
-    width: 100px;
+    width: 65px;
+    -moz-border-radius:28px;
+	-webkit-border-radius:28px;
+	border-radius:28px;
+	border:1px solid #29668f;
 }
 
 .wrapper {
