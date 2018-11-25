@@ -160,25 +160,4 @@ document.getElementById("save").onclick = function(){
 
  }
 
-//how to make an object called hello move around with keys: not using for now
-/*
-document.body.onkeyup = function(e){
-   // canvas_.clear();
-    canvas_.add(hello);
-    canvas_.renderAll();
-    }
-document.body.onkeydown = function(e){
-    if (e.key == 'g') {
-       hello.set({left: hello.left + 5,});
-       canvas_.add(hello);
-       canvas_.renderAll();
-    }
-
-    if (e.key == 'f') {
-       hello.set({left: hello.left - 5,});
-       canvas_.add(hello);
-       canvas_.renderAll();
-    }
-}
-*/
 }
