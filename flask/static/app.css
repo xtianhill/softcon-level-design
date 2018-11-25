@@ -3,4 +3,11 @@ canvas {
     border-style: dotted;
 }
 
-
+.wrapper {
+    width: 75%;
+    height: 500px;
+    border: 2px solid black;
+    margin:50px;
+    overflow: auto;
+    position: fixed;
+}

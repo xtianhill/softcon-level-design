@@ -4,20 +4,20 @@ window.onload = function a()
     var canvassrc = "https://d2ujflorbtfzji.cloudfront.net/package-screenshot/4b7e815a-669f-4023-ac73-6c7691fe9a9f_scaled.jpg";
 	var canvas = new fabric.Canvas('c', { selection: false});
     canvas.setBackgroundImage(canvassrc);
-    
-    var json_data = JSON.stringify(canvas.toDatalessJSON()); //initializing to be used later
-    
 
-//drawing the lines of the grid 
-    var grid = 50; 
-    for( var i=0; i< (1000/grid);i++){
+    var json_data = JSON.stringify(canvas.toDatalessJSON()); //initializing to be used later
+
+
+//drawing the lines of the grid
+    var grid = 50;
+    for( var i=0; i< (2000/grid);i++){
     var line= new fabric.Line([i*grid,0, i*grid, 500], {stroke:'#a3c0f5', selectable: false, originX: 'center',
       originY: 'center'});
       canvas.add(line);
       line.toObject = function() {
             return { };
         };
-    var line2= new fabric.Line([0, i*grid, 1000, i*grid], {stroke:'#a3c0f5', selectable: false, originX: 'center',
+    var line2= new fabric.Line([0, i*grid, 2000, i*grid], {stroke:'#a3c0f5', selectable: false, originX: 'center',
       originY: 'center'});
       canvas.add(line2);
       line2.toObject = function() {
@@ -32,7 +32,7 @@ var menubox = new fabric.Rect({
         top: 0,
         fill:  "#96B2E3",
         width: 600,
-        height: 200,    
+        height: 200,
         lockRotation: true,
         selectable: false,
     });
@@ -48,7 +48,7 @@ var coinsrc= "https://66.media.tumblr.com/4a8e88c9194d00c4e2e14d62f2a9dc76/tumbl
 var enemysrc= "https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png";
 var npcsrc = "https://66.media.tumblr.com/18b1dcddb1e6de2d56f2bbc16e368af5/tumblr_pi5sz2UwpH1u9vozfo1_250.png";
 
-// function make a button, visually: calls draggable() to make it actually work. 
+// function make a button, visually: calls draggable() to make it actually work.
 function button(url, pos,pic, elementname){
  fabric.Image.fromURL(url, function(img) {
        var btn =img.set({ top: 25,
@@ -57,7 +57,7 @@ function button(url, pos,pic, elementname){
         height: 50,
         hasControls: false,
         hasBorders: false,
-        originX: 'left', 
+        originX: 'left',
         originY: 'top',
         hasRotatingPoint: false,
     });
@@ -78,7 +78,7 @@ button(npcsrc,200,npc, "NPC");
 //ignore these comments for now but dont delete
 //console.log(JSON.stringify(canvas));
 /*
-var json_data = JSON.stringify(canvas.toDatalessJSON()); 
+var json_data = JSON.stringify(canvas.toDatalessJSON());
 //console.log(json_data);
 canvas.loadFromJSON(JSON.parse(json_data), function(obj) {
   canvas.renderAll();
@@ -105,14 +105,14 @@ function draggable(object, pic, pos, name, url) {
             //its generic right now, but should be different for the element types
             // for ecxample, NPC needs "message"
             temp.toObject = function() {
-            return {type: "button", 
+            return {type: "button",
             };
 };
 
         if (name == "NPC"){
         var msg = prompt("Please enter a message for the npc:", "You are under attack!");
             //actually save the input here
-            
+
         }
         if (name == "Item"){
         var effect = prompt("Please enter an effect for this item:", "Heal");
@@ -127,7 +127,7 @@ function draggable(object, pic, pos, name, url) {
         object.on('mouseup', function() {
             // Remove an event handler
             object.toObject = function() {
-            return {type: "Element", 
+            return {type: "Element",
             name: name,
             top:object.top,
             left: object.left,
@@ -144,7 +144,7 @@ function draggable(object, pic, pos, name, url) {
 
 
  //snap to grid
-canvas.on('object:moving', function(options) { 
+canvas.on('object:moving', function(options) {
   options.target.set({
     left: Math.round(options.target.left / grid) * grid,
     top: Math.round(options.target.top / grid) * grid
@@ -173,7 +173,7 @@ document.body.onkeydown = function(e){
        canvas_.add(hello);
        canvas_.renderAll();
     }
-    
+
     if (e.key == 'f') {
        hello.set({left: hello.left - 5,});
        canvas_.add(hello);
