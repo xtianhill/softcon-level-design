@@ -1,6 +1,36 @@
-canvas {
-    border: 5px solid #ccc;
-    border-style: dotted;
+.header {
+    position:fixed; top:0; left:0;
+    background-color: #a3c0f5;
+    width: 87%;
+    margin-top: 3%;
+    margin-left: 5%;
+    margin-right: -5%;
+    margin-bottom: 3%;
+    height: 100px;
+    border: 5px solid #475F96;
+    font-family: 'Press Start 2P';
 }
 
+.myButton {
+    font-family : 'Press Start 2P';
+    font-size:12px;
+	   padding:11px 11px;
+	   text-decoration:none;
+    display:inline-block;
+    background-color:#ffffff;
+    width: 65px;
+    -moz-border-radius:28px;
+	-webkit-border-radius:28px;
+	border-radius:28px;
+	border:1px solid #29668f;
+}
 
+.wrapper {
+    width: 88%;
+    height: 500px;
+    border: 5px solid #a3c0f5;
+    margin-top:10%;
+    margin-left: 4%;
+    overflow: auto;
+    position: fixed;
+}
