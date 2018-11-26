@@ -13,10 +13,8 @@ HTTP_NOTFOUND = 404
 HTTP_CONFLICT = 409
 
 def validate_json(my_json):
-    try:
-        my_json["title"]
-        my_json["data"]
-    except:
+    if "title" not in my_json or "data" not in my_json:
+        print "JSON doesn't have proper keys."
         return False
     return True
 
@@ -38,12 +36,16 @@ def send_js(path):
 
 @application.route('/api/v1/add-grid/', methods=['POST'])
 def add_grid():
-    if not request.json:
-        response = Response(request.form, status=HTTP_BADREQUEST)
-    elif not validate_json(request.get_json()):
-        response = Response(request.form, status=HTTP_BADREQUEST)
+    print "request: " + str(request.headers)
+    # if not request.json:
+    #     print "Error: not JSON"
+    #     print type(request)
+    #     response = Response("Error: not JSON", status=HTTP_BADREQUEST)
+    if not validate_json(request.get_json()):
+        print "Error: invalid JSON"
+        response = Response("Error: invalid JSON", status=HTTP_BADREQUEST)
     else:
-        my_json = request.get_json()
+        my_json = json.loads(request.get_json())
         my_title = my_json["title"]
         my_data = my_json["data"]
         my_grid = Grid(my_title, my_data)
@@ -54,6 +56,7 @@ def add_grid():
             db.session.add(my_grid)
             db.session.commit()
             response = Response(my_json, status=HTTP_CREATED, mimetype='application/json') 
+            print "SUCCESS: entry added to DB"
         except exc.DataError:
             db.session.rollback()
             response = Response(my_json, status=HTTP_CONFLICT, mimetype='application/json')

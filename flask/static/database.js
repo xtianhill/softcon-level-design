@@ -10,28 +10,28 @@
 const AWS_URL = "http://127.0.0.1:5000/";
 
 function storeGrid(gridJSON, cb) {
-    console.log('gridJSON title: ' + gridJSON.title);
-    console.log('gridJSON data: ' + gridJSON.data);
+    console.log('gridJSON: ' + gridJSON);
     if(!validJSON(gridJSON)) {
         console.log('invalid json given');
         return false;
     }
     $.ajax({
-        type: 'POST',
+        type: "POST",
         url: AWS_URL + "api/v1/add-grid/",
-        data: gridJSON,
-        dataType: "text",
-        async: false
-      }).done(function(data) {
-        cb(data);
-      }).fail(function(xhr, status, errorThrown) {
-        alert("Sorry, there was a problem!");
-        console.log("Error: " + errorThrown);
-        console.log("Status: " + status);
-        console.dir(xhr);
-      }).always(function() {
-        alert("storeGrid operation is complete.");
-      });
+        data: JSON.stringify(gridJSON),
+        contentType: "application/json",
+        dataType: "json",
+        success: function(data) {
+            console.log("success: stored the following grid in DB: " + data);
+            alert("Success: stored the following grid in DB");
+            success = true;
+        },
+        failure: function(errMsg) {
+            console.log("failure: couldn't store grid");
+            alert("failure: couldn't store grid");
+            success = false;
+        }
+    });
 }
 
 function isRunning(cb) {
@@ -137,20 +137,28 @@ function getAllTitles(cb) {
 }
 
 function validJSON(myJSON) {
+    myJSON = JSON.parse(myJSON);
+    console.log("validJSON: myJSON: " + myJSON);
+    console.log("validJSON: myJSON type: " + myJSON.type);
     if(myJSON.type == 'string') {
+        console.log("validJSON: given a string");
         myJSON = JSON.parse(myJSON);
     }
     try {
         var myTitle = myJSON["title"]
         var myData = myJSON["data"]
         if(myTitle.length == 0 || myData.length == 0) {
+            console.log("validJSON: field(s) are length 0");
             return false;
         }
         if(typeof myData != 'string') {
+            console.log("validJSON: data isn't a string");
             return false;
         }
     }
     catch(err) {
+        console.log("validJSON: caught error");
+        console.log(err)
         return false;
     }
     return true;

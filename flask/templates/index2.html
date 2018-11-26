@@ -47,10 +47,19 @@
 
         <script>
         function myFunction() {
-            var title = prompt("Enter the grid title", "title");
+            var myCB = function(data) {
+                alert(data);
+            }
+            var mytitle = prompt("Enter the grid title", "title");
             var test_data = prompt("Enter the data", "my data ");
-            if(title != null) {
-                database.storeGrid(title);
+            console.log("title: " + mytitle);
+            console.log("data: " + test_data);
+            var myJSON = {
+                "title" : mytitle,
+                "data" : test_data
+            }
+            if(mytitle != null) {
+                database.storeGrid(JSON.stringify(myJSON), myCB);
                 console.log("store grid should have worked")
             }
         }
