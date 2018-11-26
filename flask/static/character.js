@@ -165,7 +165,7 @@ Character.prototype.moveX = function(newPos, obstacle) {
 Character.prototype.newYPos = function(step) {
   this.speed.y += step * this.gravity;
 
-  var motion = new Vector(0, this.speed.y * step);
+  var motion = new Vector(0, this.speed.y * 2 * step);
   var newPos = this.position.plus(motion);
   return newPos;
 };
