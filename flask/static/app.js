@@ -151,6 +151,26 @@ canvas.on('object:moving', function(options) {
   });
 });
 
+/*function makejson(){
+  json_data = JSON.stringify(canvas.toJSON());
+  return json_data;
+}*/
+document.getElementById("savegrid").onclick= function(){
+  var title = prompt("Enter the grid title", "title");
+  var data= JSON.stringify(canvas.toJSON());
+  var myJSON= {
+    "title" : title,
+    "data" : data
+  }
+  function myCB(data) {
+    alert(data);
+  }
+  if (title != null){
+    database.storeGrid(JSON.stringify(myJSON), myCB);
+    console.log("tried to store grid!");
+  }
+}
+
 
 //take everything on the current canvas and print to console and alert in custom json format
 document.getElementById("save").onclick = function(){
