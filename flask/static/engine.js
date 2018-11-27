@@ -59,7 +59,8 @@ function initialize(){
         , pc: pc
         , step: step
         , backgroundUrl: backgroundUrl};
-        console.log(pc.inventory);
+    
+    showInventory(gameState);
 }
 
 // GAME STATE
@@ -95,6 +96,7 @@ function update(gameState) {
     gameState.pc.moveX(newXPos, xObstacle);
     }
 
+
     // find collisions if trying to jump or landing on something
     newYPos = gameState.pc.newYPos(gameState.step);
     if(newYPos.y + (0.5 * gameState.pc.size.y) - (0.5 * gameState.pc.hitbox.y) < 0)
@@ -120,6 +122,11 @@ function update(gameState) {
     } else {
         gameState.pc.moveY(newYPos, yObstacle, false);
   }
+
+  // checks if player fell of the screen
+  if(gameState.pc.position.y > gameState.height){
+    gameState.pc.status = false;
+}
 
   //physics for npcs and enemies
   for(i=0; i<gameState.elements.length; i++){
@@ -150,7 +157,7 @@ function update(gameState) {
                   }
           gameState.elements[i].moveX(newXPos, null);
       }
-    }
+    }    
 }
 }
 
@@ -202,7 +209,7 @@ function onCollision(gameState, i) {
              if(gameState.elements[i] instanceof Item){
                 gameState.pc.pickUpItem(gameState.elements[i]);
                 gameState.elements.splice(i,1);
-                showInventory(gameState.pc);
+                showInventory(gameState);
              }
     }
 
@@ -253,7 +260,8 @@ function imgInit(gameState){
 function draw(gameState){
     gameState.ctx.clearRect(0, 0, gameState.width, gameState.height);
     gameState.ctx.drawImage(gameState.backgroundUrl, 0,0, gameState.width, gameState.height);
-
+    
+    // draw each element other than character
     for(i = 0; i<gameState.elements.length; i++){
         var curElement = gameState.elements[i];
         if (curElement.shouldDisplay){
@@ -264,9 +272,17 @@ function draw(gameState){
         gameState.ctx.drawImage(curElement.img,curElement.position.x,curElement.position.y,
             curElement.size.x,curElement.size.y);
     }
+    // draw pc
     gameState.ctx.drawImage(gameState.pc.img,gameState.pc.position.x,gameState.pc.position.y,
         gameState.pc.size.x,gameState.pc.size.y);
+    
+    // camera scroll
     scrollPlayerIntoView();
+
+    // on player death visuals
+    if(!gameState.pc.status){
+        onPlayerDeath(gameState);
+    }
 }
 
 function scrollPlayerIntoView() {
@@ -290,7 +306,7 @@ function scrollPlayerIntoView() {
 };
 
 // displays the characters inventory in html. only called when new item picked up
-function showInventory(pc){
+function showInventory(gameState){
     var ul = document.getElementById('inventory');
     ul.innerHTML = "";
     var inventory = gameState.pc.inventory;
@@ -315,23 +331,34 @@ function updateHealth(pc){
     }
 }
 
+function onPlayerDeath(gameState){
+    gameState.ctx.fillStyle = "#ffffff";  
+    gameState.ctx.fillText("GAME OVER DUDE", gameState.pc.position.x, gameState.pc.position.y - 10);
+    gameState.pc.img.src = "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
+}
+
+function reset(){
+    initialize();
+    imgInit(gameState);
+    console.log(gameState);
+}
+
 function testWinConditions(gameState){
     // to be written
 }
 
 
-initialize();
-imgInit(gameState);
+reset();
 
-function loop(timestamp) {
+function loop() {
     // game loop
 
     update(gameState);
     draw(gameState);
-
     window.requestAnimationFrame(loop);
 }
 
 window.requestAnimationFrame(loop);
 
 module.exports.showInventory = showInventory;
+module.exports.reset = reset;
