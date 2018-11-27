@@ -187,4 +187,11 @@ Character.prototype.moveY = function(newPos, obstacle, up) {
           this.position = newPos;
 };
 
+Character.prototype.decHealth = function(damage){
+    this.health -= damage;
+    if(this.health < 0){
+        this.status = false;
+    }
+}
+
 module.exports = Character;

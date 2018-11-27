@@ -42,7 +42,7 @@ Player.prototype.setEquippedItem = function(itm){
     //set owned item to itm
     // set item.collected to be true
     if(itm instanceof Item){
-        this.inventory.push(this.equippedItem);
+        //this.inventory.push(this.equippedItem);
         this.equippedItem = itm;
         itm.collected = true;
     }
@@ -61,8 +61,9 @@ Player.prototype.useItem = function(){
     }
 }
 
-Player.prototype.pickUpItem = function(){
-    // to be called when player collides with item
+Player.prototype.pickUpItem = function(item){
+    this.setEquippedItem(item);
+    this.inventory.unshift(item);
 }
 
 module.exports = Player;

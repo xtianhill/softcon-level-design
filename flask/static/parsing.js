@@ -32,7 +32,7 @@ function JSONtoElements(data){
                     var max = 10;
                     var hea = 10;
                     var stat = true;
-                    var itm= 0;
+                    var itm= null;
                     var inv= [];
                     var hitbox = new Vector(19,50);
                     var spd = new Vector(0,0);
@@ -54,7 +54,7 @@ function JSONtoElements(data){
                     var max = 10;
                     var hea= 10;
                     var stat = true;
-                    var dmg= 1;
+                    var dmg= .01;
                     var spd = new Vector(0,0);
                     var mvspd = 15;
                     var grav = 60;
