@@ -624,9 +624,6 @@ function draw(gameState){
     // draw pc
     gameState.ctx.drawImage(gameState.pc.img,gameState.pc.position.x,gameState.pc.position.y,
         gameState.pc.size.x,gameState.pc.size.y);
-    
-    // camera scroll
-    scrollPlayerIntoView();
 
     // on player death visuals
     if(!gameState.pc.status){
