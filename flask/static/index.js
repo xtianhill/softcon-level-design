@@ -450,7 +450,10 @@ function update(gameState) {
 
   //physics for npcs and enemies
   for(i=0; i<gameState.elements.length; i++){
-    if (gameState.elements[i] instanceof NPC || gameState.elements[i] instanceof Enemy) {
+    if (gameState.elements[i] instanceof Item && gameState.elements[i].hovering == true) {
+        gameState.elements[i].hover(gameState.step);
+    }
+    else if (gameState.elements[i] instanceof NPC || gameState.elements[i] instanceof Enemy) {
         newYPos = gameState.elements[i].newYPos(gameState.step);
         yObstacle = null;
         for(j=0; j<gameState.elements.length; j++){
@@ -588,7 +591,9 @@ function draw(gameState){
         var curElement = gameState.elements[i];
         if (curElement.shouldDisplay){
             gameState.ctx.font = 'Press Start 2P';
-            gameState.ctx.fillText(curElement.getMessage(), curElement.position.x, curElement.position.y-10);
+            gameState.ctx.fillText(curElement.getMessage(),
+                                   curElement.position.x,
+                                   curElement.position.y-10);
             curElement.shouldDisplay = false;
         }
         gameState.ctx.drawImage(curElement.img,curElement.position.x,curElement.position.y,
@@ -599,39 +604,37 @@ function draw(gameState){
 }
 
 function scrollPlayerIntoView() {
-  var margin = gameState.wrap.offsetWidth / 2.5;
+  var displayWidth = gameState.wrap.clientWidth;
+  var levelWidth = gameState.width;
+  var margin = displayWidth / 2.5;
 
   var left = gameState.wrap.scrollLeft;
-  var right = left + gameState.wrap.offsetWidth;
+  var right = left + displayWidth;
   var center = gameState.pc.position.plus(gameState.pc.size.times(0.5));
 
   scrollVal1 = center.x - margin;
-  scrollVal2 = center.x + margin - gameState.wrap.offsetWidth;
+  scrollVal2 = center.x + margin - displayWidth;
   scrollVal3 = gameState.wrap.scrollLeft
 
   if (center.x < left + margin && scrollVal1 > 0){
     gameState.wrap.scrollLeft = scrollVal1;
     gameState.ctx.drawImage(gameState.backgroundUrl, scrollVal1, 0,
-                            gameState.wrap.offsetWidth, gameState.height);
+                            displayWidth, gameState.height);
   }
-  else if (center.x > right - margin &&
-           scrollVal2 < gameState.width - gameState.wrap.offsetWidth) {
+  else if (center.x > right - margin && scrollVal2 < levelWidth - displayWidth){
       gameState.wrap.scrollLeft = scrollVal2;
-      gameState.ctx.drawImage(gameState.backgroundUrl, scrollVal2 - 3, 0,
-                              gameState.wrap.offsetWidth, gameState.height);
+      gameState.ctx.drawImage(gameState.backgroundUrl, scrollVal2, 0,
+                              displayWidth, gameState.height);
   }
   else if (center.x > right - margin && scrollVal2 < gameState.width) {
-      gameState.wrap.scrollLeft = gameState.width - gameState.wrap.offsetWidth;
-      gameState.ctx.drawImage(gameState.backgroundUrl,
-                              gameState.width - gameState.wrap.offsetWidth, 0,
-                              gameState.wrap.offsetWidth, gameState.height);
+      gameState.wrap.scrollLeft = levelWidth - displayWidth;
+      gameState.ctx.drawImage(gameState.backgroundUrl, levelWidth-displayWidth,
+                              0, displayWidth, gameState.height);
   }
   else {
     gameState.ctx.drawImage(gameState.backgroundUrl, scrollVal3, 0,
-                            gameState.wrap.offsetWidth, gameState.height);
+                            displayWidth, gameState.height);
   }
-
-
 }
 
 function showInventory(elements){
@@ -707,14 +710,18 @@ module.exports = Environment;
 
 var icon2 = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKH3Qd3RP33Q5XxcRMrLXYhYGRu_dxvpJCIBEU_MlAudC1ev-P8A";
 const Element = require('./element.js');
+const Vector = require('./utility.js');
 
-function Item(pos, url, sz, hbox, col, eff){
+function Item(pos, url, sz, hbox, col, eff, bpos, hov){
     Element.call(this, pos, url, sz, hbox);
     this.collected = col;
     this.effect = eff;
+    this.basePos = bpos;
+    this.hovering = hov;
+    this.wobble = Math.random() * Math.PI * 2;
 }
 
-Item.prototype.Item = function(){  
+Item.prototype.Item = function(){
         //create enemy with loc = (0,0), no sprite
         // status = 1, collected = false, and effect = damage
         Element.call(this, vector(0,0), icon2, vector(50,50), vector(50,50));
@@ -738,8 +745,17 @@ Item.prototype.setCollected= function(b){
     this.collected = b;
 };
 
+Item.prototype.hover = function(step) {
+    wobbleSpeed = 2;
+    wobbleDist = 1.5;
+    this.wobble += step * wobbleSpeed;
+    var wobblePos = Math.sin(this.wobble) * wobbleDist;
+    this.position = this.basePos.plus(new Vector(0, wobblePos));
+};
+
 module.exports = Item;
-},{"./element.js":2}],7:[function(require,module,exports){
+
+},{"./element.js":2,"./utility.js":10}],7:[function(require,module,exports){
 const Character = require('./character.js');
 const Vector = require('./utility.js').vector;
 
@@ -803,7 +819,8 @@ function JSONtoElements(data){
                 else if (temp.name == "Item"){
                     var col=0;
                     var eff="heal";
-                    element = new Item(pos, url, sz, hitbox, col, eff);
+                    var hov=true;
+                    element = new Item(pos, url, sz, hitbox, col, eff, pos, hov);
                 }
                 else if (temp.name == "Player"){
                     var max = 10;

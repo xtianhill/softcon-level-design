@@ -26,7 +26,8 @@ function JSONtoElements(data){
                 else if (temp.name == "Item"){
                     var col=0;
                     var eff="heal";
-                    element = new Item(pos, url, sz, hitbox, col, eff);
+                    var hov=true;
+                    element = new Item(pos, url, sz, hitbox, col, eff, pos, hov);
                 }
                 else if (temp.name == "Player"){
                     var max = 10;
