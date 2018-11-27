@@ -582,10 +582,7 @@ function imgInit(gameState){
 
 function draw(gameState){
     gameState.ctx.clearRect(0, 0, gameState.width, gameState.height);
-    var pat =  gameState.ctx.createPattern(gameState.backgroundUrl,"repeat-x");
-    gameState.ctx.rect(0,0,gameState.width, gameState.height);
-    gameState.ctx.fillStyle = pat;
-    gameState.ctx.fill();
+    scrollPlayerIntoView();
 
     for(i = 0; i<gameState.elements.length; i++){
         var curElement = gameState.elements[i];
@@ -599,7 +596,6 @@ function draw(gameState){
     }
     gameState.ctx.drawImage(gameState.pc.img,gameState.pc.position.x,gameState.pc.position.y,
         gameState.pc.size.x,gameState.pc.size.y);
-    scrollPlayerIntoView();
 }
 
 function scrollPlayerIntoView() {
@@ -609,15 +605,34 @@ function scrollPlayerIntoView() {
   var right = left + gameState.wrap.offsetWidth;
   var center = gameState.pc.position.plus(gameState.pc.size.times(0.5));
 
-  scrollVal = center.x + margin - gameState.wrap.offsetWidth;
+  scrollVal1 = center.x - margin;
+  scrollVal2 = center.x + margin - gameState.wrap.offsetWidth;
+  scrollVal3 = gameState.wrap.scrollLeft
 
-  if (center.x < left + margin){
-    gameState.wrap.scrollLeft = center.x - margin;
+  if (center.x < left + margin && scrollVal1 > 0){
+    gameState.wrap.scrollLeft = scrollVal1;
+    gameState.ctx.drawImage(gameState.backgroundUrl, scrollVal1, 0,
+                            gameState.wrap.offsetWidth, gameState.height);
   }
-  else if (center.x > right - margin && scrollVal < gameState.width) {
-    gameState.wrap.scrollLeft = scrollVal;
+  else if (center.x > right - margin &&
+           scrollVal2 < gameState.width - gameState.wrap.offsetWidth) {
+      gameState.wrap.scrollLeft = scrollVal2;
+      gameState.ctx.drawImage(gameState.backgroundUrl, scrollVal2 - 3, 0,
+                              gameState.wrap.offsetWidth, gameState.height);
   }
-};
+  else if (center.x > right - margin && scrollVal2 < gameState.width) {
+      gameState.wrap.scrollLeft = gameState.width - gameState.wrap.offsetWidth;
+      gameState.ctx.drawImage(gameState.backgroundUrl,
+                              gameState.width - gameState.wrap.offsetWidth, 0,
+                              gameState.wrap.offsetWidth, gameState.height);
+  }
+  else {
+    gameState.ctx.drawImage(gameState.backgroundUrl, scrollVal3, 0,
+                            gameState.wrap.offsetWidth, gameState.height);
+  }
+
+
+}
 
 function showInventory(elements){
     var ul = document.getElementById('inventory');
