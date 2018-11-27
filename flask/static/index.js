@@ -607,9 +607,8 @@ function imgInit(gameState){
 
 function draw(gameState){
     gameState.ctx.clearRect(0, 0, gameState.width, gameState.height);
-    gameState.ctx.drawImage(gameState.backgroundUrl, 0,0, gameState.width, gameState.height);
-    
-    // draw each element other than character
+    scrollPlayerIntoView();
+
     for(i = 0; i<gameState.elements.length; i++){
         var curElement = gameState.elements[i];
         if (curElement.shouldDisplay){
@@ -648,11 +647,10 @@ function scrollPlayerIntoView() {
   scrollVal2 = center.x + margin - displayWidth;
   scrollVal3 = gameState.wrap.scrollLeft
 
-//   console.log(scrollVal);
-//   console.log(gameState.width);
-
-  if (center.x < left + margin){
-    gameState.wrap.scrollLeft = center.x - margin;
+  if (center.x < left + margin && scrollVal1 > 0){
+    gameState.wrap.scrollLeft = scrollVal1;
+    gameState.ctx.drawImage(gameState.backgroundUrl, scrollVal1, 0,
+                            displayWidth, gameState.height);
   }
   else if (center.x > right - margin && scrollVal2 < levelWidth - displayWidth){
       gameState.wrap.scrollLeft = scrollVal2;
