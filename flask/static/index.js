@@ -475,10 +475,10 @@ function initialize(){
     ctx.font = "12px Arial";
     ctx.fillStyle = "#ffffff";
 
-    // make a health bar dependent on the players stats
-    var healthBar = document.getElementById("health");
-    healthBar.value = pc.health;
-    healthBar.max = pc.maxHealth;
+    // // make a health bar dependent on the players stats
+    // var healthBar = document.getElementById("health");
+    // healthBar.value = pc.health;
+    // healthBar.max = pc.maxHealth;
 
     // set the initial game state
     gameState = { canvas: canvas
@@ -578,6 +578,10 @@ function update(gameState) {
                 }
             }
             gameState.elements[i].moveY(newYPos, yObstacle, false);
+            if(!gameState.elements[i].status){
+                gameState.elements.splice(i,1);
+                break;
+            }
         }
         if (gameState.elements[i] instanceof Enemy) {
             newXPos = gameState.elements[i].newXPos(gameState.step, gameState.elements[i].direction);
@@ -597,6 +601,7 @@ function update(gameState) {
                 gameState.elements[i].moveX(newXPos, null);
             }
         }
+        
     }
     // update position of items
     if(gameState.pc.equippedItem != null){
@@ -611,7 +616,6 @@ function update(gameState) {
 
     // change item selected
     if(gameState.changeItem){
-        console.log("step1");
         changeItem(gameState);
         gameState.changeItem = false;
     }
@@ -653,7 +657,7 @@ function onCollision(gameState, i) {
             //if enemy, either damage w/item or lose health
             if(gameState.elements[i] instanceof Enemy){
                 gameState.pc.decHealth(gameState.elements[i].getDamage());
-                updateHealth(gameState.pc);
+                // updateHealth(gameState.pc);
             }
 
             //if item, pick up and remove from elements, display in inventory
@@ -727,6 +731,7 @@ function draw(gameState){
         var curElement = gameState.elements[i];
         if (curElement.shouldDisplay){
             gameState.ctx.font = 'Press Start 2P';
+            gameState.ctx.fillStyle = "#ffffff";
             gameState.ctx.fillText(curElement.getMessage(),
                                    curElement.position.x,
                                    curElement.position.y-10);
@@ -738,6 +743,11 @@ function draw(gameState){
     // draw pc
     gameState.ctx.drawImage(gameState.pc.img,gameState.pc.position.x,gameState.pc.position.y,
         gameState.pc.size.x,gameState.pc.size.y);
+    gameState.ctx.fillStyle = "#FF0000";
+    gameState.ctx.fillRect(8,8,50,10);
+    gameState.ctx.fillStyle = "#00FF00";
+    var percentFull = gameState.pc.health / gameState.pc.maxHealth;
+    gameState.ctx.fillRect(8,8,percentFull * 50, 10);
     
     // draw equipped item
     if(gameState.pc.equippedItem != null){
@@ -746,15 +756,17 @@ function draw(gameState){
             item.size.y);
     }
 
-    // draw enemy health bars
+    // draw health bars
     for(i = 0; i<gameState.characters.length; i++){
-        gameState.ctx.fillStyle="#FF0000";
-        gameState.ctx.fillRect(gameState.characters[i].position.x,gameState.characters[i].position.y - 8,
-            gameState.characters[i].size.x,4);
-        gameState.ctx.fillStyle="#00FF00";
-        var percentFull = gameState.characters[i].health/gameState.characters[i].maxHealth;
-        gameState.ctx.fillRect(gameState.characters[i].position.x,gameState.characters[i].position.y - 8,
-            percentFull * gameState.characters[i].size.x,4);
+        if (gameState.characters[i].status) {
+            gameState.ctx.fillStyle = "#FF0000";
+            gameState.ctx.fillRect(gameState.characters[i].position.x, gameState.characters[i].position.y - 8,
+                gameState.characters[i].size.x, 4);
+            gameState.ctx.fillStyle = "#00FF00";
+            var percentFull = gameState.characters[i].health / gameState.characters[i].maxHealth;
+            gameState.ctx.fillRect(gameState.characters[i].position.x, gameState.characters[i].position.y - 8,
+                percentFull * gameState.characters[i].size.x, 4);
+        }
     }
 
     // on player death visuals
@@ -813,7 +825,6 @@ function showInventory(gameState){
     var ul = document.getElementById('inventory');
     ul.innerHTML = "";
     var inventory = gameState.pc.inventory;
-    console.log(inventory);
     for (var i = 0; i < inventory.length; i++) {
         var item = inventory[i];
 
@@ -859,33 +870,24 @@ function testWinConditions(gameState){
 }
 
 function handleItemUse (gameState){
-    console.log(gameState.elements);
-    for(var i=0; i<gameState.elements.length; i++){
-        if(gameState.elements[i] instanceof Character) {
-                if(detectCollision(gameState.elements[i].position, gameState.pc.equippedItem.position,
-                    gameState.elements[i], gameState.pc.equippedItem)){
-                        console.log("step4", gameState.elements[i]);
-                        gameState.pc.useItem(gameState.elements[i]);
-                        return;
-                }
+    for(var i=0; i<gameState.characters.length; i++){
+        if(detectCollision(gameState.characters[i].position, gameState.pc.equippedItem.position,
+            gameState.characters[i], gameState.pc.equippedItem)){
+                gameState.pc.useItem(gameState.characters[i]);
+                return;
         }
     }
     gameState.pc.useItem(gameState.pc);
-    updateHealth(gameState.pc);
+    //updateHealth(gameState.pc);
 }
 
 function changeItem(gameState){
     if(gameState.pc.equippedItem!=null){
-        console.log("step2");
         if(gameState.pc.inventory.length > 1){
-            console.log("step3");
             gameState.pc.inventory.push(gameState.pc.equippedItem);
             gameState.pc.inventory.shift();
         }
         gameState.pc.setEquippedItem(gameState.pc.inventory[0]);
-        console.log("step4", gameState.pc.equippedItem);
-        // set equipped to front of list
-        // put old equipped at back
     }
     showInventory(gameState);
 }
@@ -1059,7 +1061,7 @@ function JSONtoElements(data){
                 }
                 else if (temp.name == "Item"){
                     var col=0;
-                    var eff= new Effect("heal", 1);
+                    var eff= new Effect("damage", 1);
                     var hov=true;
                     element = new Item(pos, url, sz, hitbox, col, eff, pos, hov);
                 }
@@ -1173,7 +1175,7 @@ Player.prototype.useItem = function(target){
         else if (this.equippedItem.getEffect().effect == "damage"){
             console.log(target.health);
             target.health -= this.equippedItem.effect.amount;
-            if(target.health < 0){
+            if(target.health <= 0){
                 target.status = false;
             }
             console.log(target.health);

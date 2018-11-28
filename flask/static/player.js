@@ -64,7 +64,7 @@ Player.prototype.useItem = function(target){
         else if (this.equippedItem.getEffect().effect == "damage"){
             console.log(target.health);
             target.health -= this.equippedItem.effect.amount;
-            if(target.health < 0){
+            if(target.health <= 0){
                 target.status = false;
             }
             console.log(target.health);

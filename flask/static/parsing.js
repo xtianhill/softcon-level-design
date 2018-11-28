@@ -26,7 +26,7 @@ function JSONtoElements(data){
                 }
                 else if (temp.name == "Item"){
                     var col=0;
-                    var eff= new Effect("heal", 1);
+                    var eff= new Effect("damage", 1);
                     var hov=true;
                     element = new Item(pos, url, sz, hitbox, col, eff, pos, hov);
                 }
