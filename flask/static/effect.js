@@ -17,25 +17,26 @@
 |------------------------------------------------------------------------------
 */
 
-function Effect(title){
+function Effect(title, amount){
     if (title == 'heal' || title == 'damage'){
     this.effect = title;
     this.isActive = false;
+    this.amount = amount;
   }
   else{
     return {};
   }
 }
 
-Effect.prototype.Effect = function(bool, title){
-    if (title == 'heal' || title == 'damage'){
-    this.isActive = bool;
-    this.effect = title;
-  }
-  else{
-    return {};
-  }
-}
+// Effect.prototype.Effect = function(bool, title){
+//     if (title == 'heal' || title == 'damage'){
+//     this.isActive = bool;
+//     this.effect = title;
+//   }
+//   else{
+//     return {};
+//   }
+// }
 
 /*
 |------------------------------------------------------------------------------

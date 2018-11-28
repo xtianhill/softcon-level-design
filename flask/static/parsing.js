@@ -2,6 +2,7 @@ const NPC = require('./npc.js');
 const Enemy = require('./enemy.js');
 const Player = require('./player.js');
 const Item = require('./item.js');
+const Effect = require('./effect.js');
 const Element = require('./element.js');
 const Character = require('./character.js');
 const Environment = require('./environment.js');
@@ -25,13 +26,13 @@ function JSONtoElements(data){
                 }
                 else if (temp.name == "Item"){
                     var col=0;
-                    var eff="heal";
+                    var eff= new Effect("heal", 1);
                     var hov=true;
                     element = new Item(pos, url, sz, hitbox, col, eff, pos, hov);
                 }
                 else if (temp.name == "Player"){
                     var max = 10;
-                    var hea = 10;
+                    var hea = 8;
                     var stat = true;
                     var itm= null;
                     var inv= [];
@@ -43,7 +44,7 @@ function JSONtoElements(data){
                 }
                 else if (temp.name == "NPC"){
                     var max = 10;
-                    var hea = 10;
+                    var hea = 7;
                     var stat= true;
                     var msg = "hi there";
                     var spd = new Vector(0,0);

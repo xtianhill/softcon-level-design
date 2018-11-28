@@ -22,11 +22,14 @@ function initialize(){
     var leftPressed = false;
     var downPressed = false;
     var upPressed = false;
-    var data = '{"objects":[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{"type":"Element","name":"Player","top":350,"left":100,"url":"https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png","scale":1},{"type":"Element","name":"Item","top":200,"left":500,"url":"https://66.media.tumblr.com/4a8e88c9194d00c4e2e14d62f2a9dc76/tumblr_pi5t840NIu1u9vozfo1_250.png","scale":1},{"type":"Element","name":"Enemy","top":350,"left":300,"url":"https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png","scale":1},{"type":"Element","name":"NPC","top":250,"left":500,"url":"https://66.media.tumblr.com/18b1dcddb1e6de2d56f2bbc16e368af5/tumblr_pi5sz2UwpH1u9vozfo1_250.png","scale":1},{"type":"Element","name":"Environment","top":400,"left":0,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":50,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":100,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":150,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":200,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":250,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":300,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":350,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":400,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"button"},{"type":"Element","name":"Enemy","top":350,"left":650,"url":"https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png","scale":1},{"type":"Element","name":"Environment","top":400,"left":450,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":500,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":550,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":600,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":350,"left":500,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":300,"left":500,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":650,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":700,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":750,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":750,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":0,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":50,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":100,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":150,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"button"},{"type":"Element","name":"Environment","top":450,"left":200,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":250,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":300,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"button"},{"type":"Element","name":"Environment","top":450,"left":350,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":400,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":450,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":500,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":550,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":650,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":600,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":700,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"button"},{"type":"button"}],"background":"","backgroundImage":"https://cdn.cgmagonline.com/wp-content/uploads/2015/07/pixelartheader.jpg","backgroundImageOpacity":1,"backgroundImageStretch":true}';
+    var itemUsed = false;
+    var changeItem = false;
+    var data = '{"objects":[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{"type":"Element","name":"Player","top":350,"left":100,"url":"https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png","scale":1},{"type":"Element","name":"Item","top":100,"left":400,"url":"https://vivalasarepas.com/wp-content/uploads/2017/02/sprite.jpg","scale":1},{"type":"Element","name":"Item","top":200,"left":500,"url":"https://66.media.tumblr.com/4a8e88c9194d00c4e2e14d62f2a9dc76/tumblr_pi5t840NIu1u9vozfo1_250.png","scale":1},{"type":"Element","name":"Enemy","top":350,"left":300,"url":"https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png","scale":1},{"type":"Element","name":"NPC","top":250,"left":500,"url":"https://66.media.tumblr.com/18b1dcddb1e6de2d56f2bbc16e368af5/tumblr_pi5sz2UwpH1u9vozfo1_250.png","scale":1},{"type":"Element","name":"Environment","top":400,"left":0,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":50,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":100,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":150,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":200,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":250,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":300,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":350,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":400,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"button"},{"type":"Element","name":"Enemy","top":350,"left":650,"url":"https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png","scale":1},{"type":"Element","name":"Environment","top":400,"left":450,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":500,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":550,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":600,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":350,"left":500,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":300,"left":500,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":650,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":700,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":750,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":750,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":0,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":50,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":100,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":150,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"button"},{"type":"Element","name":"Environment","top":450,"left":200,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":250,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":300,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"button"},{"type":"Element","name":"Environment","top":450,"left":350,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":400,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":450,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":500,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":550,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":650,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":600,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":700,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"button"},{"type":"button"}],"background":"","backgroundImage":"https://cdn.cgmagonline.com/wp-content/uploads/2015/07/pixelartheader.jpg","backgroundImageOpacity":1,"backgroundImageStretch":true}';
 
     // query database and get level info, then translate into list of elements
     var parsedJSON = JSONtoElements(data);
     var elements = parsedJSON.elements;
+    var characters = [];
     var backgroundUrl = parsedJSON.backgroundUrl;
     var width = canvas.width;
     var height = canvas.height;
@@ -40,6 +43,18 @@ function initialize(){
             elements.splice(i,1);
         }
     }
+
+    // isolate the characters
+    for(i=0; i<elements.length; i++){
+        if(elements[i] instanceof Character){
+            characters.push(elements[i]);
+        }
+    }
+
+    // set the font style for in game messages
+    ctx.font = "12px Arial";
+    ctx.fillStyle = "#ffffff";
+
     // make a health bar dependent on the players stats
     var healthBar = document.getElementById("health");
     healthBar.value = pc.health;
@@ -54,60 +69,61 @@ function initialize(){
         , leftPressed: leftPressed
         , downPressed: downPressed
         , upPressed: upPressed
+        , itemUsed: itemUsed
+        , changeItem: changeItem
         , elements: elements
         , wrap: wrap
         , pc: pc
+        , characters: characters
         , step: step
         , backgroundUrl: backgroundUrl};
 
     showInventory(gameState);
 }
 
-// GAME STATE
-
 function update(gameState) {
+
     // move right or left as long as no wall is in the way
     newXPos = null;
-    if (gameState.rightPressed){
+    if (gameState.rightPressed) {
         newXPos = gameState.pc.newXPos(gameState.step, "right");
-        if(newXPos.x + (0.5 * gameState.pc.size.x) - (0.5 * gameState.pc.hitbox.x) < 0
-           || newXPos.x + (0.5 * gameState.pc.size.x) + (0.5 * gameState.pc.hitbox.x) > gameState.width)
-           newXPos = null;
+        if (newXPos.x + (0.5 * gameState.pc.size.x) - (0.5 * gameState.pc.hitbox.x) < 0
+            || newXPos.x + (0.5 * gameState.pc.size.x) + (0.5 * gameState.pc.hitbox.x) > gameState.width)
+            newXPos = null;
     }
-    else if (gameState.leftPressed){
+    else if (gameState.leftPressed) {
         newXPos = gameState.pc.newXPos(gameState.step, "left");
-        if(newXPos.x + (0.5 * gameState.pc.size.x) - (0.5 * gameState.pc.hitbox.x) < 0
-           || newXPos.x + (0.5 * gameState.pc.size.x) + (0.5 * gameState.pc.hitbox.x) > gameState.width)
-           newXPos = null;
+        if (newXPos.x + (0.5 * gameState.pc.size.x) - (0.5 * gameState.pc.hitbox.x) < 0
+            || newXPos.x + (0.5 * gameState.pc.size.x) + (0.5 * gameState.pc.hitbox.x) > gameState.width)
+            newXPos = null;
     }
-
+    
     // find things that collide if moving left-right
     xObstacle = null;
-    if(newXPos != null){
-        for(i=0; i<gameState.elements.length; i++){
-            if(detectCollision(newXPos, gameState.elements[i].position, gameState.pc, gameState.elements[i])){
-                if(gameState.elements[i] instanceof Environment)
+    if (newXPos != null) {
+        for (i = 0; i < gameState.elements.length; i++) {
+            if (detectCollision(newXPos, gameState.elements[i].position, gameState.pc, gameState.elements[i])) {
+                if (gameState.elements[i] instanceof Environment)
                     xObstacle = gameState.elements[i];
                 else
                     onCollision(gameState, i);
             }
         }
-
-    gameState.pc.moveX(newXPos, xObstacle);
+        gameState.pc.moveX(newXPos, xObstacle);
     }
 
 
     // find collisions if trying to jump or landing on something
     newYPos = gameState.pc.newYPos(gameState.step);
-    if(newYPos.y + (0.5 * gameState.pc.size.y) - (0.5 * gameState.pc.hitbox.y) < 0)
+    if (newYPos.y + (0.5 * gameState.pc.size.y) - (0.5 * gameState.pc.hitbox.y) < 0)
         newYPos = null;
-    else if(newYPos.y + (0.5 * gameState.pc.size.y) + (0.5 * gameState.pc.hitbox.y) > gameState.height)
+    else if (newYPos.y + (0.5 * gameState.pc.size.y) + (0.5 * gameState.pc.hitbox.y) > gameState.height)
         newYPos = newYPos; //player.die()
     yObstacle = null;
-    if(newYPos != null){
-        for(i=0; i<gameState.elements.length; i++){
-           if(detectCollision(newYPos, gameState.elements[i].position, gameState.pc, gameState.elements[i])){
-                if(gameState.elements[i] instanceof Environment)
+    if (newYPos != null) {
+        for (i = 0; i < gameState.elements.length; i++) {
+            if (detectCollision(newYPos, gameState.elements[i].position, gameState.pc, gameState.elements[i])) {
+                if (gameState.elements[i] instanceof Environment)
                     yObstacle = gameState.elements[i];
                 else
                     onCollision(gameState, i);
@@ -115,53 +131,71 @@ function update(gameState) {
         }
     }
     // jump or fall as long as no ground (or ceiling, hopefully) is in the way
-    if (gameState.upPressed){
-      if(gameState.pc.position.y-1 > 0){
-        gameState.pc.moveY(newYPos, yObstacle, true);
-    }
+    if (gameState.upPressed) {
+        if (gameState.pc.position.y - 1 > 0) {
+            gameState.pc.moveY(newYPos, yObstacle, true);
+        }
     } else {
         gameState.pc.moveY(newYPos, yObstacle, false);
-  }
-
-  // checks if player fell of the screen
-  if(gameState.pc.position.y > gameState.height){
-    gameState.pc.status = false;
-}
-
-  //physics for npcs and enemies
-  for(i=0; i<gameState.elements.length; i++){
-    if (gameState.elements[i] instanceof Item && gameState.elements[i].hovering == true) {
-        gameState.elements[i].hover(gameState.step);
     }
-    else if (gameState.elements[i] instanceof NPC || gameState.elements[i] instanceof Enemy) {
-        newYPos = gameState.elements[i].newYPos(gameState.step);
-        yObstacle = null;
-        for(j=0; j<gameState.elements.length; j++){
-            if (i != j && detectCollision(newYPos, gameState.elements[j].position, gameState.elements[i], gameState.elements[j])){
-                yObstacle = gameState.elements[j];
+
+    // checks if player fell of the screen
+    if (gameState.pc.position.y > gameState.height) {
+        gameState.pc.status = false;
+    }
+
+    //physics for npcs and enemies
+    for (i = 0; i < gameState.elements.length; i++) {
+        if (gameState.elements[i] instanceof Item && gameState.elements[i].hovering == true) {
+            gameState.elements[i].hover(gameState.step);
+        }
+        else if (gameState.elements[i] instanceof NPC || gameState.elements[i] instanceof Enemy) {
+            newYPos = gameState.elements[i].newYPos(gameState.step);
+            yObstacle = null;
+            for (j = 0; j < gameState.elements.length; j++) {
+                if (i != j && detectCollision(newYPos, gameState.elements[j].position, gameState.elements[i], gameState.elements[j])) {
+                    yObstacle = gameState.elements[j];
+                }
+            }
+            gameState.elements[i].moveY(newYPos, yObstacle, false);
+        }
+        if (gameState.elements[i] instanceof Enemy) {
+            newXPos = gameState.elements[i].newXPos(gameState.step, gameState.elements[i].direction);
+            for (j = 0; j < gameState.elements.length; j++) {
+                xObstacle = null;
+                if (i != j && detectCollision(newXPos, gameState.elements[j].position, gameState.elements[i], gameState.elements[j]))
+                    if (gameState.elements[j] instanceof Environment) {
+                        xObstacle = gameState.elements[j];
+                        gameState.elements[i].changeDirection();
+                        break;
+                    }
+                if (gameState.elements[i].startPos.x - newXPos.x > gameState.elements[i].range
+                    || newXPos.x - gameState.elements[i].startPos.x > gameState.elements[i].range) {
+                    gameState.elements[i].changeDirection();
+                    break;
+                }
+                gameState.elements[i].moveX(newXPos, null);
             }
         }
-        gameState.elements[i].moveY(newYPos, yObstacle, false);
     }
-    if (gameState.elements[i] instanceof Enemy) {
-      newXPos = gameState.elements[i].newXPos(gameState.step, gameState.elements[i].direction);
-      for(j=0; j<gameState.elements.length; j++){
-          xObstacle = null;
-          if(i != j && detectCollision(newXPos, gameState.elements[j].position, gameState.elements[i], gameState.elements[j]))
-              if(gameState.elements[j] instanceof Environment){
-                  xObstacle = gameState.elements[j];
-                  gameState.elements[i].changeDirection();
-                  break;
-                }
-              if(gameState.elements[i].startPos.x - newXPos.x > gameState.elements[i].range
-                  || newXPos.x - gameState.elements[i].startPos.x > gameState.elements[i].range){
-                  gameState.elements[i].changeDirection();
-                  break;
-                  }
-          gameState.elements[i].moveX(newXPos, null);
-      }
+    // update position of items
+    if(gameState.pc.equippedItem != null){
+        gameState.pc.equippedItem.updatePosition(gameState.pc);
     }
-}
+    
+    // if item used
+    if(gameState.itemUsed){
+        handleItemUse(gameState);
+        gameState.itemUsed = false;
+    }
+
+    // change item selected
+    if(gameState.changeItem){
+        console.log("step1");
+        changeItem(gameState);
+        gameState.changeItem = false;
+    }
+   
 }
 
 function detectCollision(pos1, pos2, element1, element2) {
@@ -192,18 +226,12 @@ function onCollision(gameState, i) {
 	    //if npc, show message
             if(gameState.elements[i] instanceof NPC){
                //elements[i].displayMessage();
-               gameState.ctx.font = "12px Arial";
                gameState.ctx.fillText(gameState.elements[i].getMessage(), 0, 0);
                gameState.elements[i].shouldDisplay = true;
             }
 
             //if enemy, either damage w/item or lose health
             if(gameState.elements[i] instanceof Enemy){
-                if(gameState.pc.equippedItem != null) {
-                    if(gameState.pc.equippedItem.getEffect() == "damage"){
-                        gameState.elements[i].decHealth(1);
-                    }
-                }
                 gameState.pc.decHealth(gameState.elements[i].getDamage());
                 updateHealth(gameState.pc);
             }
@@ -217,6 +245,17 @@ function onCollision(gameState, i) {
     }
 
 function keyDownHandler(event, gameState) {
+    
+    if(event.keyCode == 32){
+        if(gameState.pc.equippedItem != null) {
+            gameState.itemUsed = true;
+        }
+    }
+
+    if(event.keyCode == 69){ // nice
+        gameState.changeItem = true;
+    }
+
     if(event.keyCode == 68) {
         gameState.rightPressed = true;
     }
@@ -279,6 +318,24 @@ function draw(gameState){
     // draw pc
     gameState.ctx.drawImage(gameState.pc.img,gameState.pc.position.x,gameState.pc.position.y,
         gameState.pc.size.x,gameState.pc.size.y);
+    
+    // draw equipped item
+    if(gameState.pc.equippedItem != null){
+        var item = gameState.pc.equippedItem;
+        gameState.ctx.drawImage(item.img, item.position.x, item.position.y, item.size.x, 
+            item.size.y);
+    }
+
+    // draw enemy health bars
+    for(i = 0; i<gameState.characters.length; i++){
+        gameState.ctx.fillStyle="#FF0000";
+        gameState.ctx.fillRect(gameState.characters[i].position.x,gameState.characters[i].position.y - 8,
+            gameState.characters[i].size.x,4);
+        gameState.ctx.fillStyle="#00FF00";
+        var percentFull = gameState.characters[i].health/gameState.characters[i].maxHealth;
+        gameState.ctx.fillRect(gameState.characters[i].position.x,gameState.characters[i].position.y - 8,
+            percentFull * gameState.characters[i].size.x,4);
+    }
 
     // on player death visuals
     if(!gameState.pc.status){
@@ -341,9 +398,15 @@ function showInventory(gameState){
         var item = inventory[i];
 
         var listItem = document.createElement("li");
+        
+        listItem.border = "1px solid black";
+        
         var _img = document.createElement('img');
         _img.src = item.sprite;
         _img.style = "width:30px;height:30px;";
+        if(i == 0){
+            _img.border = "1px solid red";
+        }
         listItem.appendChild(_img);
 
         ul.appendChild(listItem);
@@ -358,19 +421,53 @@ function updateHealth(pc){
 }
 
 function onPlayerDeath(gameState){
-    gameState.ctx.fillStyle = "#ffffff";
+    var empty = "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
     gameState.ctx.fillText("GAME OVER DUDE", gameState.pc.position.x, gameState.pc.position.y - 10);
-    gameState.pc.img.src = "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
+    gameState.pc.img.src = empty;
+    if(gameState.pc.equippedItem != null) {
+        gameState.pc.equippedItem.img.src = empty;
+    }
 }
 
 function reset(){
     initialize();
     imgInit(gameState);
-    console.log(gameState);
 }
 
 function testWinConditions(gameState){
     // to be written
+}
+
+function handleItemUse (gameState){
+    console.log(gameState.elements);
+    for(var i=0; i<gameState.elements.length; i++){
+        if(gameState.elements[i] instanceof Character) {
+                if(detectCollision(gameState.elements[i].position, gameState.pc.equippedItem.position,
+                    gameState.elements[i], gameState.pc.equippedItem)){
+                        console.log("step4", gameState.elements[i]);
+                        gameState.pc.useItem(gameState.elements[i]);
+                        return;
+                }
+        }
+    }
+    gameState.pc.useItem(gameState.pc);
+    updateHealth(gameState.pc);
+}
+
+function changeItem(gameState){
+    if(gameState.pc.equippedItem!=null){
+        console.log("step2");
+        if(gameState.pc.inventory.length > 1){
+            console.log("step3");
+            gameState.pc.inventory.push(gameState.pc.equippedItem);
+            gameState.pc.inventory.shift();
+        }
+        gameState.pc.setEquippedItem(gameState.pc.inventory[0]);
+        console.log("step4", gameState.pc.equippedItem);
+        // set equipped to front of list
+        // put old equipped at back
+    }
+    showInventory(gameState);
 }
 
 

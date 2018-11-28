@@ -11,6 +11,7 @@ function Item(pos, url, sz, hbox, col, eff, bpos, hov){
     this.basePos = bpos;
     this.hovering = hov;
     this.wobble = Math.random() * Math.PI * 2;
+    this.targets = "";
 }
 
 Item.prototype.Item = function(){
@@ -45,4 +46,8 @@ Item.prototype.hover = function(step) {
     this.position = this.basePos.plus(new Vector(0, wobblePos));
 };
 
+Item.prototype.updatePosition = function(pc) {
+    this.position.x = pc.position.x + pc.hitbox.x * .75;
+    this.position.y = pc.position.y; //- pc.hitbox.y;
+}
 module.exports = Item;

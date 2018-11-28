@@ -13,6 +13,12 @@
     list-style-type: none;
     padding-right: 20px;
 }
+#inventory ul{
+    list-style: none;
+  }
+#inventory li{
+    display: inline;
+}
 
 progress {
     background-color: #eee;
