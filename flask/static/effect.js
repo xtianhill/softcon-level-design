@@ -17,25 +17,26 @@
 |------------------------------------------------------------------------------
 */
 
-function Effect(title){
+function Effect(title, amount){
     if (title == 'heal' || title == 'damage'){
     this.effect = title;
     this.isActive = false;
+    this.amount = amount;
   }
   else{
     return {};
   }
 }
 
-Effect.prototype.Effect = function(bool, title){
-    if (title == 'heal' || title == 'damage'){
-    this.isActive = bool;
-    this.effect = title;
-  }
-  else{
-    return {};
-  }
-}
+// Effect.prototype.Effect = function(bool, title){
+//     if (title == 'heal' || title == 'damage'){
+//     this.isActive = bool;
+//     this.effect = title;
+//   }
+//   else{
+//     return {};
+//   }
+// }
 
 /*
 |------------------------------------------------------------------------------
@@ -67,6 +68,16 @@ Effect.prototype.activate = function(){
 // Setter for isActive
 Effect.prototype.deactivate = function(){
     this.isActive = false;
+}
+
+// Getter for amount
+Effect.prototype.getAmount = function(){
+    return this.amount;
+}
+
+// Setter for amount
+Effect.prototype.setAmount = function(num){
+    this.amount = num;
 }
 
 module.exports = Effect;

@@ -2,6 +2,7 @@ const NPC = require('./npc.js');
 const Enemy = require('./enemy.js');
 const Player = require('./player.js');
 const Item = require('./item.js');
+const Effect = require('./effect.js');
 const Element = require('./element.js');
 const Character = require('./character.js');
 const Environment = require('./environment.js');
@@ -21,18 +22,20 @@ function JSONtoElements(data){
                 var hitbox = new Vector(50,50);
                 var element;
                 if (temp.name == "Environment"){
-                    element = new Environment(1,pos,url,sz,hitbox);
+                    var eff= null; // new Effect("damage", 1);
+                    element = new Environment(1,pos,url,sz,hitbox,eff);
                 }
                 else if (temp.name == "Item"){
                     var col=0;
-                    var eff="heal";
-                    element = new Item(pos, url, sz, hitbox, col, eff);
+                    var eff= new Effect("damage", 1);
+                    var hov=true;
+                    element = new Item(pos, url, sz, hitbox, col, eff, pos, hov);
                 }
                 else if (temp.name == "Player"){
                     var max = 10;
-                    var hea = 10;
+                    var hea = 8;
                     var stat = true;
-                    var itm= 0;
+                    var itm= null;
                     var inv= [];
                     var hitbox = new Vector(19,50);
                     var spd = new Vector(0,0);
@@ -42,7 +45,7 @@ function JSONtoElements(data){
                 }
                 else if (temp.name == "NPC"){
                     var max = 10;
-                    var hea = 10;
+                    var hea = 7;
                     var stat= true;
                     var msg = "hi there";
                     var spd = new Vector(0,0);
@@ -54,7 +57,7 @@ function JSONtoElements(data){
                     var max = 10;
                     var hea= 10;
                     var stat = true;
-                    var dmg= 1;
+                    var dmg= .01;
                     var spd = new Vector(0,0);
                     var mvspd = 15;
                     var grav = 60;
