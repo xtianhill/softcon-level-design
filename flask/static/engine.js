@@ -418,6 +418,7 @@ function scrollPlayerIntoView() {
   gameState.ctx.fillRect(gameState.wrap.scrollLeft+8, 8, 50, 10);
   gameState.ctx.fillStyle = "#00FF00";
   var percentFull = gameState.pc.health / gameState.pc.maxHealth;
+  if(!gameState.pc.status) { percentFull=0; }
   gameState.ctx.fillRect(gameState.wrap.scrollLeft+8, 8, percentFull*50, 10);
 }
 
