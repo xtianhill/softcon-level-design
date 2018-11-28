@@ -429,11 +429,16 @@ const Character = require('./character.js');
 const Environment = require('./environment.js');
 const Vector = require('./utility.js');
 
+/*
+|------------------------------------------------------------------------------
+| Initialize gameState, canvas, and other variables from JSON
+|------------------------------------------------------------------------------
+*/
+
 var gameState;
 
-
 function initialize(){
-    var step = 0.05;
+    var step = 0.05; // controls frequency of physics calculations
     var canvas = document.getElementById("c");
     var ctx = canvas.getContext("2d");
     document.addEventListener('keydown', function(e) {keyDownHandler(e, gameState)}, false);
@@ -455,7 +460,7 @@ function initialize(){
     var height = canvas.height;
     var wrap = document.getElementById("wrap");
 
-    // isolate the pc
+    // identify the pc
     var pc;
     for(i=0; i<elements.length; i++){
         if(elements[i] instanceof Player){
@@ -464,21 +469,9 @@ function initialize(){
         }
     }
 
-    // isolate the characters
-    for(i=0; i<elements.length; i++){
-        if(elements[i] instanceof Character){
-            characters.push(elements[i]);
-        }
-    }
-
     // set the font style for in game messages
     ctx.font = "12px Arial";
     ctx.fillStyle = "#ffffff";
-
-    // // make a health bar dependent on the players stats
-    // var healthBar = document.getElementById("health");
-    // healthBar.value = pc.health;
-    // healthBar.max = pc.maxHealth;
 
     // set the initial game state
     gameState = { canvas: canvas
@@ -501,9 +494,16 @@ function initialize(){
     showInventory(gameState);
 }
 
+/*
+|------------------------------------------------------------------------------
+| Update internal gamestate: physics and item interactions
+|------------------------------------------------------------------------------
+*/
+
 function update(gameState) {
 
-    // move right or left as long as no wall is in the way
+    // find hypothetical new right/left position as long as within the level's
+    // limits and no wall is in the way
     newXPos = null;
     if (gameState.rightPressed) {
         newXPos = gameState.pc.newXPos(gameState.step, "right");
@@ -517,8 +517,8 @@ function update(gameState) {
             || newXPos.x + (0.5 * gameState.pc.size.x) + (0.5 * gameState.pc.hitbox.x) > gameState.width)
             newXPos = null;
     }
-    
-    // find things that collide if moving left-right
+
+    // find collisions based on hypothetical new x-position, move if legal
     xObstacle = null;
     if (newXPos != null) {
         for (i = 0; i < gameState.elements.length; i++) {
@@ -532,13 +532,15 @@ function update(gameState) {
         gameState.pc.moveX(newXPos, xObstacle);
     }
 
-
-    // find collisions if trying to jump or landing on something
+    // find hypothetical new up/down position as long as within the level's
+    // limits and no platform is in the way
     newYPos = gameState.pc.newYPos(gameState.step);
     if (newYPos.y + (0.5 * gameState.pc.size.y) - (0.5 * gameState.pc.hitbox.y) < 0)
         newYPos = null;
     else if (newYPos.y + (0.5 * gameState.pc.size.y) + (0.5 * gameState.pc.hitbox.y) > gameState.height)
-        newYPos = newYPos; //player.die()
+        gameState.pc.status = false;
+
+    // find collisions based on hypothetical new y-position, jump or fall if legal
     yObstacle = null;
     if (newYPos != null) {
         for (i = 0; i < gameState.elements.length; i++) {
@@ -549,8 +551,6 @@ function update(gameState) {
                     onCollision(gameState, i);
             }
         }
-    }
-    // jump or fall as long as no ground (or ceiling, hopefully) is in the way
     if (gameState.upPressed) {
         if (gameState.pc.position.y - 1 > 0) {
             gameState.pc.moveY(newYPos, yObstacle, true);
@@ -558,13 +558,9 @@ function update(gameState) {
     } else {
         gameState.pc.moveY(newYPos, yObstacle, false);
     }
+  }
 
-    // checks if player fell of the screen
-    if (gameState.pc.position.y > gameState.height) {
-        gameState.pc.status = false;
-    }
-
-    //physics for npcs and enemies
+    // physics for npcs and enemies: both can fall, enemies may walk back and forth
     for (i = 0; i < gameState.elements.length; i++) {
         if (gameState.elements[i] instanceof Item && gameState.elements[i].hovering == true) {
             gameState.elements[i].hover(gameState.step);
@@ -601,13 +597,14 @@ function update(gameState) {
                 gameState.elements[i].moveX(newXPos, null);
             }
         }
-        
+
     }
+
     // update position of items
     if(gameState.pc.equippedItem != null){
         gameState.pc.equippedItem.updatePosition(gameState.pc);
     }
-    
+
     // if item used
     if(gameState.itemUsed){
         handleItemUse(gameState);
@@ -619,9 +616,76 @@ function update(gameState) {
         changeItem(gameState);
         gameState.changeItem = false;
     }
-   
+
 }
 
+/*
+|------------------------------------------------------------------------------
+| Draw new frame
+|------------------------------------------------------------------------------
+*/
+
+function draw(gameState){
+    // clear canvas
+    gameState.ctx.clearRect(0, 0, gameState.width, gameState.height);
+
+    // center camera on player and redraw background
+    scrollPlayerIntoView();
+
+    // draw non-player elements
+    for(i = 0; i<gameState.elements.length; i++){
+        var curElement = gameState.elements[i];
+
+        // if curElement is an NPC with a message
+        if (curElement.shouldDisplay){
+            gameState.ctx.font = 'Press Start 2P';
+            gameState.ctx.fillStyle = "#ffffff";
+            gameState.ctx.fillText(curElement.getMessage(),
+                                   curElement.position.x,
+                                   curElement.position.y-10);
+            curElement.shouldDisplay = false;
+        }
+
+        // draw the element
+        gameState.ctx.drawImage(curElement.img,curElement.position.x,curElement.position.y,
+            curElement.size.x,curElement.size.y);
+
+        // draw health bars for NPCs and Enemies
+        if((curElement instanceof Enemy || curElement instanceof NPC) && curElement.status){
+          gameState.ctx.fillStyle = "#FF0000";
+          gameState.ctx.fillRect(curElement.position.x, curElement.position.y - 8,
+              curElement.size.x, 4);
+          gameState.ctx.fillStyle = "#00FF00";
+          var percentFull = curElement.health / curElement.maxHealth;
+          gameState.ctx.fillRect(curElement.position.x, curElement.position.y - 8,
+              percentFull * curElement.size.x, 4);
+        }
+    }
+
+    // draw pc
+    gameState.ctx.drawImage(gameState.pc.img,gameState.pc.position.x,gameState.pc.position.y,
+        gameState.pc.size.x,gameState.pc.size.y);
+
+    // draw equipped item
+    if(gameState.pc.equippedItem != null){
+        var item = gameState.pc.equippedItem;
+        gameState.ctx.drawImage(item.img, item.position.x, item.position.y, item.size.x,
+            item.size.y);
+    }
+
+    // on player death visuals
+    if(!gameState.pc.status){
+        onPlayerDeath(gameState);
+    }
+}
+
+/*
+|------------------------------------------------------------------------------
+| Helper Functions
+|------------------------------------------------------------------------------
+*/
+
+// detect collisions between two hypothetical positions of two elements
 function detectCollision(pos1, pos2, element1, element2) {
     box1 = element1.hitbox;
     size1 = element1.size;
@@ -646,6 +710,7 @@ function detectCollision(pos1, pos2, element1, element2) {
     return false;
 }
 
+// react to collisions with various types of elements
 function onCollision(gameState, i) {
 	    //if npc, show message
             if(gameState.elements[i] instanceof NPC){
@@ -668,8 +733,8 @@ function onCollision(gameState, i) {
              }
     }
 
+// detect key presses
 function keyDownHandler(event, gameState) {
-    
     if(event.keyCode == 32){
         if(gameState.pc.equippedItem != null) {
             gameState.itemUsed = true;
@@ -694,6 +759,7 @@ function keyDownHandler(event, gameState) {
     }
 }
 
+// detect keys not being pressed
 function keyUpHandler(event, gameState) {
     if(event.keyCode == 68) {
         gameState.rightPressed = false;
@@ -709,7 +775,7 @@ function keyUpHandler(event, gameState) {
     }
 }
 
-// need to create all the images given urls - this could/should happen within translation function
+// create all the images given urls
 function imgInit(gameState){
     for(i = 0; i<gameState.elements.length; i++){
         gameState.elements[i].img = new Image;
@@ -723,104 +789,59 @@ function imgInit(gameState){
     gameState.pc.img.src = gameState.pc.sprite;
 }
 
-function draw(gameState){
-    gameState.ctx.clearRect(0, 0, gameState.width, gameState.height);
-    scrollPlayerIntoView();
-
-    for(i = 0; i<gameState.elements.length; i++){
-        var curElement = gameState.elements[i];
-        if (curElement.shouldDisplay){
-            gameState.ctx.font = 'Press Start 2P';
-            gameState.ctx.fillStyle = "#ffffff";
-            gameState.ctx.fillText(curElement.getMessage(),
-                                   curElement.position.x,
-                                   curElement.position.y-10);
-            curElement.shouldDisplay = false;
-        }
-        gameState.ctx.drawImage(curElement.img,curElement.position.x,curElement.position.y,
-            curElement.size.x,curElement.size.y);
-    }
-    // draw pc
-    gameState.ctx.drawImage(gameState.pc.img,gameState.pc.position.x,gameState.pc.position.y,
-        gameState.pc.size.x,gameState.pc.size.y);
-    gameState.ctx.fillStyle = "#FF0000";
-    gameState.ctx.fillRect(8,8,50,10);
-    gameState.ctx.fillStyle = "#00FF00";
-    var percentFull = gameState.pc.health / gameState.pc.maxHealth;
-    gameState.ctx.fillRect(8,8,percentFull * 50, 10);
-    
-    // draw equipped item
-    if(gameState.pc.equippedItem != null){
-        var item = gameState.pc.equippedItem;
-        gameState.ctx.drawImage(item.img, item.position.x, item.position.y, item.size.x, 
-            item.size.y);
-    }
-
-    // draw health bars
-    for(i = 0; i<gameState.characters.length; i++){
-        if (gameState.characters[i].status) {
-            gameState.ctx.fillStyle = "#FF0000";
-            gameState.ctx.fillRect(gameState.characters[i].position.x, gameState.characters[i].position.y - 8,
-                gameState.characters[i].size.x, 4);
-            gameState.ctx.fillStyle = "#00FF00";
-            var percentFull = gameState.characters[i].health / gameState.characters[i].maxHealth;
-            gameState.ctx.fillRect(gameState.characters[i].position.x, gameState.characters[i].position.y - 8,
-                percentFull * gameState.characters[i].size.x, 4);
-        }
-    }
-
-    // on player death visuals
-    if(!gameState.pc.status){
-        onPlayerDeath(gameState);
-    }
-}
-
+// scroll camera view to keep player at the center; redraw background
 function scrollPlayerIntoView() {
-  var displayWidth = gameState.wrap.clientWidth;
-  var displayHeight = gameState.wrap.clientHeight;
-  var levelWidth = gameState.width;
-  var margin = displayWidth / 2.5;
+  var bgWidth = gameState.backgroundUrl.width; // width of background image
+  var bgHeight = gameState.backgroundUrl.height; // height of background image
+  var displayWidth = gameState.wrap.clientWidth; // width of viewport
+  var displayHeight = gameState.wrap.clientHeight; // height of viewport
+  var levelWidth = gameState.width; // width of level
+  var margin = displayWidth / 2.5; // window in which player movement won't scroll display
 
-  var left = gameState.wrap.scrollLeft;
-  var right = left + displayWidth;
-  var center = gameState.pc.position.plus(gameState.pc.size.times(0.5));
+  var left = gameState.wrap.scrollLeft; // current scroll location: left boundary
+  var right = left + displayWidth; // current scroll location: right boundary
+  var center = gameState.pc.position.plus(gameState.pc.size.times(0.5)); // center of player
 
-  scrollVal1 = center.x - margin;
-  scrollVal2 = center.x + margin - displayWidth;
-  scrollVal3 = gameState.wrap.scrollLeft
-  args = []
+  scrollVal1 = center.x - margin; // new left boundary: scroll back
+  scrollVal2 = center.x + margin - displayWidth; // new left boundary: scroll forward
+  scrollVal3 = levelWidth - displayWidth; // new left boundary: at end of level
 
-  if (center.x < left + margin && scrollVal1 > 0){
+  // player is too far to left of screen; but not at start of level: scroll back
+  if (center.x < left + margin && scrollVal1 > 0)
     gameState.wrap.scrollLeft = scrollVal1;
-    gameState.ctx.drawImage(gameState.backgroundUrl, scrollVal1, 0);
-    args = [scrollVal1, 0]
-  }
-  else if (center.x > right - margin && scrollVal2 < levelWidth - displayWidth){
+
+  // player is too far to right of screen; but not at end of level: scroll forward
+  else if (center.x > right - margin && scrollVal2 < levelWidth - displayWidth)
       gameState.wrap.scrollLeft = scrollVal2;
-      gameState.ctx.drawImage(gameState.backgroundUrl, scrollVal2, 0);
-      args = [scrollVal2, 0]
-  }
-  else if (center.x > right - margin && scrollVal2 < gameState.width) {
-      gameState.wrap.scrollLeft = levelWidth - displayWidth;
-      gameState.ctx.drawImage(gameState.backgroundUrl, levelWidth-displayWidth, 0);
-      args = [levelWidth-displayWidth, 0]
-  }
-  else {
-    gameState.ctx.drawImage(gameState.backgroundUrl, scrollVal3, 0);
-    args = [scrollVal3, 0]
-  }
-   var hRatio = displayWidth  / gameState.backgroundUrl.width;
-   var vRatio =  displayHeight / gameState.backgroundUrl.height;
-   var ratio  = Math.max ( hRatio, vRatio );
-   var centerShift_x = ( displayWidth - gameState.backgroundUrl.width*ratio ) / 2;
-   var centerShift_y = ( displayHeight - gameState.backgroundUrl.height*ratio ) / 2;
-   gameState.ctx.clearRect(0,0,displayWidth, displayHeight);
-   gameState.ctx.drawImage(gameState.backgroundUrl,0,0,gameState.backgroundUrl.width,
-                      gameState.backgroundUrl.height,args[0]+centerShift_x,args[1]+centerShift_y,
-                      gameState.backgroundUrl.width*ratio, gameState.backgroundUrl.height*ratio);
+
+  // player is too far to right of screen; and at end of level: don't scroll past end of viewport
+  else if (center.x > right - margin && scrollVal2 < levelWidth)
+      gameState.wrap.scrollLeft = scrollVal3;
+
+  // else player's location is within the allowed window: don't change scroll
+
+  // code to scale background image when window is resized
+  var hRatio = displayWidth  / bgWidth;
+  var vRatio =  displayHeight / bgHeight;
+  var ratio  = Math.max ( hRatio, vRatio );
+  var centerShift_x = ( displayWidth - bgWidth*ratio ) / 2;
+  var centerShift_y = ( displayHeight - bgHeight*ratio ) / 2;
+
+  // clear background; redraw background at new scroll with scaling
+  gameState.ctx.clearRect(0, 0, displayWidth, displayHeight);
+  gameState.ctx.drawImage(gameState.backgroundUrl, 0, 0, bgWidth, bgHeight,
+                          gameState.wrap.scrollLeft+centerShift_x,centerShift_y,
+                          bgWidth*ratio, bgHeight*ratio);
+
+  // draw player's health bar in top left corner
+  gameState.ctx.fillStyle = "#FF0000";
+  gameState.ctx.fillRect(gameState.wrap.scrollLeft+8, 8, 50, 10);
+  gameState.ctx.fillStyle = "#00FF00";
+  var percentFull = gameState.pc.health / gameState.pc.maxHealth;
+  gameState.ctx.fillRect(gameState.wrap.scrollLeft+8, 8, percentFull*50, 10);
 }
 
-// displays the characters inventory in html. only called when new item picked up
+// display player's inventory in html; only called when new item picked up
 function showInventory(gameState){
     var ul = document.getElementById('inventory');
     ul.innerHTML = "";
@@ -829,9 +850,9 @@ function showInventory(gameState){
         var item = inventory[i];
 
         var listItem = document.createElement("li");
-        
+
         listItem.border = "1px solid black";
-        
+
         var _img = document.createElement('img');
         _img.src = item.sprite;
         _img.style = "width:30px;height:30px;";
@@ -844,6 +865,7 @@ function showInventory(gameState){
     }
 }
 
+// update player's health
 function updateHealth(pc){
     if(pc.health >=0) {
         var healthBar = document.getElementById("health");
@@ -851,6 +873,7 @@ function updateHealth(pc){
     }
 }
 
+// define visuals and state-changes when player dies
 function onPlayerDeath(gameState){
     var empty = "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
     gameState.ctx.fillText("GAME OVER DUDE", gameState.pc.position.x, gameState.pc.position.y - 10);
@@ -863,6 +886,7 @@ function onPlayerDeath(gameState){
 function reset(){
     initialize();
     imgInit(gameState);
+    gameState.wrap.scrollLeft = 0;
 }
 
 function testWinConditions(gameState){
@@ -892,6 +916,11 @@ function changeItem(gameState){
     showInventory(gameState);
 }
 
+/*
+|------------------------------------------------------------------------------
+| Run Game Loop
+|------------------------------------------------------------------------------
+*/
 
 reset();
 
@@ -913,10 +942,11 @@ module.exports.reset = reset;
 /*note: Environment has flag for whether its solid or not*/
 const Element = require('./element.js');
 
-function Environment(solid, pos, url, scale, hbox){
+function Environment(solid, pos, url, scale, hbox, eff){
   if (solid == 1 || solid == 0) {
       Element.call(this, pos, url, scale, hbox);
       this.solid = solid;
+      this.effect = eff;
   }
   else{
       return {};
@@ -928,6 +958,7 @@ Environment.prototype = Object.create(Element.prototype);
 Environment.prototype.Environment = function(){
     Element.call(this, new vector(0,0), null, new vector(50,50), new vector (50,50));
     this.solid= true;
+    this.effect = "damage";
 }
 
 Environment.prototype.getSolid = function(){
@@ -938,6 +969,32 @@ Environment.prototype.setSolid = function(bool){
   if (solid == 1 || solid == 0){
       this.solid = bool;
   }
+}
+
+Environment.prototype.setEffect= function(eft){
+    this.effect = eft;
+};
+
+Environment.prototype.getEffect=function(){
+    return this.effect;
+};
+
+//gets damage. return int damage
+Environment.prototype.getDamage = function(){
+    //get damage amount
+    return this.damage;
+}
+
+//set int damage
+Environment.prototype.setDamage = function(amount){
+    //set damage to amount
+        t = typeof amount
+        if (t === "number"){
+            this.damage = amount;
+        }
+        else{
+            return null;
+        }
 }
 
 module.exports = Environment;
