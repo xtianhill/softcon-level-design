@@ -89,6 +89,11 @@ function initialize(){
 
 function update(gameState) {
 
+   if(gameState.pc.status == false){
+      changeItem(gameState);
+      gameState.changeItem = false;
+   }
+
     // find hypothetical new right/left position as long as within the level's
     // limits and no wall is in the way
     newXPos = null;
@@ -112,8 +117,7 @@ function update(gameState) {
             if (detectCollision(newXPos, gameState.elements[i].position, gameState.pc, gameState.elements[i])) {
                 if (gameState.elements[i] instanceof Environment)
                     xObstacle = gameState.elements[i];
-                else
-                    onCollision(gameState, i);
+                onCollision(gameState, i);
             }
         }
         gameState.pc.moveX(newXPos, xObstacle);
@@ -134,8 +138,7 @@ function update(gameState) {
             if (detectCollision(newYPos, gameState.elements[i].position, gameState.pc, gameState.elements[i])) {
                 if (gameState.elements[i] instanceof Environment)
                     yObstacle = gameState.elements[i];
-                else
-                    onCollision(gameState, i);
+                onCollision(gameState, i);
             }
         }
     if (gameState.upPressed) {
@@ -204,6 +207,8 @@ function update(gameState) {
         gameState.changeItem = false;
     }
 
+    // counter to make tile effects only happen every few seconds
+    gameState.pc.sinceTile += 1;
 }
 
 /*
@@ -317,6 +322,17 @@ function onCollision(gameState, i) {
                 gameState.pc.pickUpItem(gameState.elements[i]);
                 gameState.elements.splice(i,1);
                 showInventory(gameState);
+             }
+
+             //if enviroment with effect, affect pc
+             if(gameState.elements[i] instanceof Environment){
+                if(gameState.pc.sinceTile > 50 && gameState.elements[i].getEffect()){
+                    if(gameState.elements[i].getEffect().getEffect() == "damage")
+                        gameState.pc.decHealth(gameState.elements[i].getEffect().getAmount());
+                    else if(gameState.elements[i].getEffect().getEffect() == "heal")
+                        gameState.pc.addHealth(gameState.elements[i].getEffect().getAmount());
+                    gameState.pc.sinceTile = 0;
+                  }
              }
     }
 

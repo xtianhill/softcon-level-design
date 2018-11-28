@@ -8,6 +8,7 @@ function Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed, mvspd, gr
     Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspd, grav);
     this.equippedItem = itm;
     this.inventory = inv;
+    this.sinceTile = 50;
 }
 
 Player.prototype = Object.create(Character.prototype);
@@ -20,7 +21,7 @@ Player.prototype.Player = function(){
     Character.call(this, vector(0,0), 10, 10, 1, vector(50,50), vector(33,13));
     this.equippedItem = null;
     this.inventory = [];
-}  
+}
 
 Player.prototype.getInventory= function(){
     return this.inventory;
@@ -31,7 +32,7 @@ Player.prototype.setInventory = function(arr)
     this.inventory = arr;
 }
 
-//gets OwnedItem. 
+//gets OwnedItem.
 Player.prototype.getEquippedItem= function(){
     //return owned item
     return this.equippedItem;
@@ -55,7 +56,7 @@ Player.prototype.useItem = function(target){
         if(this.equippedItem.getEffect().effect == "heal"){
             // CHANGE THIS TO AMOUNT not rando value
             console.log(this.equippedItem);
-            target.health += this.equippedItem.effect.amount; // 
+            target.health += this.equippedItem.effect.amount; //
             if(target.health > target.maxHealth){
                 target.health = target.maxHealth;
             }

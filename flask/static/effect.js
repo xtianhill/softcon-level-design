@@ -70,4 +70,14 @@ Effect.prototype.deactivate = function(){
     this.isActive = false;
 }
 
+// Getter for amount
+Effect.prototype.getAmount = function(){
+    return this.amount;
+}
+
+// Setter for amount
+Effect.prototype.setAmount = function(num){
+    this.amount = num;
+}
+
 module.exports = Effect;

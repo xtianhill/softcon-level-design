@@ -194,8 +194,15 @@ Character.prototype.moveY = function(newPos, obstacle, up) {
 
 Character.prototype.decHealth = function(damage){
     this.health -= damage;
-    if(this.health < 0){
+    if(this.health <= 0){
         this.status = false;
+    }
+}
+
+Character.prototype.addHealth = function(amount){
+    this.health += amount;
+    if(this.health > this.maxHealth){
+        this.health = this.maxHealth;
     }
 }
 
@@ -272,6 +279,16 @@ Effect.prototype.activate = function(){
 // Setter for isActive
 Effect.prototype.deactivate = function(){
     this.isActive = false;
+}
+
+// Getter for amount
+Effect.prototype.getAmount = function(){
+    return this.amount;
+}
+
+// Setter for amount
+Effect.prototype.setAmount = function(num){
+    this.amount = num;
 }
 
 module.exports = Effect;
@@ -509,6 +526,11 @@ function initialize(){
 
 function update(gameState) {
 
+   if(gameState.pc.status == false){
+      changeItem(gameState);
+      gameState.changeItem = false;
+   }
+
     // find hypothetical new right/left position as long as within the level's
     // limits and no wall is in the way
     newXPos = null;
@@ -532,8 +554,7 @@ function update(gameState) {
             if (detectCollision(newXPos, gameState.elements[i].position, gameState.pc, gameState.elements[i])) {
                 if (gameState.elements[i] instanceof Environment)
                     xObstacle = gameState.elements[i];
-                else
-                    onCollision(gameState, i);
+                onCollision(gameState, i);
             }
         }
         gameState.pc.moveX(newXPos, xObstacle);
@@ -554,8 +575,7 @@ function update(gameState) {
             if (detectCollision(newYPos, gameState.elements[i].position, gameState.pc, gameState.elements[i])) {
                 if (gameState.elements[i] instanceof Environment)
                     yObstacle = gameState.elements[i];
-                else
-                    onCollision(gameState, i);
+                onCollision(gameState, i);
             }
         }
     if (gameState.upPressed) {
@@ -624,6 +644,8 @@ function update(gameState) {
         gameState.changeItem = false;
     }
 
+    // counter to make tile effects only happen every few seconds
+    gameState.pc.sinceTile += 1;
 }
 
 /*
@@ -737,6 +759,17 @@ function onCollision(gameState, i) {
                 gameState.pc.pickUpItem(gameState.elements[i]);
                 gameState.elements.splice(i,1);
                 showInventory(gameState);
+             }
+
+             //if enviroment with effect, affect pc
+             if(gameState.elements[i] instanceof Environment){
+                if(gameState.pc.sinceTile > 50 && gameState.elements[i].getEffect()){
+                    if(gameState.elements[i].getEffect().getEffect() == "damage")
+                        gameState.pc.decHealth(gameState.elements[i].getEffect().getAmount());
+                    else if(gameState.elements[i].getEffect().getEffect() == "heal")
+                        gameState.pc.addHealth(gameState.elements[i].getEffect().getAmount());
+                    gameState.pc.sinceTile = 0;
+                  }
              }
     }
 
@@ -959,25 +992,25 @@ function Environment(solid, pos, url, scale, hbox, eff){
   else{
       return {};
     }
-}
+};
 
 Environment.prototype = Object.create(Element.prototype);
 
 Environment.prototype.Environment = function(){
     Element.call(this, new vector(0,0), null, new vector(50,50), new vector (50,50));
     this.solid= true;
-    this.effect = "damage";
-}
+    this.effect = new Effect("heal", 2);;
+};
 
 Environment.prototype.getSolid = function(){
     return this.solid;
-}
+};
 
 Environment.prototype.setSolid = function(bool){
   if (solid == 1 || solid == 0){
       this.solid = bool;
   }
-}
+};
 
 Environment.prototype.setEffect= function(eft){
     this.effect = eft;
@@ -986,24 +1019,6 @@ Environment.prototype.setEffect= function(eft){
 Environment.prototype.getEffect=function(){
     return this.effect;
 };
-
-//gets damage. return int damage
-Environment.prototype.getDamage = function(){
-    //get damage amount
-    return this.damage;
-}
-
-//set int damage
-Environment.prototype.setDamage = function(amount){
-    //set damage to amount
-        t = typeof amount
-        if (t === "number"){
-            this.damage = amount;
-        }
-        else{
-            return null;
-        }
-}
 
 module.exports = Environment;
 
@@ -1122,7 +1137,8 @@ function JSONtoElements(data){
                 var hitbox = new Vector(50,50);
                 var element;
                 if (temp.name == "Environment"){
-                    element = new Environment(1,pos,url,sz,hitbox);
+                    var eff= null; // new Effect("damage", 1);
+                    element = new Environment(1,pos,url,sz,hitbox,eff);
                 }
                 else if (temp.name == "Item"){
                     var col=0;
@@ -1184,6 +1200,7 @@ function Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed, mvspd, gr
     Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspd, grav);
     this.equippedItem = itm;
     this.inventory = inv;
+    this.sinceTile = 50;
 }
 
 Player.prototype = Object.create(Character.prototype);
@@ -1196,7 +1213,7 @@ Player.prototype.Player = function(){
     Character.call(this, vector(0,0), 10, 10, 1, vector(50,50), vector(33,13));
     this.equippedItem = null;
     this.inventory = [];
-}  
+}
 
 Player.prototype.getInventory= function(){
     return this.inventory;
@@ -1207,7 +1224,7 @@ Player.prototype.setInventory = function(arr)
     this.inventory = arr;
 }
 
-//gets OwnedItem. 
+//gets OwnedItem.
 Player.prototype.getEquippedItem= function(){
     //return owned item
     return this.equippedItem;
@@ -1231,7 +1248,7 @@ Player.prototype.useItem = function(target){
         if(this.equippedItem.getEffect().effect == "heal"){
             // CHANGE THIS TO AMOUNT not rando value
             console.log(this.equippedItem);
-            target.health += this.equippedItem.effect.amount; // 
+            target.health += this.equippedItem.effect.amount; //
             if(target.health > target.maxHealth){
                 target.health = target.maxHealth;
             }

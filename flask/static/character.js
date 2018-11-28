@@ -193,8 +193,15 @@ Character.prototype.moveY = function(newPos, obstacle, up) {
 
 Character.prototype.decHealth = function(damage){
     this.health -= damage;
-    if(this.health < 0){
+    if(this.health <= 0){
         this.status = false;
+    }
+}
+
+Character.prototype.addHealth = function(amount){
+    this.health += amount;
+    if(this.health > this.maxHealth){
+        this.health = this.maxHealth;
     }
 }
 

@@ -22,7 +22,8 @@ function JSONtoElements(data){
                 var hitbox = new Vector(50,50);
                 var element;
                 if (temp.name == "Environment"){
-                    element = new Environment(1,pos,url,sz,hitbox);
+                    var eff= null; // new Effect("damage", 1);
+                    element = new Environment(1,pos,url,sz,hitbox,eff);
                 }
                 else if (temp.name == "Item"){
                     var col=0;
