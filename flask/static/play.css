@@ -97,11 +97,59 @@ aside{
 
 ul{
     line-height: 300%;
-    margin-top: 45px;
-    margin-left: 5px;
+    margin-top: 40px;
+    margin-left: -5px;
     list-style: none;
 }
 
 .health-bar{
     position: absolute;
+}
+
+footer {
+    clear: both;
+    background-color: #f2e6ff;
+    max-width: 100%;
+    margin-top: 540px;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    border: 5px solid #a3c0f5;
+    font-family: 'Press Start 2P';
+}
+
+.foot_text {
+    font-size: 15px;
+    margin-top: 20px;
+    margin-left: 20px;
+    background: #f2e6ff;
+    color: #660066;
+}
+
+.dividers {
+    font-size: 15px;
+    margin-top: 20px;
+    margin-left: 20px;
+    background: #f2e6ff;
+    color: #a3c0f5;
+}
+
+.rules {
+    font-size: 15px;
+    margin-left: 20px;
+    display: inline;
+    background: #f2e6ff;
+    color: #660066;
+    list-style: none;
+    padding-left: 0;
+    line-height: 300%;
+    list-style-type:disc;
+}
+
+#rules li{
+  font-size: 15px;
+  display: inline;
+  background: #f2e6ff;
+  color: #660066;
+  padding-left: 30px;
 }
