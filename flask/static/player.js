@@ -19,11 +19,12 @@ const Vector = require('./utility.js');
 | Constructor
 |------------------------------------------------------------------------------
 */
-function Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed, mvspd, grav){
+function Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed, mvspd, grav, dir){
     Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspd, grav);
     this.equippedItem = itm;
     this.inventory = inv;
     this.sinceTile = 50;
+    this.direction = dir;
 }
 
 Player.prototype = Object.create(Character.prototype);
@@ -82,7 +83,7 @@ Player.prototype.useItem = function(target){
             }
         }
     }
-    
+
 }
 
 //Pick up an item

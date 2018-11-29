@@ -67,7 +67,13 @@ Item.prototype.hover = function(step) {
 
 //Update the item's position
 Item.prototype.updatePosition = function(pc) {
-    this.position.x = pc.position.x + pc.hitbox.x * .75;
-    this.position.y = pc.position.y; //- pc.hitbox.y;
+    if(pc.dir == "right"){
+        this.position.x = pc.position.x + pc.hitbox.x * .75;
+        this.position.y = pc.position.y; //- pc.hitbox.y;
+      }
+      else{
+        this.position.x = pc.position.x - pc.hitbox.x * .75;
+        this.position.y = pc.position.y; //- pc.hitbox.y;
+      }
 }
 module.exports = Item;
