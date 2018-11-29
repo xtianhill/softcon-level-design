@@ -21,17 +21,16 @@
   </head>
   <body>
     <header class="header" id = "header">
-      <div class="title">Level Title</div>
+        {% if title %}
+            <div class="title" id="levelTitle">{{title}}</div>
+        {% else %}
+            <h1>Invalid Title</h1>
+        {% endif %}
       <a href="#" id="movemode" class="myButton" onclick="engine.reset()">RESET</a>
     </header>
     <section="group">
       <section>
         <div class="wrapper" id="wrap">
-                {% if title %}
-                <h1 id="levelTitle">{{title}}</h1>
-              {% else %}
-                <h1>Hello, World!</h1>
-              {% endif %}
           <canvas id="c" width="1500" height="500" ></canvas>
         </div>
       </section>
