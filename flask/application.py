@@ -22,6 +22,10 @@ def validate_json(my_json):
 def home():
     return render_template('home.html')
 
+@application.route('/edit', methods=['GET'])
+def edit():
+    return render_template('makeLevel.html')
+
 @application.route('/api/v1/backend-up', methods=['GET'])
 def is_backend_running():
     return Response("BACKEND RUNNING", status=200)
