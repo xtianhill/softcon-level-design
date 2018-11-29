@@ -18,6 +18,7 @@ def validate_json(my_json):
         return False
     return True
 
+@application.route('/', methods=['GET'])
 @application.route('/home', methods=['GET'])
 def home():
     return render_template('home.html')
