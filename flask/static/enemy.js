@@ -34,6 +34,7 @@ function Enemy(loc, max, hea, stat, dmg, hbox, url, size, speed, mvspeed, grav, 
 }
 
 Enemy.prototype = Object.create(Character.prototype);
+Enemy.prototype.constructor = Enemy;
 
 //empty constructor. void
 Enemy.prototype.Enemy = function(){
