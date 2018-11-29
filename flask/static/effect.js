@@ -18,7 +18,9 @@
 */
 
 function Effect(title, amount){
-    if (title == 'heal' || title == 'damage'){
+    t = typeof title;
+    t2 = typeof amount;
+    if (if t === "string" && t2 === "number" && (title == 'heal' || title == 'damage')){
     this.effect = title;
     this.isActive = false;
     this.amount = amount;
@@ -52,7 +54,13 @@ Effect.prototype.getIsActive = function(){
 
 // Setter for Effect type
 Effect.prototype.setEffect = function(effect){
-    this.effect = effect;
+    t = typeof effect;
+    if (t === "Effect"){
+        this.effect = effect;
+    }
+    else{
+        return null;
+    }
 }
 
 // Getter for  Effect type
@@ -77,7 +85,13 @@ Effect.prototype.getAmount = function(){
 
 // Setter for amount
 Effect.prototype.setAmount = function(num){
-    this.amount = num;
+    t = typeof num;
+    if (t === "number"){
+        this.amount = num;
+    }
+    else{
+        return null;
+    }
 }
 
 module.exports = Effect;
