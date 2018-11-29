@@ -252,18 +252,24 @@ function storeGrid(gridJSON) {
             contentType: "application/json",
             dataType: "text",
             success: function(data) {
-                console.log("success: stored the following grid in DB: " + data);
-                alert("Success: stored the following grid in DB via success callback");
+                console.log("Success: stored [" + data + "] in database.");
+                alert("Success: grid successfully stored.");
             },
             failure: function(errMsg) {
                 console.log("failure: couldn't store grid");
-                alert("failure: couldn't store grid");
+                alert("Error: operation could not be performed.");
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 var status = XMLHttpRequest.status;
                 if (status == HTTP_CONFLICT) {
-                    alert("Error: title [" + gridJSON.title + "] already exists.");
+                    console.log("Error: HTTP CONFLICT (" + HTTP_CONFLICT + ")");
+                    alert("That title is taken; please choose another name.");
+                } else if(status == HTTP_BADREQUEST) {
+                    console.log("Error: HTTP BADREQUEST (" + HTTP_BADREQUEST + ")");
+                    alert("Sorry, something went wrong. The title could not be retrieved; please try again.");
                 } else {
+                    console.log("Error: unspecified error (" + status + ")");
+                    console.log("Error textStatus: " + textStatus);
                     alert("Error: operation could not be performed.");
                 }
             }
@@ -271,6 +277,7 @@ function storeGrid(gridJSON) {
         return true;
     } catch(err) {
         console.log(err);
+        return false;
     }
 }
 
@@ -283,22 +290,19 @@ async function isRunning() {
             dataType: "text",
             url: AWS_URL + "api/v1/backend-up", 
             success: function(data) {
+                alert("Backend is running");
                 console.log("success: backend is running");
             },
             failure: function(errMsg) {
                 console.log("failure: backend cannot be reached");
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
-                var status = XMLHttpRequest.status;
-                if (status == HTTP_NOTFOUND) {
-                    alert("Error: title [" + title + "] not found.");
-                } else {
-                    alert("Error: operation could not be performed.");
-                }
+                console.log("error: " + textStatus);
             }
         });
     } catch(err) {
         console.log(err);
+        return false;
     }
     return success==SUCCESS_MSG;
 }
@@ -314,16 +318,20 @@ async function deleteGrid(title) {
             async: true,
             url: AWS_URL + "api/v1/delete-grid/" + title,
             success: function(data) {
-                console.log("success: deleted grid with title " + title + " in DB via success callback");
+                alert("Success: grid successfully deleted.");
+                console.log("success: deleted grid in DB via success callback");
             },
             failure: function(errMsg) {
-                alert("failure: didn't delete item with title: " + title);
+                alert("Sorry, something went wrong. The grid was not deleted.");
+                console.log("failure: didn't delete item");
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 var status = XMLHttpRequest.status;
                 if (status == HTTP_NOTFOUND) {
-                    alert("Error: title [" + title + "] not found.");
+                    alert("Error: the grid was not found.");
                 } else {
+                    console.log("Error: unspecified error (" + status + ")");
+                    console.log("Error textStatus: " + textStatus);
                     alert("Error: operation could not be performed.");
                 }
             }
@@ -357,10 +365,14 @@ async function updateGrid(gridJSON) {
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 var status = XMLHttpRequest.status
                 if (status == HTTP_NOTFOUND) {
-                    alert("Error: title [" + gridJSON.title + "] not found.");
+                    console.log("Error: HTTP NOTFOUND (" + HTTP_NOTFOUND + ")");
+                    alert("Error: the grid was not found.");
+                } else if(status == HTTP_BADREQUEST) {
+                    console.log("Error: HTTP BADREQUEST (" + HTTP_BADREQUEST + ")");
+                    alert("Sorry, something went wrong. The title could not be retrieved; please try again.");
                 } else {
-                    console.log("textStatus: " + textStatus);
-                    console.log("errorThrown: " + errorThrown);
+                    console.log("Error: unspecified error (" + status + ")");
+                    console.log("Error textStatus: " + textStatus);
                     alert("Error: operation could not be performed.");
                 }
             }
@@ -389,6 +401,20 @@ async function getByTitle(title) {
             },
             failure: function(errMsg) {
                 console.log("failure: didn't find item in DB");
+            }, 
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                var status = XMLHttpRequest.status
+                if (status == HTTP_NOTFOUND) {
+                    console.log("Error: HTTP NOTFOUND (" + HTTP_NOTFOUND + ")");
+                    alert("Error: the grid was not found.");
+                } else if(status == HTTP_BADREQUEST) {
+                    console.log("Error: HTTP BADREQUEST (" + HTTP_BADREQUEST + ")");
+                    alert("Sorry, something went wrong. The title could not be retrieved; please try again.");
+                } else {
+                    console.log("Error: unspecified error (" + status + ")");
+                    console.log("Error textStatus: " + textStatus);
+                    alert("Error: operation could not be performed.");
+                }
             }
         });
     } catch(error) {
@@ -417,6 +443,17 @@ async function getAllTitles() {
             failure: function(errMsg) {
                 console.log("failure: couldn't retrieve titles")
                 // titles = null;
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                var status = XMLHttpRequest.status
+                if(status == HTTP_BADREQUEST) {
+                    console.log("Error: HTTP BADREQUEST (" + HTTP_BADREQUEST + ")");
+                    alert("Sorry, something went wrong. The titles could not be retrieved; please try again.");
+                } else {
+                    console.log("Error: unspecified error (" + status + ")");
+                    console.log("Error textStatus: " + textStatus);
+                    alert("Error: operation could not be performed.");
+                }
             }
         });
     } catch(err) {
@@ -432,21 +469,16 @@ async function getAllTitles() {
 //function to check if a JSON is valid to store in the database
 function validJSON(myJSON) {
     myJSON = JSON.parse(myJSON);
-    // console.log("validJSON: myJSON: " + myJSON);
-    // console.log("validJSON: myJSON type: " + myJSON.type);
     if(myJSON.type == 'string') {
-        // console.log("validJSON: given a string");
         myJSON = JSON.parse(myJSON);
     }
     try {
         var myTitle = myJSON["title"]
         var myData = myJSON["data"]
         if(myTitle.length == 0 || myData.length == 0) {
-            // console.log("validJSON: field(s) are length 0");
             return false;
         }
         if(typeof myData != 'string') {
-            // console.log("validJSON: data isn't a string");
             return false;
         }
     }
@@ -485,7 +517,9 @@ module.exports.deleteGrid = deleteGrid;
 */
 
 function Effect(title, amount){
-    if (title == 'heal' || title == 'damage'){
+    t = typeof title;
+    t2 = typeof amount;
+    if (t === "string" && t2 === "number" && (title == 'heal' || title == 'damage')){
     this.effect = title;
     this.isActive = false;
     this.amount = amount;
@@ -519,7 +553,13 @@ Effect.prototype.getIsActive = function(){
 
 // Setter for Effect type
 Effect.prototype.setEffect = function(effect){
-    this.effect = effect;
+    t = typeof effect;
+    if (t === "Effect"){
+        this.effect = effect;
+    }
+    else{
+        return null;
+    }
 }
 
 // Getter for  Effect type
@@ -544,7 +584,13 @@ Effect.prototype.getAmount = function(){
 
 // Setter for amount
 Effect.prototype.setAmount = function(num){
-    this.amount = num;
+    t = typeof num;
+    if (t === "number"){
+        this.amount = num;
+    }
+    else{
+        return null;
+    }
 }
 
 module.exports = Effect;
@@ -658,9 +704,9 @@ const Character = require('./character.js');
 |------------------------------------------------------------------------------
 */
 function Enemy(loc, max, hea, stat, dmg, hbox, url, size, speed, mvspeed, grav, dir, range, startLoc){
-    t = typeof dmg
-    t2 = typeof range
-    if (t === "number" && (dir === "right" || dir === "left" || dir === "still")) {
+    t = typeof dmg;
+    t2 = typeof range;
+    if (t === "number" && t2 === "number" && (dir === "right" || dir === "left" || dir === "still")) {
         Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspeed, grav);
         this.damage = dmg;
         this.direction = dir;
@@ -694,7 +740,7 @@ Enemy.prototype.getDamage = function(){
 //set int damage
 Enemy.prototype.setDamage = function(amount){
     //set damage to amount
-        t = typeof amount
+        t = typeof amount;
         if (t === "number"){
             this.damage = amount;
         }
@@ -710,7 +756,13 @@ Enemy.prototype.getRange = function(){
 
 //Setter for range
 Enemy.prototype.setRange = function(rng){
-    this.range = rng;
+    t = typeof rng;
+    if (t === "number"){
+        this.range = rng;
+    }
+    else{
+        return null;
+    }
 }
 
 //Getter for direction
@@ -729,7 +781,8 @@ Enemy.prototype.changeDirection = function(){
 //Setter for direction
 Enemy.prototype.setDirection = function(dir){
     //set damage to amount
-        if (dir == "right" || dir == "left" || dir == "still"){
+        t = typeof dir;
+        if (t === "string" && (dir == "right" || dir == "left" || dir == "still")){
             this.direction = dir;
         }
         else{
@@ -789,6 +842,11 @@ getData(title).then((data) => {
         var upPressed = false;
         var itemUsed = false;
         var changeItem = false;
+        
+        /*
+         * Christian's log
+         */
+        console.log("data: " + data);
 
         // comment this line if you want to load from database
        // data = '{"objects":[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{"type":"Element","name":"Player","top":350,"left":100,"url":"https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png","scale":1},{"type":"Element","name":"Item","top":100,"left":400,"url":"https://66.media.tumblr.com/f7acf066084d424d5da0c09795fe8483/tumblr_inline_piy8y9FbkJ1ruhpn7_540.png","scale":1},{"type":"Element","name":"Item","top":200,"left":500,"url":"https://66.media.tumblr.com/4a8e88c9194d00c4e2e14d62f2a9dc76/tumblr_pi5t840NIu1u9vozfo1_250.png","scale":1},{"type":"Element","name":"Enemy","top":350,"left":300,"url":"https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png","scale":1},{"type":"Element","name":"NPC","top":250,"left":500,"url":"https://66.media.tumblr.com/18b1dcddb1e6de2d56f2bbc16e368af5/tumblr_pi5sz2UwpH1u9vozfo1_250.png","scale":1},{"type":"Element","name":"Environment","top":400,"left":0,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":50,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":100,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":150,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":200,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":250,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":300,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":350,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":400,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"button"},{"type":"Element","name":"Enemy","top":350,"left":650,"url":"https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png","scale":1},{"type":"Element","name":"Environment","top":400,"left":450,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":500,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":550,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":600,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":350,"left":500,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":300,"left":500,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":650,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":700,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":750,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":750,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":0,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":50,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":100,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":150,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"button"},{"type":"Element","name":"Environment","top":450,"left":200,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":250,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":300,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"button"},{"type":"Element","name":"Environment","top":450,"left":350,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":400,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":450,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":500,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":550,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":650,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":600,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":700,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"button"},{"type":"button"}],"background":"","backgroundImage":"https://i.pinimg.com/originals/fe/78/bb/fe78bbb25f35d56b502327fb6d43b309.png","backgroundImageOpacity":1,"backgroundImageStretch":true}';
