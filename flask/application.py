@@ -156,4 +156,4 @@ def delete_grid(delete_title):
     return response
 
 if __name__ == "__main__":
-    application.run()
+    application.run(host='0.0.0.0')
