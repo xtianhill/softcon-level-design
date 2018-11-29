@@ -65,9 +65,18 @@ describe('Environment', function(){
     //getEffect and setEffect
     it('should correctly set and get effect', function(){
         EffectA = new Effect('heal', 5);
+        testEnvironment.setEffect(EffectA);
         expect(testEnvironment.getEffect()).toEqual(EffectA);
         EffectB = new Effect('heal', 8);
         testEnvironment.setEffect(EffectB);
+        expect(testEnvironment.getEffect()).toEqual(EffectB);
+    });
+
+    it('should fail to correctly set effect due to invalid input', function() {
+        EffectB = new Effect('heal', 8);
+        testEnvironment.setEffect("fake effect");
+        expect(testEnvironment.getEffect()).toEqual(EffectB);
+        testEnvironment.setEffect(1234);
         expect(testEnvironment.getEffect()).toEqual(EffectB);
     });
 });

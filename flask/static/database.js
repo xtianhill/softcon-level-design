@@ -181,7 +181,7 @@ async function getByTitle(title) {
             }
         });
     } catch(error) {
-        console.error(error);
+        console.log(error);
     }
     if(grid == null) {
         throw "didn't retrieve grid with title [" + title + "]";

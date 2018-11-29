@@ -52,7 +52,8 @@ function JSONtoElements(data){
                     var spd = new Vector(0,0);
                     var mvspd = 60;
                     var grav = 40;
-                    element = new Player(pos, max, hea, stat, itm, inv, hitbox, url, sz, spd, mvspd, grav);
+                    var dir = "right";
+                    element = new Player(pos, max, hea, stat, itm, inv, hitbox, url, sz, spd, mvspd, grav, dir);
                 }
                 else if (temp.name == "NPC"){
                     var max = 10;

@@ -25,6 +25,9 @@ describe('Item', function(){
 
     beforeEach(function(){
         testItem = new Item('pos', 'url', 'sz', 'hbox', true, new Effect('heal'));
+        testPlayer = new Player(new Vector(1,1), 20, 0, 0, testItem, [testItem],
+                                new Vector(12,12), 'dummy_url', new Vector(3,3),
+                                new Vector(0,0), 50, 80);
     });
 
 
@@ -85,3 +88,27 @@ describe('Item', function(){
     })
 
 });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Hover and Update Tests
+    |--------------------------------------------------------------------------
+    */
+
+    // hover test
+    it('should make item hover with valid input', function() {
+        testItem.hover(0.05);
+        expect(testItem.wobble()).toEqual(.1);
+        expect(testItem.position()).toEqual(Math.sin(.1) * 1.5);
+    })
+
+    it('should fail to make item hover due to invalid input'), function() {
+        testItem.hover(false);
+        expect(testItem.wobble()).toEqual(0);
+        expect(testItem.position()).toEqual(0);
+    })
+    
+    // update test
+    it('should update item position with valid input'), function() {
+        testItem.updatePosition(testPlayer.dir).
+

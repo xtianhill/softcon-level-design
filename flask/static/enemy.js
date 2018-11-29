@@ -19,9 +19,9 @@ const Character = require('./character.js');
 |------------------------------------------------------------------------------
 */
 function Enemy(loc, max, hea, stat, dmg, hbox, url, size, speed, mvspeed, grav, dir, range, startLoc){
-    t = typeof dmg
-    t2 = typeof range
-    if (t === "number" && (dir === "right" || dir === "left" || dir === "still")) {
+    t = typeof dmg;
+    t2 = typeof range;
+    if (t === "number" && t2 === "number" && (dir === "right" || dir === "left" || dir === "still")) {
         Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspeed, grav);
         this.damage = dmg;
         this.direction = dir;
@@ -34,6 +34,7 @@ function Enemy(loc, max, hea, stat, dmg, hbox, url, size, speed, mvspeed, grav, 
 }
 
 Enemy.prototype = Object.create(Character.prototype);
+Enemy.prototype.constructor = Enemy;
 
 //empty constructor. void
 Enemy.prototype.Enemy = function(){

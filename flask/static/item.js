@@ -12,6 +12,10 @@
 var icon2 = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKH3Qd3RP33Q5XxcRMrLXYhYGRu_dxvpJCIBEU_MlAudC1ev-P8A";
 const Element = require('./element.js');
 const Vector = require('./utility.js');
+const Enemy = require('./enemy.js');
+const Player = require('./player.js');
+const NPC = require('./npc.js');
+
 
 /*
 |------------------------------------------------------------------------------
@@ -25,7 +29,7 @@ function Item(pos, url, sz, hbox, col, eff, bpos, hov){
     this.basePos = bpos;
     this.hovering = hov;
     this.wobble = Math.random() * Math.PI * 2;
-    this.targets = "";
+    this.targets = [Enemy, NPC];
 }
 
 Item.prototype.Item = function(){
@@ -67,7 +71,13 @@ Item.prototype.hover = function(step) {
 
 //Update the item's position
 Item.prototype.updatePosition = function(pc) {
-    this.position.x = pc.position.x + pc.hitbox.x * .75;
-    this.position.y = pc.position.y; //- pc.hitbox.y;
+    if(pc.dir == "right"){
+        this.position.x = pc.position.x + pc.hitbox.x * .75;
+        this.position.y = pc.position.y; //- pc.hitbox.y;
+      }
+      else{
+        this.position.x = pc.position.x - pc.hitbox.x * .75;
+        this.position.y = pc.position.y; //- pc.hitbox.y;
+      }
 }
 module.exports = Item;

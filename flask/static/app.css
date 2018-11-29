@@ -155,6 +155,10 @@
 .wrapper {
     width: 88%;
     height: 500px;
+    background-image: url("https://i.pinimg.com/originals/fe/78/bb/fe78bbb25f35d56b502327fb6d43b309.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
     border: 5px solid #a3c0f5;
     margin-top:10%;
     margin-left: 4%;

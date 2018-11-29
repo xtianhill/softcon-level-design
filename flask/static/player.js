@@ -19,14 +19,16 @@ const Vector = require('./utility.js');
 | Constructor
 |------------------------------------------------------------------------------
 */
-function Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed, mvspd, grav){
+function Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed, mvspd, grav, dir){
     Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspd, grav);
     this.equippedItem = itm;
     this.inventory = inv;
     this.sinceTile = 50;
+    this.direction = dir;
 }
 
 Player.prototype = Object.create(Character.prototype);
+Player.prototype.constructor = Player;
 
 //empty constructor. void
 Player.prototype.Player = function(){
@@ -57,10 +59,10 @@ Player.prototype.getEquippedItem= function(){
 
 //Setter for owned item; return 1 if successful, return 0 for non-item input
 Player.prototype.setEquippedItem = function(itm){
-    //set owned item to itm
+    // set owned item to itm
     // set item.collected to be true
     if(itm instanceof Item){
-        //this.inventory.push(this.equippedItem);
+        // this.inventory.push(this.equippedItem);
         this.equippedItem = itm;
         itm.collected = true;
     }
@@ -70,32 +72,31 @@ Player.prototype.setEquippedItem = function(itm){
 Player.prototype.useItem = function(target){
     /* if there is a target, do the effect (heal or damage)*/
     if(this.status){
-        if(target != null){
+        if(this.isTarget(target)){
             if(this.equippedItem.getEffect().effect == "heal" && target.status){
-                console.log(this.equippedItem);
-                target.health += this.equippedItem.effect.amount; 
-                if(target.health > target.maxHealth){
-                    target.health = target.maxHealth;
-                }
-                console.log(target.health);
+                target.addHealth(this.equippedItem.getEffect().getAmount());
             }
             else if (this.equippedItem.getEffect().effect == "damage" && target.status){
-                
-                target.health -= this.equippedItem.effect.amount;
-                if(target.health <= 0){
-                    target.status = false;
-                }
-                console.log(target.health);
+                target.decHealth(this.equippedItem.getEffect().getAmount());
             }
         }
     }
-    
+
 }
 
 //Pick up an item
 Player.prototype.pickUpItem = function(item){
     this.setEquippedItem(item);
     this.inventory.unshift(item);
+}
+
+Player.prototype.isTarget = function (target){
+    for(i=0;i<this.equippedItem.targets.length;i++){
+        if(this.equippedItem.targets[i].name == target.constructor.name){
+            return true;
+        }
+    }
+    return false;
 }
 
 module.exports = Player;

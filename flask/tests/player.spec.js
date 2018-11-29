@@ -37,6 +37,7 @@ describe('Player', function() {
         testPlayer = new Player(new Vector(1,1), 20, 0, 0, testItem, [testItem],
                                 new Vector(12,12), 'dummy_url', new Vector(3,3),
                                 new Vector(0,0), 50, 80);
+        testVector1 = new Vector(6, 9);
     });
 
     /*
@@ -139,4 +140,5 @@ describe('Player', function() {
         expect(testPlayer.getEquippedItem().getPosition().y).toEqual(6);
         expect(testPlayer.getInventory()).toEqual([testItem, testItem2]);
     });
+
 });

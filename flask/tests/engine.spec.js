@@ -174,8 +174,7 @@ describe('Engine Tests', function(){
     });
 
     it('should set distance condition to true if you reach end of level', function(){
-        gameState.elements[0].pos = new Vector(30,30);
-        gameState.endPoint = new Vector(30,30);
+        gameState.elements[0].pos = new Vector(490,30);
         testWinConditions(gameState);
         expect(gameState.winConditions[3]).toBeTruthy();
     });
@@ -183,7 +182,7 @@ describe('Engine Tests', function(){
     it('should end game when all conditions met', function(){
         gameState.winConditions = [true, true, true, true];
         testWinConditions(gameState);
-        expect(gameState.gameOver).toBeTruthy();
+        expect(gameState.victory).toBeTruthy();
     });
 
 
