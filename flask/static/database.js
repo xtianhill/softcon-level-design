@@ -6,6 +6,17 @@
  * 
  */
 
+/*
+|------------------------------------------------------------------------------
+| Database
+|------------------------------------------------------------------------------
+|
+| This file contains the Database utility functions.
+|
+|------------------------------------------------------------------------------
+*/
+
+
 const HTTP_OK = "200";
 const HTTP_CREATED = "201";
 const HTTP_BADREQUEST = "400";
@@ -15,6 +26,7 @@ const HTTP_CONFLICT = "409";
 // const AWS_URL = "http://softcon-leveldesign.us-east-1.elasticbeanstalk.com/";
 const AWS_URL = "http://127.0.0.1:5000/";
 
+//store a grid, which is a JSON, in the database
 function storeGrid(gridJSON) {
     if(!validJSON(gridJSON)) {
         throw "invalid JSON given";
@@ -41,6 +53,7 @@ function storeGrid(gridJSON) {
     return success;
 }
 
+//check if the database is running
 function isRunning() {
     var success = false;
     $.ajax({
@@ -58,6 +71,8 @@ function isRunning() {
     return success;
 }
 
+
+//delete a grid from the database
 function deleteGrid(title, cb) {
     if(title.length <= 0 || title == null) {
         throw "invalid title given";
@@ -88,6 +103,8 @@ function deleteGrid(title, cb) {
     return success;
 }
 
+
+//update a grid that is already in the database
 function updateGrid(gridJSON) {
     if(!validJSON(gridJSON)) {
         throw "invalid JSON given";
@@ -112,6 +129,8 @@ function updateGrid(gridJSON) {
     return success;
 }
 
+
+//retrieve a grid from the database using its title
 function getByTitle(title) {
     console.log('title is: '+ title);
     if(title.length == 0) {
@@ -138,6 +157,8 @@ function getByTitle(title) {
     return grid;
 }
 
+
+//return all the titles of the levels stored in the database
 function getAllTitles() {
     var titles = null;
     $.ajax({
@@ -160,6 +181,8 @@ function getAllTitles() {
     return titles;
 }
 
+
+//function to check if a JSON is valid to store in the database
 function validJSON(myJSON) {
     myJSON = JSON.parse(myJSON);
     console.log("validJSON: myJSON: " + myJSON);
