@@ -69,27 +69,27 @@ Player.prototype.setEquippedItem = function(itm){
 //Use owned item
 Player.prototype.useItem = function(target){
     /* if there is a target, do the effect (heal or damage)*/
-    if(target != null){
-        // DO A CHECK TO SEE IF THE TARGET IS LEGIT
-        if(this.equippedItem.getEffect().effect == "heal"){
-            // CHANGE THIS TO AMOUNT not rando value
-            console.log(this.equippedItem);
-            target.health += this.equippedItem.effect.amount; //
-            if(target.health > target.maxHealth){
-                target.health = target.maxHealth;
+    if(this.status){
+        if(target != null){
+            if(this.equippedItem.getEffect().effect == "heal" && target.status){
+                console.log(this.equippedItem);
+                target.health += this.equippedItem.effect.amount; 
+                if(target.health > target.maxHealth){
+                    target.health = target.maxHealth;
+                }
+                console.log(target.health);
             }
-            console.log(target.health);
-        }
-        else if (this.equippedItem.getEffect().effect == "damage"){
-            console.log(target.health);
-            target.health -= this.equippedItem.effect.amount;
-            if(target.health <= 0){
-                target.status = false;
+            else if (this.equippedItem.getEffect().effect == "damage" && target.status){
+                
+                target.health -= this.equippedItem.effect.amount;
+                if(target.health <= 0){
+                    target.status = false;
+                }
+                console.log(target.health);
             }
-            console.log(target.health);
         }
-
     }
+    
 }
 
 //Pick up an item
