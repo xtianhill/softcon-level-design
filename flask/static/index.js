@@ -775,6 +775,7 @@ getData().then((data) => {
 */
     function initialize(){
         var step = 0.05; // controls frequency of physics calculations
+        var sinceItem = 0;
         var canvas = document.getElementById("c");
         var ctx = canvas.getContext("2d");
         document.addEventListener('keydown', function(e) {keyDownHandler(e, gameState)}, false);
@@ -834,6 +835,7 @@ getData().then((data) => {
             , pc: pc
             , characters: characters
             , step: step
+            , sinceItem: sinceItem
             , backgroundUrl: backgroundUrl};
 
         showInventory(gameState);
@@ -953,6 +955,7 @@ getData().then((data) => {
         // if item used
         if(gameState.itemUsed){
             handleItemUse(gameState);
+            gameState.sinceItem = 0;
             gameState.itemUsed = false;
         }
 
@@ -966,6 +969,7 @@ getData().then((data) => {
 
         // counter to make tile effects only happen every few seconds
         gameState.pc.sinceTile += 1;
+        gameState.sinceItem += 1;
     }
 
     /*
@@ -1040,13 +1044,26 @@ getData().then((data) => {
         if(gameState.pc.dir == "left"){
             gameState.ctx.save();
             gameState.ctx.scale(-1,1);
-            gameState.ctx.drawImage(item.img, -item.position.x, item.position.y,
-                                    -item.size.x, item.size.y);
+            if(gameState.sinceItem < 10){
+                console.log(gameState.sinceItem);
+                gameState.ctx.drawImage(item.img, -item.position.x+5, item.position.y,
+                                      -item.size.x, item.size.y);
+            }
+            else {
+                gameState.ctx.drawImage(item.img, -item.position.x, item.position.y,
+                                      -item.size.x, item.size.y);
+            }
             gameState.ctx.restore();
           }
         else{
-          gameState.ctx.drawImage(item.img, item.position.x, item.position.y,
-                                  item.size.x, item.size.y);
+          if(gameState.sinceItem < 10){
+              gameState.ctx.drawImage(item.img, item.position.x+5, item.position.y,
+                                      item.size.x, item.size.y);
+          }
+          else {
+              gameState.ctx.drawImage(item.img, item.position.x, item.position.y,
+                                    item.size.x, item.size.y);
+          }
           }
     }
 
@@ -1316,7 +1333,6 @@ function showInventory(gameState){
             }
         }
         gameState.pc.useItem(gameState.pc);
-        //updateHealth(gameState.pc);
     }
 
     function changeItem(gameState){
@@ -1446,7 +1462,7 @@ function Item(pos, url, sz, hbox, col, eff, bpos, hov){
     this.basePos = bpos;
     this.hovering = hov;
     this.wobble = Math.random() * Math.PI * 2;
-    //this.targets = [new Enemy(), new NPC()];
+    this.targets = "";
 }
 
 Item.prototype.Item = function(){
