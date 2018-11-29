@@ -5,8 +5,11 @@ window.onload = function a()
     var selectedelementtype=0;
     var eraser=0;
     var hasplayer=0;
+    var issolid=1;
+    var curr_effect="heal";
     var canvassrc = "https://d2ujflorbtfzji.cloudfront.net/package-screenshot/4b7e815a-669f-4023-ac73-6c7691fe9a9f_scaled.jpg";
-	var canvas = new fabric.Canvas('c', { selection: false});
+    var playergravity= "medium";
+  var canvas = new fabric.Canvas('c', { selection: false});
     //canvas.setBackgroundImage(canvassrc);
 
     var json_data = JSON.stringify(canvas.toDatalessJSON()); //initializing to be used later
@@ -95,6 +98,15 @@ canvas.loadFromJSON(JSON.parse(json_data), function(obj) {
 
 //function that make the buttons actually...buttons.
 function draggable(object, pic, pos, name, url) {
+  object.toObject = function() {
+  return {type: "Element",
+  name: name,
+  top:object.top,
+  left: object.left,
+  url: url,
+  scale: 1
+  };
+}
         object.on('mousedown', function() {
           /*{
             var temp = new fabric.Image(pic,{
@@ -119,7 +131,7 @@ function draggable(object, pic, pos, name, url) {
 if (eraser==1){
   canvas.remove(this);
 }
-        if (name == "NPC"){
+        /*if (name == "NPC"){
         var msg = prompt("Please enter a message for the npc:", "You are under attack!");
             //actually save the input here
 
@@ -129,7 +141,7 @@ if (eraser==1){
             //actually save the input here
             //ask molly about effects
         }
-
+*/
         });
         object.on('mouseup', function() {
             // Remove an event handler
@@ -175,14 +187,32 @@ canvas.on('mouseover', function(e) {
 
 
 
+  $("#gravity-selector").on("change", function () {
+      //alert("You choose " + $("input[name='color']:checked").val());
+      playergravity=$("input[name='color']:checked").val();
+      //issolid=$('gra-selector').val();
+  });
 
+  $("#solid-selector").on("change", function () {
+    //  alert("You choose " + $('#solid-selector').val());
+      issolid=$('#solid-selector').val();
+  });
+
+  $("#effect-selector").on("change", function () {
+    //  alert("You choose " + $('#effect-selector').val());
+      curr_effect=$('#effect-selector').val();
+  });
 
   canvas.on('mouse:down', function(event){
+  //  console.log(playergravity);
+  //  console.log(issolid);
+  var health= $('#maxhealthselector').val();
+  console.log(health);
     if (selectedimg!=0 && eraser !=1){
     var pointer = canvas.getPointer(event.e);
     var posX = Math.round((pointer.x-25) / grid) * grid;
     var posY = Math.round((pointer.y-25) / grid) * grid;
-    console.log(posX+", "+posY);
+    //console.log(posX+", "+posY);
   var temp = new fabric.Image(selectedimg,{
       left:  posX,
       top:  posY,
@@ -194,6 +224,15 @@ canvas.on('mouseover', function(e) {
       originY: 'top'
   });
   canvas.add(temp);
+/*  temp.toObject = function() {
+  return {type: "Element",
+  name: selectedelementtype,
+  top:temp.top,
+  left: temp.left,
+  url: "hi",
+  scale: 1
+  };
+}*/
   draggable(temp,  ground, posX,selectedelementtype,groundsrc);
 /*  temp.toObject = function() {
   return {type: "Element",
@@ -218,6 +257,20 @@ canvas.on('mouseover', function(e) {
 
 document.getElementById("eraserbutton").onclick= function(){
   eraser=1;
+  document.getElementById("cursor6").style.visibility="visible";
+  document.getElementById("cursor").style.visibility="hidden";
+  document.getElementById("cursor2").style.visibility="hidden";
+  document.getElementById("cursor4").style.visibility="hidden";
+  document.getElementById("cursor3").style.visibility="hidden";
+  document.getElementById("cursor5").style.visibility="hidden";
+  $(document).mousemove(function (e) {
+    $(".cursor6").show().css({
+      "left": e.clientX,
+      "top": e.clientY
+    });
+  }).mouseout(function () {
+    $(".cursor6").hide();
+  });
 }
 
 document.getElementById("movemode").onclick= function(){
@@ -228,6 +281,10 @@ selectedelementtype=0;
   */
   document.getElementById("cursor").style.visibility="hidden";
   document.getElementById("cursor2").style.visibility="hidden";
+  document.getElementById("cursor4").style.visibility="hidden";
+  document.getElementById("cursor3").style.visibility="hidden";
+  document.getElementById("cursor5").style.visibility="hidden";
+  document.getElementById("cursor6").style.visibility="hidden";
   }
 
 
@@ -260,6 +317,11 @@ document.getElementById("save").onclick = function(){
    selectedimg=ground;
    selectedelementtype="Environment";
    document.getElementById("cursor").style.visibility="visible";
+   document.getElementById("cursor2").style.visibility="hidden";
+   document.getElementById("cursor3").style.visibility="hidden";
+   document.getElementById("cursor4").style.visibility="hidden";
+   document.getElementById("cursor5").style.visibility="hidden";
+   document.getElementById("cursor6").style.visibility="hidden";
  $(document).mousemove(function (e) {
    $(".cursor").show().css({
      "left": e.clientX,
@@ -274,6 +336,11 @@ document.getElementById("save").onclick = function(){
    selectedimg=player;
    selectedelementtype="Player";
    document.getElementById("cursor2").style.visibility="visible";
+   document.getElementById("cursor").style.visibility="hidden";
+   document.getElementById("cursor3").style.visibility="hidden";
+   document.getElementById("cursor4").style.visibility="hidden";
+   document.getElementById("cursor5").style.visibility="hidden";
+   document.getElementById("cursor6").style.visibility="hidden";
  $(document).mousemove(function (e) {
    $(".cursor2").show().css({
      "left": e.clientX,
@@ -283,5 +350,72 @@ document.getElementById("save").onclick = function(){
    $(".cursor2").hide();
  });
  }
+
+ document.getElementById("itembutton").onclick = function() {
+   selectedimg=coin;
+   selectedelementtype="Item";
+   document.getElementById("cursor3").style.visibility="visible";
+   document.getElementById("cursor2").style.visibility="hidden";
+   document.getElementById("cursor").style.visibility="hidden";
+   document.getElementById("cursor4").style.visibility="hidden";
+   document.getElementById("cursor5").style.visibility="hidden";
+   document.getElementById("cursor6").style.visibility="hidden";
+ $(document).mousemove(function (e) {
+   $(".cursor3").show().css({
+     "left": e.clientX,
+     "top": e.clientY
+   });
+ }).mouseout(function () {
+   $(".cursor3").hide();
+ });
+ }
+
+ document.getElementById("enemybutton").onclick = function() {
+   selectedimg=enemy;
+   selectedelementtype="Enemy";
+   document.getElementById("cursor4").style.visibility="visible";
+   document.getElementById("cursor2").style.visibility="hidden";
+   document.getElementById("cursor").style.visibility="hidden";
+   document.getElementById("cursor3").style.visibility="hidden";
+   document.getElementById("cursor5").style.visibility="hidden";
+   document.getElementById("cursor6").style.visibility="hidden";
+ $(document).mousemove(function (e) {
+   $(".cursor4").show().css({
+     "left": e.clientX,
+     "top": e.clientY
+   });
+ }).mouseout(function () {
+   $(".cursor4").hide();
+ });
+ }
+
+ document.getElementById("npcbutton").onclick = function() {
+   selectedimg=npc;
+   selectedelementtype="NPC";
+   document.getElementById("cursor5").style.visibility="visible";
+   document.getElementById("cursor2").style.visibility="hidden";
+   document.getElementById("cursor").style.visibility="hidden";
+   document.getElementById("cursor3").style.visibility="hidden";
+   document.getElementById("cursor4").style.visibility="hidden";
+   document.getElementById("cursor6").style.visibility="hidden";
+ $(document).mousemove(function (e) {
+   $(".cursor5").show().css({
+     "left": e.clientX,
+     "top": e.clientY
+   });
+ }).mouseout(function () {
+   $(".cursor5").hide();
+ });
+ }
+
+
+
+
+
+
+
+
+
+
 
  }

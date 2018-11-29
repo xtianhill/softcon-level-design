@@ -1,43 +1,75 @@
 .myButton{
   position: absolute;
-  top:20px;
+  top:25px;
+  left: 25px
 }
 
 .groundbutton{
   position: absolute;
   top:20px;
-  left:125px;
+  left:175px;
 }
 
+.box{
+  position:absolute;
+  top:15px;
+  left:15px;
+}
 .playerbutton{
   position: absolute;
   top:20px;
-  left: 175px;
+  left: 405px;
 }
 
 .itembutton{
   position: absolute;
   top:20px;
-  left: 250px;
+  left: 600px;
 }
 
-.custom-select{
+.effect-selector{
   position: absolute;
-  left:225px;
+  left:605px;
   top: 70px;
-  
+
 }
+
+.solid-selector{
+  position: absolute;
+  left:165px;
+  top: 70px;
+
+}
+
+.gravity-selector{
+  position: absolute;
+  left:320px;
+  top: 70px;
+  display: block;
+}
+.speed-selector{
+  position: absolute;
+  left:310px;
+  top: 40px;
+  display: block;
+}
+.maxhealthselector{
+  position:absolute;
+  left:310px;
+  top:0px;
+}
+
 
 .enemybutton{
   position: absolute;
   top:20px;
-  left: 350px;
+  left: 700px;
 }
 
 .npcbutton{
   position: absolute;
   top:20px;
-  left: 450px;
+  left: 800px;
 }
 
 
@@ -58,10 +90,49 @@
   pointer-events: none;
 }
 
+.cursor3 {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  left: 10px;
+  top: -10px;
+  cursor: none;
+  pointer-events: none;
+  display:none;
+}
+
+.cursor4 {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  left: -100px;
+  cursor: none;
+  pointer-events: none;
+  display:none;
+}
+.cursor5 {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  left: -100px;
+  cursor: none;
+  pointer-events: none;
+  display:none;
+}
+.cursor6 {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  left: -100px;
+  cursor: none;
+  pointer-events: none;
+  display:none;
+}
+
 .eraser {
   position: absolute;
   top:20px;
-  left: 50px;
+  left: 100px;
 }
 
 .header {
@@ -75,6 +146,7 @@
     height: 100px;
     border: 5px solid #475F96;
     font-family: 'Press Start 2P';
+    font-size: 10px;
 
 }
 
