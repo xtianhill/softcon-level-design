@@ -41,7 +41,7 @@
 <div class="maxhealthselector">
            <form action="/action_page.php">
              Enter a max health between 1 and 1000:
-             <input type="number" name="health" min="1" max="1000">
+             <input type="number" name="health" min="1" max="1000" value="100">
            </form>
          </div>
 
@@ -62,13 +62,34 @@
 <option value=0>not solid</option>
 </select>
 
+<select name= "enviroeffectselector"id="environ-effect-selector" class="environ-effect-selector">
+<option value="heal">Heal</option>
+<option value="damage">Damage</option>
+</select>
+
 <div class="gravity-selector" id="gravity-selector">
 <form action="/action_page.php">
-  Gravity:
+  Gravity:<br>
   <input type="radio" name="color" value="high">high
+  <br>
   <input type="radio" name="color" value="medium" checked>medium
+  <br>
   <input type="radio" name="color" value="low">low
+  <br>
 </form>
+</div>
+
+<div class="enemydamageselector">
+           <form action="/action_page.php">
+             damage (1 - 100):
+             <br>
+             <input type="number" name="enemydamage" min="1" max="1000" value="5">
+           </form>
+         </div>
+<div class="npcmessager">
+<form action="/action_page.php">
+           message:<br>
+          <input type="text" name="npcmessage" value="hi friend!">
 </div>
 
 
