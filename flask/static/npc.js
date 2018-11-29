@@ -23,6 +23,7 @@ function NPC(loc, max, hea, stat, msg, hbox, url, size, speed, mvspd, grav){
     if(typeof msg === "string"){
         Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspd, grav);
         this.message = msg;
+        this.spokenTo = false;
     }
     else return {};
 }

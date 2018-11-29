@@ -766,7 +766,7 @@ async function getData(title){
     }
 }
 
-getData().then((data) => {
+getData("julia").then((data) => {
 
 /*
 |------------------------------------------------------------------------------
@@ -787,18 +787,38 @@ getData().then((data) => {
         var itemUsed = false;
         var changeItem = false;
 
+        // comment this line if you want to load from database
        data = '{"objects":[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{"type":"Element","name":"Player","top":350,"left":100,"url":"https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png","scale":1},{"type":"Element","name":"Item","top":100,"left":400,"url":"https://66.media.tumblr.com/f7acf066084d424d5da0c09795fe8483/tumblr_inline_piy8y9FbkJ1ruhpn7_540.png","scale":1},{"type":"Element","name":"Item","top":200,"left":500,"url":"https://66.media.tumblr.com/4a8e88c9194d00c4e2e14d62f2a9dc76/tumblr_pi5t840NIu1u9vozfo1_250.png","scale":1},{"type":"Element","name":"Enemy","top":350,"left":300,"url":"https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png","scale":1},{"type":"Element","name":"NPC","top":250,"left":500,"url":"https://66.media.tumblr.com/18b1dcddb1e6de2d56f2bbc16e368af5/tumblr_pi5sz2UwpH1u9vozfo1_250.png","scale":1},{"type":"Element","name":"Environment","top":400,"left":0,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":50,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":100,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":150,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":200,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":250,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":300,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":350,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":400,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"button"},{"type":"Element","name":"Enemy","top":350,"left":650,"url":"https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png","scale":1},{"type":"Element","name":"Environment","top":400,"left":450,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":500,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":550,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":600,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":350,"left":500,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":300,"left":500,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":650,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":700,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":400,"left":750,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":750,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":0,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":50,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":100,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":150,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"button"},{"type":"Element","name":"Environment","top":450,"left":200,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":250,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":300,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"button"},{"type":"Element","name":"Environment","top":450,"left":350,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":400,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":450,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":500,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":550,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":650,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":600,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"Element","name":"Environment","top":450,"left":700,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1},{"type":"button"},{"type":"button"}],"background":"","backgroundImage":"https://i.pinimg.com/originals/fe/78/bb/fe78bbb25f35d56b502327fb6d43b309.png","backgroundImageOpacity":1,"backgroundImageStretch":true}';
 
-        // query database and get level info, then translate into list of elements
+        // translate data from database into list of elements
         var parsedJSON = JSONtoElements(data);
         console.log(parsedJSON);
         var elements = parsedJSON.elements;
         var characters = [];
         var backgroundUrl = parsedJSON.backgroundUrl;
-        var width = canvas.width;
+        var winConditions = ["end"]; //pasrsedJSON.winConditions;
+        var width = 100//canvas.width;
         var height = canvas.height;
         var wrap = document.getElementById("wrap");
 
+
+        // set win conditions to false if they were chosen by designer
+        var victory = false;
+        var npcCondition = true;
+        var endCondition = true;
+        var enemyCondition = true;
+        for(i=0; i<winConditions.length; i++){
+            if(winConditions[i] === "npc"){
+                npcCondition = false;
+            }
+            if(winConditions[i] === "enemy"){
+                enemyCondition = false;
+            }
+            if(winConditions[i] === "end"){
+                endCondition = false;
+            }
+        }
+        
         // identify the pc
         var pc;
         for(i=0; i<elements.length; i++){
@@ -852,60 +872,62 @@ getData().then((data) => {
         // find hypothetical new right/left position as long as within the level's
         // limits and no wall is in the way
         newXPos = null;
-        if (gameState.rightPressed) {
-            gameState.pc.dir = "right";
-            newXPos = gameState.pc.newXPos(gameState.step, "right");
-            if (newXPos.x + (0.5 * gameState.pc.size.x) - (0.5 * gameState.pc.hitbox.x) < 0
-                || newXPos.x + (0.5 * gameState.pc.size.x) + (0.5 * gameState.pc.hitbox.x) > gameState.width)
-                newXPos = null;
-        }
-        else if (gameState.leftPressed) {
-            gameState.pc.dir = "left";
-            newXPos = gameState.pc.newXPos(gameState.step, "left");
-            if (newXPos.x + (0.5 * gameState.pc.size.x) - (0.5 * gameState.pc.hitbox.x) < 0
-                || newXPos.x + (0.5 * gameState.pc.size.x) + (0.5 * gameState.pc.hitbox.x) > gameState.width)
-                newXPos = null;
-        }
+        if(!gameState.victory){
+            if (gameState.rightPressed) {
+                gameState.pc.dir = "right";
+                newXPos = gameState.pc.newXPos(gameState.step, "right");
+                if (newXPos.x + (0.5 * gameState.pc.size.x) - (0.5 * gameState.pc.hitbox.x) < 0
+                    || newXPos.x + (0.5 * gameState.pc.size.x) + (0.5 * gameState.pc.hitbox.x) > gameState.width)
+                    newXPos = null;
+            }
+            else if (gameState.leftPressed) {
+                gameState.pc.dir = "left";
+                newXPos = gameState.pc.newXPos(gameState.step, "left");
+                if (newXPos.x + (0.5 * gameState.pc.size.x) - (0.5 * gameState.pc.hitbox.x) < 0
+                    || newXPos.x + (0.5 * gameState.pc.size.x) + (0.5 * gameState.pc.hitbox.x) > gameState.width)
+                    newXPos = null;
+            }
 
-        // find collisions based on hypothetical new x-position, move if legal
-        xObstacle = null;
-        if (newXPos != null) {
-            for (i = 0; i < gameState.elements.length; i++) {
-                if (detectCollision(newXPos, gameState.elements[i].position, gameState.pc, gameState.elements[i])) {
-                    if (gameState.elements[i] instanceof Environment)
-                        xObstacle = gameState.elements[i];
-                    onCollision(gameState, i);
+            // find collisions based on hypothetical new x-position, move if legal
+            xObstacle = null;
+            if (newXPos != null) {
+                for (i = 0; i < gameState.elements.length; i++) {
+                    if (detectCollision(newXPos, gameState.elements[i].position, gameState.pc, gameState.elements[i])) {
+                        if (gameState.elements[i] instanceof Environment)
+                            xObstacle = gameState.elements[i];
+                        onCollision(gameState, i);
+                    }
                 }
+                gameState.pc.moveX(newXPos, xObstacle);
             }
-            gameState.pc.moveX(newXPos, xObstacle);
-        }
 
-        // find hypothetical new up/down position as long as within the level's
-        // limits and no platform is in the way
-        newYPos = gameState.pc.newYPos(gameState.step);
-        if (newYPos.y + (0.5 * gameState.pc.size.y) - (0.5 * gameState.pc.hitbox.y) < 0)
-            newYPos = null;
-        else if (newYPos.y + (0.5 * gameState.pc.size.y) + (0.5 * gameState.pc.hitbox.y) > gameState.height)
-            gameState.pc.status = false;
+            // find hypothetical new up/down position as long as within the level's
+            // limits and no platform is in the way
+            newYPos = gameState.pc.newYPos(gameState.step);
+            if (newYPos.y + (0.5 * gameState.pc.size.y) - (0.5 * gameState.pc.hitbox.y) < 0)
+                newYPos = null;
+            else if (newYPos.y + (0.5 * gameState.pc.size.y) + (0.5 * gameState.pc.hitbox.y) > gameState.height)
+                gameState.pc.status = false;
 
-        // find collisions based on hypothetical new y-position, jump or fall if legal
-        yObstacle = null;
-        if (newYPos != null) {
-            for (i = 0; i < gameState.elements.length; i++) {
-                if (detectCollision(newYPos, gameState.elements[i].position, gameState.pc, gameState.elements[i])) {
-                    if (gameState.elements[i] instanceof Environment)
-                        yObstacle = gameState.elements[i];
-                    onCollision(gameState, i);
+            // find collisions based on hypothetical new y-position, jump or fall if legal
+            yObstacle = null;
+            if (newYPos != null) {
+                for (i = 0; i < gameState.elements.length; i++) {
+                    if (detectCollision(newYPos, gameState.elements[i].position, gameState.pc, gameState.elements[i])) {
+                        if (gameState.elements[i] instanceof Environment)
+                            yObstacle = gameState.elements[i];
+                        onCollision(gameState, i);
+                    }
                 }
+            if (gameState.upPressed) {
+                if (gameState.pc.position.y - 1 > 0) {
+                    gameState.pc.moveY(newYPos, yObstacle, true);
+                }
+            } else {
+                gameState.pc.moveY(newYPos, yObstacle, false);
             }
-        if (gameState.upPressed) {
-            if (gameState.pc.position.y - 1 > 0) {
-                gameState.pc.moveY(newYPos, yObstacle, true);
-            }
-        } else {
-            gameState.pc.moveY(newYPos, yObstacle, false);
         }
-      }
+        }
 
         // physics for npcs and enemies: both can fall, enemies may walk back and forth
         for (i = 0; i < gameState.elements.length; i++) {
@@ -953,18 +975,16 @@ getData().then((data) => {
         }
 
         // if item used
-        if(gameState.itemUsed){
+        if(gameState.itemUsed && !gameState.victory){
             handleItemUse(gameState);
             gameState.sinceItem = 0;
             gameState.itemUsed = false;
         }
 
         // change item selected
-        if(gameState.changeItem){
-            if(gameState.pc.status) {
+        if(gameState.changeItem && gameState.pc.status && !gameState.victory){
                 changeItem(gameState);
                 gameState.changeItem = false;
-            }
         }
 
         // counter to make tile effects only happen every few seconds
@@ -1024,23 +1044,8 @@ getData().then((data) => {
         }
     }
 
-    // draw pc
-    console.log(gameState.pc.dir);
-    if(gameState.pc.dir == "left"){
-        gameState.ctx.save();
-        gameState.ctx.scale(-1,1);
-        gameState.ctx.drawImage(gameState.pc.img,-gameState.pc.position.x,gameState.pc.position.y,
-            -gameState.pc.size.x,gameState.pc.size.y);
-        gameState.ctx.restore();
-      }
-    else{
-        gameState.ctx.drawImage(gameState.pc.img,gameState.pc.position.x,gameState.pc.position.y,
-          gameState.pc.size.x,gameState.pc.size.y);
-      }
-
-    // draw equipped item
-    if(gameState.pc.equippedItem != null){
-        var item = gameState.pc.equippedItem;
+    // draw pc + equipped item if the game isnt over
+    if(gameState.pc.status && !gameState.victory){
         if(gameState.pc.dir == "left"){
             gameState.ctx.save();
             gameState.ctx.scale(-1,1);
@@ -1054,7 +1059,7 @@ getData().then((data) => {
                                       -item.size.x, item.size.y);
             }
             gameState.ctx.restore();
-          }
+        }
         else{
           if(gameState.sinceItem < 10){
               gameState.ctx.drawImage(item.img, item.position.x+5, item.position.y,
@@ -1067,9 +1072,16 @@ getData().then((data) => {
           }
     }
 
+    
+
     // on player death visuals
     if(!gameState.pc.status){
         onPlayerDeath(gameState);
+    }
+
+    // on player victory visuals
+    if(gameState.victory){
+        onVictory(gameState);
     }
 }
 
@@ -1111,12 +1123,12 @@ getData().then((data) => {
                    //elements[i].displayMessage();
                    gameState.ctx.fillText(gameState.elements[i].getMessage(), 0, 0);
                    gameState.elements[i].shouldDisplay = true;
+                   gameState.elements[i].spokenTo = true;
                 }
 
                 //if enemy, either damage w/item or lose health
                 if(gameState.elements[i] instanceof Enemy){
                     gameState.pc.decHealth(gameState.elements[i].getDamage());
-                    // updateHealth(gameState.pc);
                 }
 
                 //if item, pick up and remove from elements, display in inventory
@@ -1246,10 +1258,12 @@ function scrollPlayerIntoView() {
   if(!gameState.pc.status) { percentFull=0; }
   gameState.ctx.fillRect(gameState.wrap.scrollLeft+8, 8, percentFull*300, 10);
   gameState.ctx.fillStyle = "#ffffff";
+  gameState.ctx.font = '10px "Press Start 2P"';
   gameState.ctx.fillText(Math.round(100*percentFull) + "/100", gameState.wrap.scrollLeft+316, 18);
+
 }
 
-// display player's inventory in html; only called when new item picked up
+// display player's inventory in html; only called when new item picked up or item switched
 function showInventory(gameState){
     var box = document.getElementById('inventory_box');
     var ul = document.getElementById('inventory');
@@ -1299,14 +1313,26 @@ function showInventory(gameState){
 
     // define visuals and state-changes when player dies
     function onPlayerDeath(gameState){
-        var empty = "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
+        //var empty = "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
+        gameState.ctx.font = '10px "Press Start 2P"';
         gameState.ctx.fillStyle = "#ffffff";
         gameState.ctx.fillText("GAME OVER DUDE", gameState.pc.position.x, gameState.pc.position.y - 10);
-        gameState.pc.img.src = empty;
-        if(gameState.pc.equippedItem != null) {
-            gameState.pc.equippedItem.img.src = empty;
-        }
+       // gameState.pc.img.src = empty;
+        // if(gameState.pc.equippedItem != null) {
+        //     gameState.pc.equippedItem.img.src = empty;
+        // }
         gameState.changeItem = false;
+    }
+
+    // visuals for when player has won
+    function onVictory(gameState){
+        gameState.ctx.fillStyle = "rgba(0,0,0,.5)";
+        gameState.ctx.fillRect(gameState.wrap.scrollLeft, 0,
+            gameState.wrap.clientWidth, gameState.wrap.clientHeight);
+        gameState.ctx.fillStyle = "#ffffff";
+        gameState.ctx.font = '40px "Press Start 2P"';
+        gameState.ctx.fillText("VICTORY IS YOURS", 0,
+        gameState.wrap.clientHeight/2);
     }
 
     function reset(){
@@ -1315,21 +1341,54 @@ function showInventory(gameState){
         gameState.wrap.scrollLeft = 0;
     }
 
+    function testNPCCondition(characters){
+        for(i=0; i<characters.length; i++){
+            if(characters[i] instanceof NPC && !characters[i].spokenTo){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function testEnemyCondition(characters){
+        for(i=0; i<characters.length; i++){
+            if(characters[i] instanceof Enemy && characters[i].status){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function testEndCondition(gameState){
+        if(gameState.pc.position.x+gameState.pc.hitbox.x >= gameState.width - 15){
+            return true;
+        }
+        return false;
+    }
+
     function testWinConditions(gameState){
-        // to be written
+        if(!gameState.npcCondition){
+            gameState.npcCondition = testNPCCondition(gameState.characters);
+        }
+        if(!gameState.enemyCondition){
+            gameState.enemyCondition = testEnemyCondition(gameState.characters);
+        }
+        if(!gameState.endCondition){
+            gameState.endCondition = testEndCondition(gameState);
+        }
+        if(gameState.npcCondition && gameState.enemyCondition && gameState.endCondition){
+            gameState.victory = true;
+        }
     }
 
     function handleItemUse (gameState){
         for(var i=0; i<gameState.characters.length; i++){
-            if(!gameState.characters[i].status){
-                gameState.characters.splice(i,1);
-                i--;
-                continue;
-            }
-            if(detectCollision(gameState.characters[i].position, gameState.pc.equippedItem.position,
-                gameState.characters[i], gameState.pc.equippedItem)){
-                    gameState.pc.useItem(gameState.characters[i]);
-                    return;
+            if(gameState.characters[i].status){
+                if(detectCollision(gameState.characters[i].position, gameState.pc.equippedItem.position,
+                    gameState.characters[i], gameState.pc.equippedItem)){
+                        gameState.pc.useItem(gameState.characters[i]);
+                        return;
+                }
             }
         }
         gameState.pc.useItem(gameState.pc);
@@ -1541,6 +1600,7 @@ function NPC(loc, max, hea, stat, msg, hbox, url, size, speed, mvspd, grav){
     if(typeof msg === "string"){
         Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspd, grav);
         this.message = msg;
+        this.spokenTo = false;
     }
     else return {};
 }
