@@ -29,7 +29,7 @@ function NPC(loc, max, hea, stat, msg, hbox, url, size, speed, mvspd, grav){
 }
 
 NPC.prototype = Object.create(Character.prototype); 
-
+NPC.prototype.constructor = NPC;
 //Getter for message
 NPC.prototype.getMessage = function(){
     return this.message;

@@ -28,6 +28,7 @@ function Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed, mvspd, gr
 }
 
 Player.prototype = Object.create(Character.prototype);
+Player.prototype.constructor = Player;
 
 //empty constructor. void
 Player.prototype.Player = function(){
@@ -71,15 +72,12 @@ Player.prototype.setEquippedItem = function(itm){
 Player.prototype.useItem = function(target){
     /* if there is a target, do the effect (heal or damage)*/
     if(this.status){
-        if(target != null){
+        if(this.isTarget(target)){
             if(this.equippedItem.getEffect().effect == "heal" && target.status){
-                console.log(this.equippedItem);
                 target.addHealth(this.equippedItem.getEffect().getAmount());
-                console.log(target.health);
             }
             else if (this.equippedItem.getEffect().effect == "damage" && target.status){
                 target.decHealth(this.equippedItem.getEffect().getAmount());
-                console.log(target.health);
             }
         }
     }
@@ -90,6 +88,15 @@ Player.prototype.useItem = function(target){
 Player.prototype.pickUpItem = function(item){
     this.setEquippedItem(item);
     this.inventory.unshift(item);
+}
+
+Player.prototype.isTarget = function (target){
+    for(i=0;i<this.equippedItem.targets.length;i++){
+        if(this.equippedItem.targets[i].name == target.constructor.name){
+            return true;
+        }
+    }
+    return false;
 }
 
 module.exports = Player;

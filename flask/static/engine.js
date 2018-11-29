@@ -51,7 +51,6 @@ getData("julia").then((data) => {
 
         // translate data from database into list of elements
         var parsedJSON = JSONtoElements(data);
-        console.log(parsedJSON);
         var elements = parsedJSON.elements;
         var characters = [];
         var backgroundUrl = parsedJSON.backgroundUrl;
@@ -334,7 +333,6 @@ getData("julia").then((data) => {
                 if (gameState.pc.equippedItem != null) {
                     var item = gameState.pc.equippedItem;
                     if (gameState.sinceItem < 10) {
-                        console.log(gameState.sinceItem);
                         gameState.ctx.drawImage(item.img, -item.position.x + 5, item.position.y,
                             -item.size.x, item.size.y);
                     }

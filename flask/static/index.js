@@ -673,6 +673,7 @@ function Enemy(loc, max, hea, stat, dmg, hbox, url, size, speed, mvspeed, grav, 
 }
 
 Enemy.prototype = Object.create(Character.prototype);
+Enemy.prototype.constructor = Enemy;
 
 //empty constructor. void
 Enemy.prototype.Enemy = function(){
@@ -1532,6 +1533,10 @@ module.exports = Environment;
 var icon2 = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKH3Qd3RP33Q5XxcRMrLXYhYGRu_dxvpJCIBEU_MlAudC1ev-P8A";
 const Element = require('./element.js');
 const Vector = require('./utility.js');
+const Enemy = require('./enemy.js');
+const Player = require('./player.js');
+const NPC = require('./npc.js');
+
 
 /*
 |------------------------------------------------------------------------------
@@ -1545,7 +1550,7 @@ function Item(pos, url, sz, hbox, col, eff, bpos, hov){
     this.basePos = bpos;
     this.hovering = hov;
     this.wobble = Math.random() * Math.PI * 2;
-    //this.targets = [new Enemy(), new NPC()];
+    this.targets = [Enemy, NPC];
 }
 
 Item.prototype.Item = function(){
@@ -1598,7 +1603,7 @@ Item.prototype.updatePosition = function(pc) {
 }
 module.exports = Item;
 
-},{"./element.js":4,"./utility.js":12}],9:[function(require,module,exports){
+},{"./element.js":4,"./enemy.js":5,"./npc.js":9,"./player.js":11,"./utility.js":12}],9:[function(require,module,exports){
 /*
 |------------------------------------------------------------------------------
 | NPC Class
@@ -1630,7 +1635,7 @@ function NPC(loc, max, hea, stat, msg, hbox, url, size, speed, mvspd, grav){
 }
 
 NPC.prototype = Object.create(Character.prototype); 
-
+NPC.prototype.constructor = NPC;
 //Getter for message
 NPC.prototype.getMessage = function(){
     return this.message;
@@ -1772,6 +1777,7 @@ function Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed, mvspd, gr
 }
 
 Player.prototype = Object.create(Character.prototype);
+Player.prototype.constructor = Player;
 
 //empty constructor. void
 Player.prototype.Player = function(){
@@ -1815,15 +1821,12 @@ Player.prototype.setEquippedItem = function(itm){
 Player.prototype.useItem = function(target){
     /* if there is a target, do the effect (heal or damage)*/
     if(this.status){
-        if(target != null){
+        if(this.isTarget(target)){
             if(this.equippedItem.getEffect().effect == "heal" && target.status){
-                console.log(this.equippedItem);
                 target.addHealth(this.equippedItem.getEffect().getAmount());
-                console.log(target.health);
             }
             else if (this.equippedItem.getEffect().effect == "damage" && target.status){
                 target.decHealth(this.equippedItem.getEffect().getAmount());
-                console.log(target.health);
             }
         }
     }
@@ -1834,6 +1837,15 @@ Player.prototype.useItem = function(target){
 Player.prototype.pickUpItem = function(item){
     this.setEquippedItem(item);
     this.inventory.unshift(item);
+}
+
+Player.prototype.isTarget = function (target){
+    for(i=0;i<this.equippedItem.targets.length;i++){
+        if(this.equippedItem.targets[i].name == target.constructor.name){
+            return true;
+        }
+    }
+    return false;
 }
 
 module.exports = Player;
