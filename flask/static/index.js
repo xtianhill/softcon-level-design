@@ -970,59 +970,59 @@ getData().then(data => {
     |------------------------------------------------------------------------------
     */
     
-    function draw(gameState){
-        // clear canvas
-        gameState.ctx.clearRect(0, 0, gameState.width, gameState.height);
-    
-        // center camera on player and redraw background
-        scrollPlayerIntoView();
-    
-        // draw non-player elements
-        for(i = 0; i<gameState.elements.length; i++){
-            var curElement = gameState.elements[i];
-    
-            // if curElement is an NPC with a message
-            if (curElement.shouldDisplay){
-                gameState.ctx.font = 'Press Start 2P';
-                gameState.ctx.fillStyle = "#ffffff";
-                gameState.ctx.fillText(curElement.getMessage(),
-                                       curElement.position.x,
-                                       curElement.position.y-10);
-                curElement.shouldDisplay = false;
-            }
-    
-            // draw the element
-            gameState.ctx.drawImage(curElement.img,curElement.position.x,curElement.position.y,
-                curElement.size.x,curElement.size.y);
-    
-            // draw health bars for NPCs and Enemies
-            if((curElement instanceof Enemy || curElement instanceof NPC) && curElement.status){
-              gameState.ctx.fillStyle = "#FF0000";
-              gameState.ctx.fillRect(curElement.position.x, curElement.position.y - 8,
-                  curElement.size.x, 4);
-              gameState.ctx.fillStyle = "#00FF00";
-              var percentFull = curElement.health / curElement.maxHealth;
-              gameState.ctx.fillRect(curElement.position.x, curElement.position.y - 8,
-                  percentFull * curElement.size.x, 4);
-            }
+   function draw(gameState){
+    // clear canvas
+    gameState.ctx.clearRect(0, 0, gameState.width, gameState.height);
+
+    // center camera on player and redraw background
+    scrollPlayerIntoView();
+
+    // draw non-player elements
+    for(i = 0; i<gameState.elements.length; i++){
+        var curElement = gameState.elements[i];
+
+        // if curElement is an NPC with a message
+        if (curElement.shouldDisplay){
+            gameState.ctx.font = 'Press Start 2P';
+            gameState.ctx.fillStyle = "#ffffff";
+            gameState.ctx.fillText(curElement.getMessage(),
+                                   curElement.position.x,
+                                   curElement.position.y-10);
+            curElement.shouldDisplay = false;
         }
-    
-        // draw pc
-        gameState.ctx.drawImage(gameState.pc.img,gameState.pc.position.x,gameState.pc.position.y,
-            gameState.pc.size.x,gameState.pc.size.y);
-    
-        // draw equipped item
-        if(gameState.pc.equippedItem != null){
-            var item = gameState.pc.equippedItem;
-            gameState.ctx.drawImage(item.img, item.position.x, item.position.y, item.size.x,
-                item.size.y);
-        }
-    
-        // on player death visuals
-        if(!gameState.pc.status){
-            onPlayerDeath(gameState);
+
+        // draw the element
+        gameState.ctx.drawImage(curElement.img,curElement.position.x,curElement.position.y,
+            curElement.size.x,curElement.size.y);
+
+        // draw health bars for NPCs and Enemies
+        if((curElement instanceof Enemy || curElement instanceof NPC) && curElement.status){
+          gameState.ctx.fillStyle = "#206020";
+          gameState.ctx.fillRect(curElement.position.x, curElement.position.y - 8,
+              curElement.size.x, 4);
+          gameState.ctx.fillStyle = "#009900";
+          var percentFull = curElement.health / curElement.maxHealth;
+          gameState.ctx.fillRect(curElement.position.x, curElement.position.y - 8,
+              percentFull * curElement.size.x, 4);
         }
     }
+
+    // draw pc
+    gameState.ctx.drawImage(gameState.pc.img,gameState.pc.position.x,gameState.pc.position.y,
+        gameState.pc.size.x,gameState.pc.size.y);
+
+    // draw equipped item
+    if(gameState.pc.equippedItem != null){
+        var item = gameState.pc.equippedItem;
+        gameState.ctx.drawImage(item.img, item.position.x, item.position.y, item.size.x,
+            item.size.y);
+    }
+
+    // on player death visuals
+    if(!gameState.pc.status){
+        onPlayerDeath(gameState);
+    }
+}
     
     /*
     |------------------------------------------------------------------------------
@@ -1145,90 +1145,82 @@ getData().then(data => {
         gameState.pc.img.src = gameState.pc.sprite;
     }
     
-    // scroll camera view to keep player at the center; redraw background
-    function scrollPlayerIntoView() {
-      var bgWidth = gameState.backgroundUrl.width; // width of background image
-      var bgHeight = gameState.backgroundUrl.height; // height of background image
-      var displayWidth = gameState.wrap.clientWidth; // width of viewport
-      var displayHeight = gameState.wrap.clientHeight; // height of viewport
-      var levelWidth = gameState.width; // width of level
-      var margin = displayWidth / 2.5; // window in which player movement won't scroll display
-    
-      var left = gameState.wrap.scrollLeft; // current scroll location: left boundary
-      var right = left + displayWidth; // current scroll location: right boundary
-      var center = gameState.pc.position.plus(gameState.pc.size.times(0.5)); // center of player
-    
-      scrollVal1 = center.x - margin; // new left boundary: scroll back
-      scrollVal2 = center.x + margin - displayWidth; // new left boundary: scroll forward
-      scrollVal3 = levelWidth - displayWidth; // new left boundary: at end of level
-    
-      // player is too far to left of screen; but not at start of level: scroll back
-      if (center.x < left + margin && scrollVal1 > 0)
-        gameState.wrap.scrollLeft = scrollVal1;
-    
-      // player is too far to right of screen; but not at end of level: scroll forward
-      else if (center.x > right - margin && scrollVal2 < levelWidth - displayWidth)
-          gameState.wrap.scrollLeft = scrollVal2;
-    
-      // player is too far to right of screen; and at end of level: don't scroll past end of viewport
-      else if (center.x > right - margin && scrollVal2 < levelWidth)
-          gameState.wrap.scrollLeft = scrollVal3;
-    
-      // else player's location is within the allowed window: don't change scroll
-    
-      // code to scale background image when window is resized
-      var hRatio = displayWidth  / bgWidth;
-      var vRatio =  displayHeight / bgHeight;
-      var ratio  = Math.max ( hRatio, vRatio );
-      var centerShift_x = ( displayWidth - bgWidth*ratio ) / 2;
-      var centerShift_y = ( displayHeight - bgHeight*ratio ) / 2;
-    
-      // clear background; redraw background at new scroll with scaling
-      gameState.ctx.clearRect(0, 0, displayWidth, displayHeight);
-      gameState.ctx.drawImage(gameState.backgroundUrl, 0, 0, bgWidth, bgHeight,
-                              gameState.wrap.scrollLeft+centerShift_x,centerShift_y,
-                              bgWidth*ratio, bgHeight*ratio);
-    
-      // draw player's health bar in top left corner
-      gameState.ctx.fillStyle = "#FF0000";
-      gameState.ctx.fillRect(gameState.wrap.scrollLeft+8, 8, 100, 20);
-      gameState.ctx.fillStyle = "#00FF00";
-      var percentFull = gameState.pc.health / gameState.pc.maxHealth;
-      if(!gameState.pc.status) { percentFull=0; }
-      gameState.ctx.fillRect(gameState.wrap.scrollLeft+8, 8, percentFull*100, 20);
-    }
-    
-    // display player's inventory in html; only called when new item picked up
-    function showInventory(gameState){
-        var ul = document.getElementById('inventory');
-        ul.innerHTML = "";
-        var inventory = gameState.pc.inventory;
-        for (var i = 0; i < inventory.length; i++) {
-            var item = inventory[i];
-    
-            var listItem = document.createElement("li");
-    
-            listItem.border = "1px solid black";
-    
-            var _img = document.createElement('img');
-            _img.src = item.sprite;
-            _img.style = "width:30px;height:30px;";
-            if(i == 0){
-                _img.border = "1px solid red";
-            }
-            listItem.appendChild(_img);
-    
-            ul.appendChild(listItem);
-        }
-    }
-    
-    // update player's health
-    function updateHealth(pc){
-        if(pc.health >=0) {
-            var healthBar = document.getElementById("health");
-            healthBar.value = pc.health;
-        }
-    }
+// scroll camera view to keep player at the center; redraw background
+function scrollPlayerIntoView() {
+    var bgWidth = gameState.backgroundUrl.width; // width of background image
+    var bgHeight = gameState.backgroundUrl.height; // height of background image
+    var displayWidth = gameState.wrap.clientWidth; // width of viewport
+    var displayHeight = gameState.wrap.clientHeight; // height of viewport
+    var levelWidth = gameState.width; // width of level
+    var margin = displayWidth / 2.5; // window in which player movement won't scroll display
+  
+    var left = gameState.wrap.scrollLeft; // current scroll location: left boundary
+    var right = left + displayWidth; // current scroll location: right boundary
+    var center = gameState.pc.position.plus(gameState.pc.size.times(0.5)); // center of player
+  
+    scrollVal1 = center.x - margin; // new left boundary: scroll back
+    scrollVal2 = center.x + margin - displayWidth; // new left boundary: scroll forward
+    scrollVal3 = levelWidth - displayWidth; // new left boundary: at end of level
+  
+    // player is too far to left of screen; but not at start of level: scroll back
+    if (center.x < left + margin && scrollVal1 > 0)
+      gameState.wrap.scrollLeft = scrollVal1;
+  
+    // player is too far to right of screen; but not at end of level: scroll forward
+    else if (center.x > right - margin && scrollVal2 < levelWidth - displayWidth)
+        gameState.wrap.scrollLeft = scrollVal2;
+  
+    // player is too far to right of screen; and at end of level: don't scroll past end of viewport
+    else if (center.x > right - margin && scrollVal2 < levelWidth)
+        gameState.wrap.scrollLeft = scrollVal3;
+  
+    // else player's location is within the allowed window: don't change scroll
+  
+    // code to scale background image when window is resized
+    var hRatio = displayWidth  / bgWidth;
+    var vRatio =  displayHeight / bgHeight;
+    var ratio  = Math.max ( hRatio, vRatio );
+    var centerShift_x = ( displayWidth - bgWidth*ratio ) / 2;
+    var centerShift_y = ( displayHeight - bgHeight*ratio ) / 2;
+  
+    // clear background; redraw background at new scroll with scaling
+    gameState.ctx.clearRect(0, 0, displayWidth, displayHeight);
+    gameState.ctx.drawImage(gameState.backgroundUrl, 0, 0, bgWidth, bgHeight,
+                            gameState.wrap.scrollLeft+centerShift_x,centerShift_y,
+                            bgWidth*ratio, bgHeight*ratio);
+  
+    // draw player's health bar in top left corner
+    gameState.ctx.fillStyle = "#206020";
+    gameState.ctx.fillRect(gameState.wrap.scrollLeft+8, 8, 150, 20);
+    gameState.ctx.fillStyle = "#009900";
+    var percentFull = gameState.pc.health / gameState.pc.maxHealth;
+    if(!gameState.pc.status) { percentFull=0; }
+    gameState.ctx.fillRect(gameState.wrap.scrollLeft+8, 8, percentFull*150, 20);
+  }
+  
+  // display player's inventory in html; only called when new item picked up
+  function showInventory(gameState){
+      var box = document.getElementById('inventory_box');
+      var ul = document.getElementById('inventory');
+      ul.innerHTML = "";
+      var inventory = gameState.pc.inventory;
+      if(inventory.length == 0)
+          box.style.visibility = "hidden";
+      else
+          box.style.visibility = "visible";
+      for (var i = 0; i < inventory.length; i++) {
+          var item = inventory[i];
+  
+          var listItem = document.createElement("li");
+  
+          var _img = document.createElement('img');
+          _img.src = item.sprite;
+          _img.style = "width:60px;height:60px;";
+          listItem.appendChild(_img);
+  
+          ul.appendChild(listItem);
+      }
+  }
     
     // define visuals and state-changes when player dies
     function onPlayerDeath(gameState){
