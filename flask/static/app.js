@@ -2,9 +2,12 @@ window.onload = function a()
 {
     //setup
     var selectedimg=0;
+    var selectedelementtype=0;
+    var eraser=0;
+    var hasplayer=0;
     var canvassrc = "https://d2ujflorbtfzji.cloudfront.net/package-screenshot/4b7e815a-669f-4023-ac73-6c7691fe9a9f_scaled.jpg";
 	var canvas = new fabric.Canvas('c', { selection: false});
-    canvas.setBackgroundImage(canvassrc);
+    //canvas.setBackgroundImage(canvassrc);
 
     var json_data = JSON.stringify(canvas.toDatalessJSON()); //initializing to be used later
 
@@ -28,7 +31,7 @@ window.onload = function a()
 
 
 //gray rectangle for buttons to go in
-var menubox = new fabric.Rect({
+/*var menubox = new fabric.Rect({
         left: 0,
         top: 0,
         fill:  "#96B2E3",
@@ -41,6 +44,7 @@ canvas.add(menubox);
 menubox.toObject = function() {
   return { };
 };
+*/
 
 //urls for all the buttons
 var groundsrc = "https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg";
@@ -50,7 +54,8 @@ var enemysrc= "https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumb
 var npcsrc = "https://66.media.tumblr.com/18b1dcddb1e6de2d56f2bbc16e368af5/tumblr_pi5sz2UwpH1u9vozfo1_250.png";
 
 // function make a button, visually: calls draggable() to make it actually work.
-function button(url, pos,pic, elementname){
+
+/*function button(url, pos,pic, elementname){
  fabric.Image.fromURL(url, function(img) {
        var btn =img.set({ top: 25,
         left: pos,
@@ -70,12 +75,13 @@ function button(url, pos,pic, elementname){
 });
 }
 
+
 button(groundsrc,0,ground, "Environment");
 button(playersrc,50,player, "Player");
 button(coinsrc,100, coin, "Item");
 button(enemysrc,150,enemy, "Enemy");
 button(npcsrc,200,npc, "NPC");
-
+*/
 //ignore these comments for now but dont delete
 //console.log(JSON.stringify(canvas));
 /*
@@ -90,6 +96,7 @@ canvas.loadFromJSON(JSON.parse(json_data), function(obj) {
 //function that make the buttons actually...buttons.
 function draggable(object, pic, pos, name, url) {
         object.on('mousedown', function() {
+          /*{
             var temp = new fabric.Image(pic,{
                 left: pos,
                 top: 25,
@@ -99,17 +106,19 @@ function draggable(object, pic, pos, name, url) {
                 width: 50,
                 originX: 'left',
                 originY: 'top'
-            });
-            canvas.add(temp);
-            draggable(temp, pic,pos,name,url);
+            });*/
+            //canvas.add(temp);
+            //draggable(temp, pic,pos,name,url);
             //the following determines the json attributes of each thing when added to grid
             //its generic right now, but should be different for the element types
             // for ecxample, NPC needs "message"
-            temp.toObject = function() {
-            return {type: "button",
-            };
-};
-
+            //temp.toObject = function() {
+            //return {type: "button",
+            //};
+//};
+if (eraser==1){
+  canvas.remove(this);
+}
         if (name == "NPC"){
         var msg = prompt("Please enter a message for the npc:", "You are under attack!");
             //actually save the input here
@@ -120,10 +129,7 @@ function draggable(object, pic, pos, name, url) {
             //actually save the input here
             //ask molly about effects
         }
-        /*
-        if (name == "Environment"){
-            var bool = prompt("Is this block solid? enter yes or no:", "yes");
-        }*/
+
         });
         object.on('mouseup', function() {
             // Remove an event handler
@@ -137,9 +143,10 @@ function draggable(object, pic, pos, name, url) {
             };
   };
             this.off('mousedown');
-            if(this.top <100) {
+
+            /*if(this.top <100) {
                canvas.remove(this);
-            }
+            }*/
         });
     }
 
@@ -150,18 +157,28 @@ canvas.on('object:moving', function(options) {
     left: Math.round(options.target.left / grid) * grid,
     top: Math.round(options.target.top / grid) * grid
   });
+
 });
 
+canvas.on('mouseover', function(e) {
 
-/*function getMouseCoords(event)
-{
-  var pointer = canvas.getPointer(event.e);
-  var posX = pointer.x;
-  var posY = pointer.y;
-  console.log(posX+", "+posY);    // Log to console
-}*/
+    console.log("over");
+    //canvas.renderAll();
+  });
+
+  canvas.on('mouseout', function(e) {
+
+    console.log("out");
+    //canvas.renderAll();
+  });
+
+
+
+
+
+
   canvas.on('mouse:down', function(event){
-    if (selectedimg!=0){
+    if (selectedimg!=0 && eraser !=1){
     var pointer = canvas.getPointer(event.e);
     var posX = Math.round((pointer.x-25) / grid) * grid;
     var posY = Math.round((pointer.y-25) / grid) * grid;
@@ -177,8 +194,21 @@ canvas.on('object:moving', function(options) {
       originY: 'top'
   });
   canvas.add(temp);
+  draggable(temp,  ground, posX,selectedelementtype,groundsrc);
+/*  temp.toObject = function() {
+  return {type: "Element",
+  name: selectedelementtype,
+  top:temp.top,
+  left: temp.left,
+  url: "hi",
+  scale: 1
+  };
+};
+*/
 }
 });
+
+
 
 
 /*function makejson(){
@@ -186,8 +216,13 @@ canvas.on('object:moving', function(options) {
   return json_data;
 }*/
 
+document.getElementById("eraserbutton").onclick= function(){
+  eraser=1;
+}
+
 document.getElementById("movemode").onclick= function(){
   selectedimg=0;
+selectedelementtype=0;
   /*var cursor= document.getElementById("cursor");
   cursor.style.display="none";
   */
@@ -223,6 +258,7 @@ document.getElementById("save").onclick = function(){
 
  document.getElementById("groundbutton").onclick = function() {
    selectedimg=ground;
+   selectedelementtype="Environment";
    document.getElementById("cursor").style.visibility="visible";
  $(document).mousemove(function (e) {
    $(".cursor").show().css({
@@ -236,6 +272,7 @@ document.getElementById("save").onclick = function(){
 
  document.getElementById("playerbutton").onclick = function() {
    selectedimg=player;
+   selectedelementtype="Player";
    document.getElementById("cursor2").style.visibility="visible";
  $(document).mousemove(function (e) {
    $(".cursor2").show().css({
