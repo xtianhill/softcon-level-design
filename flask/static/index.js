@@ -767,7 +767,7 @@ async function getData(title){
     }
 }
 
-var title = getElementById("title").text;
+var title = document.getElementById("title").innerHTML;
 console.log(title);
 getData(title).then((data) => {
 
