@@ -25,7 +25,7 @@ async function getData(title){
     }
 }
 
-var title = document.getElementById("title").innerHTML;
+var title = document.getElementById("levelTitle").innerHTML;
 console.log(title);
 getData(title).then((data) => {
 
