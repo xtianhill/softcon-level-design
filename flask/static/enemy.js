@@ -55,7 +55,7 @@ Enemy.prototype.getDamage = function(){
 //set int damage
 Enemy.prototype.setDamage = function(amount){
     //set damage to amount
-        t = typeof amount
+        t = typeof amount;
         if (t === "number"){
             this.damage = amount;
         }
@@ -71,7 +71,13 @@ Enemy.prototype.getRange = function(){
 
 //Setter for range
 Enemy.prototype.setRange = function(rng){
-    this.range = rng;
+    t = typeof rng;
+    if (t === "number"){
+        this.range = rng;
+    }
+    else{
+        return null;
+    }
 }
 
 //Getter for direction
@@ -90,7 +96,8 @@ Enemy.prototype.changeDirection = function(){
 //Setter for direction
 Enemy.prototype.setDirection = function(dir){
     //set damage to amount
-        if (dir == "right" || dir == "left" || dir == "still"){
+        t = typeof dir;
+        if (t === "string" && (dir == "right" || dir == "left" || dir == "still")){
             this.direction = dir;
         }
         else{
