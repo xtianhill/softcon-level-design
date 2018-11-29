@@ -54,26 +54,33 @@ getData("julia").then((data) => {
         var elements = parsedJSON.elements;
         var characters = [];
         var backgroundUrl = parsedJSON.backgroundUrl;
-        var winConditions = ["enemy", "npc"]; //pasrsedJSON.winConditions;
+        var winConditions = ["enemy", "npc"];
         var width = canvas.width;
         var height = canvas.height;
         var wrap = document.getElementById("wrap");
-
 
         // set win conditions to false if they were chosen by designer
         var victory = false;
         var npcCondition = true;
         var endCondition = true;
         var enemyCondition = true;
+        var ul = document.getElementById("rules");
         for(i=0; i<winConditions.length; i++){
+            var listItem = document.createElement("li");
             if(winConditions[i] === "npc"){
                 npcCondition = false;
+                listItem.append(document.createTextNode("Talk to every NPC!"));
+                ul.appendChild(listItem);
             }
             if(winConditions[i] === "enemy"){
                 enemyCondition = false;
+                listItem.append(document.createTextNode("Kill every enemy!"));
+                ul.appendChild(listItem);
             }
             if(winConditions[i] === "end"){
                 endCondition = false;
+                listItem.append(document.createTextNode("Reach the end of the level!"));
+                ul.appendChild(listItem);
             }
         }
         
