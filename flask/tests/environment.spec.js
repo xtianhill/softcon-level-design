@@ -11,6 +11,7 @@
 */
 
 const Enviroment = require('../static/environment.js');
+const Effect = require('../static/effect.js');
 const vector = require('../static/utility.js');
 
 describe('Environment', function(){
@@ -25,7 +26,7 @@ describe('Environment', function(){
     */
 
     beforeEach(function(){
-        testEnvironment = new Enviroment(true, new vector(1,1), null, new vector(50,10), new vector(20,50));
+        testEnvironment = new Enviroment(true, new vector(1,1), null, new vector(50,10), new vector(20,50), new Effect('heal', 5));
     });
 
     /*
@@ -58,6 +59,15 @@ describe('Environment', function(){
 
     it('should fail to set solid due to invalid input', function() {
         testEnvironment.setSolid("hello");
-        expect(testEnemy.getSolid()).toBeTruthy();
+        expect(testEnvironment.getSolid()).toBeTruthy();
+    });
+
+    //getEffect and setEffect
+    it('should correctly set and get effect', function(){
+        EffectA = new Effect('heal', 5);
+        expect(testEnvironment.getEffect()).toEqual(EffectA);
+        EffectB = new Effect('heal', 8);
+        testEnvironment.setEffect(EffectB);
+        expect(testEnvironment.getEffect()).toEqual(EffectB);
     });
 });
