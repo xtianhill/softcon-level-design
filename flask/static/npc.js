@@ -1,6 +1,23 @@
+/*
+|------------------------------------------------------------------------------
+| NPC Class
+|------------------------------------------------------------------------------
+|
+| This file contains the NPC prototype (the javascript equivalent of a
+| class). NPC is a subclass of the Character superclass. It has 
+| information about the NPC's message.
+|
+|------------------------------------------------------------------------------
+*/
+
 const Character = require('./character.js');
 const Vector = require('./utility.js').vector;
 
+/*
+|------------------------------------------------------------------------------
+| Constructor
+|------------------------------------------------------------------------------
+*/
 function NPC(loc, max, hea, stat, msg, hbox, url, size, speed, mvspd, grav){
     
     if(typeof msg === "string"){
@@ -12,12 +29,13 @@ function NPC(loc, max, hea, stat, msg, hbox, url, size, speed, mvspd, grav){
 
 NPC.prototype = Object.create(Character.prototype); 
 
-
+//Getter for message
 NPC.prototype.getMessage = function(){
     return this.message;
     
 }
 
+//Setter for message
 NPC.prototype.setMessage = function(msg){
     //disallow non-string message
     if(typeof msg == "string"){

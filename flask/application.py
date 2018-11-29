@@ -18,9 +18,9 @@ def validate_json(my_json):
         return False
     return True
 
-@application.route('/', methods=['GET'])
+@application.route('/api/v1/backend-up', methods=['GET'])
 def hello():
-    return Response("SUCCESS: backend is running", status=200)
+    return Response("BACKEND RUNNING", status=200)
 
 @application.route('/db_tests', methods=['GET'])
 def db_test():
@@ -34,13 +34,13 @@ def index():
 def send_js(path):
     return send_from_directory('../static', path)
 
+@application.route('/play/<title>')
+def play_grid(title):
+    return send_from_directory('../static', title)
+
 @application.route('/api/v1/add-grid/', methods=['POST'])
 def add_grid():
     print "request: " + str(request.headers)
-    # if not request.json:
-    #     print "Error: not JSON"
-    #     print type(request)
-    #     response = Response("Error: not JSON", status=HTTP_BADREQUEST)
     if not validate_json(request.get_json()):
         print "Error: invalid JSON"
         response = Response("Error: invalid JSON", status=HTTP_BADREQUEST)
@@ -66,12 +66,12 @@ def add_grid():
 
 @application.route('/api/v1/update-grid/', methods=['POST'])
 def update_grid():
-    if not request.json:
-        response = Response(request.form, status=HTTP_BADREQUEST)
-    elif not validate_json(request.get_json()):
-        response = Response(request.form, status=HTTP_BADREQUEST)
+    print "request: " + str(request.headers)
+    if not validate_json(request.get_json()):
+        print "Error: invalid JSON"
+        response = Response(status=HTTP_BADREQUEST)
     else:
-        my_json = request.get_json()
+        my_json = json.loads(request.get_json())
         my_title = my_json["title"]
         new_data = my_json["data"]
         try:
@@ -81,12 +81,14 @@ def update_grid():
             my_grid = Grid.query.filter_by(title=my_title).first()
             my_grid.data = new_data
             db.session.commit()
-            response = Response(my_json, status=HTTP_CREATED, mimetype='application/json') 
+            response = Response(my_title, status=HTTP_CREATED, mimetype='application/json') 
+            print "SUCCESS: entry updated in DB"
         except exc.DataError:
             db.session.rollback()
-            response = Response(my_json, status=HTTP_NOTFOUND, mimetype='application/json')
+            response = Response(my_title, status=HTTP_NOTFOUND, mimetype='application/json')
         finally:
             db.session.close()
+        print "Update grid: " + str(response)
     return response
 
 @application.route('/api/v1/query-all-titles/', methods=['GET'])
@@ -154,4 +156,4 @@ def delete_grid(delete_title):
     return response
 
 if __name__ == "__main__":
-    application.run()
+    application.run(host='0.0.0.0')
