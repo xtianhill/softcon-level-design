@@ -20,12 +20,15 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.3.0/fabric.min.js" ></script>
 
 	<!-- Get the highest 1.X version of jQuery from CDN. Required for ready() function. -->
-	<script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+	<script src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
 </head>
 <body>
-  <div class="header"> ** working on a new menu **
+
+  <div class="header" id = "header">
     		   <div style="display: inline-block; background: #a3c0f5"></div>
-           <a href="#" class="myButton">click</a>
+           <a href="#" id="movemode" class="myButton">click</a>
+           <input type= "image" id = "groundbutton" src = "https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg" style= "height: 50px; width: 50px">
+           <input type= "image" id = "playerbutton" src = "https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png" style= "height: 50px; width: 50px">
 </div>
 		<button  id = "save"> Show my elements </button>
 
@@ -64,5 +67,9 @@
 
 
         </script>
+
+      <img src="https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg" alt="Cursor" class="cursor" id="cursor"/>
+      <img src="https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png" alt="Cursor" class="cursor2" id="cursor2"/>
+
     </body>
 </html>

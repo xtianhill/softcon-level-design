@@ -1,7 +1,23 @@
-/*Enemy Prototype
-Note: location is a vector with x and y*/
+/*
+|------------------------------------------------------------------------------
+| Enemy Class
+|------------------------------------------------------------------------------
+|
+| This file contains the Enemy prototype (the javascript equivalent of a
+| class). Enemy is a subclass of the superclass Character. This contains
+| data about an Enemy's status, as well as methods for moving and interacting
+| with the game's physics.
+|
+|------------------------------------------------------------------------------
+*/
+
 const Character = require('./character.js');
 
+/*
+|------------------------------------------------------------------------------
+| Constructor
+|------------------------------------------------------------------------------
+*/
 function Enemy(loc, max, hea, stat, dmg, hbox, url, size, speed, mvspeed, grav, dir, range, startLoc){
     t = typeof dmg
     t2 = typeof range
@@ -47,19 +63,22 @@ Enemy.prototype.setDamage = function(amount){
         }
 }
 
+//Getter for range
 Enemy.prototype.getRange = function(){
     return this.range;
 }
 
+//Setter for range
 Enemy.prototype.setRange = function(rng){
     this.range = rng;
 }
 
-//gets direction
+//Getter for direction
 Enemy.prototype.getDirection = function(){
     return this.direction;
 }
 
+//Changes direction
 Enemy.prototype.changeDirection = function(){
     if(this.direction == "right")
         this.direction = "left";
@@ -67,7 +86,7 @@ Enemy.prototype.changeDirection = function(){
         this.direction = "right";
 }
 
-//set int damage
+//Setter for direction
 Enemy.prototype.setDirection = function(dir){
     //set damage to amount
         if (dir == "right" || dir == "left" || dir == "still"){

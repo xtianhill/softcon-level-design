@@ -25,7 +25,7 @@ describe('Effect', function(){
     */
 
     beforeEach(function(){
-        testEffect = new Effect('heal');
+        testEffect = new Effect('heal', 10);
     })
 
     /*
@@ -42,17 +42,17 @@ describe('Effect', function(){
 
     // test invalid input
     it('should return null Effect because of integer input for title', function(){
-      testEffect= new Effect(4);
+      testEffect= new Effect(4, 4);
       expect(testEffect).toEqual({});
     });
 
     it ('should return null Effect because of bad string input for title', function(){
-      testEffect= new Effect('twerk');
+      testEffect= new Effect('twerk', 4);
       expect(testEffect).toEqual({});
     });
 
-    it ('should return null Effect because of bad booleam input', function(){
-      testEffect = new Effect('hello', 'heal');
+    it ('should return null Effect because of bad boolean input', function(){
+      testEffect = new Effect('hello', 'heal', 4);
       expect(testEffect).toEqual({});
     });
 
@@ -93,4 +93,17 @@ describe('Effect', function(){
         (testEffect).deactivate();
         expect((testEffect).getIsActive()).toBeFalsy();
     });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Amount Method Tests
+    |--------------------------------------------------------------------------
+    */
+
+    it('should get and set the amounts', function(){
+        expect((testEffect).getAmount()).toEqual(10);
+        testEffect.setAmount(5);
+        expect((testEffect).getAmount()).toEqual(5);
+    });
+
 });

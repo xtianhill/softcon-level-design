@@ -1,7 +1,23 @@
-/*Environment prototype*/
+/*
+|------------------------------------------------------------------------------
+| Environment Class
+|------------------------------------------------------------------------------
+|
+| This file contains the Environment prototype (the javascript equivalent of a
+| class). 
+|
+|------------------------------------------------------------------------------
+*/
+
+
 /*note: Environment has flag for whether its solid or not*/
 const Element = require('./element.js');
 
+/*
+|------------------------------------------------------------------------------
+| Constructor
+|------------------------------------------------------------------------------
+*/
 function Environment(solid, pos, url, scale, hbox, eff){
   if (solid == 1 || solid == 0) {
       Element.call(this, pos, url, scale, hbox);
@@ -21,20 +37,24 @@ Environment.prototype.Environment = function(){
     this.effect = new Effect("heal", 2);;
 };
 
+//Getter for solid
 Environment.prototype.getSolid = function(){
     return this.solid;
 };
 
+//Setter for solid
 Environment.prototype.setSolid = function(bool){
   if (solid == 1 || solid == 0){
       this.solid = bool;
   }
 };
 
+//Setter for effect
 Environment.prototype.setEffect= function(eft){
     this.effect = eft;
 };
 
+//Getter for effect
 Environment.prototype.getEffect=function(){
     return this.effect;
 };

@@ -6,6 +6,17 @@
  * 
  */
 
+/*
+|------------------------------------------------------------------------------
+| Database
+|------------------------------------------------------------------------------
+|
+| This file contains the Database utility functions.
+|
+|------------------------------------------------------------------------------
+*/
+
+
 const HTTP_OK = "200";
 const HTTP_CREATED = "201";
 const HTTP_BADREQUEST = "400";
@@ -16,6 +27,7 @@ const HTTP_CONFLICT = "409";
 const AWS_URL = "http://127.0.0.1:5000/";
 const SUCCESS_MSG = "BACKEND RUNNING";
 
+//store a grid, which is a JSON, in the database
 function storeGrid(gridJSON) {
     if(!validJSON(gridJSON)) {
         throw "invalid JSON given";
@@ -51,6 +63,7 @@ function storeGrid(gridJSON) {
     }
 }
 
+// checks if the database is running
 async function isRunning() {
     var success;
     try {
@@ -111,6 +124,7 @@ async function deleteGrid(title) {
     }
 }
 
+//update a grid that is already in the database
 async function updateGrid(gridJSON) {
     if(!validJSON(gridJSON)) {
         throw "invalid JSON given";
@@ -147,6 +161,7 @@ async function updateGrid(gridJSON) {
     }
 }
 
+//retrieve a grid from the database using its title
 async function getByTitle(title) {
     if(title.length == 0) {
         throw "invalid title given";
@@ -174,6 +189,7 @@ async function getByTitle(title) {
     return grid;
 }
 
+//return all the titles of the levels stored in the database
 async function getAllTitles() {
     var titles;
     try {
@@ -201,6 +217,8 @@ async function getAllTitles() {
     return titles;
 }
 
+
+//function to check if a JSON is valid to store in the database
 function validJSON(myJSON) {
     myJSON = JSON.parse(myJSON);
     // console.log("validJSON: myJSON: " + myJSON);
