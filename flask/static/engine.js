@@ -89,11 +89,6 @@ function initialize(){
 
 function update(gameState) {
 
-   if(gameState.pc.status == false){
-      changeItem(gameState);
-      gameState.changeItem = false;
-   }
-
     // find hypothetical new right/left position as long as within the level's
     // limits and no wall is in the way
     newXPos = null;
@@ -203,8 +198,10 @@ function update(gameState) {
 
     // change item selected
     if(gameState.changeItem){
-        changeItem(gameState);
-        gameState.changeItem = false;
+        if(gameState.pc.status) {
+            changeItem(gameState);
+            gameState.changeItem = false;
+        }
     }
 
     // counter to make tile effects only happen every few seconds
@@ -438,11 +435,11 @@ function scrollPlayerIntoView() {
 
   // draw player's health bar in top left corner
   gameState.ctx.fillStyle = "#FF0000";
-  gameState.ctx.fillRect(gameState.wrap.scrollLeft+8, 8, 50, 10);
+  gameState.ctx.fillRect(gameState.wrap.scrollLeft+8, 8, 100, 20);
   gameState.ctx.fillStyle = "#00FF00";
   var percentFull = gameState.pc.health / gameState.pc.maxHealth;
   if(!gameState.pc.status) { percentFull=0; }
-  gameState.ctx.fillRect(gameState.wrap.scrollLeft+8, 8, percentFull*50, 10);
+  gameState.ctx.fillRect(gameState.wrap.scrollLeft+8, 8, percentFull*100, 20);
 }
 
 // display player's inventory in html; only called when new item picked up
@@ -485,6 +482,7 @@ function onPlayerDeath(gameState){
     if(gameState.pc.equippedItem != null) {
         gameState.pc.equippedItem.img.src = empty;
     }
+    gameState.changeItem = false;
 }
 
 function reset(){
@@ -499,6 +497,11 @@ function testWinConditions(gameState){
 
 function handleItemUse (gameState){
     for(var i=0; i<gameState.characters.length; i++){
+        if(!gameState.characters[i].status){
+            gameState.characters.splice(i,1);
+            i--;
+            continue;
+        }
         if(detectCollision(gameState.characters[i].position, gameState.pc.equippedItem.position,
             gameState.characters[i], gameState.pc.equippedItem)){
                 gameState.pc.useItem(gameState.characters[i]);
@@ -516,6 +519,7 @@ function changeItem(gameState){
             gameState.pc.inventory.shift();
         }
         gameState.pc.setEquippedItem(gameState.pc.inventory[0]);
+        gameState.pc.equippedItem.updatePosition(gameState.pc);
     }
     showInventory(gameState);
 }
