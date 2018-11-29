@@ -152,10 +152,13 @@ describe('REST API Tests', function() {
                 "title" : "newUnitTestTestGrid",
                 "data" : "myfakedata123"
             };
-            spyOn($, "ajax");
-            expect(Database.storeGrid(newTestGrid, testCB)).toBeTruthy();
+            Database.storeGrid(testGrid, testCB);
+            expect(doneFn).not.toHaveBeenCalled();
+            expect($.ajax.calls.mostRecent().method).toBe("POST");
             expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/add-grid/");
-            expect(Database.storeGrid(newTestGrid, testCB)).toBeFalsy();
+            Database.storeGrid(testGrid, testCB);
+            expect(doneFn).not.toHaveBeenCalled();
+            expect($.ajax.calls.mostRecent().method).toBe("POST");
             expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/add-grid/");
         });
         it('should test adding a bad grid', function() {
@@ -169,8 +172,7 @@ describe('REST API Tests', function() {
                 "notATitle" : "badTitle",
                 "notData" : "notData"
             };
-            expect(Database.storeGrid(badTestGrid, testCB)).toBeFalsy();
-            expect($.ajax).not.toHaveBeenCalled();
+            Database.storeGrid(badTestGrid);
         });
     });
 
@@ -187,15 +189,15 @@ describe('REST API Tests', function() {
                 "title" : "unitTestDeleteGrid",
                 "data" : "mydata123"
             };
-            expect(Database.storeGrid(deleteGrid, testCB)).toBeTruthy();
+            Database.storeGrid(deleteGrid, testCB);
             expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/add-grid/");
-            expect(Database.deleteGrid(deleteGrid.title)).toBeTruthy();
+            Database.deleteGrid(deleteGrid.title);
             expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/delete-grid/" + deleteGrid.title);
         });
         it('should test deleting a grid which is *not* in the database', function() {
             spyOn($, "ajax");
             var badDeleteGridTitle = "titleOfGridWhichIsNotInDatabase";
-            expect(Database.deleteGrid(badDeleteGridTitle)).toBeFalsy();
+            Database.deleteGrid(badDeleteGridTitle);
             expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/delete-grid/" + badDeleteGridTitle);
         });
         it('should test deleting a grid given an empty string title', function() {
