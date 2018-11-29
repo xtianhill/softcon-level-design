@@ -265,100 +265,100 @@ getData("julia").then((data) => {
     |------------------------------------------------------------------------------
     */
 
-   function draw(gameState){
-    // clear canvas
-    gameState.ctx.clearRect(0, 0, gameState.width, gameState.height);
+    function draw(gameState) {
+        // clear canvas
+        gameState.ctx.clearRect(0, 0, gameState.width, gameState.height);
 
-    // center camera on player and redraw background
-    scrollPlayerIntoView();
+        // center camera on player and redraw background
+        scrollPlayerIntoView();
 
-    // draw non-player elements
-    for(i = 0; i<gameState.elements.length; i++){
-        var curElement = gameState.elements[i];
+        // draw non-player elements
+        for (i = 0; i < gameState.elements.length; i++) {
+            var curElement = gameState.elements[i];
 
-        // if curElement is an NPC with a message
-        if (curElement.shouldDisplay){
-            gameState.ctx.font = '10px "Press Start 2P"';
-            gameState.ctx.fillStyle = "#ffffff";
-            gameState.ctx.fillText(curElement.getMessage(),
-                                   curElement.position.x,
-                                   curElement.position.y-10);
-            curElement.shouldDisplay = false;
+            // if curElement is an NPC with a message
+            if (curElement.shouldDisplay) {
+                gameState.ctx.font = '10px "Press Start 2P"';
+                gameState.ctx.fillStyle = "#ffffff";
+                gameState.ctx.fillText(curElement.getMessage(),
+                    curElement.position.x,
+                    curElement.position.y - 10);
+                curElement.shouldDisplay = false;
+            }
+
+            // draw the element
+            if (curElement instanceof Enemy && curElement.getDirection() == "right") {
+                gameState.ctx.save();
+                gameState.ctx.scale(-1, 1);
+                gameState.ctx.drawImage(curElement.img, -curElement.position.x, curElement.position.y,
+                    -curElement.size.x, curElement.size.y);
+                gameState.ctx.restore();
+            }
+            else {
+                gameState.ctx.drawImage(curElement.img, curElement.position.x, curElement.position.y,
+                    curElement.size.x, curElement.size.y);
+            }
+
+            // draw health bars for NPCs and Enemies
+            if ((curElement instanceof Enemy || curElement instanceof NPC) && curElement.status) {
+                gameState.ctx.fillStyle = "#206020";
+                gameState.ctx.fillRect(curElement.position.x, curElement.position.y - 8,
+                    curElement.size.x, 4);
+                gameState.ctx.fillStyle = "#009900";
+                var percentFull = curElement.health / curElement.maxHealth;
+                gameState.ctx.fillRect(curElement.position.x, curElement.position.y - 8,
+                    percentFull * curElement.size.x, 4);
+            }
         }
 
-        // draw the element
-        if(curElement instanceof Enemy && curElement.getDirection() == "right"){
-            gameState.ctx.save();
-            gameState.ctx.scale(-1,1);
-            gameState.ctx.drawImage(curElement.img,-curElement.position.x,curElement.position.y,
-                                    -curElement.size.x,curElement.size.y);
-            gameState.ctx.restore();
-          }
-        else{
-            gameState.ctx.drawImage(curElement.img,curElement.position.x,curElement.position.y,
-            curElement.size.x,curElement.size.y);
-          }
+        // draw pc + equipped item if the game isnt over
 
-        // draw health bars for NPCs and Enemies
-        if((curElement instanceof Enemy || curElement instanceof NPC) && curElement.status){
-          gameState.ctx.fillStyle = "#206020";
-          gameState.ctx.fillRect(curElement.position.x, curElement.position.y - 8,
-              curElement.size.x, 4);
-          gameState.ctx.fillStyle = "#009900";
-          var percentFull = curElement.health / curElement.maxHealth;
-          gameState.ctx.fillRect(curElement.position.x, curElement.position.y - 8,
-              percentFull * curElement.size.x, 4);
-        }
-    }
-
-    // draw pc + equipped item if the game isnt over
-
-    if(gameState.pc.status && !gameState.victory){
+        if (gameState.pc.status && !gameState.victory) {
 
 
-    if(gameState.pc.dir == "left"){
-        gameState.ctx.save();
-        gameState.ctx.scale(-1,1);
-        gameState.ctx.drawImage(gameState.pc.img,-gameState.pc.position.x,gameState.pc.position.y,
-            -gameState.pc.size.x,gameState.pc.size.y);
-        gameState.ctx.restore();
-      }
-    else{
-        gameState.ctx.drawImage(gameState.pc.img,gameState.pc.position.x,gameState.pc.position.y,
-          gameState.pc.size.x,gameState.pc.size.y);
-      }
+            if (gameState.pc.dir == "left") {
+                gameState.ctx.save();
+                gameState.ctx.scale(-1, 1);
+                gameState.ctx.drawImage(gameState.pc.img, -gameState.pc.position.x, gameState.pc.position.y,
+                    -gameState.pc.size.x, gameState.pc.size.y);
+                gameState.ctx.restore();
+            }
+            else {
+                gameState.ctx.drawImage(gameState.pc.img, gameState.pc.position.x, gameState.pc.position.y,
+                    gameState.pc.size.x, gameState.pc.size.y);
+            }
 
-        if(gameState.pc.dir == "left"){
-            gameState.ctx.save();
-            gameState.ctx.scale(-1,1);
-            if(gameState.pc.equippedItem !=null){
-                var item = gameState.pc.equippedItem;
-                if(gameState.sinceItem < 10){
-                    console.log(gameState.sinceItem);
-                    gameState.ctx.drawImage(item.img, -item.position.x+5, item.position.y,
-                                          -item.size.x, item.size.y);
+            if (gameState.pc.dir == "left") {
+                gameState.ctx.save();
+                gameState.ctx.scale(-1, 1);
+                if (gameState.pc.equippedItem != null) {
+                    var item = gameState.pc.equippedItem;
+                    if (gameState.sinceItem < 10) {
+                        console.log(gameState.sinceItem);
+                        gameState.ctx.drawImage(item.img, -item.position.x + 5, item.position.y,
+                            -item.size.x, item.size.y);
+                    }
+                    else {
+                        gameState.ctx.drawImage(item.img, -item.position.x, item.position.y,
+                            -item.size.x, item.size.y);
+                    }
                 }
-                else {
-                    gameState.ctx.drawImage(item.img, -item.position.x, item.position.y,
-                                          -item.size.x, item.size.y);
+                gameState.ctx.restore();
+            }
+            else {
+                if (gameState.pc.equippedItem != null) {
+                    var item = gameState.pc.equippedItem;
+                    if (gameState.sinceItem < 10) {
+                        gameState.ctx.drawImage(item.img, item.position.x + 5, item.position.y,
+                            item.size.x, item.size.y);
+                    }
+                    else {
+                        gameState.ctx.drawImage(item.img, item.position.x, item.position.y,
+                            item.size.x, item.size.y);
+                    }
                 }
             }
-            gameState.ctx.restore();
         }
-        else{
-            if(gameState.pc.equippedItem !=null){
-                var item = gameState.pc.equippedItem;
-          if(gameState.sinceItem < 10){
-              gameState.ctx.drawImage(item.img, item.position.x+5, item.position.y,
-                                      item.size.x, item.size.y);
-          }
-          else {
-              gameState.ctx.drawImage(item.img, item.position.x, item.position.y,
-                                    item.size.x, item.size.y);
-          }
-          }
-        }
-    }
 
 
     // on player death visuals
@@ -604,10 +604,6 @@ function showInventory(gameState){
         gameState.ctx.font = '10px "Press Start 2P"';
         gameState.ctx.fillStyle = "#ffffff";
         gameState.ctx.fillText("GAME OVER DUDE", gameState.pc.position.x, gameState.pc.position.y - 10);
-       // gameState.pc.img.src = empty;
-        // if(gameState.pc.equippedItem != null) {
-        //     gameState.pc.equippedItem.img.src = empty;
-        // }
         gameState.changeItem = false;
     }
 
