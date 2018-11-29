@@ -1,6 +1,7 @@
 window.onload = function a()
 {
     //setup
+    var selectedimg=0;
     var canvassrc = "https://d2ujflorbtfzji.cloudfront.net/package-screenshot/4b7e815a-669f-4023-ac73-6c7691fe9a9f_scaled.jpg";
 	var canvas = new fabric.Canvas('c', { selection: false});
     canvas.setBackgroundImage(canvassrc);
@@ -151,10 +152,50 @@ canvas.on('object:moving', function(options) {
   });
 });
 
+
+/*function getMouseCoords(event)
+{
+  var pointer = canvas.getPointer(event.e);
+  var posX = pointer.x;
+  var posY = pointer.y;
+  console.log(posX+", "+posY);    // Log to console
+}*/
+  canvas.on('mouse:down', function(event){
+    if (selectedimg!=0){
+    var pointer = canvas.getPointer(event.e);
+    var posX = Math.round((pointer.x-25) / grid) * grid;
+    var posY = Math.round((pointer.y-25) / grid) * grid;
+    console.log(posX+", "+posY);
+  var temp = new fabric.Image(selectedimg,{
+      left:  posX,
+      top:  posY,
+      hasControls: false,
+      hasBorders: false,
+      height: 50,
+      width: 50,
+      originX: 'left',
+      originY: 'top'
+  });
+  canvas.add(temp);
+}
+});
+
+
 /*function makejson(){
   json_data = JSON.stringify(canvas.toJSON());
   return json_data;
 }*/
+
+document.getElementById("movemode").onclick= function(){
+  selectedimg=0;
+  /*var cursor= document.getElementById("cursor");
+  cursor.style.display="none";
+  */
+  document.getElementById("cursor").style.visibility="hidden";
+  document.getElementById("cursor2").style.visibility="hidden";
+  }
+
+
 document.getElementById("savegrid").onclick= function(){
   var title = prompt("Enter the grid title", "title");
   var data= JSON.stringify(canvas.toJSON());
@@ -180,4 +221,30 @@ document.getElementById("save").onclick = function(){
 
  }
 
-}
+ document.getElementById("groundbutton").onclick = function() {
+   selectedimg=ground;
+   document.getElementById("cursor").style.visibility="visible";
+ $(document).mousemove(function (e) {
+   $(".cursor").show().css({
+     "left": e.clientX,
+     "top": e.clientY
+   });
+ }).mouseout(function () {
+   $(".cursor").hide();
+ });
+ }
+
+ document.getElementById("playerbutton").onclick = function() {
+   selectedimg=player;
+   document.getElementById("cursor2").style.visibility="visible";
+ $(document).mousemove(function (e) {
+   $(".cursor2").show().css({
+     "left": e.clientX,
+     "top": e.clientY
+   });
+ }).mouseout(function () {
+   $(".cursor2").hide();
+ });
+ }
+
+ }
