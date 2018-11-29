@@ -261,4 +261,29 @@ describe('Character', function() {
         expect(testCharacter.getPosition()).toEqual(new Vector(1, 1));
         expect(testCharacter.getSpeed()).toEqual(new Vector(0,-70));
     });
+
+    //decHealth Tests
+    it('should decrease health by damage of 3', function(){
+        testCharacter.decHealth(3);
+        expect(testCharacter.getHealth()).toEqual(7);
+        expect(testCharacter.getStatus()).toBeTruthy();
+    });
+
+    it('should try to decrease health to less than zero and character dies', function(){
+        testCharacter.decHealth(11);
+        expect(testCharacter.getStatus()).toBeFalsy();
+    });
+
+    //addHealth Tests
+    it('should increase health by 5', function(){
+        testCharacter.addHealth(5);
+        expect(testCharacter.getHealth()).toEqual(15);
+        expect(testCharacter.getStatus()).toBeTruthy();
+    });
+
+    it('should try to increase health past max and stop at the max', function(){
+        testCharacter.addHealth(85);
+        expect(testCharacter.getHealth()).toEqual(20);
+        expect(testCharacter.getStatus()).toBeTruthy();
+    });
 });
