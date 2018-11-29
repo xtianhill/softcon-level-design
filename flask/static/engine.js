@@ -9,19 +9,16 @@ const Character = require('./character.js');
 const Environment = require('./environment.js');
 const Vector = require('./utility.js');
 const database = require('./database.js');
-/*
-|------------------------------------------------------------------------------
-| Initialize gameState, canvas, and other variables from JSON
-|------------------------------------------------------------------------------
-*/
+
 
 var gameState;
 
-async function getData(){
+// searches the database by the title given and returns the data to be parsed
+async function getData(title){
     var data;
     try{
-        data1 = await database.getByTitle("julia");
-        return data1;
+        data = await database.getByTitle(title);
+        return data;
     } catch (error){
         data = "error";
         return data;
@@ -30,6 +27,11 @@ async function getData(){
 
 getData().then(data => {
 
+/*
+|------------------------------------------------------------------------------
+| Initialize gameState, canvas, and other variables from JSON
+|------------------------------------------------------------------------------
+*/
     function initialize(){
         var step = 0.05; // controls frequency of physics calculations
         var canvas = document.getElementById("c");
