@@ -7,15 +7,20 @@
  * 
  */
 
+const HTTP_OK = "200";
+const HTTP_CREATED = "201";
+const HTTP_BADREQUEST = "400";
+const HTTP_NOTFOUND = "404";
+const HTTP_CONFLICT = "409";
+
 // const AWS_URL = "http://softcon-leveldesign.us-east-1.elasticbeanstalk.com/";
 const AWS_URL = "http://127.0.0.1:5000/";
 
-function storeGrid(gridJSON, cb) {
-    console.log('gridJSON: ' + gridJSON);
+function storeGrid(gridJSON) {
     if(!validJSON(gridJSON)) {
-        console.log('invalid json given');
-        return false;
+        throw "invalid JSON given";
     }
+    var success = false;
     $.ajax({
         type: "POST",
         url: AWS_URL + "api/v1/add-grid/",
@@ -24,62 +29,74 @@ function storeGrid(gridJSON, cb) {
         dataType: "json",
         success: function(data) {
             console.log("success: stored the following grid in DB: " + data);
-            alert("Success: stored the following grid in DB");
-            success = true;
+            alert("Success: stored the following grid in DB via success callback");
         },
         failure: function(errMsg) {
             console.log("failure: couldn't store grid");
             alert("failure: couldn't store grid");
-            success = false;
         }
+    }).done(function(data) {
+            alert("Success: stored the following grid in DB via done callback");
+        success = true;
     });
+    return success;
 }
 
-function isRunning(cb) {
+function isRunning() {
+    var success = false;
     $.ajax({
         type: "GET",
         url: AWS_URL,
         success: function(data) {
             console.log("success: backend is running");
-            cb(data);
         },
         failure: function(errMsg) {
             console.log("failure: backend cannot be reached");
         }
+    }).done(function(data) {
+        success = true;
     });
+    return success;
 }
 
 function deleteGrid(title, cb) {
-    console.log('title is: '+ title);
-    var success = false;
-    if(title.length == 0) {
-        return false;
+    if(title.length <= 0 || title == null) {
+        throw "invalid title given";
     }
+    var success;
     $.ajax({
         type: "GET",
-        async: false,
+        async: true,
         url: AWS_URL + "api/v1/delete-grid/" + title,
         success: function(data) {
-            console.log("success: deleted grid wwith title " + title + " in DB");
+            console.log("success: deleted grid with title " + title + " in DB via success callback");
             success = true;
+            cb(data);
         },
         failure: function(errMsg) {
             alert("failure: didn't delete item with title: " + title);
+            success = false;
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            var status = XMLHttpRequest.status
+            if (status == HTTP_NOTFOUND) {
+                alert("Error: title [" + title + "] not found.");
+            } else {
+                alert("Error: operation could not be performed.");
+            }
         }
     });
     return success;
 }
 
-function updateGrid(gridJSON, cb) {
-    console.log('gridJSON is: ' + gridJSON);
-    success = false;
+function updateGrid(gridJSON) {
     if(!validJSON(gridJSON)) {
-        return success;
+        throw "invalid JSON given";
     }
+    var success = false;
     $.ajax({
         type: "POST",
         url: AWS_URL + "api/v1/update-grid/",
-        // The key needs to match your method's input parameter (case-sensitive).
         data: JSON.stringify(gridJSON),
         contentType: "application/json",
         dataType: "json",
@@ -93,34 +110,37 @@ function updateGrid(gridJSON, cb) {
             success = false;
         }
     });
+    return success;
 }
 
-function getByTitle(title, cb) {
+function getByTitle(title) {
     console.log('title is: '+ title);
     if(title.length == 0) {
-        return false;
+        throw "invalid title given";
     }
-    var grid;
+    var grid = null;
     $.ajax({
         type: "GET",
         url: AWS_URL + "api/v1/search-grid/" + title,
         contentType: "application/json",
         dataType: "json",
-        async: false,
         success: function(data) {
-            alert("success! found item with title " + title + " in DB");
-            console.log(data);
+            console.log("success: found item with title " + title + " in DB");
             grid = data;
         },
         failure: function(errMsg) {
-            alert("failure: didn't find item in DB");
-            return null;
+            console.log("failure: didn't find item in DB");
+            grid = null;
         }
     });
+    if(grid == null) {
+        throw "didn't retrieve grid with title [" + title + "]";
+    }
     return grid;
 }
 
-function getAllTitles(cb) {
+function getAllTitles() {
+    var titles = null;
     $.ajax({
         type: "GET",
         url: AWS_URL + "/api/v1/query-all-titles/",
@@ -128,13 +148,17 @@ function getAllTitles(cb) {
         success: function(data) {
             console.log("success! found the following titles:");
             console.log(data);
-            return data;
+            titles = data;
         },
         failure: function(errMsg) {
             console.log("failure: couldn't retrieve titles")
-            return null;
+            titles = null;
         }
     });
+    if(titles == null) {
+        throw "didn't retrieve titles";
+    }
+    return titles;
 }
 
 function validJSON(myJSON) {
@@ -164,11 +188,6 @@ function validJSON(myJSON) {
     }
     return true;
 }
-
-// module.exports.storeGrid = storeGrid;
-// module.exports.getByTitle = getByTitle;
-// module.exports.getAllTitles = getAllTitles;
-// module.exports.validJSON = validJSON;
 
 module.exports.storeGrid = storeGrid;
 module.exports.getByTitle = getByTitle;

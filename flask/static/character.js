@@ -151,21 +151,23 @@ Character.prototype.newXPos = function(step, dir) {
 // Checks if a hypothetical next x position of a Character is legal, and if so,
 // updates its position.
 Character.prototype.moveX = function(newPos, obstacle) {
-  if(obstacle != null) {
-      if(obstacle.getSolid() == 0){
-          this.position = newPos;
+    if (this.status) {
+        if (obstacle != null) {
+            if (obstacle.getSolid() == 0) {
+                this.position = newPos;
+            }
         }
-   }
-   else{
-       this.position = newPos;
-     }
+        else {
+            this.position = newPos;
+        }
+    }
 }
 
 // Calculates the hypothetical next y position of a character based on gravity
 Character.prototype.newYPos = function(step) {
   this.speed.y += step * this.gravity;
 
-  var motion = new Vector(0, this.speed.y * step);
+  var motion = new Vector(0, this.speed.y * 2 * step);
   var newPos = this.position.plus(motion);
   return newPos;
 };
@@ -174,17 +176,33 @@ Character.prototype.newYPos = function(step) {
 // updates its position; if it hits the ground stops its motion; if it is on
 // ground and jumps, updates its speed to allow the jump on the next game loop.
 Character.prototype.moveY = function(newPos, obstacle, up) {
-  var jumpSpeed = 70;
-  if(obstacle != null) {
-      if(obstacle.getSolid() == 1){
-          newPos.x = this.position.x
-          if (up && this.speed.y > 0){
-              this.speed.y = -jumpSpeed;
-          } else
-              this.speed.y = 0;
-      }
-    } else
-          this.position = newPos;
+    var jumpSpeed = 70;
+    if (this.status) {
+        if (obstacle != null) {
+            if (obstacle.getSolid() == 1) {
+                newPos.x = this.position.x
+                if (up && this.speed.y > 0) {
+                    this.speed.y = -jumpSpeed;
+                } else
+                    this.speed.y = 0;
+            }
+        } else
+            this.position = newPos;
+    }
 };
+
+Character.prototype.decHealth = function(damage){
+    this.health -= damage;
+    if(this.health <= 0){
+        this.status = false;
+    }
+}
+
+Character.prototype.addHealth = function(amount){
+    this.health += amount;
+    if(this.health > this.maxHealth){
+        this.health = this.maxHealth;
+    }
+}
 
 module.exports = Character;

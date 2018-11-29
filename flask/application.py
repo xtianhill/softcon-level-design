@@ -66,9 +66,11 @@ def add_grid():
 
 @application.route('/api/v1/update-grid/', methods=['POST'])
 def update_grid():
-    if not request.json:
-        response = Response(request.form, status=HTTP_BADREQUEST)
-    elif not validate_json(request.get_json()):
+    print "request: " + str(request.headers)
+    # if not request.json:
+    #     response = Response(request.form, status=HTTP_BADREQUEST)
+    if not validate_json(request.get_json()):
+        print "Error: invalid JSON"
         response = Response(request.form, status=HTTP_BADREQUEST)
     else:
         my_json = request.get_json()
@@ -82,6 +84,7 @@ def update_grid():
             my_grid.data = new_data
             db.session.commit()
             response = Response(my_json, status=HTTP_CREATED, mimetype='application/json') 
+            print "SUCCESS: entry updated in DB"
         except exc.DataError:
             db.session.rollback()
             response = Response(my_json, status=HTTP_NOTFOUND, mimetype='application/json')

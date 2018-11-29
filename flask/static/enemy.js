@@ -78,7 +78,4 @@ Enemy.prototype.setDirection = function(dir){
         }
 }
 
-Enemy.prototype.decHealth = function(){
-    // decrease an enemies health if attacked with damage effect
-}
 module.exports = Enemy;
