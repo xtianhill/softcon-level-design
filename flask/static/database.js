@@ -41,18 +41,24 @@ function storeGrid(gridJSON) {
             contentType: "application/json",
             dataType: "text",
             success: function(data) {
-                console.log("success: stored the following grid in DB: " + data);
-                alert("Success: stored the following grid in DB via success callback");
+                console.log("Success: stored [" + data + "] in database.");
+                alert("Success: grid successfully stored.");
             },
             failure: function(errMsg) {
                 console.log("failure: couldn't store grid");
-                alert("failure: couldn't store grid");
+                alert("Error: operation could not be performed.");
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 var status = XMLHttpRequest.status;
                 if (status == HTTP_CONFLICT) {
-                    alert("Error: title [" + gridJSON.title + "] already exists.");
+                    console.log("Error: HTTP CONFLICT (" + HTTP_CONFLICT + ")");
+                    alert("That title is taken; please choose another name.");
+                } else if(status == HTTP_BADREQUEST) {
+                    console.log("Error: HTTP BADREQUEST (" + HTTP_BADREQUEST + ")");
+                    alert("Sorry, something went wrong. The title could not be retrieved; please try again.");
                 } else {
+                    console.log("Error: unspecified error (" + status + ")");
+                    console.log("Error textStatus: " + textStatus);
                     alert("Error: operation could not be performed.");
                 }
             }
@@ -60,6 +66,7 @@ function storeGrid(gridJSON) {
         return true;
     } catch(err) {
         console.log(err);
+        return false;
     }
 }
 
@@ -72,22 +79,19 @@ async function isRunning() {
             dataType: "text",
             url: AWS_URL + "api/v1/backend-up", 
             success: function(data) {
+                alert("Backend is running");
                 console.log("success: backend is running");
             },
             failure: function(errMsg) {
                 console.log("failure: backend cannot be reached");
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
-                var status = XMLHttpRequest.status;
-                if (status == HTTP_NOTFOUND) {
-                    alert("Error: title [" + title + "] not found.");
-                } else {
-                    alert("Error: operation could not be performed.");
-                }
+                console.log("error: " + textStatus);
             }
         });
     } catch(err) {
         console.log(err);
+        return false;
     }
     return success==SUCCESS_MSG;
 }
@@ -103,16 +107,20 @@ async function deleteGrid(title) {
             async: true,
             url: AWS_URL + "api/v1/delete-grid/" + title,
             success: function(data) {
-                console.log("success: deleted grid with title " + title + " in DB via success callback");
+                alert("Success: grid successfully deleted.");
+                console.log("success: deleted grid in DB via success callback");
             },
             failure: function(errMsg) {
-                alert("failure: didn't delete item with title: " + title);
+                alert("Sorry, something went wrong. The grid was not deleted.");
+                console.log("failure: didn't delete item");
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 var status = XMLHttpRequest.status;
                 if (status == HTTP_NOTFOUND) {
-                    alert("Error: title [" + title + "] not found.");
+                    alert("Error: the grid was not found.");
                 } else {
+                    console.log("Error: unspecified error (" + status + ")");
+                    console.log("Error textStatus: " + textStatus);
                     alert("Error: operation could not be performed.");
                 }
             }
@@ -146,10 +154,14 @@ async function updateGrid(gridJSON) {
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 var status = XMLHttpRequest.status
                 if (status == HTTP_NOTFOUND) {
-                    alert("Error: title [" + gridJSON.title + "] not found.");
+                    console.log("Error: HTTP NOTFOUND (" + HTTP_NOTFOUND + ")");
+                    alert("Error: the grid was not found.");
+                } else if(status == HTTP_BADREQUEST) {
+                    console.log("Error: HTTP BADREQUEST (" + HTTP_BADREQUEST + ")");
+                    alert("Sorry, something went wrong. The title could not be retrieved; please try again.");
                 } else {
-                    console.log("textStatus: " + textStatus);
-                    console.log("errorThrown: " + errorThrown);
+                    console.log("Error: unspecified error (" + status + ")");
+                    console.log("Error textStatus: " + textStatus);
                     alert("Error: operation could not be performed.");
                 }
             }
@@ -178,6 +190,20 @@ async function getByTitle(title) {
             },
             failure: function(errMsg) {
                 console.log("failure: didn't find item in DB");
+            }, 
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                var status = XMLHttpRequest.status
+                if (status == HTTP_NOTFOUND) {
+                    console.log("Error: HTTP NOTFOUND (" + HTTP_NOTFOUND + ")");
+                    alert("Error: the grid was not found.");
+                } else if(status == HTTP_BADREQUEST) {
+                    console.log("Error: HTTP BADREQUEST (" + HTTP_BADREQUEST + ")");
+                    alert("Sorry, something went wrong. The title could not be retrieved; please try again.");
+                } else {
+                    console.log("Error: unspecified error (" + status + ")");
+                    console.log("Error textStatus: " + textStatus);
+                    alert("Error: operation could not be performed.");
+                }
             }
         });
     } catch(error) {
@@ -206,6 +232,17 @@ async function getAllTitles() {
             failure: function(errMsg) {
                 console.log("failure: couldn't retrieve titles")
                 // titles = null;
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                var status = XMLHttpRequest.status
+                if(status == HTTP_BADREQUEST) {
+                    console.log("Error: HTTP BADREQUEST (" + HTTP_BADREQUEST + ")");
+                    alert("Sorry, something went wrong. The titles could not be retrieved; please try again.");
+                } else {
+                    console.log("Error: unspecified error (" + status + ")");
+                    console.log("Error textStatus: " + textStatus);
+                    alert("Error: operation could not be performed.");
+                }
             }
         });
     } catch(err) {
@@ -221,21 +258,16 @@ async function getAllTitles() {
 //function to check if a JSON is valid to store in the database
 function validJSON(myJSON) {
     myJSON = JSON.parse(myJSON);
-    // console.log("validJSON: myJSON: " + myJSON);
-    // console.log("validJSON: myJSON type: " + myJSON.type);
     if(myJSON.type == 'string') {
-        // console.log("validJSON: given a string");
         myJSON = JSON.parse(myJSON);
     }
     try {
         var myTitle = myJSON["title"]
         var myData = myJSON["data"]
         if(myTitle.length == 0 || myData.length == 0) {
-            // console.log("validJSON: field(s) are length 0");
             return false;
         }
         if(typeof myData != 'string') {
-            // console.log("validJSON: data isn't a string");
             return false;
         }
     }

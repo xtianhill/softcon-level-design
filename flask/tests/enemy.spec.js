@@ -74,7 +74,6 @@ describe('Enemy', function() {
         expect(testEnemy.getDamage()).toEqual(5);
     });
 
-<<<<<<< HEAD
     // test getRange and setRange
     it('should set the range to null and get the range successfully', function() {
         testEnemy.setRange(null);
@@ -100,7 +99,7 @@ describe('Enemy', function() {
     it('should test changeDirection', function() {
         testEnemy.changeDirection();
         expect(testEnemy.getDirection()).toEqual("left");
-=======
+
     /*
     |--------------------------------------------------------------------------
     | Getter and Setter Tests for Range

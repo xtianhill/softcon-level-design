@@ -43,6 +43,9 @@ def index():
 def send_js(path):
     return send_from_directory('../static', path)
 
+@application.route('/play')
+def bad_play():
+    return 'Please enter a title in the URL.'
 @application.route('/play/<title>')
 def play_grid(title):
     return render_template('playTitle.html', title=title)
