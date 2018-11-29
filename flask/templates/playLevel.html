@@ -1,22 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <link rel="stylesheet" href="../static/play.css" type="text/css" />
-  <meta charset="utf-8">
-  <meta name="viewport"
-     content="width=device-width, initial-scale=1, user-scalable=yes">
-  <title>Play a Level</title>     
-</head>
-<div>
-Level Title
-<button onmousedown="engine.reset()">RESET</button>
-</div>
-<div class="wrapper" id="wrap">
-    <canvas id="c" width="1000" height="500"></canvas>
-</div>
-<div class = "inventory"> 
-  Inventory
-  <ul id="inventory"></ul>
-</div> 
-<script src = "../static/index.js"></script>
+  <head>
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+    <link rel="stylesheet" href="../static/play.css" type="text/css" />
+    <meta charset="utf-8">
+    <meta name="viewport"
+       content="width=device-width, initial-scale=1, user-scalable=yes">
+    <title>Play a Level</title>
+  </head>
+  <body>
+    <header class="header" id = "header">
+      <div class="title">Level Title</div>
+      <a href="#" id="movemode" class="myButton" onclick="engine.reset()">RESET</a>
+    </header>
+    <section="group">
+      <section>
+        <div class="wrapper" id="wrap">
+          <canvas id="c" width="1000" height="500" ></canvas>
+        </div>
+      </section>
+        <aside class = "inventory">
+        <div class="inventory_title">Inventory</div>
+        <div id="inventory_box" class="inventory_box"></div>
+        <ul id="inventory"></ul>
+      </aside>
+    </section>
+    <script src = "../static/index.js"></script>
+  </body>
 </html>
