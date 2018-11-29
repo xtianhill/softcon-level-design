@@ -681,10 +681,10 @@ function draw(gameState){
 
         // draw health bars for NPCs and Enemies
         if((curElement instanceof Enemy || curElement instanceof NPC) && curElement.status){
-          gameState.ctx.fillStyle = "#FF0000";
+          gameState.ctx.fillStyle = "#206020";
           gameState.ctx.fillRect(curElement.position.x, curElement.position.y - 8,
               curElement.size.x, 4);
-          gameState.ctx.fillStyle = "#00FF00";
+          gameState.ctx.fillStyle = "#009900";
           var percentFull = curElement.health / curElement.maxHealth;
           gameState.ctx.fillRect(curElement.position.x, curElement.position.y - 8,
               percentFull * curElement.size.x, 4);
@@ -742,32 +742,32 @@ function detectCollision(pos1, pos2, element1, element2) {
 // react to collisions with various types of elements
 function onCollision(gameState, i) {
 	    //if npc, show message
-            if(gameState.elements[i] instanceof NPC){
+      collision = gameState.elements[i]
+            if(collision instanceof NPC){
                //elements[i].displayMessage();
-               gameState.ctx.fillText(gameState.elements[i].getMessage(), 0, 0);
-               gameState.elements[i].shouldDisplay = true;
+               gameState.ctx.fillText(collision.getMessage(), 0, 0);
+               collision.shouldDisplay = true;
             }
 
             //if enemy, either damage w/item or lose health
-            if(gameState.elements[i] instanceof Enemy){
-                gameState.pc.decHealth(gameState.elements[i].getDamage());
-                // updateHealth(gameState.pc);
+            if(collision instanceof Enemy){
+                gameState.pc.decHealth(collision.getDamage());
             }
 
             //if item, pick up and remove from elements, display in inventory
-             if(gameState.elements[i] instanceof Item){
+             if(collision instanceof Item){
                 gameState.pc.pickUpItem(gameState.elements[i]);
                 gameState.elements.splice(i,1);
                 showInventory(gameState);
              }
 
              //if enviroment with effect, affect pc
-             if(gameState.elements[i] instanceof Environment){
-                if(gameState.pc.sinceTile > 50 && gameState.elements[i].getEffect()){
-                    if(gameState.elements[i].getEffect().getEffect() == "damage")
-                        gameState.pc.decHealth(gameState.elements[i].getEffect().getAmount());
-                    else if(gameState.elements[i].getEffect().getEffect() == "heal")
-                        gameState.pc.addHealth(gameState.elements[i].getEffect().getAmount());
+             if(collision instanceof Environment){
+                if(gameState.pc.sinceTile > 50 && collision.getEffect()){
+                    if(collision.getEffect().getEffect() == "damage")
+                        gameState.pc.decHealth(collision.getEffect().getAmount());
+                    else if(collision.getEffect().getEffect() == "heal")
+                        gameState.pc.addHealth(collision.getEffect().getAmount());
                     gameState.pc.sinceTile = 0;
                   }
              }
@@ -874,9 +874,9 @@ function scrollPlayerIntoView() {
                           bgWidth*ratio, bgHeight*ratio);
 
   // draw player's health bar in top left corner
-  gameState.ctx.fillStyle = "#FF0000";
+  gameState.ctx.fillStyle = "#206020";
   gameState.ctx.fillRect(gameState.wrap.scrollLeft+8, 8, 50, 10);
-  gameState.ctx.fillStyle = "#00FF00";
+  gameState.ctx.fillStyle = "#009900";
   var percentFull = gameState.pc.health / gameState.pc.maxHealth;
   if(!gameState.pc.status) { percentFull=0; }
   gameState.ctx.fillRect(gameState.wrap.scrollLeft+8, 8, percentFull*50, 10);
@@ -884,33 +884,25 @@ function scrollPlayerIntoView() {
 
 // display player's inventory in html; only called when new item picked up
 function showInventory(gameState){
+    var box = document.getElementById('inventory_box');
     var ul = document.getElementById('inventory');
     ul.innerHTML = "";
     var inventory = gameState.pc.inventory;
+    if(inventory.length == 0)
+        box.style.visibility = "hidden";
+    else
+        box.style.visibility = "visible";
     for (var i = 0; i < inventory.length; i++) {
         var item = inventory[i];
 
         var listItem = document.createElement("li");
 
-        listItem.border = "1px solid black";
-
         var _img = document.createElement('img');
         _img.src = item.sprite;
-        _img.style = "width:30px;height:30px;";
-        if(i == 0){
-            _img.border = "1px solid red";
-        }
+        _img.style = "width:60px;height:60px;";
         listItem.appendChild(_img);
 
         ul.appendChild(listItem);
-    }
-}
-
-// update player's health
-function updateHealth(pc){
-    if(pc.health >=0) {
-        var healthBar = document.getElementById("health");
-        healthBar.value = pc.health;
     }
 }
 
@@ -943,7 +935,6 @@ function handleItemUse (gameState){
         }
     }
     gameState.pc.useItem(gameState.pc);
-    //updateHealth(gameState.pc);
 }
 
 function changeItem(gameState){
@@ -1232,10 +1223,10 @@ Player.prototype.getEquippedItem= function(){
 
 //set owned item and return 1. return 0 for non-item input
 Player.prototype.setEquippedItem = function(itm){
-    //set owned item to itm
+    // set owned item to itm
     // set item.collected to be true
     if(itm instanceof Item){
-        //this.inventory.push(this.equippedItem);
+        // this.inventory.push(this.equippedItem);
         this.equippedItem = itm;
         itm.collected = true;
     }
@@ -1243,24 +1234,16 @@ Player.prototype.setEquippedItem = function(itm){
 
 Player.prototype.useItem = function(target){
     /* if there is a target, do the effect (heal or damage)*/
-    if(target != null){
+    if(target != null && target != this){
         // DO A CHECK TO SEE IF THE TARGET IS LEGIT
         if(this.equippedItem.getEffect().effect == "heal"){
-            // CHANGE THIS TO AMOUNT not rando value
             console.log(this.equippedItem);
-            target.health += this.equippedItem.effect.amount; //
-            if(target.health > target.maxHealth){
-                target.health = target.maxHealth;
-            }
-            console.log(target.health);
+            target.addHealth(this.equippedItem.getEffect().getAmount());
+            console.log("target health heal: " + target.health);
         }
         else if (this.equippedItem.getEffect().effect == "damage"){
-            console.log(target.health);
-            target.health -= this.equippedItem.effect.amount;
-            if(target.health <= 0){
-                target.status = false;
-            }
-            console.log(target.health);
+            target.decHealth(this.equippedItem.getEffect().getAmount());
+            console.log("target health damage: " + target.health);
         }
 
     }

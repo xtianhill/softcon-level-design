@@ -40,10 +40,10 @@ Player.prototype.getEquippedItem= function(){
 
 //set owned item and return 1. return 0 for non-item input
 Player.prototype.setEquippedItem = function(itm){
-    //set owned item to itm
+    // set owned item to itm
     // set item.collected to be true
     if(itm instanceof Item){
-        //this.inventory.push(this.equippedItem);
+        // this.inventory.push(this.equippedItem);
         this.equippedItem = itm;
         itm.collected = true;
     }
@@ -51,24 +51,16 @@ Player.prototype.setEquippedItem = function(itm){
 
 Player.prototype.useItem = function(target){
     /* if there is a target, do the effect (heal or damage)*/
-    if(target != null){
+    if(target != null && target != this){
         // DO A CHECK TO SEE IF THE TARGET IS LEGIT
         if(this.equippedItem.getEffect().effect == "heal"){
-            // CHANGE THIS TO AMOUNT not rando value
             console.log(this.equippedItem);
-            target.health += this.equippedItem.effect.amount; //
-            if(target.health > target.maxHealth){
-                target.health = target.maxHealth;
-            }
-            console.log(target.health);
+            target.addHealth(this.equippedItem.getEffect().getAmount());
+            console.log("target health heal: " + target.health);
         }
         else if (this.equippedItem.getEffect().effect == "damage"){
-            console.log(target.health);
-            target.health -= this.equippedItem.effect.amount;
-            if(target.health <= 0){
-                target.status = false;
-            }
-            console.log(target.health);
+            target.decHealth(this.equippedItem.getEffect().getAmount());
+            console.log("target health damage: " + target.health);
         }
 
     }
