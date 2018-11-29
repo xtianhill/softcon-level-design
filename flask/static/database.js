@@ -16,17 +16,16 @@ const HTTP_CONFLICT = "409";
 const AWS_URL = "http://127.0.0.1:5000/";
 const SUCCESS_MSG = "BACKEND RUNNING";
 
-async function storeGrid(gridJSON) {
-    var myData = JSON.stringify(gridJSON);
-    if(!validJSON(myData)) {
+function storeGrid(gridJSON) {
+    if(!validJSON(gridJSON)) {
         throw "invalid JSON given";
     }
     var success;
     try {
         success = $.ajax({
             type: "POST",
-            url: AWS_URL + "api/v1/add-grid",
-            data: myData,
+            url: AWS_URL + "api/v1/add-grid/",
+            data: JSON.stringify(gridJSON),
             contentType: "application/json",
             dataType: "text",
             success: function(data) {
@@ -46,11 +45,9 @@ async function storeGrid(gridJSON) {
                 }
             }
         });
-        console.log("success msg: " + success);
         return true;
     } catch(err) {
         console.log(err);
-        return false;
     }
 }
 
