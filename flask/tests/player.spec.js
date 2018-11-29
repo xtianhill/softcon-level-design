@@ -37,6 +37,7 @@ describe('Player', function() {
         testPlayer = new Player(new Vector(1,1), 20, 0, 0, testItem, [testItem],
                                 new Vector(12,12), 'dummy_url', new Vector(3,3),
                                 new Vector(0,0), 50, 80);
+        testVector1 = new Vector(6, 9);
     });
 
     /*
@@ -139,4 +140,51 @@ describe('Player', function() {
         expect(testPlayer.getEquippedItem().getPosition().y).toEqual(6);
         expect(testPlayer.getInventory()).toEqual([testItem, testItem2]);
     });
+
+    // test setStatus and getStatus
+    it('should succcessfuly use setStatus and getStatus', function() {
+        testPlayer.setStatus(true);
+        expect(testPlayer.getStatus()).toBeTruthy();
+        testPlayer.getStats(false);
+        expect(testPlayer.getStatus()).toBeFalsy();
+    });
+
+    it('should fail to set status due to invalid input', function() {
+        testPlayer.setStatus("hello");
+        expect(testPlayer.getStatus()).toBeFalsy();
+    });
+
+    // test setSpeed and getSpeed
+    it('should test setSpeed and getSpeed', function() {
+        testPlayer.setSpeed(testVector1);
+        expect(testPlayer.getSpeed()).toEqual(testVector1);
+    });
+
+    it('should fail to set speed due to invalid input', function() {
+        testPlayer.setSpeed(400);
+        expect(testPlayer.getSpeed()).toEqual(testVector1);
+    });
+
+    // test getMovementSpeed and setMovementSpeed
+    it('should successfully set MovementSpeed and get MovementSpeed', function() {
+        testPlayer.setMovementSpeed(400);
+        expect(testPlayer.getMovementSpeed()).toEqual(400);
+    });
+
+    it('should fail to set the MovementSpeed due to invalid input', function() {
+        testPlayer.setMovementSpeed("three thousand");
+        expect(testPlayer.getMovementSpeed()).toEqual(400);
+    });
+
+    // test setGravity and getGravity
+    it('should successfully set and get Gravity', function() {
+        testPlayer.setGravity(100);
+        expect(testPlayer.getGravity()).toEqual(100);
+    });
+
+    it('should fail to set Gravity due to invalid input', function() {
+        testPlayer.setGravity("three thousand");
+        expect(testPlayer.getGravity()).toEqual(100);
+    });
+
 });
