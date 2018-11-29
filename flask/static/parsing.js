@@ -1,3 +1,14 @@
+/*
+|------------------------------------------------------------------------------
+| Parser
+|------------------------------------------------------------------------------
+|
+| This file contains the Parser, the JSONtoElements function, which
+| creates a new element based on data from a given JSON.
+|
+|------------------------------------------------------------------------------
+*/
+
 const NPC = require('./npc.js');
 const Enemy = require('./enemy.js');
 const Player = require('./player.js');

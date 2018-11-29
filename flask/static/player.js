@@ -1,9 +1,24 @@
-/*Player Prototype
-Note: location is a vector with x and y*/
+/*
+|------------------------------------------------------------------------------
+| Player Class
+|------------------------------------------------------------------------------
+|
+| This file contains the Player prototype (the javascript equivalent of a
+| class). Player is a subclass of the superclass Character. It contains
+| data about player status and whether the player has an item.
+|
+|------------------------------------------------------------------------------
+*/
+/*Note: location is a vector with x and y*/
 const Item = require('./item.js');
 const Character = require('./character.js');
 const Vector = require('./utility.js');
 
+/*
+|------------------------------------------------------------------------------
+| Constructor
+|------------------------------------------------------------------------------
+*/
 function Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed, mvspd, grav){
     Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspd, grav);
     this.equippedItem = itm;
@@ -23,22 +38,24 @@ Player.prototype.Player = function(){
     this.inventory = [];
 }
 
+//Getter for inventory
 Player.prototype.getInventory= function(){
     return this.inventory;
 }
 
+//Setter for inventory
 Player.prototype.setInventory = function(arr)
 {
     this.inventory = arr;
 }
 
-//gets OwnedItem.
+//Getter for an owned item
 Player.prototype.getEquippedItem= function(){
     //return owned item
     return this.equippedItem;
 }
 
-//set owned item and return 1. return 0 for non-item input
+//Setter for owned item; return 1 if successful, return 0 for non-item input
 Player.prototype.setEquippedItem = function(itm){
     //set owned item to itm
     // set item.collected to be true
@@ -49,31 +66,33 @@ Player.prototype.setEquippedItem = function(itm){
     }
 }
 
+//Use owned item
 Player.prototype.useItem = function(target){
     /* if there is a target, do the effect (heal or damage)*/
-    if(target != null){
-        // DO A CHECK TO SEE IF THE TARGET IS LEGIT
-        if(this.equippedItem.getEffect().effect == "heal"){
-            // CHANGE THIS TO AMOUNT not rando value
-            console.log(this.equippedItem);
-            target.health += this.equippedItem.effect.amount; //
-            if(target.health > target.maxHealth){
-                target.health = target.maxHealth;
+    if(this.status){
+        if(target != null){
+            if(this.equippedItem.getEffect().effect == "heal" && target.status){
+                console.log(this.equippedItem);
+                target.health += this.equippedItem.effect.amount; 
+                if(target.health > target.maxHealth){
+                    target.health = target.maxHealth;
+                }
+                console.log(target.health);
             }
-            console.log(target.health);
-        }
-        else if (this.equippedItem.getEffect().effect == "damage"){
-            console.log(target.health);
-            target.health -= this.equippedItem.effect.amount;
-            if(target.health <= 0){
-                target.status = false;
+            else if (this.equippedItem.getEffect().effect == "damage" && target.status){
+                
+                target.health -= this.equippedItem.effect.amount;
+                if(target.health <= 0){
+                    target.status = false;
+                }
+                console.log(target.health);
             }
-            console.log(target.health);
         }
-
     }
+    
 }
 
+//Pick up an item
 Player.prototype.pickUpItem = function(item){
     this.setEquippedItem(item);
     this.inventory.unshift(item);

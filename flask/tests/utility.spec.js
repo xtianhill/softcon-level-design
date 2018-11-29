@@ -30,6 +30,7 @@ describe('Utility', function(){
         testVector0 = new Vector(0, 0);
         testVector1 = new Vector(6, 9);
         testVector2 = new Vector(12, 18);
+        testVector3 = new Vector(72, 162);
     })
 
     /*
@@ -65,5 +66,15 @@ describe('Utility', function(){
     it('should fail to add vectors due to invalid input', function() {
         expect(testVector0.plus(5)).toEqual({});
         expect(testVector0.plus("testVector1")).toEqual({});
+    });
+
+    it('should multiply vectors', function() {
+        expect(testVector1.times(testVector2)).toEqual(testVector3);
+        expect(testVector0.times(testVector3)).toEqual(testVector0);
+    });
+
+    it('should multiply a vector times a number', function() {
+        expect(testVector0.times(13)).toEqual(testVector0);
+        expect(testVector1.times(2)).toEqual(testVector2);
     });
 });

@@ -44,12 +44,21 @@
         <button onclick="database.getByTitle('cbh-title')">Search for cbh-title</button>
         <button onclick="database.getByTitle('vcbc')">Search for vcbc</button>
         <button onclick="myFunction()">Add test grid to DB</button>
+        <button onclick="testRetrieveGrid()">Test Retrieving Grid</button>
+        <button onclick="testStoreGrid()">Test Storing Grid</button>
+        <button onclick="testDeleteGrid()">Test Delete Grid</button>
+        <button onclick="testUpdateGrid()">Test Update Grid</button>
+        <button onclick="testGetAllTitles()">Test Get All Titles</button>
+        <button onclick="testDeleteGrid()">Test Delete Grid</button>
+        <button onclick="testIsRunning()">Test Is Running</button>
 
         <script>
+        var cbResult;
+        var myCB = function(data) {
+            alert(data);
+            cbResult = data;
+        }
         function myFunction() {
-            var myCB = function(data) {
-                alert(data);
-            }
             var mytitle = prompt("Enter the grid title", "title");
             var test_data = prompt("Enter the data", "my data ");
             console.log("title: " + mytitle);
@@ -62,6 +71,76 @@
                 database.storeGrid(JSON.stringify(myJSON), myCB);
                 console.log("store grid should have worked")
             }
+        }
+
+        async function testIsRunning() {
+            var success;
+            try {
+                success = await database.isRunning();
+                console.log("isrunning success: " + success)
+            } catch(err) {
+                console.log(err);
+            }
+        }
+
+        async function testRetrieveGrid() {
+            var mytitle = prompt("Enter the grid title", "title");
+            
+            if(mytitle != null) {
+                console.log("*****before: cbResult = " + cbResult);
+                try {
+                    var testGridVal = await database.getByTitle(mytitle, myCB);
+                } catch (error) {
+                    console.log(error);
+                }
+                console.log("*****after: cbResult = " + cbResult);
+                console.log("*****after: testGridVal = " + testGridVal);
+            }
+        }
+
+        async function testDeleteGrid() {
+            var title = "testStoreGrid title";
+            try {
+                var success = await database.deleteGrid(title);
+                console.log("*****testDeleteGrid: " + success)
+            } catch(err) {
+                console.log(err);
+            }
+        }
+
+        async function testUpdateGrid() {
+            var myTestUpdateGrid = {
+                "title" : "testStoreGrid title",
+                "data" : "xtina xtina banana fana fo fina, me mi mo mina, xtina! this the new grid thoooo"
+            }
+            console.log("*****myTestUpdateGrid: " + JSON.stringify(myTestUpdateGrid));
+            try {
+                var storeResult = await database.updateGrid(JSON.stringify(myTestUpdateGrid));
+                console.log("*****myTestUpdateGrid: " + storeResult);
+            } catch(error) {
+                console.log(error);
+            }
+            console.log("*****updateResult: " + storeResult);
+        }
+
+        async function testGetAllTitles() {
+            var titles;
+            try {
+                titles = await database.getAllTitles();
+                console.log(titles);
+            } catch(err) {
+                console.log(err);
+            }
+        }
+
+        function testStoreGrid() {
+            var myTestGrid = {
+                "title" : "testStoreGrid title",
+                "data" : "xtina xtina banana fana fo fina, me mi mo mina, xtina!"
+            }
+            console.log("*****myTestGrid: " + JSON.stringify(myTestGrid));
+            var storeResult = database.storeGrid(JSON.stringify(myTestGrid));
+            console.log("*****storeResult: " + storeResult);
         }
         </script>
     </body>  
