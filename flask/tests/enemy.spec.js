@@ -74,6 +74,33 @@ describe('Enemy', function() {
         expect(testEnemy.getDamage()).toEqual(5);
     });
 
+<<<<<<< HEAD
+    // test getRange and setRange
+    it('should set the range to null and get the range successfully', function() {
+        testEnemy.setRange(null);
+        expect(testEnemy.getRange()).toEqual(null);
+    });
+
+    it('should fail to set the range due to invalid input', function() {
+        testEnemy.setRange("hello");
+        expect(testEnemy.getRange()).toBeFalsy();
+    });
+
+    // test getDirection, setDirection, changeDirection
+    it('should test setting and getting the Direction successfully', function() {
+        testEnemy.setDirection("right");
+        expect(testEnemy.getDirection()).toEqual("right");
+    });
+
+    it('should fail to set Direction due to invalid input', function() {
+        testEnemy.setDirection("nowehere");
+        expect(testEnemy.getDirection()).toEqual("right");
+    });
+
+    it('should test changeDirection', function() {
+        testEnemy.changeDirection();
+        expect(testEnemy.getDirection()).toEqual("left");
+=======
     /*
     |--------------------------------------------------------------------------
     | Getter and Setter Tests for Range
@@ -108,6 +135,7 @@ describe('Enemy', function() {
     it('should change direction', function(){
         expect(testEnemy.changeDirection()).toEqual("left")
         expect(testEnemy.changeDirection()).toEqual("right")
+>>>>>>> b95333d7ec9f4485dd9a206ca9bf157f834ae846
     });
 
 });
