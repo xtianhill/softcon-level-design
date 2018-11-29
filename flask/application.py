@@ -18,8 +18,12 @@ def validate_json(my_json):
         return False
     return True
 
+@application.route('/home', methods=['GET'])
+def home():
+    return render_template('home.html')
+
 @application.route('/api/v1/backend-up', methods=['GET'])
-def hello():
+def is_backend_running():
     return Response("BACKEND RUNNING", status=200)
 
 @application.route('/db_tests', methods=['GET'])
@@ -36,7 +40,7 @@ def send_js(path):
 
 @application.route('/play/<title>')
 def play_grid(title):
-    return send_from_directory('../static', title)
+    return render_template('playTitle.html', title=title)
 
 @application.route('/api/v1/add-grid/', methods=['POST'])
 def add_grid():
