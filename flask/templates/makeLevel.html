@@ -26,6 +26,11 @@
 
   <div class="header" id = "header">
     		   <div style="display: inline-block; background: #a3c0f5"></div>
+           <svg class= "box" width="65" height="65" >
+  <rect x="0" y="2" width="60" height="60" style="fill:pink ;stroke:pink;stroke-width:5;fill-opacity:1;stroke-opacity:0.9" />
+  Sorry, your browser does not support inline SVG.
+</svg>
+
            <input type="image" id="movemode" class="myButton" src = "http://chittagongit.com/images/move-icon/move-icon-4.jpg" style= "height: 50px; width: 50px">
            <input type ="image" id= "eraserbutton" class="eraser" src="https://webiconspng.com/wp-content/uploads/2017/09/Eraser-PNG-Image-47683.png" style="height: 50px; width: 50px">
            <input type= "image" id = "groundbutton" class="groundbutton"src = "https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg" style= "height: 50px; width: 50px">
@@ -33,13 +38,41 @@
            <input type= "image" id = "itembutton" class= "itembutton" src = "https://66.media.tumblr.com/4a8e88c9194d00c4e2e14d62f2a9dc76/tumblr_pi5t840NIu1u9vozfo1_250.png" style= "height: 50px; width: 50px">
            <input type= "image" id = "enemybutton" class= "enemybutton" src = "https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png" style= "height: 50px; width: 50px">
            <input type= "image" id= "npcbutton" class="npcbutton" src= "https://66.media.tumblr.com/18b1dcddb1e6de2d56f2bbc16e368af5/tumblr_pi5sz2UwpH1u9vozfo1_250.png" style= "height: 50px; width: 50px">
-<div class="custom-select" style="width:200px;">
-           <select>
-  <option value="select an effect">Select an effect</option>
+<div class="maxhealthselector">
+           <form action="/action_page.php">
+             Enter a max health between 1 and 1000:
+             <input type="number" name="health" min="1" max="1000">
+           </form>
+         </div>
+
+  <select name= "selector1"id="effect-selector" class="effect-selector">
   <option value="heal">Heal</option>
   <option value="damage">Damage</option>
 </select>
+
+<select name= "selector3"id="speed-selector" class="speed-selector">
+<option value="high">High speed</option>
+<option value="medium">Medium speed</option>
+<option value="low">Low speed</option>
+</select>
+
+
+<select name="selector2" id="solid-selector" class= "solid-selector">
+<option value=1>solid</option>
+<option value=0>not solid</option>
+</select>
+
+<div class="gravity-selector" id="gravity-selector">
+<form action="/action_page.php">
+  Gravity:
+  <input type="radio" name="color" value="high">high
+  <input type="radio" name="color" value="medium" checked>medium
+  <input type="radio" name="color" value="low">low
+</form>
 </div>
+
+
+
 </div>
 		<button  id = "save"> Show my elements </button>
 
@@ -81,6 +114,9 @@
 
       <img src="https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg" alt="Cursor" class="cursor" id="cursor"/>
       <img src="https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png" alt="Cursor" class="cursor2" id="cursor2"/>
-
+      <img src="https://66.media.tumblr.com/4a8e88c9194d00c4e2e14d62f2a9dc76/tumblr_pi5t840NIu1u9vozfo1_250.png" alt="Cursor" class="cursor3" id="cursor3"/>
+      <img src="https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png" alt="Cursor" class="cursor4" id="cursor4"/>
+      <img src="https://66.media.tumblr.com/18b1dcddb1e6de2d56f2bbc16e368af5/tumblr_pi5sz2UwpH1u9vozfo1_250.png" alt="Cursor" class="cursor5" id="cursor5"/>
+      <img src="https://webiconspng.com/wp-content/uploads/2017/09/Eraser-PNG-Image-47683.png" alt="Cursor" class="cursor6" id="cursor6"/>
     </body>
 </html>

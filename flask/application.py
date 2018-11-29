@@ -18,9 +18,14 @@ def validate_json(my_json):
         return False
     return True
 
+@application.route('/', methods=['GET'])
 @application.route('/home', methods=['GET'])
 def home():
     return render_template('home.html')
+
+@application.route('/edit', methods=['GET'])
+def edit():
+    return render_template('makeLevel.html')
 
 @application.route('/api/v1/backend-up', methods=['GET'])
 def is_backend_running():
