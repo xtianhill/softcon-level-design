@@ -23,8 +23,8 @@ const HTTP_BADREQUEST = "400";
 const HTTP_NOTFOUND = "404";
 const HTTP_CONFLICT = "409";
 
-// const AWS_URL = "http://softcon-leveldesign.us-east-1.elasticbeanstalk.com/";
-const AWS_URL = "http://127.0.0.1:5000/";
+const AWS_URL = "http://softcon-leveldesign.us-east-1.elasticbeanstalk.com/";
+// const AWS_URL = "http://127.0.0.1:5000/";
 const SUCCESS_MSG = "BACKEND RUNNING";
 
 //store a grid, which is a JSON, in the database
