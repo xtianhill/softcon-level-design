@@ -312,22 +312,42 @@ getData("julia").then((data) => {
     }
 
     // draw pc + equipped item if the game isnt over
+
     if(gameState.pc.status && !gameState.victory){
+
+
+    if(gameState.pc.dir == "left"){
+        gameState.ctx.save();
+        gameState.ctx.scale(-1,1);
+        gameState.ctx.drawImage(gameState.pc.img,-gameState.pc.position.x,gameState.pc.position.y,
+            -gameState.pc.size.x,gameState.pc.size.y);
+        gameState.ctx.restore();
+      }
+    else{
+        gameState.ctx.drawImage(gameState.pc.img,gameState.pc.position.x,gameState.pc.position.y,
+          gameState.pc.size.x,gameState.pc.size.y);
+      }
+
         if(gameState.pc.dir == "left"){
             gameState.ctx.save();
             gameState.ctx.scale(-1,1);
-            if(gameState.sinceItem < 10){
-                console.log(gameState.sinceItem);
-                gameState.ctx.drawImage(item.img, -item.position.x+5, item.position.y,
-                                      -item.size.x, item.size.y);
-            }
-            else {
-                gameState.ctx.drawImage(item.img, -item.position.x, item.position.y,
-                                      -item.size.x, item.size.y);
+            if(gameState.pc.equippedItem !=null){
+                var item = gameState.pc.equippedItem;
+                if(gameState.sinceItem < 10){
+                    console.log(gameState.sinceItem);
+                    gameState.ctx.drawImage(item.img, -item.position.x+5, item.position.y,
+                                          -item.size.x, item.size.y);
+                }
+                else {
+                    gameState.ctx.drawImage(item.img, -item.position.x, item.position.y,
+                                          -item.size.x, item.size.y);
+                }
             }
             gameState.ctx.restore();
         }
         else{
+            if(gameState.pc.equippedItem !=null){
+                var item = gameState.pc.equippedItem;
           if(gameState.sinceItem < 10){
               gameState.ctx.drawImage(item.img, item.position.x+5, item.position.y,
                                       item.size.x, item.size.y);
@@ -337,9 +357,9 @@ getData("julia").then((data) => {
                                     item.size.x, item.size.y);
           }
           }
+        }
     }
 
-    
 
     // on player death visuals
     if(!gameState.pc.status){
@@ -598,8 +618,8 @@ function showInventory(gameState){
             gameState.wrap.clientWidth, gameState.wrap.clientHeight);
         gameState.ctx.fillStyle = "#ffffff";
         gameState.ctx.font = '40px "Press Start 2P"';
-        gameState.ctx.fillText("VICTORY IS YOURS", 0,
-        gameState.wrap.clientHeight/2);
+        gameState.ctx.fillText("VICTORY IS YOURS", 
+            0, gameState.wrap.clientHeight/2);
     }
 
     function reset(){

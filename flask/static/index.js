@@ -796,8 +796,8 @@ getData("julia").then((data) => {
         var elements = parsedJSON.elements;
         var characters = [];
         var backgroundUrl = parsedJSON.backgroundUrl;
-        var winConditions = ["end"]; //pasrsedJSON.winConditions;
-        var width = 100//canvas.width;
+        var winConditions = ["enemy", "npc"]; //pasrsedJSON.winConditions;
+        var width = canvas.width;
         var height = canvas.height;
         var wrap = document.getElementById("wrap");
 
@@ -856,7 +856,12 @@ getData("julia").then((data) => {
             , characters: characters
             , step: step
             , sinceItem: sinceItem
-            , backgroundUrl: backgroundUrl};
+            , backgroundUrl: backgroundUrl
+            , npcCondition: npcCondition
+            , emenyCondition: enemyCondition
+            , endCondition: endCondition
+            , victory: victory
+        };
 
         showInventory(gameState);
     }
@@ -990,6 +995,9 @@ getData("julia").then((data) => {
         // counter to make tile effects only happen every few seconds
         gameState.pc.sinceTile += 1;
         gameState.sinceItem += 1;
+
+        // test if the level is won
+        testWinConditions(gameState);
     }
 
     /*
@@ -1045,22 +1053,42 @@ getData("julia").then((data) => {
     }
 
     // draw pc + equipped item if the game isnt over
+
     if(gameState.pc.status && !gameState.victory){
+
+
+    if(gameState.pc.dir == "left"){
+        gameState.ctx.save();
+        gameState.ctx.scale(-1,1);
+        gameState.ctx.drawImage(gameState.pc.img,-gameState.pc.position.x,gameState.pc.position.y,
+            -gameState.pc.size.x,gameState.pc.size.y);
+        gameState.ctx.restore();
+      }
+    else{
+        gameState.ctx.drawImage(gameState.pc.img,gameState.pc.position.x,gameState.pc.position.y,
+          gameState.pc.size.x,gameState.pc.size.y);
+      }
+
         if(gameState.pc.dir == "left"){
             gameState.ctx.save();
             gameState.ctx.scale(-1,1);
-            if(gameState.sinceItem < 10){
-                console.log(gameState.sinceItem);
-                gameState.ctx.drawImage(item.img, -item.position.x+5, item.position.y,
-                                      -item.size.x, item.size.y);
-            }
-            else {
-                gameState.ctx.drawImage(item.img, -item.position.x, item.position.y,
-                                      -item.size.x, item.size.y);
+            if(gameState.pc.equippedItem !=null){
+                var item = gameState.pc.equippedItem;
+                if(gameState.sinceItem < 10){
+                    console.log(gameState.sinceItem);
+                    gameState.ctx.drawImage(item.img, -item.position.x+5, item.position.y,
+                                          -item.size.x, item.size.y);
+                }
+                else {
+                    gameState.ctx.drawImage(item.img, -item.position.x, item.position.y,
+                                          -item.size.x, item.size.y);
+                }
             }
             gameState.ctx.restore();
         }
         else{
+            if(gameState.pc.equippedItem !=null){
+                var item = gameState.pc.equippedItem;
           if(gameState.sinceItem < 10){
               gameState.ctx.drawImage(item.img, item.position.x+5, item.position.y,
                                       item.size.x, item.size.y);
@@ -1070,9 +1098,9 @@ getData("julia").then((data) => {
                                     item.size.x, item.size.y);
           }
           }
+        }
     }
 
-    
 
     // on player death visuals
     if(!gameState.pc.status){
@@ -1331,8 +1359,8 @@ function showInventory(gameState){
             gameState.wrap.clientWidth, gameState.wrap.clientHeight);
         gameState.ctx.fillStyle = "#ffffff";
         gameState.ctx.font = '40px "Press Start 2P"';
-        gameState.ctx.fillText("VICTORY IS YOURS", 0,
-        gameState.wrap.clientHeight/2);
+        gameState.ctx.fillText("VICTORY IS YOURS", 
+            gameState.wrap.scrollLeft + gameState.wrap.clientWidth, gameState.wrap.clientHeight/2);
     }
 
     function reset(){
@@ -1521,7 +1549,7 @@ function Item(pos, url, sz, hbox, col, eff, bpos, hov){
     this.basePos = bpos;
     this.hovering = hov;
     this.wobble = Math.random() * Math.PI * 2;
-    this.targets = "";
+    //this.targets = [new Enemy(), new NPC()];
 }
 
 Item.prototype.Item = function(){
