@@ -1810,9 +1810,8 @@ function JSONtoElements(data){
                 if (temp.name == "Environment"){
                     console.log(dataobj.objects[i]);
                     var eff = new Effect(dataobj.objects[i].effect, 1); // new Effect("damage", 1);
-                    var status = dataobj.objects[i].status;
-                    console.log("status", status);
-                    element = new Environment(status,pos,url,sz,hitbox,eff);
+                    var solid = dataobj.objects[i].solid;
+                    element = new Environment(solid,pos,url,sz,hitbox,eff);
                 }
                 else if (temp.name == "Item"){
                     console.log("item", dataobj.objects[i]);
