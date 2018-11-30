@@ -72,6 +72,7 @@ getData(title).then((data) => {
         var endCondition = true;
         var enemyCondition = true;
         var ul = document.getElementById("rules");
+        ul.innerHTML = "";
         for(i=0; i<winConditions.length; i++){
             var listItem = document.createElement("li");
             if(winConditions[i] === "npc"){
