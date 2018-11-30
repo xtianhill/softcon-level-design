@@ -20,7 +20,9 @@ const Effect = require('./effect.js');
 |------------------------------------------------------------------------------
 */
 function Environment(solid, pos, url, scale, hbox, eff){
-  if (solid == true || solid == false) {
+    console.log("solid", solid == true);
+    console.log("solid", solid == false);
+    if (solid == true || solid == false) {
       Element.call(this, pos, url, scale, hbox);
       this.solid = solid;
       this.effect = eff;
