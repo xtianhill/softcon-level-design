@@ -22,9 +22,9 @@ const Vector = require('./utility.js');
 
 function Character(loc, max, hea, stat, hbox, url, size, spd, mvspd, grav){
 
-    if((spd instanceof Vector) && (typeof mvspd === "number") &&
-      (typeof grav === "number")&&  (typeof stat === "boolean") &&
-      (typeof max === "number") && (typeof hea ==="number")){
+    // if((spd instanceof Vector) && (typeof mvspd === "number") &&
+    //   (typeof grav === "number")&&  (typeof stat === "boolean") &&
+    //   (typeof max === "number") && (typeof hea ==="number")){
         Element.call(this, loc, url, size, hbox);
         this.maxHealth = max; //maximum health
 	      this.health=hea; //int health
@@ -33,7 +33,7 @@ function Character(loc, max, hea, stat, hbox, url, size, spd, mvspd, grav){
         this.moveSpeed = mvspd; //tells how fast it moves
         this.gravity = grav;
     }
-    else return {};
+    // else return {};
 }
 
 Character.prototype = Object.create(Element.prototype);
