@@ -225,6 +225,18 @@ aside{
   top:-50px;
 }
 
+.backgroundbutton{
+  position:absolute;
+  top:20px;
+  left:510px;
+}
+
+.changebackground{
+  position:absolute;
+  top:160px;
+
+}
+
 
 .cursor {
   position: absolute;

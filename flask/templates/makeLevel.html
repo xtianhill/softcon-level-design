@@ -217,6 +217,18 @@
          </form>
 </div>
 </div>
+<div class="backgroundeditor" id="backgroundeditor" style="display:none">
+  <div class="customnpc">
+        <form>
+            background image url:<br>
+            <input type="url" name="newbackground" id="newbackground">
+
+          </form>
+  </div>
+  <div class= "changebackground" id ="changebackground">
+    <button>change background</button>
+  </div>
+</div>
 
   <ul id="inventory"></ul>
 </aside>
@@ -237,7 +249,7 @@
            <input type= "image" id = "enemybutton" class= "enemybutton" src = "https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png" style= "height: 50px; width: 50px">
            <input type= "image" id= "npcbutton" class="npcbutton" src= "https://66.media.tumblr.com/18b1dcddb1e6de2d56f2bbc16e368af5/tumblr_pi5sz2UwpH1u9vozfo1_250.png" style= "height: 50px; width: 50px">
            <input type= "image" id= "wincondbutton" class="wincondbutton" src= "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2HCODXAqoz-FoAX_BaDOeTDGfIIOsurFlIqT-fWYw3E1LyuBs" style= "height: 50px; width: 50px">
-
+           <input type= "image" id= "backgroundbutton" class="backgroundbutton" src= "https://cdn0.iconfinder.com/data/icons/basic-outline/64/icon-basic-set_12-camera-512.png" style= "height: 50px; width: 50px">
 
 
 
@@ -247,7 +259,7 @@
 		  <!-- A canvas tag is required or
 
      Fabric.js doesn't know where to draw. -->
-    <div class="wrapper">
+    <div class="wrapper" id="wrapper">
     <canvas id="c" width="2000" height="500"></canvas>
     </div>
 		<img src="https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png" id="player" style= "display: none">

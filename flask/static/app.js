@@ -530,6 +530,12 @@ document.getElementById("changeenemy").onclick= function(){
 curr_url=newurl;
 }
 
+document.getElementById("changeenemy").onclick= function(){
+  var newurl=$("input[name='newbackground']").val();
+  document.getElementById("wrapper").style="background-img: newurl";
+  backgroundimg=newurl;
+}
+
 document.getElementById("eraserbutton").onclick= function(){
   eraser=1;
   curr_url=0;
@@ -581,6 +587,24 @@ eraser=0;
 
   document.getElementById("wincondbutton").onclick= function(){
     document.getElementById("wincondeditor").style="display:inline";
+    document.getElementById("editpic").style="display: none";
+    document.getElementById("playereditor").style="display: none";
+    document.getElementById("environmenteditor").style="display: none";
+    document.getElementById("enemyeditor").style="display: none";
+    document.getElementById("npceditor").style="display: none";
+    document.getElementById("itemeditor").style="display: none";
+    document.getElementById("cursor").style.visibility="hidden";
+    document.getElementById("cursor2").style.visibility="hidden";
+    document.getElementById("cursor4").style.visibility="hidden";
+    document.getElementById("cursor3").style.visibility="hidden";
+    document.getElementById("cursor5").style.visibility="hidden";
+    document.getElementById("cursor6").style.visibility="hidden";
+
+  }
+
+  document.getElementById("backgroundbutton").onclick= function(){
+    document.getElementById("backgroundeditor").style="display:inline"
+    document.getElementById("wincondeditor").style="display:none";
     document.getElementById("editpic").style="display: none";
     document.getElementById("playereditor").style="display: none";
     document.getElementById("environmenteditor").style="display: none";
