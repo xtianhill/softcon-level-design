@@ -87,10 +87,11 @@ Enemy.prototype.getDirection = function(){
 
 //Changes direction
 Enemy.prototype.changeDirection = function(){
-    if(this.direction == "right")
+    if(this.direction === "right"){
         this.direction = "left";
-    else if(this.direction == "left")
+    } else if(this.direction === "left"){
         this.direction = "right";
+    }
 }
 
 //Setter for direction

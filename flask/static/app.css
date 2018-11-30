@@ -1,3 +1,40 @@
+aside{
+  float: right;
+  margin-right: 20px;
+  margin-top: 20px;
+  width: 150px;
+}
+
+.inventory{
+  height: 500px;
+  position: relative;
+  background-color: #f2e6ff;
+  border: 5px solid #a3c0f5;
+  font-family: 'Press Start 2P';
+  font-size: 10px;
+}
+
+
+.inventory_title {
+    position: absolute;
+    margin-top: 10px;
+    font-size: 15px;
+    margin-left: 8px;
+    display: inline-block;
+    background: #f2e6ff;
+    color: #660066;
+}
+
+.inventory_box {
+    position: absolute;
+    margin-top: 40px;
+    margin-left: 40px;
+    height: 60px;
+    width: 60px;
+    border: 5px solid #a3c0f5;
+}
+
+
 .myButton{
   position: absolute;
   top:25px;
@@ -18,90 +55,86 @@
 .playerbutton{
   position: absolute;
   top:20px;
-  left: 405px;
+  left: 235px;
 }
 
 .customsprite{
   position:absolute;
-  top:20px;
-  left:550px;
+  top:150px;
 }
 
 .changebutton{
   position:absolute;
-  top:55px;
-  left:550px;
+  top:180px;
 }
 
 .itembutton{
   position: absolute;
   top:20px;
-  left: 800px;
+  left: 270px;
 }
 
 .effect-selector{
   position: absolute;
-  left:800px;
-  top: 70px;
+  top: 120px;
 
 }
 
 .solid-selector{
   position: absolute;
-  left:165px;
-  top: 70px;
+  top:110px;
 
 }
 
 .environ-effect-selector{
   position: absolute;
-  left:165px;
-  top: 0px;
+  top: 130px;
 }
 
 .npcmessager{
   position: absolute;
-  top:70px;
-  left: 1100px;
+  top:120px;
+
 }
 
 .gravity-selector{
   position: absolute;
-  left:450px;
-  top: 20px;
+  top: 200px;
   display: block;
 }
 
 .enemydamageselector{
   position: absolute;
-  left:900px;
-  top: 70px;
+  top: 120px;
   display: block;
 }
 
 .speed-selector{
   position: absolute;
-  left:310px;
-  top: 40px;
+  top: 265px;
   display: block;
 }
 .maxhealthselector{
   position:absolute;
-  left:310px;
-  top:0px;
+  top:290px;
 }
 
+.editpic {
+  position:absolute;
+  top:5px;
+  left: 5px;
+}
 
 .enemybutton{
   position: absolute;
   top:20px;
-  left: 900px;
+  left: 325px;
 }
 
 .npcbutton{
   position: absolute;
   top:20px;
-  left: 1100px;
+  left: 390px;
 }
 
 
@@ -170,7 +203,7 @@
 .header {
     position:fixed; top:0; left:0;
     background-color: #a3c0f5;
-    width: 87%;
+    width: 80%;
     margin-top: 3%;
     margin-left: 5%;
     margin-right: -5%;
@@ -185,19 +218,16 @@
 
 
 .wrapper {
-    width: 88%;
-    height: 500px;
-    background-image: url("https://i.pinimg.com/originals/fe/78/bb/fe78bbb25f35d56b502327fb6d43b309.png");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    border: 5px solid #a3c0f5;
-    margin-top:10%;
-    margin-left: 4%;
-    overflow: auto;
-    position: fixed;
-    background-image: url("https://i.pinimg.com/originals/fe/78/bb/fe78bbb25f35d56b502327fb6d43b309.png");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+  width: 80%;
+      height: 500px;
+      background-image: url("https://i.pinimg.com/originals/fe/78/bb/fe78bbb25f35d56b502327fb6d43b309.png");
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      border: 5px solid #a3c0f5;
+      margin-top:10%;
+      margin-left: 4%;
+      overflow: auto;
+      position: fixed;
+
 }

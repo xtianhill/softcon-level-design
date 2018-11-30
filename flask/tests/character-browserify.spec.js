@@ -366,7 +366,7 @@ module.exports = Environment;
 |------------------------------------------------------------------------------
 |
 | This file contains the Vector prototype (the javascript equivalent of a
-| class). 
+| class).
 |
 |------------------------------------------------------------------------------
 */
@@ -377,23 +377,33 @@ module.exports = Environment;
 |------------------------------------------------------------------------------
 */
 function Vector(x,y){
-	this.x=x;
-	this.y=y;
+	if (typeof(x) != 'number' || typeof(y) != 'number'){
+		return {};
+	}
+	else{
+		this.x=x;
+		this.y=y;
+	}
 }
 
 //Add to the vector
 Vector.prototype.plus = function(vec) {
-	return new Vector (this.x + vec.x, this.y + vec.y);
-}
-
-//Multiply the vector times a vector
-Vector.prototype.times = function(vec) {
-	return new Vector (this.x * vec.x, this.y * vec.y);
+	if (typeof(vec.x) != 'number' || typeof(vec.y) != 'number'){
+		return {};
+	}
+	else{
+		return new Vector (this.x + vec.x, this.y + vec.y);
+	}
 }
 
 //Multiply the vector times a number
 Vector.prototype.times = function(num) {
 	return new Vector (this.x * num, this.y * num);
+}
+
+//Multiply the vector times a vector
+Vector.prototype.times = function(vec) {
+	return new Vector (this.x * vec.x, this.y * vec.y);
 }
 
 module.exports = Vector;
@@ -613,11 +623,11 @@ describe('Character', function() {
 
     // newYPos Tests
     it('should make newYpos with step 1 ', function(){
-        expect(testCharacter.newYPos(1)).toEqual(new Vector(1,41));
+        expect(testCharacter.newYPos(1)).toEqual(new Vector(1,81));
     });
 
     it('should make newYpos with step 5 ', function(){
-        expect(testCharacter.newYPos(5)).toEqual(new Vector(1,1001));
+        expect(testCharacter.newYPos(5)).toEqual(new Vector(1,2001));
     });
 
     // moveY Tests
@@ -627,13 +637,14 @@ describe('Character', function() {
         expect(testCharacter.getPosition()).toEqual(newPos);
     });
 
-    it('should move y to newpos because of non-solid obstacle', function(){
+    it('should set testCharacter.speed.y to 0 because of non-solid obstacle', function() {
         testEnvironment =  new Environment(false, new Vector(1,1), null,
                                            new Vector(50,10),
                                            new Vector(20,50));
         newPos = new Vector(1,41);
         testCharacter.moveY(newPos, testEnvironment, true);
-        expect(testCharacter.getPosition()).toEqual(newPos);
+        testVector1 = new Vector(0, 0);
+        expect(testCharacter.getSpeed()).toEqual(testVector1);
     });
 
     it('should not move y to newpos because of solid obstacle and should set yspeed to 0', function(){
