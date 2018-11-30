@@ -53,12 +53,14 @@ Effect.prototype.getIsActive = function(){
 }
 
 // Setter for Effect type
-Effect.prototype.setEffect = function(effect){
-    t = typeof effect;
-    if (t === "Effect"){
-        this.effect = effect;
+Effect.prototype.setEffect = function(eft){
+    t = typeof eft;
+    if (t == "object") {
+        this.effect = eft.effect;
+        this.isActive = eft.isActive;
+        this.amount = eft.amount;
     }
-    else{
+    else {
         return null;
     }
 }
