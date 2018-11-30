@@ -521,6 +521,7 @@ module.exports = Enemy;
 var icon2 = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKH3Qd3RP33Q5XxcRMrLXYhYGRu_dxvpJCIBEU_MlAudC1ev-P8A";
 const Element = require('./element.js');
 const Vector = require('./utility.js');
+const Effect = require('./effect.js');
 const Enemy = require('./enemy.js');
 const Player = require('./player.js');
 const NPC = require('./npc.js');
@@ -533,12 +534,16 @@ const NPC = require('./npc.js');
 */
 function Item(pos, url, sz, hbox, col, eff, bpos, hov){
     Element.call(this, pos, url, sz, hbox);
-    this.collected = col;
-    this.effect = eff;
-    this.basePos = bpos;
-    this.hovering = hov;
-    this.wobble = Math.random() * Math.PI * 2;
-    this.targets = [Enemy, NPC];
+    if ((typeof col === 'boolean') && (eff instanceof Effect)) {
+        this.collected = col;
+        this.effect = eff;
+        this.basePos = bpos;
+        this.hovering = hov;
+        this.wobble = Math.random() * Math.PI * 2;
+        this.targets = [Enemy, NPC];
+    } else {
+        return {};
+    }
 }
 
 Item.prototype.Item = function(){
@@ -547,36 +552,42 @@ Item.prototype.Item = function(){
         Element.call(this, vector(0,0), icon2, vector(50,50), vector(50,50));
         this.collected = false;
         this.effect = "damage";
-};
-
-//Setter for effect
-Item.prototype.setEffect= function(eft){
-    this.effect = eft;
-};
+}
 
 //Getter for effect
-Item.prototype.getEffect=function(){
+Item.prototype.getEffect = function(){
     return this.effect;
-};
+}
+
+//Setter for effect
+Item.prototype.setEffect = function(eft){
+    if (eft instanceof Effect) {
+        this.effect = eft;
+    }
+}
 
 //Getter for whether the item has been collected
-Item.prototype.getCollected= function(){
+Item.prototype.getCollected = function(){
     return this.collected;
-};
+}
 
 //Setter for whether the item has been collected
-Item.prototype.setCollected= function(b){
+Item.prototype.setCollected = function(b){
     this.collected = b;
-};
+}
 
 //Make item hover
 Item.prototype.hover = function(step) {
-    wobbleSpeed = 2;
-    wobbleDist = 1.5;
-    this.wobble += step * wobbleSpeed;
-    var wobblePos = Math.sin(this.wobble) * wobbleDist;
-    this.position = this.basePos.plus(new Vector(0, wobblePos));
-};
+    if (typeof step == 'number') {
+        wobbleSpeed = 2;
+        // wobbleDist = 1.5;
+        this.wobble += step * wobbleSpeed;
+        // var wobblePos = Math.sin(this.wobble) * wobbleDist;
+        // this.position = this.basePos.plus(new Vector(0, wobblePos));
+    } else {
+        return null;
+    }
+}
 
 //Update the item's position
 Item.prototype.updatePosition = function(pc) {
@@ -591,7 +602,7 @@ Item.prototype.updatePosition = function(pc) {
 }
 module.exports = Item;
 
-},{"./element.js":3,"./enemy.js":4,"./npc.js":6,"./player.js":7,"./utility.js":8}],6:[function(require,module,exports){
+},{"./effect.js":2,"./element.js":3,"./enemy.js":4,"./npc.js":6,"./player.js":7,"./utility.js":8}],6:[function(require,module,exports){
 /*
 |------------------------------------------------------------------------------
 | NPC Class
@@ -668,25 +679,20 @@ const Vector = require('./utility.js');
 |------------------------------------------------------------------------------
 */
 function Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed, mvspd, grav, dir){
+    if((itm instanceof Item) && (Array.isArray(inv)) && (dir instanceof Vector)){
     Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspd, grav);
     this.equippedItem = itm;
     this.inventory = inv;
     this.sinceTile = 50;
     this.direction = dir;
-}
+    
+    } else
+        return {};
+};
 
 Player.prototype = Object.create(Character.prototype);
 Player.prototype.constructor = Player;
 
-//empty constructor. void
-Player.prototype.Player = function(){
-    //create enemy with loc = (0,0), maxhealth = 10
-    // health = 10, status = 1, item = null, size 50x50, speed 10x10
-
-    Character.call(this, vector(0,0), 10, 10, 1, vector(50,50), vector(33,13));
-    this.equippedItem = null;
-    this.inventory = [];
-}
 
 //Getter for inventory
 Player.prototype.getInventory= function(){
@@ -694,9 +700,17 @@ Player.prototype.getInventory= function(){
 }
 
 //Setter for inventory
-Player.prototype.setInventory = function(arr)
-{
-    this.inventory = arr;
+Player.prototype.setInventory = function(arr){
+    if(Array.isArray(arr)){
+        items= true;
+        for(i=0; i<arr.length; i++){
+            if(!(arr[i] instanceof Item))
+                items=false;
+        }
+        if(items){
+        this.inventory = arr;
+        }
+    }
 }
 
 //Getter for an owned item
@@ -768,25 +782,32 @@ module.exports = Player;
 */
 function Vector(x,y){
 	if (typeof(x) != 'number' || typeof(y) != 'number'){
-		return null
+		return {};
 	}
-	this.x=x;
-	this.y=y;
+	else{
+		this.x=x;
+		this.y=y;
+	}
 }
 
 //Add to the vector
 Vector.prototype.plus = function(vec) {
-	return new Vector (this.x + vec.x, this.y + vec.y);
-}
-
-//Multiply the vector times a vector
-Vector.prototype.times = function(vec) {
-	return new Vector (this.x * vec.x, this.y * vec.y);
+	if (typeof(vec.x) != 'number' || typeof(vec.y) != 'number'){
+		return {};
+	}
+	else{
+		return new Vector (this.x + vec.x, this.y + vec.y);
+	}
 }
 
 //Multiply the vector times a number
 Vector.prototype.times = function(num) {
 	return new Vector (this.x * num, this.y * num);
+}
+
+//Multiply the vector times a vector
+Vector.prototype.times = function(vec) {
+	return new Vector (this.x * vec.x, this.y * vec.y);
 }
 
 module.exports = Vector;
@@ -810,6 +831,8 @@ var Player = require('../static/player.js');
 var Item = require('../static/item.js');
 var Vector = require('../static/utility.js');
 var Effect = require('../static/effect.js');
+var Enemy = require('../static/enemy.js');
+var Character = require('../static/character.js');
 
 describe('Player', function() {
     let testPlayer;
@@ -825,12 +848,12 @@ describe('Player', function() {
 
     beforeEach(function(){
         testItem = new Item(new Vector(2,2), 'dummy_url', new Vector(2,2),
-                            new Vector(2,2), true, new Effect('heal'));
+                            new Vector(2,2), true, new Effect('heal', 10), new Vector(0,0), false);
         testItem2 = new Item(new Vector(2,2), 'dummy_url', new Vector(2,2),
-                            new Vector(2,2), true, new Effect('damage'));
-        testPlayer = new Player(new Vector(1,1), 20, 0, 0, testItem, [testItem],
+                            new Vector(2,2), true, new Effect('damage', 10), new Vector(0,0), false);
+        testPlayer = new Player(new Vector(1,1), 20, 10, true, testItem, [testItem],
                                 new Vector(12,12), 'dummy_url', new Vector(3,3),
-                                new Vector(0,0), 50, 80);
+                                new Vector(0,0), 50, 80, new Vector(0,0));
         testVector1 = new Vector(6, 9);
     });
 
@@ -843,22 +866,22 @@ describe('Player', function() {
     // Test Full Constructor
     it('should create a new player with loc (1,1), maxhealth 20 health 0, status 0, item testItem', function() {
         expect(testPlayer.getEquippedItem()).toEqual(testItem);
-        expect(testPlayer.getLocation()).toEqual(new Vector(1,1));
+        expect(testPlayer.getPosition()).toEqual(new Vector(1,1));
         expect(testPlayer.getMaxHealth()).toEqual(20);
-        expect(testPlayer.getHealth()).toEqual(0);
-        expect(testPlayer.getStatus()).toEqual(0);
+        expect(testPlayer.getHealth()).toEqual(10);
+        expect(testPlayer.getStatus()).toEqual(true);
     });
 
     // Test Invalid Input Constructor
     it('should return an empty object due to invalid equippedItem', function() {
-        testPlayer = new Player(new Vector(1,1), 20, 0, 0, "fake_item", [testItem],
+        testPlayer = new Player(new Vector(1,1), 20, 10, true, "fake_item", [testItem],
                               new Vector(12,12), 'dummy_url', new Vector(3,3),
                               new Vector(0,0), 50, 80);
         expect(testPlayer).toEqual({});
     });
 
     it('should return an empty object due to invalid Inventory', function() {
-        testPlayer = new Player(new Vector(1,1), 20, 0, 0, testItem, [10,13,15],
+        testPlayer = new Player(new Vector(1,1), 20, 10, true, testItem, [10,13,15],
                               new Vector(12,12), 'dummy_url', new Vector(3,3),
                               new Vector(0,0), 50, 80);
         expect(testPlayer).toEqual({});
@@ -903,39 +926,25 @@ describe('Player', function() {
     |--------------------------------------------------------------------------
     */
 
-    // test damage effect in useItem
-    it('should active the effect of equippedItem', function(){
-        testEnemy = new Enemy(new Vector(1,1), 20, 0, 0, 5, new Vector(10,10),
-                              new Vector(10,10));
-        testPlayer.setEquippedItem(testItem);
-        testPlayer.useItem();
-        expect(testEnemy.getHealth()).toEqual(testEnemy.getMaxHealth());
-        expect(testEnemy.getHealth()).toEqual(20);
-        expect(testEnemy.getEquippedItem()).toEqual(null);
-        expect(testItem.getEffect().getIsActive()).toBeTruthy();
-    });
-
     //test heal effect in useItem
     it('should test heal', function() {
+        testEnemy = new Enemy(new Vector(1,1), 20, 10, true, 5, new Vector(10,10), 'dummy',
+                              new Vector(10,10), new Vector(0,0), 50, 50, 'right', 10, new Vector(1,1));
+        console.log(testEnemy);
         testPlayer.setEquippedItem(testItem);
-        testPlayer.useItem();
-        expect(testPlayer.getHealth()).toEqual(testPlayer.getMaxHealth());
-        expect(testPlayer.getHealth()).toEqual(20);
-        expect(testPlayer.getEquippedItem()).toEqual(null);
-        expect(testItem.getEffect().getIsActive()).toBeTruthy();
+        testPlayer.useItem(testEnemy);
+        expect(testEnemy.health).toEqual(testEnemy.maxHealth);
     });
 
     // set items position to be relative to the player, add the item to inventory,
     // and set equipped item
     it('should pick up item', function(){
         testPlayer.pickUpItem(testItem2);
-        expect(testPlayer.getEquippedItem().toEqual(testItem2));
-        expect(testPlayer.getEquippedItem().getPosition().x).toEqual(11);
-        expect(testPlayer.getEquippedItem().getPosition().y).toEqual(6);
-        expect(testPlayer.getInventory()).toEqual([testItem, testItem2]);
+        expect(testPlayer.getEquippedItem()).toEqual(testItem2);
+        expect(testPlayer.getInventory()).toEqual([testItem2,testItem]);
     });
 
 });
 
-},{"../static/effect.js":2,"../static/item.js":5,"../static/player.js":7,"../static/utility.js":8}]},{},[9])(9)
+},{"../static/character.js":1,"../static/effect.js":2,"../static/enemy.js":4,"../static/item.js":5,"../static/player.js":7,"../static/utility.js":8}]},{},[9])(9)
 });
