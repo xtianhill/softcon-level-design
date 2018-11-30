@@ -54,7 +54,7 @@ function JSONtoElements(data){
                 }
                 else if (temp.name == "Player"){
                     console.log("player",dataobj.objects[i]);
-                    var max = dataobj.objects[i].maxhealth;
+                    var max = 10;//dataobj.objects[i].maxhealth;
                     var stat = true;
                     var itm= null;
                     var inv= [];
