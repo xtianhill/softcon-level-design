@@ -47,10 +47,9 @@ describe('Parsing', function() {
 	*/
 
 	it('should return an empty array and empty backgroundurl given an empty JSON', function(){
-			var returned= JSONtoElements(JSON1);
-
-			expect(returned.elements).toEqual([]);
-			expect(returned.backgroundUrl).toEqual('');
+			var returned = JSONtoElements(JSON1);
+			expect((returned).elements).toEqual([]);
+			expect((returned).backgroundUrl).toEqual('');
 	});
 
 	it('should return an array with 2 environment elements in it and given background image ', function(){

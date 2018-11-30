@@ -29,37 +29,48 @@
   </div>
 <div class="environmenteditor" id="environmenteditor" style="display:none">
   <select name="selector2" id="solid-selector" class= "solid-selector">
-  <option value=1>solid</option>
-  <option value=0>not solid</option>
+  <option value="true">solid</option>
+  <option value="false">not solid</option>
   </select>
 
   <select name= "enviroeffectselector"id="environ-effect-selector" class="environ-effect-selector">
   <option value="heal">Heal</option>
   <option value="damage">Damage</option>
   </select>
+
+  <div class="customterrain">
+  <form>
+             terrain url:<br>
+            <input type="url" name="terrainurl" id="terrainurl">
+
+          </form>
+  </div>
+  <div class= "changeterrain"id ="changeterrain">
+    <button>change terrain</button>
+  </div>
 </div>
 
 <div class="playereditor" id="playereditor" style="display:none">
   <div class="maxhealthselector">
-             <form action="/action_page.php">
+             <form>
                Enter a max health between 1 and 1000:
                <input type="number" name="health" min="1" max="1000" value="100">
              </form>
            </div>
 
            <select name= "selector3"id="speed-selector" class="speed-selector">
-           <option value="high">High speed</option>
-           <option value="medium">Medium speed</option>
-           <option value="low">Low speed</option>
+           <option value=80>High speed</option>
+           <option value=60>Medium speed</option>
+           <option value=20>Low speed</option>
            </select>
            <div class="gravity-selector" id="gravity-selector">
            <form>
              Gravity:<br>
-             <input type="radio" name="color" value="high">high
+             <input type="radio" name="color" value=70>high
              <br>
-             <input type="radio" name="color" value="medium" checked>medium
+             <input type="radio" name="color" value=40 checked>medium
              <br>
-             <input type="radio" name="color" value="low">low
+             <input type="radio" name="color" value=25>low
              <br>
            </form>
            </div>
@@ -81,6 +92,12 @@
   <option value="heal">Heal</option>
   <option value="damage">Damage</option>
 </select>
+<div class="itemstrengthselector">
+           <form>
+             strength:
+             <input type="number" name="amount" min="1" max="100" value="1">
+           </form>
+         </div>
 </div>
 <div class="enemyeditor" id="enemyeditor" style= "display:none">
 <div class="enemydamageselector">
@@ -92,13 +109,42 @@
          </div>
        </div>
 <div class="npceditor" id="npceditor" style= "display:none">
+  <div class="customnpc">
+        <form>
+            NPC url:<br>
+            <input type="url" name="newnpc" id="newnpc">
+
+          </form>
+  </div>
+  <div class= "changenpc"id ="changenpc">
+    <button>change NPC</button>
+  </div>
   <div class="npcmessager">
-  <form>
+<form>
              message:<br>
             <input type="text" name="npcmessage" value="hi friend!">
           </form>
   </div>
-  </div
+  <div class="npc-gravity-selector" id="npc-gravity-selector">
+  <form>
+    Gravity:<br>
+    <input type="radio" name="grav" value=70>high
+    <br>
+    <input type="radio" name="grav" value=40 checked>medium
+    <br>
+    <input type="radio" name="grav" value=25>low
+    <br>
+    <input type="radio" name="grav" value=0>none
+    <br>
+  </form>
+  </div>
+  <div class="npcmaxhealthselector">
+             <form>
+               Enter a max health between 1 and 1000:
+               <input type="number" name="npcmaxhealth" min="1" max="1000" value="100">
+             </form>
+           </div>
+</div>
 
   <ul id="inventory"></ul>
 </aside>
@@ -109,16 +155,13 @@
 
   <div class="header" id = "header">
     		   <div style="display: inline-block; background: #a3c0f5"></div>
-           <svg class= "box" width="65" height="65" >
-  <rect x="0" y="2" width="60" height="60" style="fill:pink ;stroke:pink;stroke-width:5;fill-opacity:1;stroke-opacity:0.9" />
-  Sorry, your browser does not support inline SVG.
-</svg>
+
 
            <input type="image" id="movemode" class="myButton" src = "http://chittagongit.com/images/move-icon/move-icon-4.jpg" style= "height: 50px; width: 50px">
            <input type ="image" id= "eraserbutton" class="eraser" src="https://webiconspng.com/wp-content/uploads/2017/09/Eraser-PNG-Image-47683.png" style="height: 50px; width: 50px">
            <input type= "image" id = "groundbutton" class="groundbutton"src = "https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg" style= "height: 50px; width: 50px">
            <input type= "image" id = "playerbutton" class = "playerbutton"src = "https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png" style= "height: 50px; width: 50px">
-           <input type= "image" id = "itembutton" class= "itembutton" src = "https://66.media.tumblr.com/4a8e88c9194d00c4e2e14d62f2a9dc76/tumblr_pi5t840NIu1u9vozfo1_250.png" style= "height: 50px; width: 50px">
+           <input type= "image" id = "itembutton" class= "itembutton" src = "https://66.media.tumblr.com/f7acf066084d424d5da0c09795fe8483/tumblr_inline_piy8y9FbkJ1ruhpn7_540.png" style= "height: 50px; width: 50px">
            <input type= "image" id = "enemybutton" class= "enemybutton" src = "https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png" style= "height: 50px; width: 50px">
            <input type= "image" id= "npcbutton" class="npcbutton" src= "https://66.media.tumblr.com/18b1dcddb1e6de2d56f2bbc16e368af5/tumblr_pi5sz2UwpH1u9vozfo1_250.png" style= "height: 50px; width: 50px">
 
@@ -138,7 +181,7 @@
 		<img src="https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png" id="player" style= "display: none">
 		<img src ="https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg" id="ground" style= "display: none">
         <img src = "http://superwalrusland.com/ohr/issue26/pa/stone2_b.jpg" id = "stone" style= "display: none">
-        <img src = "https://66.media.tumblr.com/4a8e88c9194d00c4e2e14d62f2a9dc76/tumblr_pi5t840NIu1u9vozfo1_250.png" id = "coin" style= "display: none">
+        <img src = "https://66.media.tumblr.com/f7acf066084d424d5da0c09795fe8483/tumblr_inline_piy8y9FbkJ1ruhpn7_540.png" id = "coin" style= "display: none">
         <img src = "https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png" id = "enemy" style= "display: none">
         <img src = "https://66.media.tumblr.com/18b1dcddb1e6de2d56f2bbc16e368af5/tumblr_pi5sz2UwpH1u9vozfo1_250.png" id ="npc" style= "display: none">
         <img src = "https://orig00.deviantart.net/1ba2/f/2013/348/b/d/garbage_by_pixel_placer-d6xybtp.png" id= "trash" style="display: none">
@@ -167,7 +210,7 @@
 
       <img src="https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg" alt="Cursor" class="cursor" id="cursor"/>
       <img src="https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png" alt="Cursor" class="cursor2" id="cursor2"/>
-      <img src="https://66.media.tumblr.com/4a8e88c9194d00c4e2e14d62f2a9dc76/tumblr_pi5t840NIu1u9vozfo1_250.png" alt="Cursor" class="cursor3" id="cursor3"/>
+      <img src="https://66.media.tumblr.com/f7acf066084d424d5da0c09795fe8483/tumblr_inline_piy8y9FbkJ1ruhpn7_540.png" alt="Cursor" class="cursor3" id="cursor3"/>
       <img src="https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png" alt="Cursor" class="cursor4" id="cursor4"/>
       <img src="https://66.media.tumblr.com/18b1dcddb1e6de2d56f2bbc16e368af5/tumblr_pi5sz2UwpH1u9vozfo1_250.png" alt="Cursor" class="cursor5" id="cursor5"/>
       <img src="https://webiconspng.com/wp-content/uploads/2017/09/Eraser-PNG-Image-47683.png" alt="Cursor" class="cursor6" id="cursor6"/>
