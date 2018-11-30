@@ -96,7 +96,8 @@ Player.prototype.pickUpItem = function(item){
 Player.prototype.isTarget = function (target){
     for(i=0;i<this.equippedItem.targets.length;i++){
         console.log("is target func",target, this.equippedItem.targets[i]);
-        if(this.equippedItem.targets[i].name == target.constructor.name){
+        console.log("please work",this.equippedItem.targets[i],target.constructor.name);
+        if(this.equippedItem.targets[i] == target.constructor.name){
             return true;
         }
     }

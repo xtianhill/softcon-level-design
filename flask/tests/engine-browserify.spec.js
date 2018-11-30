@@ -1317,7 +1317,7 @@ const NPC = require('./npc.js');
 | Constructor
 |------------------------------------------------------------------------------
 */
-function Item(pos, url, sz, hbox, col, eff, bpos, hov, targets){
+function Item(pos, url, sz, hbox, col, eff, bpos, hov, ts){
     Element.call(this, pos, url, sz, hbox);
     if ((typeof col === 'boolean') && (eff instanceof Effect)) {
         this.collected = col;
@@ -1326,21 +1326,24 @@ function Item(pos, url, sz, hbox, col, eff, bpos, hov, targets){
         this.hovering = hov;
         this.wobble = Math.random() * Math.PI * 2;
         this.targets=[];
-        // for(i=0;i<targets.length;i++){
-        //     console.log("hello");
-        //     if(targets[i] === "Player"){
-        //         this.targets.push(Player);
-        //     }
-        //     if(targets[i] === "Enemy"){
-        //         this.targets.push(Enemy);
-        //     }
-        //     if(targets[i] === "NPC"){
-        //         this.targets.push(NPC);
-        //     }
-        // }
-        if(this.targets.length == 0){
-            this.targets.push(Player);
+        console.log(ts.length);
+        console.log("test", (ts[0] === "Player"));
+        for(var i=0;i<ts.length;i++){
+            if(ts[i] === "Player"){
+                console.log("this should be setting targets");
+                this.targets.push(Player);
+                console.log(this.targets);
+            }
+            if(ts[i] === "Enemy"){
+                this.targets.push(Enemy);
+            }
+            if(ts[i] === "NPC"){
+                this.targets.push(NPC);
+            }
         }
+       
+        console.log("TARGETS", this.targets);
+        console.log("TARGETS", this.targets[0]);
         
     } else {
         return {};
@@ -1664,6 +1667,7 @@ Player.prototype.pickUpItem = function(item){
 
 Player.prototype.isTarget = function (target){
     for(i=0;i<this.equippedItem.targets.length;i++){
+        console.log("is target func",target, this.equippedItem.targets[i]);
         if(this.equippedItem.targets[i].name == target.constructor.name){
             return true;
         }

@@ -31,25 +31,25 @@ function Item(pos, url, sz, hbox, col, eff, bpos, hov, ts){
         this.basePos = bpos;
         this.hovering = hov;
         this.wobble = Math.random() * Math.PI * 2;
-        this.targets=[];
-        console.log(ts.length);
-        console.log("test", (ts[0] === "Player"));
-        for(var i=0;i<ts.length;i++){
-            if(ts[i] === "Player"){
-                console.log("this should be setting targets");
-                this.targets.push(Player);
-                console.log(this.targets);
-            }
-            if(ts[i] === "Enemy"){
-                this.targets.push(Enemy);
-            }
-            if(ts[i] === "NPC"){
-                this.targets.push(NPC);
-            }
-        }
+        this.targets=ts;
+        // console.log(ts.length);
+        // console.log("test", (ts[0] === "Player"));
+        // for(var i=0;i<ts.length;i++){
+        //     if(ts[i] === "Player"){
+        //         console.log("this should be setting targets");
+        //         this.targets.push(Player);
+        //         console.log(this.targets);
+        //     }
+        //     if(ts[i] === "Enemy"){
+        //         this.targets.push(Enemy);
+        //     }
+        //     if(ts[i] === "NPC"){
+        //         this.targets.push(NPC);
+        //     }
+        // }
        
-        console.log("TARGETS", this.targets);
-        console.log("TARGETS", this.targets[0]);
+        // console.log("TARGETS", this.targets);
+        // console.log("TARGETS", this.targets[0]);
         
     } else {
         return {};

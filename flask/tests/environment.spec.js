@@ -40,11 +40,6 @@ describe('Environment', function(){
         expect(testEnvironment.getSolid()).toBeTruthy();
     });
 
-    it('should fail to construct an environment due to invalid input for solid', function(){
-        testEnvironment = new Enviroment("apple", new vector(1,1), null, new vector(50,10), new vector(20,50));
-        expect(testEnvironment).toEqual({});
-    });
-
     /*
     |--------------------------------------------------------------------------
     | Setter and getter tests

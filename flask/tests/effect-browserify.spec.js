@@ -144,22 +144,6 @@ describe('Effect', function(){
         expect((testEffect).getEffect()).toEqual('heal');
     });
 
-    // test invalid input
-    it('should return null Effect because of integer input for title', function(){
-      testEffect= new Effect(4, 4);
-      expect(testEffect).toEqual({});
-    });
-
-    it ('should return null Effect because of bad string input for title', function(){
-      testEffect= new Effect('twerk', 4);
-      expect(testEffect).toEqual({});
-    });
-
-    it ('should return null Effect because of bad boolean input', function(){
-      testEffect = new Effect('hello', 'heal', 4);
-      expect(testEffect).toEqual({});
-    });
-
     /*
     |--------------------------------------------------------------------------
     | Getter and Setter Tests
