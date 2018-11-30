@@ -16,6 +16,8 @@ var Player = require('../static/player.js');
 var Item = require('../static/item.js');
 var Vector = require('../static/utility.js');
 var Effect = require('../static/effect.js');
+var Enemy = require('../static/enemy.js');
+var Character = require('../static/character.js');
 
 describe('Player', function() {
     let testPlayer;
@@ -31,12 +33,12 @@ describe('Player', function() {
 
     beforeEach(function(){
         testItem = new Item(new Vector(2,2), 'dummy_url', new Vector(2,2),
-                            new Vector(2,2), true, new Effect('heal'));
+                            new Vector(2,2), true, new Effect('heal', 10), new Vector(0,0), false);
         testItem2 = new Item(new Vector(2,2), 'dummy_url', new Vector(2,2),
-                            new Vector(2,2), true, new Effect('damage'));
-        testPlayer = new Player(new Vector(1,1), 20, 0, 0, testItem, [testItem],
+                            new Vector(2,2), true, new Effect('damage', 10), new Vector(0,0), false);
+        testPlayer = new Player(new Vector(1,1), 20, 10, true, testItem, [testItem],
                                 new Vector(12,12), 'dummy_url', new Vector(3,3),
-                                new Vector(0,0), 50, 80);
+                                new Vector(0,0), 50, 80, new Vector(0,0));
         testVector1 = new Vector(6, 9);
     });
 
@@ -49,22 +51,22 @@ describe('Player', function() {
     // Test Full Constructor
     it('should create a new player with loc (1,1), maxhealth 20 health 0, status 0, item testItem', function() {
         expect(testPlayer.getEquippedItem()).toEqual(testItem);
-        expect(testPlayer.getLocation()).toEqual(new Vector(1,1));
+        expect(testPlayer.getPosition()).toEqual(new Vector(1,1));
         expect(testPlayer.getMaxHealth()).toEqual(20);
-        expect(testPlayer.getHealth()).toEqual(0);
-        expect(testPlayer.getStatus()).toEqual(0);
+        expect(testPlayer.getHealth()).toEqual(10);
+        expect(testPlayer.getStatus()).toEqual(true);
     });
 
     // Test Invalid Input Constructor
     it('should return an empty object due to invalid equippedItem', function() {
-        testPlayer = new Player(new Vector(1,1), 20, 0, 0, "fake_item", [testItem],
+        testPlayer = new Player(new Vector(1,1), 20, 10, true, "fake_item", [testItem],
                               new Vector(12,12), 'dummy_url', new Vector(3,3),
                               new Vector(0,0), 50, 80);
         expect(testPlayer).toEqual({});
     });
 
     it('should return an empty object due to invalid Inventory', function() {
-        testPlayer = new Player(new Vector(1,1), 20, 0, 0, testItem, [10,13,15],
+        testPlayer = new Player(new Vector(1,1), 20, 10, true, testItem, [10,13,15],
                               new Vector(12,12), 'dummy_url', new Vector(3,3),
                               new Vector(0,0), 50, 80);
         expect(testPlayer).toEqual({});
@@ -109,36 +111,22 @@ describe('Player', function() {
     |--------------------------------------------------------------------------
     */
 
-    // test damage effect in useItem
-    it('should active the effect of equippedItem', function(){
-        testEnemy = new Enemy(new Vector(1,1), 20, 0, 0, 5, new Vector(10,10),
-                              new Vector(10,10));
-        testPlayer.setEquippedItem(testItem);
-        testPlayer.useItem();
-        expect(testEnemy.getHealth()).toEqual(testEnemy.getMaxHealth());
-        expect(testEnemy.getHealth()).toEqual(20);
-        expect(testEnemy.getEquippedItem()).toEqual(null);
-        expect(testItem.getEffect().getIsActive()).toBeTruthy();
-    });
-
     //test heal effect in useItem
     it('should test heal', function() {
+        testEnemy = new Enemy(new Vector(1,1), 20, 10, true, 5, new Vector(10,10), 'dummy',
+                              new Vector(10,10), new Vector(0,0), 50, 50, 'right', 10, new Vector(1,1));
+        console.log(testEnemy);
         testPlayer.setEquippedItem(testItem);
-        testPlayer.useItem();
-        expect(testPlayer.getHealth()).toEqual(testPlayer.getMaxHealth());
-        expect(testPlayer.getHealth()).toEqual(20);
-        expect(testPlayer.getEquippedItem()).toEqual(null);
-        expect(testItem.getEffect().getIsActive()).toBeTruthy();
+        testPlayer.useItem(testEnemy);
+        expect(testEnemy.health).toEqual(testEnemy.maxHealth);
     });
 
     // set items position to be relative to the player, add the item to inventory,
     // and set equipped item
     it('should pick up item', function(){
         testPlayer.pickUpItem(testItem2);
-        expect(testPlayer.getEquippedItem().toEqual(testItem2));
-        expect(testPlayer.getEquippedItem().getPosition().x).toEqual(11);
-        expect(testPlayer.getEquippedItem().getPosition().y).toEqual(6);
-        expect(testPlayer.getInventory()).toEqual([testItem, testItem2]);
+        expect(testPlayer.getEquippedItem()).toEqual(testItem2);
+        expect(testPlayer.getInventory()).toEqual([testItem2,testItem]);
     });
 
 });
