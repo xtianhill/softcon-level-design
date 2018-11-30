@@ -1,15 +1,42 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.utility = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-/*Vector class */
+/*
+|------------------------------------------------------------------------------
+| Vector Class
+|------------------------------------------------------------------------------
+|
+| This file contains the Vector prototype (the javascript equivalent of a
+| class). 
+|
+|------------------------------------------------------------------------------
+*/
+
+/*
+|------------------------------------------------------------------------------
+| Constructor
+|------------------------------------------------------------------------------
+*/
 function Vector(x,y){
 	this.x=x;
 	this.y=y;
 }
 
+//Add to the vector
 Vector.prototype.plus = function(vec) {
 	return new Vector (this.x + vec.x, this.y + vec.y);
 }
 
+//Multiply the vector times a vector
+Vector.prototype.times = function(vec) {
+	return new Vector (this.x * vec.x, this.y * vec.y);
+}
+
+//Multiply the vector times a number
+Vector.prototype.times = function(num) {
+	return new Vector (this.x * num, this.y * num);
+}
+
 module.exports = Vector;
+
 },{}],2:[function(require,module,exports){
 /*
 |------------------------------------------------------------------------------
@@ -43,6 +70,7 @@ describe('Utility', function(){
         testVector0 = new Vector(0, 0);
         testVector1 = new Vector(6, 9);
         testVector2 = new Vector(12, 18);
+        testVector3 = new Vector(72, 162);
     })
 
     /*
@@ -78,6 +106,16 @@ describe('Utility', function(){
     it('should fail to add vectors due to invalid input', function() {
         expect(testVector0.plus(5)).toEqual({});
         expect(testVector0.plus("testVector1")).toEqual({});
+    });
+
+    it('should multiply vectors', function() {
+        expect(testVector1.times(testVector2)).toEqual(testVector3);
+        expect(testVector0.times(testVector3)).toEqual(testVector0);
+    });
+
+    it('should multiply a vector times a number', function() {
+        expect(testVector0.times(13)).toEqual(testVector0);
+        expect(testVector1.times(2)).toEqual(testVector2);
     });
 });
 
