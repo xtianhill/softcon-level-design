@@ -5,7 +5,7 @@
 |------------------------------------------------------------------------------
 |
 | This file contains the Vector prototype (the javascript equivalent of a
-| class). 
+| class).
 |
 |------------------------------------------------------------------------------
 */
@@ -16,23 +16,31 @@
 |------------------------------------------------------------------------------
 */
 function Vector(x,y){
-	this.x=x;
-	this.y=y;
+	if (typeof(x) != 'number' || typeof(y) != 'number'){
+		return {};
+	}
+	else{
+		this.x=x;
+		this.y=y;
+	}
 }
 
 //Add to the vector
 Vector.prototype.plus = function(vec) {
-	return new Vector (this.x + vec.x, this.y + vec.y);
+	if (typeof(vec.x) != 'number' || typeof(vec.y) != 'number'){
+		return {};
+	}
+	else{
+		return new Vector (this.x + vec.x, this.y + vec.y);
+	}
 }
 
-//Multiply the vector times a vector
-Vector.prototype.times = function(vec) {
-	return new Vector (this.x * vec.x, this.y * vec.y);
-}
-
-//Multiply the vector times a number
+//Multiply the vector times a number or a vector
 Vector.prototype.times = function(num) {
-	return new Vector (this.x * num, this.y * num);
+	if(typeof(num) == 'number')
+	    return new Vector (this.x * num, this.y * num);
+	else if(num instanceof Vector)
+	    return new Vector (this.x * num.x, this.y * num.y);
 }
 
 module.exports = Vector;
@@ -84,6 +92,7 @@ describe('Utility', function(){
         expect(testVector0).toEqual(new Vector(0, 0));
         expect(testVector1).toEqual(new Vector(6, 9));
         expect(testVector2).toEqual(new Vector(12, 18));
+        expect(testVector3).toEqual(new Vector(72, 162));
     });
 
     it('should fail to create a vectors with invalid input', function(){
@@ -108,6 +117,12 @@ describe('Utility', function(){
         expect(testVector0.plus("testVector1")).toEqual({});
     });
 
+    /*
+    |--------------------------------------------------------------------------
+    | Multiply Tests
+    |--------------------------------------------------------------------------
+    */
+
     it('should multiply vectors', function() {
         expect(testVector1.times(testVector2)).toEqual(testVector3);
         expect(testVector0.times(testVector3)).toEqual(testVector0);
@@ -116,6 +131,7 @@ describe('Utility', function(){
     it('should multiply a vector times a number', function() {
         expect(testVector0.times(13)).toEqual(testVector0);
         expect(testVector1.times(2)).toEqual(testVector2);
+        console.log(testVector1.times(2));
     });
 });
 
