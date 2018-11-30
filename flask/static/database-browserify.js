@@ -31,7 +31,7 @@ const SUCCESS_MSG = "BACKEND RUNNING";
 //store a grid, which is a JSON, in the database
 function storeGrid(gridJSON) {
     if(!validJSON(gridJSON)) {
-        throw "invalid JSON given";
+        throw new Error("invalid JSON given");
     }
     var success;
     try {
@@ -78,7 +78,7 @@ async function isRunning() {
         success = await $.ajax({
             type: "GET",
             dataType: "text",
-            url: AWS_URL + "api/v1/backend-up", 
+            url: AWS_URL + "api/v1/backend-up/", 
             success: function(data) {
                 alert("Backend is running");
                 console.log("success: backend is running");
@@ -99,7 +99,7 @@ async function isRunning() {
 
 async function deleteGrid(title) {
     if(title.length <= 0 || title == null) {
-        throw "invalid title given";
+        throw new Error("invalid title given");
     }
     var success;
     try {
@@ -136,7 +136,7 @@ async function deleteGrid(title) {
 //update a grid that is already in the database
 async function updateGrid(gridJSON) {
     if(!validJSON(gridJSON)) {
-        throw "invalid JSON given";
+        throw new Error("invalid JSON given");
     }
     try {
         var success = await $.ajax({
@@ -177,7 +177,7 @@ async function updateGrid(gridJSON) {
 //retrieve a grid from the database using its title
 async function getByTitle(title) {
     if(title.length == 0) {
-        throw "invalid title given";
+        throw new Error("invalid title given");
     }
     var grid;
     try {
@@ -211,7 +211,7 @@ async function getByTitle(title) {
         console.log(error);
     }
     if(grid == null) {
-        throw "didn't retrieve grid with title [" + title + "]";
+        throw new Error("didn't retrieve grid with title [" + title + "]");
     }
     return grid;
 }
@@ -250,7 +250,7 @@ async function getAllTitles() {
         console.log(err);
     }
     if(titles == null) {
-        throw "didn't retrieve titles";
+        throw new Error("didn't retrieve titles");
     }
     return titles;
 }
