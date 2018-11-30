@@ -22,15 +22,14 @@ const Vector = require('./utility.js');
 */
 
 function Character(loc, max, hea, stat, hbox, url, size, spd, mvspd, grav){
-    // console.log("speed", (spd instanceof Vector));
-    // console.log("mvspeed", (typeof mvspd === "number"));
-    // console.log("stat", (typeof stat === "boolean"));
-    // console.log("grav", (typeof grav === "number"));
-    // console.log("health", (typeof hea ==="number"));
-    // console.log("max",  (typeof max === "number"));
-    if((spd instanceof Vector) && (typeof mvspd === "number") &&
-       (typeof grav === "number")&&  (typeof stat === "boolean") &&
-       (typeof max === "number") && (typeof hea ==="number")){
+    console.log("speed", (spd instanceof Vector));
+    console.log("mvspeed", (typeof mvspd === "number"));
+    console.log("stat", (typeof stat === "boolean"));
+    console.log("grav", (typeof grav === "number"));
+    console.log("health", (typeof hea ==="number"));
+    console.log("max",  (typeof max === "number"));
+    if((spd instanceof Vector) &&
+       (typeof stat === "boolean")){
         Element.call(this, loc, url, size, hbox);
         this.maxHealth = max; //maximum health
 	      this.health=hea; //int health
@@ -806,7 +805,8 @@ function JSONtoElements(data){
                 else if (temp.name == "Item"){
                     console.log("item", dataobj.objects[i]);
                     var col = false;
-                    var eff = new Effect("damage", 1);
+                    console.log("amount",temp.amount);
+                    var eff = new Effect(temp.effect, temp.amount);
                     var hov =true;
                     var targets = dataobj.objects[i].targets;
                     element = new Item(pos, url, sz, hitbox, col, eff, pos, hov, targets);
@@ -814,7 +814,7 @@ function JSONtoElements(data){
                 }
                 else if (temp.name == "Player"){
                     console.log("player",dataobj.objects[i]);
-                    var max = 10;//dataobj.objects[i].maxhealth;
+                    var max = temp.maxhealth;
                     var stat = true;
                     var itm= null;
                     var inv= [];
@@ -822,29 +822,35 @@ function JSONtoElements(data){
                     if(url === defaultUrl)
                         hitbox = new Vector(19,50);
                     var spd = new Vector(0,0);
-                    var mvspd = 30;//dataobj.objects[i].speed;
-                    var grav =  50;//dataobj.objects[i].gravity;
+                    console.log("spd", spd);
+                    console.log("speed", temp.speed);
+                    console.log("gravity", temp.gravity);
+                    var mvspd = temp.speed;
+                    var grav =  temp.gravity;
                     var dir = "right";
                     element = new Player(pos, max, max, stat, itm, inv, hitbox, url, sz, spd, mvspd, grav, dir);
+                    console.log("PLAYER", element);
                 }
                 else if (temp.name == "NPC"){
-                    var max = 10;
-                    var hea = 7;
+                    var max = temp.maxhealth;
+                    var hea = temp.maxhealth;
                     var stat = true; 
-                    var msg =  dataobj.objects[i].msg;
+                    console.log("msg", temp.msg);
+                    var msg =  temp.msg;
                     var spd = new Vector(0,0);
                     var mvspd = 30;
-                    var grav = 50;
+                    var grav = temp.gravity;
                     element = new NPC(pos, max, hea, stat, msg, hitbox, url, sz, spd, mvspd, grav);
                 }
                 else if (temp.name == "Enemy"){
-                    var max = 10;
-                    var hea= 10;
+                    var max = temp.maxhealth;
+                    var hea= temp.maxhealth;
                     var stat = true;
-                    var dmg =  1;//dataobj.objects[i].damage;
+                    var dmg =  temp.damage;
+                    console.log("damage",temp.damage);
                     var spd = new Vector(0,0);
-                    var mvspd = 15;
-                    var grav = 60;
+                    var mvspd = temp.speed;
+                    var grav = temp.gravity;
                     var dir = "left";
                     var range = 35;
                     var startLoc = pos;
@@ -884,7 +890,9 @@ const Vector = require('./utility.js');
 */
 function Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed, mvspd, grav, dir){
     if((Array.isArray(inv))){
+        console.log("HI FROM PLAYER");
     Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspd, grav);
+    
     this.equippedItem = itm;
     this.inventory = inv;
     this.sinceTile = 50;
@@ -940,9 +948,11 @@ Player.prototype.useItem = function(target){
     if(this.status){
         if(this.isTarget(target)){
             if(this.equippedItem.getEffect().effect == "heal" && target.status){
+                console.log("using");
                 target.addHealth(this.equippedItem.getEffect().getAmount());
             }
             else if (this.equippedItem.getEffect().effect == "damage" && target.status){
+                console.log("using2");
                 target.decHealth(this.equippedItem.getEffect().getAmount());
             }
         }

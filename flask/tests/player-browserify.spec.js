@@ -22,15 +22,14 @@ const Vector = require('./utility.js');
 */
 
 function Character(loc, max, hea, stat, hbox, url, size, spd, mvspd, grav){
-    // console.log("speed", (spd instanceof Vector));
-    // console.log("mvspeed", (typeof mvspd === "number"));
-    // console.log("stat", (typeof stat === "boolean"));
-    // console.log("grav", (typeof grav === "number"));
-    // console.log("health", (typeof hea ==="number"));
-    // console.log("max",  (typeof max === "number"));
-    if((spd instanceof Vector) && (typeof mvspd === "number") &&
-       (typeof grav === "number")&&  (typeof stat === "boolean") &&
-       (typeof max === "number") && (typeof hea ==="number")){
+    console.log("speed", (spd instanceof Vector));
+    console.log("mvspeed", (typeof mvspd === "number"));
+    console.log("stat", (typeof stat === "boolean"));
+    console.log("grav", (typeof grav === "number"));
+    console.log("health", (typeof hea ==="number"));
+    console.log("max",  (typeof max === "number"));
+    if((spd instanceof Vector) &&
+       (typeof stat === "boolean")){
         Element.call(this, loc, url, size, hbox);
         this.maxHealth = max; //maximum health
 	      this.health=hea; //int health
@@ -706,7 +705,9 @@ const Vector = require('./utility.js');
 */
 function Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed, mvspd, grav, dir){
     if((Array.isArray(inv))){
+        console.log("HI FROM PLAYER");
     Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspd, grav);
+    
     this.equippedItem = itm;
     this.inventory = inv;
     this.sinceTile = 50;
@@ -762,9 +763,11 @@ Player.prototype.useItem = function(target){
     if(this.status){
         if(this.isTarget(target)){
             if(this.equippedItem.getEffect().effect == "heal" && target.status){
+                console.log("using");
                 target.addHealth(this.equippedItem.getEffect().getAmount());
             }
             else if (this.equippedItem.getEffect().effect == "damage" && target.status){
+                console.log("using2");
                 target.decHealth(this.equippedItem.getEffect().getAmount());
             }
         }

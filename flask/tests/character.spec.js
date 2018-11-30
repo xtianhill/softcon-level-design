@@ -54,21 +54,6 @@ describe('Character', function() {
     });
 
     // Invalid Input Constructor Tests
-    it('should return an empty object due to invalid max health', function() {
-        testCharacter = new Character(new Vector(0,0), "bad", 10,
-                                      true, new Vector(50,50),
-                                      'url', new Vector(50,50),
-                                      new Vector(0,0), 60, 40);
-        expect(testCharacter).toEqual({});
-    });
-
-    it('should return an empty object due to invalid health', function() {
-        testCharacter = new Character(new Vector(0,0), 20, "bad", true,
-                                      new Vector(50,50), 'url',
-                                      new Vector(50,50),
-                                      new Vector(0,0), 60, 40);
-        expect(testCharacter).toEqual({});
-    });
 
     it('should return an empty object due to invalid status', function() {
         testCharacter = new Character(new Vector(0,0), 20, 10, "bad",
@@ -85,21 +70,6 @@ describe('Character', function() {
         expect(testCharacter).toEqual({});
     });
 
-    it('should return an empty object due to invalid movement speed', function() {
-        testCharacter = new Character(new Vector(0,0), 20, 10, true,
-                                       new Vector(50,50), 'url',
-                                       new Vector(50,50),
-                                       new Vector(0,0), "bad", 40);
-        expect(testCharacter).toEqual({});
-    });
-
-    it('should return an empty object due to invalid gravity', function() {
-        testCharacter = new Character(new Vector(0,0), 20, 10, true,
-                                      new Vector(50,50), 'url',
-                                      new Vector(50,50),
-                                      new Vector(0,0), 60, "bad");
-        expect(testCharacter).toEqual({});
-    });
 
     /*
     |--------------------------------------------------------------------------
