@@ -1627,7 +1627,7 @@ const NPC = require('./npc.js');
 | Constructor
 |------------------------------------------------------------------------------
 */
-function Item(pos, url, sz, hbox, col, eff, bpos, hov, targets){
+function Item(pos, url, sz, hbox, col, eff, bpos, hov, ts){
     Element.call(this, pos, url, sz, hbox);
     if ((typeof col === 'boolean') && (eff instanceof Effect)) {
         this.collected = col;
@@ -1636,6 +1636,8 @@ function Item(pos, url, sz, hbox, col, eff, bpos, hov, targets){
         this.hovering = hov;
         this.wobble = Math.random() * Math.PI * 2;
         this.targets=[];
+        console.log(ts.length);
+        console.log("test", (ts[0] === "Player"));
         // for(i=0;i<targets.length;i++){
         //     console.log("hello");
         //     if(targets[i] === "Player"){
