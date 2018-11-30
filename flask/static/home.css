@@ -1,3 +1,137 @@
-ul{height:200px; width:18%;}
+header {
+    position: relative;
+    background-color: #f2e6ff;
+    max-width: 100%;
+    height: 50px;
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 10px;
+    border: 5px solid #a3c0f5;
+    font-family: 'Press Start 2P';
+}
 
-ul{overflow:hidden; overflow-y:scroll;}
+.title {
+    position: absolute;
+    font-size: 20px;
+    margin-top: 16px;
+    margin-left: 20px;
+    display: inline-block;
+    background: #f2e6ff;
+    color: #660066;
+}
+
+section {
+  float: left;
+  margin-top: 5px;
+  margin-left:20px;
+  height: 500px;
+  background-color: #f2e6ff;
+  border: 5px solid #a3c0f5;
+  width: calc(50% - 40px);
+}
+
+aside{
+  float: right;
+  margin-top: 5px;
+  margin-right:20px;
+  height: 500px;
+  background-color: #f2e6ff;
+  border: 5px solid #a3c0f5;
+  width: calc(50% - 40px);
+}
+
+.nav {
+  float: left;
+  margin-left: 20px;
+  margin-top: 80px;
+  margin-bottom: 20px;
+  width: 50%;
+  height: 390px;
+  box-shadow: 0 0 30px #a3c0f5;
+  position: relative;
+  background-color: #ffe6f0;
+  border: 3px solid #a3c0f5;
+  font-family: 'Press Start 2P';
+}
+
+.playlevel_text{
+  float: right;
+  margin-top: 90px;
+  position: relative;
+  width: 40%;
+  line-height: 150%;
+  color: #b30059;
+  font-size: 15px;
+  font-family: 'Press Start 2P';
+}
+
+.search{
+  float: left;
+  margin-top: 50px;
+  margin-left: 25px;
+  position: absolute;
+  color: #660066;
+  font-family: 'Press Start 2P';
+}
+
+.playlevel_scroll{
+  margin-top: 20px;
+  margin-left: 25px;
+  position: absolute;
+  color: #660066;
+  font-size: 20px;
+  font-family: 'Press Start 2P';
+}
+
+.all_titles{
+  height: 390px;
+  padding-left: 10px;
+  margin-right: 0px;
+  position: relative;
+  font-family: 'Press Start 2P';
+}
+
+nav ul{
+    line-height: 200%;
+    margin-top: 0px;
+    background: #ffe6f0;
+    color: #660066;
+    list-style: none;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+li{
+  font-size: 15px;
+  background: #ffe6f0;
+  list-style-image: url(https://i.pinimg.com/originals/fe/78/bb/fe78bbb25f35d56b502327fb6d43b309.png);
+  color: #660066;
+  padding-left: 0px;
+}
+
+/* unvisited link */
+a:link {
+    color: #660066;
+    text-decoration: none;
+}
+
+/* visited link */
+a:visited {
+  color: #660066;
+  text-decoration: none;
+}
+
+/* mouse over link */
+a:hover {
+  color: #b30059;
+  background: #d2e0f9;
+  box-shadow: 0 0 30px #a3c0f5;
+  text-decoration: none;
+}
+
+/* selected link */
+a:active {
+  color: #660066;
+  text-decoration: none;
+}
