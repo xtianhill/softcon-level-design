@@ -19,6 +19,7 @@ const testNPCCondition = require('../static/engine-test-class.js').testNPCCondit
 const testEndCondition = require('../static/engine-test-class.js').testEndCondition;
 const testEnemyCondition = require('../static/engine-test-class.js').testEnemyCondition;
 
+const handleItemUse = require('../static/engine-test-class.js').handleItemUse;
 const Player = require('../static/player.js');
 const Item = require('../static/item.js');
 const Enemy = require('../static/enemy.js');
@@ -63,7 +64,6 @@ describe('Engine Tests', function(){
             , victory: false
         };
         
-        //console.log(gameState);
         gameState.elements[2].spokenTo = false;
     });
 
@@ -110,7 +110,6 @@ describe('Engine Tests', function(){
     */
 
     it('should return true if there is a collision', function(){
-        //console.log(gameState);
         expect(detectCollision(gameState.elements[0].position,
             gameState.elements[2].position,gameState.elements[0],gameState.elements[2])).toBeTruthy();
 
@@ -146,17 +145,20 @@ describe('Engine Tests', function(){
     */
 
     it('should make player call pickUpItem when colliding with item', function(){
+        gameState.elements[0].pickUpItem = jasmine.createSpy('pickUpItem');
         onCollision(gameState, 3);
-        spyOn(gameState.elements[0], 'pickUpItem');
         expect(gameState.elements[0].pickUpItem).toHaveBeenCalled();
 
     });
 
     it('should decrease enemies health when attacked', function(){
-        onCollision(gameState, 1);
-
-        spyOn(gameState.elements[1], 'decHealth');
-        expect(gameState.elements[1].decHealth).toHaveBeenCalled();
+        var before = gameState.elements[1].health;
+        console.log(gameState.pc);
+        var damage = gameState.pc.equippedItem.effect.amount;
+        gameState.elements[0].position = new Vector(6,6);
+        handleItemUse(gameState);
+        gameState
+        expect(gameState.elements[1].health).toEqual(before-damage);
     });
 
     it('should call display message if collision with npc', function(){

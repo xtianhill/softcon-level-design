@@ -46,7 +46,7 @@ getData(title).then((data) => {
         var upPressed = false;
         var itemUsed = false;
         var changeItem = false;
-        
+
         /*
          * Christian's log
          */
@@ -65,6 +65,7 @@ getData(title).then((data) => {
         var height = canvas.height;
         var wrap = document.getElementById("wrap");
 
+        console.log("elements", elements);
         // set win conditions to false if they were chosen by designer
         var victory = false;
         var npcCondition = true;
@@ -91,7 +92,7 @@ getData(title).then((data) => {
                 ul.appendChild(listItem);
             }
         }
-    
+
         // identify the pc
         var pc;
         for(i=0; i<elements.length; i++){
@@ -452,7 +453,7 @@ getData(title).then((data) => {
 
     // detect key presses
     function keyDownHandler(event, gameState) {
-        if(event.keyCode == 32){
+        if(event.keyCode == 81){
             if(gameState.pc.equippedItem != null) {
                 gameState.itemUsed = true;
             }
@@ -626,9 +627,10 @@ function showInventory(gameState){
         gameState.ctx.fillRect(gameState.wrap.scrollLeft, 0,
             gameState.wrap.clientWidth, gameState.wrap.clientHeight);
         gameState.ctx.fillStyle = "#ffffff";
-        gameState.ctx.font = '40px "Press Start 2P"';
-        gameState.ctx.fillText("VICTORY IS YOURS", 
-            0, gameState.wrap.clientHeight/2);
+        gameState.ctx.font = '30px "Press Start 2P"';
+        gameState.ctx.fillText("VICTORY IS YOURS",
+            gameState.wrap.scrollLeft + .25* gameState.wrap.clientWidth,
+            gameState.wrap.clientHeight/2);
     }
 
     function reset(){
@@ -722,6 +724,6 @@ function showInventory(gameState){
 
     module.exports.showInventory = showInventory;
     module.exports.reset = reset;
-    
+
 });
 module.exports.getData = getData;

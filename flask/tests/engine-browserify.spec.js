@@ -927,9 +927,10 @@ function onCollision(gameState, i) {
 
             //if item, pick up and remove from elements, display in inventory
              if(gameState.elements[i] instanceof Item){
+                 console.log("hello");
                 gameState.pc.pickUpItem(gameState.elements[i]);
                 gameState.elements.splice(i,1);
-                showInventory(gameState);
+                //showInventory(gameState);
              }
 
              //if enviroment with effect, affect pc
@@ -1174,9 +1175,13 @@ function testWinConditions(gameState){
 
 function handleItemUse (gameState){
     for(var i=0; i<gameState.characters.length; i++){
+        console.log(gameState.characters[i]);
         if(gameState.characters[i].status){
+            console.log(detectCollision(gameState.characters[i].position, gameState.pc.equippedItem.position,
+                gameState.characters[i], gameState.pc.equippedItem));
             if(detectCollision(gameState.characters[i].position, gameState.pc.equippedItem.position,
                 gameState.characters[i], gameState.pc.equippedItem)){
+                    console.log("HELLO?");
                     gameState.pc.useItem(gameState.characters[i]);
                     return;
             }
@@ -1209,6 +1214,7 @@ module.exports.update = update;
 module.exports.testNPCCondition = testNPCCondition;
 module.exports.testEndCondition = testEndCondition;
 module.exports.testEnemyCondition = testEnemyCondition;
+module.exports.handleItemUse = handleItemUse;
 
 },{"./character.js":1,"./element.js":3,"./enemy.js":4,"./environment.js":6,"./item.js":7,"./npc.js":8,"./parsing.js":9,"./player.js":10,"./utility.js":11}],6:[function(require,module,exports){
 /*
@@ -1697,6 +1703,7 @@ const testNPCCondition = require('../static/engine-test-class.js').testNPCCondit
 const testEndCondition = require('../static/engine-test-class.js').testEndCondition;
 const testEnemyCondition = require('../static/engine-test-class.js').testEnemyCondition;
 
+const handleItemUse = require('../static/engine-test-class.js').handleItemUse;
 const Player = require('../static/player.js');
 const Item = require('../static/item.js');
 const Enemy = require('../static/enemy.js');
@@ -1741,7 +1748,6 @@ describe('Engine Tests', function(){
             , victory: false
         };
         
-        //console.log(gameState);
         gameState.elements[2].spokenTo = false;
     });
 
@@ -1788,7 +1794,6 @@ describe('Engine Tests', function(){
     */
 
     it('should return true if there is a collision', function(){
-        //console.log(gameState);
         expect(detectCollision(gameState.elements[0].position,
             gameState.elements[2].position,gameState.elements[0],gameState.elements[2])).toBeTruthy();
 
@@ -1824,17 +1829,20 @@ describe('Engine Tests', function(){
     */
 
     it('should make player call pickUpItem when colliding with item', function(){
+        gameState.elements[0].pickUpItem = jasmine.createSpy('pickUpItem');
         onCollision(gameState, 3);
-        spyOn(gameState.elements[0], 'pickUpItem');
         expect(gameState.elements[0].pickUpItem).toHaveBeenCalled();
 
     });
 
     it('should decrease enemies health when attacked', function(){
-        onCollision(gameState, 1);
-
-        spyOn(gameState.elements[1], 'decHealth');
-        expect(gameState.elements[1].decHealth).toHaveBeenCalled();
+        var before = gameState.elements[1].health;
+        console.log(gameState.pc);
+        var damage = gameState.pc.equippedItem.effect.amount;
+        gameState.elements[0].position = new Vector(6,6);
+        handleItemUse(gameState);
+        gameState
+        expect(gameState.elements[1].health).toEqual(before-damage);
     });
 
     it('should call display message if collision with npc', function(){
