@@ -26,6 +26,7 @@ function JSONtoElements(data){
                 "backgroundUrl": '' }; 
     }
     var dataobj= JSON.parse(data);
+    console.log(dataobj);
     dataobj.objects = dataobj.canvas;
     
     i=0;
