@@ -1640,7 +1640,7 @@ function Item(pos, url, sz, hbox, col, eff, bpos, hov, ts){
         console.log("test", (ts[0] === "Player"));
         for(var i=0;i<ts.length;i++){
         //     console.log("hello");
-             if(ts[i] === "Player"){
+            if(ts[i] === "Player"){
                 this.targets.push(Player);
             }
             if(ts[i] === "Enemy"){
@@ -1653,6 +1653,7 @@ function Item(pos, url, sz, hbox, col, eff, bpos, hov, ts){
         if(this.targets.length == 0){
             this.targets.push(Player);
         }
+        console.log("TARGETS", this.targets);
         
     } else {
         return {};
@@ -1976,6 +1977,7 @@ Player.prototype.pickUpItem = function(item){
 
 Player.prototype.isTarget = function (target){
     for(i=0;i<this.equippedItem.targets.length;i++){
+        console.log("is target func",target, this.equippedItem.targets[i]);
         if(this.equippedItem.targets[i].name == target.constructor.name){
             return true;
         }
