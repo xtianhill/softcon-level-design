@@ -34,18 +34,18 @@ function Item(pos, url, sz, hbox, col, eff, bpos, hov, ts){
         this.targets=[];
         console.log(ts.length);
         console.log("test", (ts[0] === "Player"));
-        // for(i=0;i<targets.length;i++){
+        for(var i=0;i<ts.length;i++){
         //     console.log("hello");
-        //     if(targets[i] === "Player"){
-        //         this.targets.push(Player);
-        //     }
-        //     if(targets[i] === "Enemy"){
-        //         this.targets.push(Enemy);
-        //     }
-        //     if(targets[i] === "NPC"){
-        //         this.targets.push(NPC);
-        //     }
-        // }
+             if(ts[i] === "Player"){
+                this.targets.push(Player);
+            }
+            if(ts[i] === "Enemy"){
+                this.targets.push(Enemy);
+            }
+            if(ts[i] === "NPC"){
+                this.targets.push(NPC);
+            }
+        }
         if(this.targets.length == 0){
             this.targets.push(Player);
         }
