@@ -2,7 +2,7 @@ window.onload = function a()
 {
     //setup
 
-    var backgroundimg=0;
+    var backgroundimg="https://i.pinimg.com/originals/fe/78/bb/fe78bbb25f35d56b502327fb6d43b309.png";
     var selectedimg=0;
     var selectedelementtype=0;
     var eraser=0;
@@ -645,27 +645,38 @@ document.getElementById("savegrid").onclick= function(){
   }
 
   var title = prompt("Enter the grid title", "title");
-  console.log(JSON.stringify(canvas.toJSON()));
-  var data=JSON.stringify(canvas.toJSON());
+  //console.log(JSON.stringify(canvas.toJSON()));
+  var plaindata=JSON.stringify(canvas.toJSON());
+  var objdata=JSON.parse(plaindata);
+  objdata.winconds=winconds;
+  objdata.thebackgroundimg=backgroundimg;
+  var data=JSON.stringify(objdata);
   var myJSON= {
     "title" : title,
     "data" : data
   }
+  alert(data);
   function myCB(data) {
     alert(data);
   }
-  if (title != null){
+ if (title != null){
     database.storeGrid(JSON.stringify(myJSON), myCB);
     console.log("tried to store grid!");
   }
+
 }
 
 
 //take everything on the current canvas and print to console and alert in custom json format
 document.getElementById("save").onclick = function(){
      json_data = JSON.stringify(canvas.toJSON());
+     ojson_data=JSON.parse(json_data);
+     var additionalFields = ['selectable', 'uid', 'custom'];
+     ojson_data.objects[1]=additionalFields;
+     new_json_data = JSON.stringify(ojson_data);
+
                //console.log(json_data);
-               alert(json_data);
+               alert(new_json_data);
 
  }
 
