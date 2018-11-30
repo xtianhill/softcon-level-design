@@ -34,24 +34,32 @@ describe('Engine Tests', function(){
             new Enemy(new Vector(20,20), 0, 0, true, 10, vec, 'e_url', vec, vec, 0, 0),
             new NPC(vec, 0, 0, true, 'message!', vec, 'n_url', vec, vec, 0, 0),
             testItem];
-
+ 
         gameState = { canvas: 'canvas'
-                    , width: 500
-                    , height: 500
-                    , ctx: {fillText: function(){}}
-                    , rightPressed: false
-                    , leftPressed: false
-                    , downPressed: false
-                    , upPressed: false
-                    , elements: elements
-                    , pc: elements[0]
-                    , step: .05
-                    , backgroundUrl: 'backgroundUrl'
-                    , winConditions: [false, false, false, false]
-                    , gameOver: false
-                };
-        gameState.elements[2].hasBeenTalkedTo = false;
-
+            , width: 500
+            , height: 500
+            , ctx: {fillText: function(){}}
+            , rightPressed: false
+            , leftPressed: false
+            , downPressed: false
+            , upPressed: false
+            , itemUsed: false
+            , changeItem: false
+            , elements: elements
+            , wrap: 'wrap'
+            , pc: elements[0]
+            , characters: [elements[0], elements[1]]
+            , step: .05
+            , sinceItem: 5
+            , backgroundUrl: 'backgroundUrl'
+            , npcCondition: false
+            , emenyCondition: false
+            , endCondition: false
+            , victory: false
+        };
+        
+        console.log(gameState);
+        gameState.elements[2].spokenTo = false;
     });
 
     /*
@@ -97,6 +105,7 @@ describe('Engine Tests', function(){
     */
 
     it('should return true if there is a collision', function(){
+        console.log(gameState);
         expect(detectCollision(gameState.elements[0].position,
             gameState.elements[2].position,gameState.elements[0],gameState.elements[2])).toBeTruthy();
 
@@ -147,7 +156,7 @@ describe('Engine Tests', function(){
 
     it('should call display message if collision with npc', function(){
         onCollision(gameState, 2);
-        expect(gameState.elements[2].hasBeenTalkedTo).toBeTruthy();
+        expect(gameState.elements[2].spokenTo).toBeTruthy();
     });
 
     /*
