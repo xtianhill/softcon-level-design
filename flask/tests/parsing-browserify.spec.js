@@ -236,14 +236,14 @@ module.exports = Character;
 function Effect(title, amount){
     t = typeof title;
     t2 = typeof amount;
-    if (t === "string" && t2 === "number" && (title == 'heal' || title == 'damage')){
+    //if (t === "string" && t2 === "number" && (title == 'heal' || title == 'damage')){
     this.effect = title;
     this.isActive = false;
     this.amount = amount;
-  }
-  else{
-    return {};
-  }
+//   }
+//   else{
+//     return {};
+//   }
 }
 
 // Effect.prototype.Effect = function(bool, title){
@@ -538,14 +538,15 @@ const Effect = require('./effect.js');
 function Environment(solid, pos, url, scale, hbox, eff){
     // console.log("solid", solid == true);
     // console.log("solid", solid == false);
-    if (solid == true || solid == false) {
+   //if (solid == true || solid == false) {
+        console.log("did env work");
       Element.call(this, pos, url, scale, hbox);
       this.solid = solid;
       this.effect = eff;
-  }
-  else{
-      return {};
-    }
+  //}
+//   else{
+//       return {};
+//     }
 };
 
 Environment.prototype = Object.create(Element.prototype);
@@ -775,14 +776,13 @@ function JSONtoElements(data){
         return {"elements": [],
                 "backgroundUrl": '' }; 
     }
+    console.log("data in paring", data);
     var dataobj= JSON.parse(data);
     console.log(dataobj);
-    dataobj.objects = dataobj.canvas;
     
     i=0;
     var elementarray= [];
     var backgroundurl= dataobj.background; //dataobj.backgroundImage";
-    var winconds = dataobj.winconds;
         for (i=0; i<dataobj.objects.length; i++){
             var temp= dataobj.objects[i];
             if (temp.type =="Element"){
@@ -792,9 +792,11 @@ function JSONtoElements(data){
                 var hitbox = new Vector(50,50);
                 var element;
                 if (temp.name == "Environment"){
-                    
-                    var eff = new Effect(dataobj.objects[i].effect, 1); // new Effect("damage", 1);
-                    var solid = dataobj.objects[i].solid;
+                    console.log(temp);
+                    var eff = new Effect(temp.effect, 1); // new Effect("damage", 1);
+                    console.log("did effect work", eff);
+                    var solid = temp.solid;
+                    console.log("solid!", solid);
                     element = new Environment(solid,pos,url,sz,hitbox,eff);
                     console.log(element);
                 }
@@ -850,8 +852,8 @@ function JSONtoElements(data){
         }
         
         return {"elements": elementarray,
-                "backgroundUrl": backgroundurl,
-                "winconds": winconds };
+                "backgroundUrl": "https://i.pinimg.com/originals/fe/78/bb/fe78bbb25f35d56b502327fb6d43b309.png"
+             }
     }
 module.exports = JSONtoElements;
 

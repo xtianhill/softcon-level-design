@@ -21,14 +21,14 @@
 function Effect(title, amount){
     t = typeof title;
     t2 = typeof amount;
-    if (t === "string" && t2 === "number" && (title == 'heal' || title == 'damage')){
+    //if (t === "string" && t2 === "number" && (title == 'heal' || title == 'damage')){
     this.effect = title;
     this.isActive = false;
     this.amount = amount;
-  }
-  else{
-    return {};
-  }
+//   }
+//   else{
+//     return {};
+//   }
 }
 
 // Effect.prototype.Effect = function(bool, title){
@@ -211,14 +211,15 @@ const Effect = require('./effect.js');
 function Environment(solid, pos, url, scale, hbox, eff){
     // console.log("solid", solid == true);
     // console.log("solid", solid == false);
-    if (solid == true || solid == false) {
+   //if (solid == true || solid == false) {
+        console.log("did env work");
       Element.call(this, pos, url, scale, hbox);
       this.solid = solid;
       this.effect = eff;
-  }
-  else{
-      return {};
-    }
+  //}
+//   else{
+//       return {};
+//     }
 };
 
 Environment.prototype = Object.create(Element.prototype);
