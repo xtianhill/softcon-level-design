@@ -43,7 +43,8 @@ function JSONtoElements(data){
                 if (temp.name == "Environment"){
                     
                     var eff = new Effect(temp.effect, 1); // new Effect("damage", 1);
-                    var solid = dataobj.objects[i].solid;
+                    console.log("did effect work", eff);
+                    var solid = temp.solid;
                     element = new Environment(solid,pos,url,sz,hitbox,eff);
                     console.log(element);
                 }
