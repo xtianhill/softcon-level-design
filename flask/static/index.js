@@ -1849,6 +1849,7 @@ function JSONtoElements(data){
                     var grav =  temp.gravity;
                     var dir = "right";
                     element = new Player(pos, max, max, stat, itm, inv, hitbox, url, sz, spd, mvspd, grav, dir);
+                    console.log("PLAYER", element);
                 }
                 else if (temp.name == "NPC"){
                     var max = temp.maxhealth;
@@ -1909,7 +1910,9 @@ const Vector = require('./utility.js');
 */
 function Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed, mvspd, grav, dir){
     if((Array.isArray(inv))){
+        console.log("HI FROM PLAYER");
     Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspd, grav);
+    
     this.equippedItem = itm;
     this.inventory = inv;
     this.sinceTile = 50;
