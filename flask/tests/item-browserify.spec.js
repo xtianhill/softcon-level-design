@@ -208,7 +208,108 @@ Character.prototype.addHealth = function(amount){
 
 module.exports = Character;
 
-},{"./element.js":2,"./utility.js":7}],2:[function(require,module,exports){
+},{"./element.js":3,"./utility.js":8}],2:[function(require,module,exports){
+/*
+|------------------------------------------------------------------------------
+| Effect Class
+|------------------------------------------------------------------------------
+|
+| This file contains the Effect prototype (the javascript equivalent of a
+| class). Effect is used by Environment and Item. It contains data
+| about how an Effect affects the game (e.g. restores health), as well as
+| methods for activating or changing an Effect.
+|
+|------------------------------------------------------------------------------
+*/
+
+/*
+|------------------------------------------------------------------------------
+| Constructors
+|------------------------------------------------------------------------------
+*/
+
+function Effect(title, amount){
+    t = typeof title;
+    t2 = typeof amount;
+    if (t === "string" && t2 === "number" && (title == 'heal' || title == 'damage')){
+    this.effect = title;
+    this.isActive = false;
+    this.amount = amount;
+  }
+  else{
+    return {};
+  }
+}
+
+// Effect.prototype.Effect = function(bool, title){
+//     if (title == 'heal' || title == 'damage'){
+//     this.isActive = bool;
+//     this.effect = title;
+//   }
+//   else{
+//     return {};
+//   }
+// }
+
+/*
+|------------------------------------------------------------------------------
+| Getter and setter functions (functions are the javascript version of
+| class methods).
+|------------------------------------------------------------------------------
+*/
+
+// Getter for isActive
+Effect.prototype.getIsActive = function(){
+    return this.isActive;
+}
+
+// Setter for Effect type
+Effect.prototype.setEffect = function(eft){
+    t = typeof eft;
+    if (t == "object") {
+        this.effect = eft.effect;
+        this.isActive = eft.isActive;
+        this.amount = eft.amount;
+    }
+    else {
+        return null;
+    }
+}
+
+// Getter for  Effect type
+Effect.prototype.getEffect = function(){
+    return this.effect;
+}
+
+// Setter for isActive
+Effect.prototype.activate = function(){
+    this.isActive = true;
+}
+
+// Setter for isActive
+Effect.prototype.deactivate = function(){
+    this.isActive = false;
+}
+
+// Getter for amount
+Effect.prototype.getAmount = function(){
+    return this.amount;
+}
+
+// Setter for amount
+Effect.prototype.setAmount = function(num){
+    t = typeof num;
+    if (t === "number"){
+        this.amount = num;
+    }
+    else{
+        return null;
+    }
+}
+
+module.exports = Effect;
+
+},{}],3:[function(require,module,exports){
 /*
 |------------------------------------------------------------------------------
 | Element Class
@@ -295,7 +396,7 @@ Element.prototype.setHitbox = function(hbx){
 }
 
 module.exports = Element;
-},{"./utility.js":7}],3:[function(require,module,exports){
+},{"./utility.js":8}],4:[function(require,module,exports){
 /*
 |------------------------------------------------------------------------------
 | Enemy Class
@@ -405,7 +506,7 @@ Enemy.prototype.setDirection = function(dir){
 
 module.exports = Enemy;
 
-},{"./character.js":1}],4:[function(require,module,exports){
+},{"./character.js":1}],5:[function(require,module,exports){
 /*
 |------------------------------------------------------------------------------
 | Item Class
@@ -420,6 +521,7 @@ module.exports = Enemy;
 var icon2 = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKH3Qd3RP33Q5XxcRMrLXYhYGRu_dxvpJCIBEU_MlAudC1ev-P8A";
 const Element = require('./element.js');
 const Vector = require('./utility.js');
+const Effect = require('./effect.js');
 const Enemy = require('./enemy.js');
 const Player = require('./player.js');
 const NPC = require('./npc.js');
@@ -432,12 +534,16 @@ const NPC = require('./npc.js');
 */
 function Item(pos, url, sz, hbox, col, eff, bpos, hov){
     Element.call(this, pos, url, sz, hbox);
-    this.collected = col;
-    this.effect = eff;
-    this.basePos = bpos;
-    this.hovering = hov;
-    this.wobble = Math.random() * Math.PI * 2;
-    this.targets = [Enemy, NPC];
+    if ((typeof col === 'boolean') && (eff instanceof Effect)) {
+        this.collected = col;
+        this.effect = eff;
+        this.basePos = bpos;
+        this.hovering = hov;
+        this.wobble = Math.random() * Math.PI * 2;
+        this.targets = [Enemy, NPC];
+    } else {
+        return {};
+    }
 }
 
 Item.prototype.Item = function(){
@@ -446,36 +552,42 @@ Item.prototype.Item = function(){
         Element.call(this, vector(0,0), icon2, vector(50,50), vector(50,50));
         this.collected = false;
         this.effect = "damage";
-};
-
-//Setter for effect
-Item.prototype.setEffect= function(eft){
-    this.effect = eft;
-};
+}
 
 //Getter for effect
-Item.prototype.getEffect=function(){
+Item.prototype.getEffect = function(){
     return this.effect;
-};
+}
+
+//Setter for effect
+Item.prototype.setEffect = function(eft){
+    if (eft instanceof Effect) {
+        this.effect = eft;
+    }
+}
 
 //Getter for whether the item has been collected
-Item.prototype.getCollected= function(){
+Item.prototype.getCollected = function(){
     return this.collected;
-};
+}
 
 //Setter for whether the item has been collected
-Item.prototype.setCollected= function(b){
+Item.prototype.setCollected = function(b){
     this.collected = b;
-};
+}
 
 //Make item hover
 Item.prototype.hover = function(step) {
-    wobbleSpeed = 2;
-    wobbleDist = 1.5;
-    this.wobble += step * wobbleSpeed;
-    var wobblePos = Math.sin(this.wobble) * wobbleDist;
-    this.position = this.basePos.plus(new Vector(0, wobblePos));
-};
+    if (typeof step == 'number') {
+        wobbleSpeed = 2;
+        // wobbleDist = 1.5;
+        this.wobble += step * wobbleSpeed;
+        // var wobblePos = Math.sin(this.wobble) * wobbleDist;
+        // this.position = this.basePos.plus(new Vector(0, wobblePos));
+    } else {
+        return null;
+    }
+}
 
 //Update the item's position
 Item.prototype.updatePosition = function(pc) {
@@ -490,7 +602,7 @@ Item.prototype.updatePosition = function(pc) {
 }
 module.exports = Item;
 
-},{"./element.js":2,"./enemy.js":3,"./npc.js":5,"./player.js":6,"./utility.js":7}],5:[function(require,module,exports){
+},{"./effect.js":2,"./element.js":3,"./enemy.js":4,"./npc.js":6,"./player.js":7,"./utility.js":8}],6:[function(require,module,exports){
 /*
 |------------------------------------------------------------------------------
 | NPC Class
@@ -544,7 +656,7 @@ NPC.prototype.setMessage = function(msg){
 
 module.exports = NPC;
 
-},{"./character.js":1,"./utility.js":7}],6:[function(require,module,exports){
+},{"./character.js":1,"./utility.js":8}],7:[function(require,module,exports){
 /*
 |------------------------------------------------------------------------------
 | Player Class
@@ -648,7 +760,7 @@ Player.prototype.isTarget = function (target){
 
 module.exports = Player;
 
-},{"./character.js":1,"./item.js":4,"./utility.js":7}],7:[function(require,module,exports){
+},{"./character.js":1,"./item.js":5,"./utility.js":8}],8:[function(require,module,exports){
 /*
 |------------------------------------------------------------------------------
 | Vector Class
@@ -667,20 +779,22 @@ module.exports = Player;
 */
 function Vector(x,y){
 	if (typeof(x) != 'number' || typeof(y) != 'number'){
-		return null
+		return {};
 	}
-	this.x=x;
-	this.y=y;
+	else{
+		this.x=x;
+		this.y=y;
+	}
 }
 
 //Add to the vector
 Vector.prototype.plus = function(vec) {
-	return new Vector (this.x + vec.x, this.y + vec.y);
-}
-
-//Multiply the vector times a vector
-Vector.prototype.times = function(vec) {
-	return new Vector (this.x * vec.x, this.y * vec.y);
+	if (typeof(vec.x) != 'number' || typeof(vec.y) != 'number'){
+		return {};
+	}
+	else{
+		return new Vector (this.x + vec.x, this.y + vec.y);
+	}
 }
 
 //Multiply the vector times a number
@@ -688,9 +802,14 @@ Vector.prototype.times = function(num) {
 	return new Vector (this.x * num, this.y * num);
 }
 
+//Multiply the vector times a vector
+Vector.prototype.times = function(vec) {
+	return new Vector (this.x * vec.x, this.y * vec.y);
+}
+
 module.exports = Vector;
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 /*
 |------------------------------------------------------------------------------
 | Tests for Item Class
@@ -705,8 +824,14 @@ module.exports = Vector;
 */
 
 var Item = require('../static/item.js');
+var Player = require('../static/player.js');
+var Vector = require('../static/utility.js');
+var Effect = require('../static/effect.js');
+const Enemy = require('../static/enemy.js');
+
 describe('Item', function(){
     let testItem;
+    let testPlayer;
 
     /*
     |--------------------------------------------------------------------------
@@ -717,7 +842,7 @@ describe('Item', function(){
     */
 
     beforeEach(function(){
-        testItem = new Item('pos', 'url', 'sz', 'hbox', true, new Effect('heal'));
+        testItem = new Item('pos', 'url', 'sz', 'hbox', true, new Effect('heal', 10));
         testPlayer = new Player(new Vector(1,1), 20, 0, 0, testItem, [testItem],
                                 new Vector(12,12), 'dummy_url', new Vector(3,3),
                                 new Vector(0,0), 50, 80);
@@ -738,7 +863,7 @@ describe('Item', function(){
 
     // Invalid Input Constructor Tests
     it('should fail to construct an item due to invalid input for collected', function(){
-        testItem = new Item('pos', 'url', 'sz', 'hbox', 19, new Effect('heal'));
+        testItem = new Item('pos', 'url', 'sz', 'hbox', 19, new Effect('heal', 9));
         expect(testItem).toEqual({});
     });
 
@@ -755,18 +880,19 @@ describe('Item', function(){
 
     // setEffect and getEffect Tests
     it('should set and get effect with valid input', function() {
-        testItem.setEffect(new Effect('damage'));
-        expect(testItem.getEffect()).toEqual('damage');;
+        testEffect1 = new Effect('damage', 10);
+        testItem.setEffect(testEffect1);
+        expect((testItem.getEffect()).getEffect()).toEqual('damage');;
     })
 
     it('should fail to set effect due to invalid input', function(){
     	testItem.setEffect(false);
-    	expect(testItem.getEffect()).toEqual('heal');
+    	expect((testItem.getEffect()).getEffect()).toEqual('heal');
     });
 
     it('should fail to set effect due to invalid input', function() {
         testItem.setEffect(300);
-        expect(testItem.getEffect()).toEqual('heal');
+        expect((testItem.getEffect()).getEffect()).toEqual('heal');
     });
 
     // setCollected and getCollected tests
@@ -778,9 +904,7 @@ describe('Item', function(){
     it('should fail to set collected due to invalid input', function() {
         testItem.setCollected("hooray");
         expect(testItem.getCollected()).toBeTruthy();
-    })
-
-});
+    });
 
     /*
     |--------------------------------------------------------------------------
@@ -791,20 +915,23 @@ describe('Item', function(){
     // hover test
     it('should make item hover with valid input', function() {
         testItem.hover(0.05);
-        expect(testItem.wobble()).toEqual(.1);
-        expect(testItem.position()).toEqual(Math.sin(.1) * 1.5);
+        shouldWobble = (2 * 0.05 + testItem.wobble) - 0.1;
+        expect(testItem.wobble).toEqual(shouldWobble);
     });
 
     it('should fail to make item hover due to invalid input', function() {
         testItem.hover(false);
-        expect(testItem.wobble()).toEqual(0);
-        expect(testItem.position()).toEqual(0);
+        originalWobbleValue = testItem.wobble;
+        expect(testItem.wobble).toEqual(originalWobbleValue);
     });
     
     // update test
     // it('should update item position with valid input'), function() {
     //     testItem.updatePosition(testPlayer.dir).
 
+});
 
-},{"../static/item.js":4}]},{},[8])(8)
+
+
+},{"../static/effect.js":2,"../static/enemy.js":4,"../static/item.js":5,"../static/player.js":7,"../static/utility.js":8}]},{},[9])(9)
 });
