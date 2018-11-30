@@ -20,14 +20,14 @@
 function Effect(title, amount){
     t = typeof title;
     t2 = typeof amount;
-    if (t === "string" && t2 === "number" && (title == 'heal' || title == 'damage')){
+    //if (t === "string" && t2 === "number" && (title == 'heal' || title == 'damage')){
     this.effect = title;
     this.isActive = false;
     this.amount = amount;
-  }
-  else{
-    return {};
-  }
+//   }
+//   else{
+//     return {};
+//   }
 }
 
 // Effect.prototype.Effect = function(bool, title){
