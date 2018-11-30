@@ -41,10 +41,11 @@ function JSONtoElements(data){
                 var hitbox = new Vector(50,50);
                 var element;
                 if (temp.name == "Environment"){
-                    
+                    console.log(temp);
                     var eff = new Effect(temp.effect, 1); // new Effect("damage", 1);
                     console.log("did effect work", eff);
                     var solid = temp.solid;
+                    console.log("solid!", solid);
                     element = new Environment(solid,pos,url,sz,hitbox,eff);
                     console.log(element);
                 }
