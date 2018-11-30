@@ -1,3 +1,4 @@
+/** SIDE menuy bar --options menu **/
 aside{
   float: right;
   margin-right: 20px;
@@ -34,11 +35,36 @@ aside{
     border: 5px solid #a3c0f5;
 }
 
+/** TOP menu bar **/
+.header {
+    position:fixed; top:0; left:0;
+    width: 80%;
+    margin-top: 3%;
+    margin-left: 5%;
+    margin-right: -5%;
+    margin-bottom: 3%;
+    height: 100px;
+    background-color: #f2e6ff;
+    border: 5px solid #a3c0f5;
+    font-family: 'Press Start 2P';
+    font-size: 10px;
 
+}
+
+/** BUTTONS in top menu **/
+
+/*move mode button*/
 .myButton{
   position: absolute;
   top:25px;
   left: 25px
+}
+
+/*eraser button*/
+.eraser {
+  position: absolute;
+  top:20px;
+  left: 100px;
 }
 
 .groundbutton{
@@ -47,25 +73,11 @@ aside{
   left:175px;
 }
 
-.box{
-  position:absolute;
-  top:15px;
-  left:15px;
-}
+
 .playerbutton{
   position: absolute;
   top:20px;
   left: 235px;
-}
-
-.customsprite{
-  position:absolute;
-  top:150px;
-}
-
-.changebutton{
-  position:absolute;
-  top:180px;
 }
 
 .itembutton{
@@ -74,6 +86,37 @@ aside{
   left: 270px;
 }
 
+.enemybutton{
+  position: absolute;
+  top:20px;
+  left: 325px;
+}
+
+.npcbutton{
+  position: absolute;
+  top:20px;
+  left: 390px;
+}
+
+.wincondbutton{
+  position:absolute;
+  top:20px;
+  left:450px;
+}
+
+.backgroundbutton{
+  position:absolute;
+  top:20px;
+  left:510px;
+}
+
+
+
+/**EDITORS**
+  **per-element menus that display in the Options box on the right
+*/
+
+/** ITEM editor **/
 .effect-selector{
   position: absolute;
   top: 170px;
@@ -99,6 +142,8 @@ aside{
   top:150px;
 }
 
+
+/** ENVIRONMENT editor **/
 .solid-selector{
   position: absolute;
   top:110px;
@@ -120,6 +165,7 @@ aside{
 
 }
 
+/** NPC editor **/
 .customnpc{
   position: absolute;
   top:120px;
@@ -148,12 +194,34 @@ aside{
 
 }
 
+/** PLAYER editor **/
+.customsprite{
+  position:absolute;
+  top:150px;
+}
+
+.changebutton{
+  position:absolute;
+  top:180px;
+}
+
 .gravity-selector{
   position: absolute;
   top: 200px;
   display: block;
 }
 
+.speed-selector{
+  position: absolute;
+  top: 265px;
+  display: block;
+}
+.maxhealthselector{
+  position:absolute;
+  top:290px;
+}
+
+/** ENEMY editor **/
 .customenemy{
   position: absolute;
   top: 120px;
@@ -186,50 +254,14 @@ aside{
   top: 410px;
 }
 
-.speed-selector{
-  position: absolute;
-  top: 265px;
-  display: block;
-}
-.maxhealthselector{
-  position:absolute;
-  top:290px;
-}
-
-.editpic {
-  position:absolute;
-  top:5px;
-  left: 5px;
-}
-
-.enemybutton{
-  position: absolute;
-  top:20px;
-  left: 325px;
-}
-
-.npcbutton{
-  position: absolute;
-  top:20px;
-  left: 390px;
-}
-
-.wincondbutton{
-  position:absolute;
-  top:20px;
-  left:450px;
-}
+/** WINCOND editor **/
 
 .wincondeditor{
   position:absolute;
   top:-50px;
 }
 
-.backgroundbutton{
-  position:absolute;
-  top:20px;
-  left:510px;
-}
+/** BACKGROUND editor **/
 
 .changebackground{
   position:absolute;
@@ -237,7 +269,18 @@ aside{
 
 }
 
+/* **end of editors** */
 
+
+/*editpic is the thumbnail of the element shown in the options menu*/
+.editpic {
+  position:absolute;
+  top:5px;
+  left: 5px;
+}
+
+
+/*cursor styles that change when element is selected*/
 .cursor {
   position: absolute;
   width: 25px;
@@ -294,29 +337,7 @@ aside{
   display:none;
 }
 
-.eraser {
-  position: absolute;
-  top:20px;
-  left: 100px;
-}
-
-.header {
-    position:fixed; top:0; left:0;
-    width: 80%;
-    margin-top: 3%;
-    margin-left: 5%;
-    margin-right: -5%;
-    margin-bottom: 3%;
-    height: 100px;
-    background-color: #f2e6ff;
-    border: 5px solid #a3c0f5;
-    font-family: 'Press Start 2P';
-    font-size: 10px;
-
-}
-
-
-
+/* WRAPPER:  CANVAS is in, sets contains background image for game*/
 .wrapper {
   width: 80%;
       height: 500px;
