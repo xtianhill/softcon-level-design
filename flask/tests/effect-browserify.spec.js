@@ -54,12 +54,14 @@ Effect.prototype.getIsActive = function(){
 }
 
 // Setter for Effect type
-Effect.prototype.setEffect = function(effect){
-    t = typeof effect;
-    if (t === "Effect"){
-        this.effect = effect;
+Effect.prototype.setEffect = function(eft){
+    t = typeof eft;
+    if (t == "object") {
+        this.effect = eft.effect;
+        this.isActive = eft.isActive;
+        this.amount = eft.amount;
     }
-    else{
+    else {
         return null;
     }
 }
@@ -115,6 +117,7 @@ const Effect = require('../static/effect.js');
 
 describe('Effect', function(){
     let testEffect;
+    let testEffect1;
 
     /*
     |--------------------------------------------------------------------------
@@ -126,6 +129,7 @@ describe('Effect', function(){
 
     beforeEach(function(){
         testEffect = new Effect('heal', 10);
+        testEffect1 = new Effect('damage', 13);
     })
 
     /*
@@ -162,12 +166,14 @@ describe('Effect', function(){
     |--------------------------------------------------------------------------
     */
 
-    it('should get and set the title', function(){
-        testEffect.setEffect('damage');
+    it('should get and set the effect', function(){
+        testEffect.setEffect(testEffect1);
         expect((testEffect).getEffect()).toEqual('damage');
+        expect(testEffect.amount).toEqual(testEffect1.amount);
+        expect(testEffect.amount).toEqual(13);
     });
 
-    it('should fail to set the title because of bad string input for title', function(){
+    it('should fail to set the title because of bad input for title', function(){
         testEffect.setEffect('fake_news');
         expect((testEffect).getEffect()).toEqual('heal');
     });
