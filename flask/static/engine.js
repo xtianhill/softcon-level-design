@@ -65,6 +65,7 @@ getData(title).then((data) => {
         var height = canvas.height;
         var wrap = document.getElementById("wrap");
 
+        console.log("elements", elements);
         // set win conditions to false if they were chosen by designer
         var victory = false;
         var npcCondition = true;
