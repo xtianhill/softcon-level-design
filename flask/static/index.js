@@ -28,7 +28,7 @@ function Character(loc, max, hea, stat, hbox, url, size, spd, mvspd, grav){
     console.log("grav", (typeof grav === "number"));
     console.log("health", (typeof hea ==="number"));
     console.log("max",  (typeof max === "number"));
-    if((spd instanceof Vector) && (typeof mvspd === "number") &&
+    if((spd instanceof Vector) &&
        (typeof stat === "boolean")){
         Element.call(this, loc, url, size, hbox);
         this.maxHealth = max; //maximum health
