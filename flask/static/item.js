@@ -31,6 +31,7 @@ function Item(pos, url, sz, hbox, col, eff, bpos, hov, targets){
         this.basePos = bpos;
         this.hovering = hov;
         this.wobble = Math.random() * Math.PI * 2;
+        this.targets=[];
         for(i=0;i<targets.length;i++){
             if(targets[i] === "Player"){
                 this.targets.push(Player);
