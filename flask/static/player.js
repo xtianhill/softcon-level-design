@@ -20,25 +20,20 @@ const Vector = require('./utility.js');
 |------------------------------------------------------------------------------
 */
 function Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed, mvspd, grav, dir){
+    if((itm instanceof Item) && (Array.isArray(inv)) && (dir instanceof Vector)){
     Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspd, grav);
     this.equippedItem = itm;
     this.inventory = inv;
     this.sinceTile = 50;
     this.direction = dir;
-}
+    
+    } else
+        return {};
+};
 
 Player.prototype = Object.create(Character.prototype);
 Player.prototype.constructor = Player;
 
-//empty constructor. void
-Player.prototype.Player = function(){
-    //create enemy with loc = (0,0), maxhealth = 10
-    // health = 10, status = 1, item = null, size 50x50, speed 10x10
-
-    Character.call(this, vector(0,0), 10, 10, 1, vector(50,50), vector(33,13));
-    this.equippedItem = null;
-    this.inventory = [];
-}
 
 //Getter for inventory
 Player.prototype.getInventory= function(){
@@ -46,9 +41,17 @@ Player.prototype.getInventory= function(){
 }
 
 //Setter for inventory
-Player.prototype.setInventory = function(arr)
-{
-    this.inventory = arr;
+Player.prototype.setInventory = function(arr){
+    if(Array.isArray(arr)){
+        items= true;
+        for(i=0; i<arr.length; i++){
+            if(!(arr[i] instanceof Item))
+                items=false;
+        }
+        if(items){
+        this.inventory = arr;
+        }
+    }
 }
 
 //Getter for an owned item
