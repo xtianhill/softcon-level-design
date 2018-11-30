@@ -1548,7 +1548,7 @@ const Effect = require('./effect.js');
 |------------------------------------------------------------------------------
 */
 function Environment(solid, pos, url, scale, hbox, eff){
-  if (solid == 0 || solid == 1) {
+  if (solid == true || solid == false) {
       Element.call(this, pos, url, scale, hbox);
       this.solid = solid;
       this.effect = eff;
@@ -1783,8 +1783,9 @@ function JSONtoElements(data){
                 var hitbox = new Vector(50,50);
                 var element;
                 if (temp.name == "Environment"){
+                    console.log(dataobj.objects[i]);
                     var eff = new Effect(dataobj.objects[i].effect, 1); // new Effect("damage", 1);
-                    var status = dataobj.objects[i].status;
+                    var status = true;//dataobj.objects[i].status;
                     console.log("status", status);
                     element = new Environment(status,pos,url,sz,hitbox,eff);
                 }
@@ -1796,6 +1797,7 @@ function JSONtoElements(data){
                     console.log('from parsing');
                 }
                 else if (temp.name == "Player"){
+                    console.log("player",dataobj.objects[i]);
                     var max = dataobj.objects[i].maxhealth;
                     var stat = true;
                     var itm= null;
