@@ -9,137 +9,258 @@
  * 
  */
 
-// const AWS_URL = "http://softcon-leveldesign.us-east-1.elasticbeanstalk.com/";
-const AWS_URL = "http://127.0.0.1:5000/";
+/*
+|------------------------------------------------------------------------------
+| Database
+|------------------------------------------------------------------------------
+|
+| This file contains the Database utility functions.
+|
+|------------------------------------------------------------------------------
+*/
 
-function storeGrid(gridJSON, cb) {
-    console.log('gridJSON title: ' + gridJSON.title);
-    console.log('gridJSON data: ' + gridJSON.data);
+
+const HTTP_OK = "200";
+const HTTP_CREATED = "201";
+const HTTP_BADREQUEST = "400";
+const HTTP_NOTFOUND = "404";
+const HTTP_CONFLICT = "409";
+
+const AWS_URL = "http://softcon-leveldesign.us-east-1.elasticbeanstalk.com/";
+// const AWS_URL = "http://127.0.0.1:5000/";
+const SUCCESS_MSG = "BACKEND RUNNING";
+
+//store a grid, which is a JSON, in the database
+function storeGrid(gridJSON) {
     if(!validJSON(gridJSON)) {
-        console.log('invalid json given');
+        throw "invalid JSON given";
+    }
+    var success;
+    try {
+        success = $.ajax({
+            type: "POST",
+            url: AWS_URL + "api/v1/add-grid/",
+            data: JSON.stringify(gridJSON),
+            contentType: "application/json",
+            dataType: "text",
+            success: function(data) {
+                console.log("Success: stored [" + data + "] in database.");
+                alert("Success: grid successfully stored.");
+            },
+            failure: function(errMsg) {
+                console.log("failure: couldn't store grid");
+                alert("Error: operation could not be performed.");
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                var status = XMLHttpRequest.status;
+                if (status == HTTP_CONFLICT) {
+                    console.log("Error: HTTP CONFLICT (" + HTTP_CONFLICT + ")");
+                    alert("That title is taken; please choose another name.");
+                } else if(status == HTTP_BADREQUEST) {
+                    console.log("Error: HTTP BADREQUEST (" + HTTP_BADREQUEST + ")");
+                    alert("Sorry, something went wrong. The title could not be retrieved; please try again.");
+                } else {
+                    console.log("Error: unspecified error (" + status + ")");
+                    console.log("Error textStatus: " + textStatus);
+                    alert("Error: operation could not be performed.");
+                }
+            }
+        });
+        return true;
+    } catch(err) {
+        console.log(err);
         return false;
     }
-    $.ajax({
-        type: 'POST',
-        url: AWS_URL + "api/v1/add-grid/",
-        data: gridJSON,
-        dataType: "text",
-        async: false
-      }).done(function(data) {
-        cb(data);
-      }).fail(function(xhr, status, errorThrown) {
-        alert("Sorry, there was a problem!");
-        console.log("Error: " + errorThrown);
-        console.log("Status: " + status);
-        console.dir(xhr);
-      }).always(function() {
-        alert("storeGrid operation is complete.");
-      });
 }
 
-function isRunning(cb) {
-    $.ajax({
-        type: "GET",
-        url: AWS_URL,
-        success: function(data) {
-            console.log("success: backend is running");
-            cb(data);
-        },
-        failure: function(errMsg) {
-            console.log("failure: backend cannot be reached");
-        }
-    });
-}
-
-function deleteGrid(title, cb) {
-    console.log('title is: '+ title);
-    var success = false;
-    if(title.length == 0) {
+// checks if the database is running
+async function isRunning() {
+    var success;
+    try {
+        success = await $.ajax({
+            type: "GET",
+            dataType: "text",
+            url: AWS_URL + "api/v1/backend-up", 
+            success: function(data) {
+                alert("Backend is running");
+                console.log("success: backend is running");
+            },
+            failure: function(errMsg) {
+                console.log("failure: backend cannot be reached");
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                console.log("error: " + textStatus);
+            }
+        });
+    } catch(err) {
+        console.log(err);
         return false;
     }
-    $.ajax({
-        type: "GET",
-        async: false,
-        url: AWS_URL + "api/v1/delete-grid/" + title,
-        success: function(data) {
-            console.log("success: deleted grid wwith title " + title + " in DB");
-            success = true;
-        },
-        failure: function(errMsg) {
-            alert("failure: didn't delete item with title: " + title);
-        }
-    });
-    return success;
+    return success==SUCCESS_MSG;
 }
 
-function updateGrid(gridJSON, cb) {
-    console.log('gridJSON is: ' + gridJSON);
-    success = false;
+async function deleteGrid(title) {
+    if(title.length <= 0 || title == null) {
+        throw "invalid title given";
+    }
+    var success;
+    try {
+        success = await $.ajax({
+            type: "GET",
+            async: true,
+            url: AWS_URL + "api/v1/delete-grid/" + title,
+            success: function(data) {
+                alert("Success: grid successfully deleted.");
+                console.log("success: deleted grid in DB via success callback");
+            },
+            failure: function(errMsg) {
+                alert("Sorry, something went wrong. The grid was not deleted.");
+                console.log("failure: didn't delete item");
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                var status = XMLHttpRequest.status;
+                if (status == HTTP_NOTFOUND) {
+                    alert("Error: the grid was not found.");
+                } else {
+                    console.log("Error: unspecified error (" + status + ")");
+                    console.log("Error textStatus: " + textStatus);
+                    alert("Error: operation could not be performed.");
+                }
+            }
+        });
+        return true;
+    } catch(err) {
+        console.log(err);
+        return false;
+    }
+}
+
+//update a grid that is already in the database
+async function updateGrid(gridJSON) {
     if(!validJSON(gridJSON)) {
-        return success;
+        throw "invalid JSON given";
     }
-    $.ajax({
-        type: "POST",
-        url: AWS_URL + "api/v1/update-grid/",
-        // The key needs to match your method's input parameter (case-sensitive).
-        data: JSON.stringify(gridJSON),
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            console.log("success: updated the following grid in DB: " + data);
-            console.log(data);
-            success = true;
-        },
-        failure: function(errMsg) {
-            console.log("failure: couldn't store grid");
-            success = false;
-        }
-    });
+    try {
+        var success = await $.ajax({
+            type: "POST",
+            url: AWS_URL + "api/v1/update-grid/",
+            data: JSON.stringify(gridJSON),
+            contentType: "application/json",
+            dataType: "text",
+            success: function(data) {
+                console.log("success: updated the following grid in DB: " + data);
+                console.log(data);
+            },
+            failure: function(errMsg) {
+                console.log("failure: couldn't store grid");
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                var status = XMLHttpRequest.status
+                if (status == HTTP_NOTFOUND) {
+                    console.log("Error: HTTP NOTFOUND (" + HTTP_NOTFOUND + ")");
+                    alert("Error: the grid was not found.");
+                } else if(status == HTTP_BADREQUEST) {
+                    console.log("Error: HTTP BADREQUEST (" + HTTP_BADREQUEST + ")");
+                    alert("Sorry, something went wrong. The title could not be retrieved; please try again.");
+                } else {
+                    console.log("Error: unspecified error (" + status + ")");
+                    console.log("Error textStatus: " + textStatus);
+                    alert("Error: operation could not be performed.");
+                }
+            }
+        });
+        return true;
+    } catch(error) {
+        console.log(error);
+        return false;
+    }
 }
 
-function getByTitle(title, cb) {
-    console.log('title is: '+ title);
+//retrieve a grid from the database using its title
+async function getByTitle(title) {
     if(title.length == 0) {
-        return false;
+        throw "invalid title given";
     }
     var grid;
-    $.ajax({
-        type: "GET",
-        url: AWS_URL + "api/v1/search-grid/" + title,
-        contentType: "application/json",
-        dataType: "json",
-        async: false,
-        success: function(data) {
-            alert("success! found item with title " + title + " in DB");
-            console.log(data);
-            grid = data;
-        },
-        failure: function(errMsg) {
-            alert("failure: didn't find item in DB");
-            return null;
-        }
-    });
+    try {
+        grid = await $.ajax({
+            type: "GET",
+            url: AWS_URL + "api/v1/search-grid/" + title,
+            contentType: "application/json",
+            dataType: "json",
+            success: function(data) {
+                console.log("success: found item with title " + title + " in DB");
+            },
+            failure: function(errMsg) {
+                console.log("failure: didn't find item in DB");
+            }, 
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                var status = XMLHttpRequest.status
+                if (status == HTTP_NOTFOUND) {
+                    console.log("Error: HTTP NOTFOUND (" + HTTP_NOTFOUND + ")");
+                    alert("Error: the grid was not found.");
+                } else if(status == HTTP_BADREQUEST) {
+                    console.log("Error: HTTP BADREQUEST (" + HTTP_BADREQUEST + ")");
+                    alert("Sorry, something went wrong. The title could not be retrieved; please try again.");
+                } else {
+                    console.log("Error: unspecified error (" + status + ")");
+                    console.log("Error textStatus: " + textStatus);
+                    alert("Error: operation could not be performed.");
+                }
+            }
+        });
+    } catch(error) {
+        console.log(error);
+    }
+    if(grid == null) {
+        throw "didn't retrieve grid with title [" + title + "]";
+    }
     return grid;
 }
 
-function getAllTitles(cb) {
-    $.ajax({
-        type: "GET",
-        url: AWS_URL + "/api/v1/query-all-titles/",
-        contentType: "application/json",
-        success: function(data) {
-            console.log("success! found the following titles:");
-            console.log(data);
-            return data;
-        },
-        failure: function(errMsg) {
-            console.log("failure: couldn't retrieve titles")
-            return null;
-        }
-    });
+//return all the titles of the levels stored in the database
+async function getAllTitles() {
+    var titles;
+    try {
+        titles = await $.ajax({
+            type: "GET",
+            url: AWS_URL + "api/v1/query-all-titles/",
+            contentType: "application/json",
+            // dataType: "json",
+            success: function(data) {
+                console.log("success! found the following titles:");
+                console.log(data);
+                // titles = data;
+            },
+            failure: function(errMsg) {
+                console.log("failure: couldn't retrieve titles")
+                // titles = null;
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                var status = XMLHttpRequest.status
+                if(status == HTTP_BADREQUEST) {
+                    console.log("Error: HTTP BADREQUEST (" + HTTP_BADREQUEST + ")");
+                    alert("Sorry, something went wrong. The titles could not be retrieved; please try again.");
+                } else {
+                    console.log("Error: unspecified error (" + status + ")");
+                    console.log("Error textStatus: " + textStatus);
+                    alert("Error: operation could not be performed.");
+                }
+            }
+        });
+    } catch(err) {
+        console.log(err);
+    }
+    if(titles == null) {
+        throw "didn't retrieve titles";
+    }
+    return titles;
 }
 
+
+//function to check if a JSON is valid to store in the database
 function validJSON(myJSON) {
+    myJSON = JSON.parse(myJSON);
     if(myJSON.type == 'string') {
         myJSON = JSON.parse(myJSON);
     }
@@ -154,15 +275,11 @@ function validJSON(myJSON) {
         }
     }
     catch(err) {
+        console.log(err)
         return false;
     }
     return true;
 }
-
-// module.exports.storeGrid = storeGrid;
-// module.exports.getByTitle = getByTitle;
-// module.exports.getAllTitles = getAllTitles;
-// module.exports.validJSON = validJSON;
 
 module.exports.storeGrid = storeGrid;
 module.exports.getByTitle = getByTitle;
@@ -330,10 +447,13 @@ describe('REST API Tests', function() {
                 "title" : "newUnitTestTestGrid",
                 "data" : "myfakedata123"
             };
-            spyOn($, "ajax");
-            expect(Database.storeGrid(newTestGrid, testCB)).toBeTruthy();
+            Database.storeGrid(testGrid, testCB);
+            expect(doneFn).not.toHaveBeenCalled();
+            expect($.ajax.calls.mostRecent().method).toBe("POST");
             expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/add-grid/");
-            expect(Database.storeGrid(newTestGrid, testCB)).toBeFalsy();
+            Database.storeGrid(testGrid, testCB);
+            expect(doneFn).not.toHaveBeenCalled();
+            expect($.ajax.calls.mostRecent().method).toBe("POST");
             expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/add-grid/");
         });
         it('should test adding a bad grid', function() {
@@ -347,8 +467,7 @@ describe('REST API Tests', function() {
                 "notATitle" : "badTitle",
                 "notData" : "notData"
             };
-            expect(Database.storeGrid(badTestGrid, testCB)).toBeFalsy();
-            expect($.ajax).not.toHaveBeenCalled();
+            Database.storeGrid(badTestGrid);
         });
     });
 
@@ -365,15 +484,15 @@ describe('REST API Tests', function() {
                 "title" : "unitTestDeleteGrid",
                 "data" : "mydata123"
             };
-            expect(Database.storeGrid(deleteGrid, testCB)).toBeTruthy();
+            Database.storeGrid(deleteGrid, testCB);
             expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/add-grid/");
-            expect(Database.deleteGrid(deleteGrid.title)).toBeTruthy();
+            Database.deleteGrid(deleteGrid.title);
             expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/delete-grid/" + deleteGrid.title);
         });
         it('should test deleting a grid which is *not* in the database', function() {
             spyOn($, "ajax");
             var badDeleteGridTitle = "titleOfGridWhichIsNotInDatabase";
-            expect(Database.deleteGrid(badDeleteGridTitle)).toBeFalsy();
+            Database.deleteGrid(badDeleteGridTitle);
             expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/delete-grid/" + badDeleteGridTitle);
         });
         it('should test deleting a grid given an empty string title', function() {

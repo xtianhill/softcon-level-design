@@ -15,6 +15,7 @@ const Effect = require('../static/effect.js');
 
 describe('Effect', function(){
     let testEffect;
+    let testEffect1;
 
     /*
     |--------------------------------------------------------------------------
@@ -26,6 +27,7 @@ describe('Effect', function(){
 
     beforeEach(function(){
         testEffect = new Effect('heal', 10);
+        testEffect1 = new Effect('damage', 13);
     })
 
     /*
@@ -62,12 +64,14 @@ describe('Effect', function(){
     |--------------------------------------------------------------------------
     */
 
-    it('should get and set the title', function(){
-        testEffect.setEffect('damage');
+    it('should get and set the effect', function(){
+        testEffect.setEffect(testEffect1);
         expect((testEffect).getEffect()).toEqual('damage');
+        expect(testEffect.amount).toEqual(testEffect1.amount);
+        expect(testEffect.amount).toEqual(13);
     });
 
-    it('should fail to set the title because of bad string input for title', function(){
+    it('should fail to set the title because of bad input for title', function(){
         testEffect.setEffect('fake_news');
         expect((testEffect).getEffect()).toEqual('heal');
     });
