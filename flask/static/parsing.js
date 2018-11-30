@@ -99,7 +99,7 @@ function JSONtoElements(data){
         }
         
         return {"elements": elementarray,
-                "backgroundUrl": backgroundurl,
-                "winconds": winconds };
+                "backgroundUrl": backgroundurl
+             }
     }
 module.exports = JSONtoElements;

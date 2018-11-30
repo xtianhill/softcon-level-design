@@ -864,7 +864,7 @@ getData(title).then((data) => {
         var elements = parsedJSON.elements;
         var characters = [];
         var backgroundUrl = parsedJSON.backgroundUrl;
-        var winConditions = parsedJSON.winconds;
+        var winConditions =  ["enemy", "npc"];
         var width = canvas.width;
         var height = canvas.height;
         var wrap = document.getElementById("wrap");
@@ -1868,8 +1868,8 @@ function JSONtoElements(data){
         }
         
         return {"elements": elementarray,
-                "backgroundUrl": backgroundurl,
-                "winconds": winconds };
+                "backgroundUrl": backgroundurl
+             }
     }
 module.exports = JSONtoElements;
 
