@@ -639,7 +639,7 @@ document.getElementById("savegrid").onclick= function(){
   if (con3==true){
     winconds.push("NPC");
   }
-  canvas.winconds=winconds;
+  
   var title = prompt("Enter the grid title", "title");
   var data=JSON.stringify(canvas.toJSON());
   var myJSON= {
