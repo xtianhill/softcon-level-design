@@ -32,6 +32,7 @@ function JSONtoElements(data){
     i=0;
     var elementarray= [];
     var backgroundurl= dataobj.thebackgroundimg;
+    var winconds= dataobj.winconds;
         for (i=0; i<dataobj.objects.length; i++){
             var temp= dataobj.objects[i];
             if (temp.type =="Element"){
@@ -108,7 +109,8 @@ function JSONtoElements(data){
         }
 
         return {"elements": elementarray,
-                "backgroundUrl": backgroundurl
+                "backgroundUrl": backgroundurl,
+                "winconditions": winconds,
              }
     }
 module.exports = JSONtoElements;

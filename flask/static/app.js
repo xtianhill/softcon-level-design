@@ -635,13 +635,13 @@ document.getElementById("savegrid").onclick= function(){
   var con3=$('#check3').is(':checked');
   if (con1==true){
 
-    winconds.push("End");
+    winconds.push("end");
   }
   if (con2==true){
-    winconds.push("Enemy");
+    winconds.push("enemy");
   }
   if (con3==true){
-    winconds.push("NPC");
+    winconds.push("npc");
   }
 
   var title = prompt("Enter the grid title", "title");
