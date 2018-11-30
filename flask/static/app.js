@@ -5,7 +5,7 @@ window.onload = function a()
     var selectedelementtype=0;
     var eraser=0;
     var hasplayer=0;
-    var issolid=1;
+    var issolid="true";
     var curr_effect="heal";
     var canvassrc = "https://d2ujflorbtfzji.cloudfront.net/package-screenshot/4b7e815a-669f-4023-ac73-6c7691fe9a9f_scaled.jpg";
     var playergravity= "medium";
@@ -53,7 +53,7 @@ menubox.toObject = function() {
 //urls for all the buttons
 var groundsrc = "https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg";
 var playersrc = "https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png"
-var coinsrc= "https://66.media.tumblr.com/4a8e88c9194d00c4e2e14d62f2a9dc76/tumblr_pi5t840NIu1u9vozfo1_250.png";
+var coinsrc= "https://66.media.tumblr.com/f7acf066084d424d5da0c09795fe8483/tumblr_inline_piy8y9FbkJ1ruhpn7_540.png";
 var enemysrc= "https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png";
 var npcsrc = "https://66.media.tumblr.com/18b1dcddb1e6de2d56f2bbc16e368af5/tumblr_pi5sz2UwpH1u9vozfo1_250.png";
 
@@ -103,8 +103,11 @@ function JSONderulo(object, name, url){
   var curr_player_grav= $("input[name='color']:checked").val();
   var curr_player_maxhealth= $("input[name='health']").val();
   var curr_item_effect= $('#effect-selector').val();
-  var curr_enemy_damage= $('input[name=enemydamage]').val();
+  var curr_enemy_damage= $("input[name='enemydamage']").val();
   var curr_npc_message= $("input[name='npcmessage']").val();
+  var curr_item_amount=$("input[name='amount']").val();
+  var curr_npc_grav =$("input[name='grav']:checked").val();
+  var curr_npc_maxhealth= $("input[name='npcmaxhealth']").val();
 switch(name){
   case "Environment":
   object.toObject = function() {
@@ -142,6 +145,7 @@ switch(name){
   url: url,
   scale: 1,
   effect: curr_item_effect,
+  amount: curr_item_amount,
   };
 }
     break;
@@ -166,6 +170,8 @@ switch(name){
   url: url,
   scale: 1,
   msg: curr_npc_message,
+  gravity: curr_npc_grav,
+  maxhealth: curr_npc_maxhealth,
   };
 }
   break;
@@ -445,6 +451,35 @@ document.getElementById("changebutton").onclick= function(){
 
 }
 
+document.getElementById("changeterrain").onclick= function(){
+    var newurl=$("input[name='terrainurl']").val();
+
+  document.getElementById("groundbutton").src=newurl;
+  document.getElementById("ground").src=newurl;
+ document.getElementById("cursor").src=newurl;
+ document.getElementById("editpic").src=newurl;
+ curr_url=newurl;
+}
+
+document.getElementById("changeitem").onclick= function(){
+    var newurl=$("input[name='newitem']").val();
+  document.getElementById("itembutton").src=newurl;
+  document.getElementById("coin").src=newurl;
+ document.getElementById("cursor3").src=newurl;
+ document.getElementById("editpic").src=newurl;
+curr_url=newurl;
+}
+
+
+document.getElementById("changenpc").onclick= function(){
+    var newurl=$("input[name='newnpc']").val();
+  document.getElementById("npcbutton").src=newurl;
+  document.getElementById("npc").src=newurl;
+ document.getElementById("cursor5").src=newurl;
+ document.getElementById("editpic").src=newurl;
+curr_url=newurl;
+}
+
 document.getElementById("eraserbutton").onclick= function(){
   eraser=1;
   curr_url=0;
@@ -587,6 +622,7 @@ document.getElementById("save").onclick = function(){
    document.getElementById("environmenteditor").style="display: none";
    document.getElementById("playereditor").style="display: none";
    document.getElementById("enemyeditor").style="display: none";
+   document.getElementById("npceditor").style="display: none";
    document.getElementById("cursor3").style.visibility="visible";
    document.getElementById("cursor2").style.visibility="hidden";
    document.getElementById("cursor").style.visibility="hidden";
