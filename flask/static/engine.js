@@ -46,7 +46,7 @@ getData(title).then((data) => {
         var upPressed = false;
         var itemUsed = false;
         var changeItem = false;
-        
+
         /*
          * Christian's log
          */
@@ -92,7 +92,7 @@ getData(title).then((data) => {
                 ul.appendChild(listItem);
             }
         }
-    
+
         // identify the pc
         var pc;
         for(i=0; i<elements.length; i++){
@@ -628,8 +628,9 @@ function showInventory(gameState){
             gameState.wrap.clientWidth, gameState.wrap.clientHeight);
         gameState.ctx.fillStyle = "#ffffff";
         gameState.ctx.font = '40px "Press Start 2P"';
-        gameState.ctx.fillText("VICTORY IS YOURS", 
-            0, gameState.wrap.clientHeight/2);
+        gameState.ctx.fillText("VICTORY IS YOURS",
+            gameState.wrap.scrollLeft + gameState.wrap.clientWidth/2,
+            gameState.wrap.clientHeight/2);
     }
 
     function reset(){
@@ -723,6 +724,6 @@ function showInventory(gameState){
 
     module.exports.showInventory = showInventory;
     module.exports.reset = reset;
-    
+
 });
 module.exports.getData = getData;
