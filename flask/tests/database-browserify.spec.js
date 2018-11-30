@@ -33,7 +33,7 @@ const SUCCESS_MSG = "BACKEND RUNNING";
 //store a grid, which is a JSON, in the database
 function storeGrid(gridJSON) {
     if(!validJSON(gridJSON)) {
-        throw "invalid JSON given";
+        throw new Error("invalid JSON given");
     }
     var success;
     try {
@@ -80,7 +80,7 @@ async function isRunning() {
         success = await $.ajax({
             type: "GET",
             dataType: "text",
-            url: AWS_URL + "api/v1/backend-up", 
+            url: AWS_URL + "api/v1/backend-up/", 
             success: function(data) {
                 alert("Backend is running");
                 console.log("success: backend is running");
@@ -101,7 +101,7 @@ async function isRunning() {
 
 async function deleteGrid(title) {
     if(title.length <= 0 || title == null) {
-        throw "invalid title given";
+        throw new Error("invalid title given");
     }
     var success;
     try {
@@ -138,7 +138,7 @@ async function deleteGrid(title) {
 //update a grid that is already in the database
 async function updateGrid(gridJSON) {
     if(!validJSON(gridJSON)) {
-        throw "invalid JSON given";
+        throw new Error("invalid JSON given");
     }
     try {
         var success = await $.ajax({
@@ -179,7 +179,7 @@ async function updateGrid(gridJSON) {
 //retrieve a grid from the database using its title
 async function getByTitle(title) {
     if(title.length == 0) {
-        throw "invalid title given";
+        throw new Error("invalid title given");
     }
     var grid;
     try {
@@ -213,7 +213,7 @@ async function getByTitle(title) {
         console.log(error);
     }
     if(grid == null) {
-        throw "didn't retrieve grid with title [" + title + "]";
+        throw new Error("didn't retrieve grid with title [" + title + "]");
     }
     return grid;
 }
@@ -252,7 +252,7 @@ async function getAllTitles() {
         console.log(err);
     }
     if(titles == null) {
-        throw "didn't retrieve titles";
+        throw new Error("didn't retrieve titles");
     }
     return titles;
 }
@@ -316,20 +316,27 @@ const Database = require('../static/database-browserify.js');
 // const jasmine = require('../../node_modules/jasmine-ajax');
 // const jasmine = require('../../spec/helpers/mock-ajax.js')
 
-// const AWS_URL = "http://softcon-leveldesign.us-east-1.elasticbeanstalk.com/";
-const AWS_URL = "http://127.0.0.1:5000/";
+const AWS_URL = "http://softcon-leveldesign.us-east-1.elasticbeanstalk.com/";
+// const AWS_URL = "http://127.0.0.1:5000/";
+
+const ISRUNNING_URL    = "api/v1/backend-up/";
+const STOREGRID_URL    = "api/v1/add-grid/";
+const DELETEGRID_URL   = "api/v1/delete-grid/";
+const UPDATEGRID_URL   = "api/v1/update-grid/"
+const GETGRID_URL      = "api/v1/search-grid/";
+const GETALLTITLES_URL = "api/v1/query-all-titles/";
 
 describe('Valid JSON Tests', function() {
-    var validJSON1 = JSON.parse('{ "title" : "mytitle1", "data" : "my data 1" }');
-    var validJSON2 = JSON.parse('{ "title" : "mytitle2", "data" : "my data 12" }');
-    var validJSON3 = JSON.parse('{ "title" : "mytitle3", "data" : "my data 123" }');
+    var validJSON1 = JSON.stringify(JSON.parse('{ "title" : "mytitle1", "data" : "my data 1" }'));
+    var validJSON2 = JSON.stringify(JSON.parse('{ "title" : "mytitle2", "data" : "my data 12" }'));
+    var validJSON3 = JSON.stringify(JSON.parse('{ "title" : "mytitle3", "data" : "my data 123" }'));
 
-    var invalidJSON1 = JSON.parse('{ "title" : "", "data" : "my data 123" }');
-    var invalidJSON2 = JSON.parse('{ "title" : "mytitle3", "data" : "" }');
-    var invalidJSON3 = JSON.parse('{ "title" : "", "data" : "" }');
-    var invalidJSON4 = JSON.parse('{ "notatitle" : "bad title", "notdata" : "bad data" }');
-    var invalidJSON5 = JSON.parse('{ "title" : "atitle", "data" : 123456789 }');
-    var invalidJSON6 = JSON.parse('{ "title" : "anothertitle", "data" : 0}');
+    var invalidJSON1 = JSON.stringify(JSON.parse('{ "title" : "", "data" : "my data 123" }'));
+    var invalidJSON2 = JSON.stringify(JSON.parse('{ "title" : "mytitle3", "data" : "" }'));
+    var invalidJSON3 = JSON.stringify(JSON.parse('{ "title" : "", "data" : "" }'));
+    var invalidJSON4 = JSON.stringify(JSON.parse('{ "notatitle" : "bad title", "notdata" : "bad data" }'));
+    var invalidJSON5 = JSON.stringify(JSON.parse('{ "title" : "atitle", "data" : 123456789 }'));
+    var invalidJSON6 = JSON.stringify(JSON.parse('{ "title" : "anothertitle", "data" : 0}'));
 
     it('should test that a given JSON with nonempty title and data fields is treated as valid', function() {
         expect(Database.validJSON(validJSON1)).toBeTruthy();
@@ -384,10 +391,10 @@ describe('REST API Tests', function() {
                   doneFn(this.responseText);
                 }
             };
-            xhr.open("GET", AWS_URL);
+            xhr.open("GET", AWS_URL+ ISRUNNING_URL);
             xhr.send();
 
-            expect(jasmine.Ajax.requests.mostRecent().url).toBe(AWS_URL);
+            expect(jasmine.Ajax.requests.mostRecent().url).toBe(AWS_URL + ISRUNNING_URL);
             expect(doneFn).not.toHaveBeenCalled();
 
             jasmine.Ajax.requests.mostRecent().respondWith({
@@ -399,17 +406,10 @@ describe('REST API Tests', function() {
         });
         it('should test if the backend is running with database.js function call', function() {
             var doneFn = jasmine.createSpy("success");
-
-            Database.isRunning(doneFn);
-
-            thisRequest = jasmine.Ajax.requests.mostRecent();
-            expect(thisRequest.url).toBe(AWS_URL);
+            expect(Database.isRunning()).toBeTruthy();
             expect(doneFn).not.toHaveBeenCalled();
-            expect(thisRequest.method).toBe("GET");
-            thisRequest.respondWith({
-                "status" : 200,
-                "responseText" : "SUCCESS: backend is running" 
-            });
+            expect(jasmine.Ajax.requests.mostRecent().url).toBe(AWS_URL + ISRUNNING_URL);
+            expect(jasmine.Ajax.requests.mostRecent().method).toBe("GET");
         });
     });
 
@@ -417,96 +417,68 @@ describe('REST API Tests', function() {
     describe('storeGrid() tests', function() {
         it('should test adding a grid which is *not* in the database', function() {
             var doneFn = jasmine.createSpy("success");
-            var callbackResult;
-            function testCB(data) {
-                callbackResult = data;
-                console.log("callbackResult is now [" + data + "]");
-            }
             var testGrid = {
                 "title" : "unitTestTestGrid",
                 "data" : "myfakedata123"
             };
-            Database.storeGrid(testGrid, testCB);
+            expect(Database.storeGrid(JSON.stringify(testGrid))).toBeTruthy();
             thisRequest = jasmine.Ajax.requests.mostRecent();
-            expect(thisRequest.url).toBe(AWS_URL + "api/v1/add-grid/");
+            expect(thisRequest.url).toBe(AWS_URL + STOREGRID_URL);
             expect(doneFn).not.toHaveBeenCalled();
             expect(thisRequest.method).toBe("POST");
-            thisRequest.respondWith({
-                "status" : 200,
-                "responseText" : "SUCCESS: backend is running" 
-            });
-            expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/add-grid/");
-        });
-        it('should test adding a grid which *is* already in the database', function() {
-            var callbackResult;
-            function testCB(data) {
-                callbackResult = data;
-                console.log("callbackResult is now [" + data + "]");
-            }
-            var newTestGrid = {
-                "title" : "newUnitTestTestGrid",
-                "data" : "myfakedata123"
-            };
-            Database.storeGrid(testGrid, testCB);
-            expect(doneFn).not.toHaveBeenCalled();
-            expect($.ajax.calls.mostRecent().method).toBe("POST");
-            expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/add-grid/");
-            Database.storeGrid(testGrid, testCB);
-            expect(doneFn).not.toHaveBeenCalled();
-            expect($.ajax.calls.mostRecent().method).toBe("POST");
-            expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/add-grid/");
         });
         it('should test adding a bad grid', function() {
-            var callbackResult;
-            function testCB(data) {
-                callbackResult = data;
-                console.log("callbackResult is now [" + data + "]");
-            }
-            spyOn($, "ajax");
+            var doneFn = jasmine.createSpy("success");
             var badTestGrid = {
                 "notATitle" : "badTitle",
                 "notData" : "notData"
             };
-            Database.storeGrid(badTestGrid);
+            expect(function() {
+                Database.storeGrid(JSON.stringify(badTestGrid))
+            }).toThrow();
+            expect(doneFn).not.toHaveBeenCalled();
         });
     });
 
     // testing deleting different grids from database
     describe('deleteGrid() tests', function() {
         it('should test deleting a grid which *is* in the database', function() {
-            var callbackResult;
-            function testCB(data) {
-                callbackResult = data;
-                console.log("callbackResult is now [" + data + "]");
-            }
-            spyOn($, "ajax");
+            var doneFn = jasmine.createSpy("success");
             var deleteGrid = {
                 "title" : "unitTestDeleteGrid",
                 "data" : "mydata123"
             };
-            Database.storeGrid(deleteGrid, testCB);
-            expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/add-grid/");
-            Database.deleteGrid(deleteGrid.title);
-            expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/delete-grid/" + deleteGrid.title);
+            expect(Database.storeGrid(JSON.stringify(deleteGrid))).toBeTruthy();
+            expect(jasmine.Ajax.requests.mostRecent().url).toEqual(AWS_URL + STOREGRID_URL);
+            expect(Database.deleteGrid(deleteGrid.title)).toBeTruthy();
+            expect(jasmine.Ajax.requests.mostRecent().url).toEqual(AWS_URL + DELETEGRID_URL + deleteGrid.title);
+            expect(doneFn).not.toHaveBeenCalled();
         });
         it('should test deleting a grid which is *not* in the database', function() {
-            spyOn($, "ajax");
+            var doneFn = jasmine.createSpy("success");
             var badDeleteGridTitle = "titleOfGridWhichIsNotInDatabase";
-            Database.deleteGrid(badDeleteGridTitle);
-            expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/delete-grid/" + badDeleteGridTitle);
+            Database.deleteGrid(badDeleteGridTitle).then(function(result) {
+                expect(result).toBeFalsy();
+                doneFn();
+            });
+            expect(jasmine.Ajax.requests.mostRecent().url).toEqual(AWS_URL + DELETEGRID_URL + badDeleteGridTitle);
+            expect(doneFn).not.toHaveBeenCalled();
         });
         it('should test deleting a grid given an empty string title', function() {
-            spyOn($, "ajax");
+            var doneFn = jasmine.createSpy("success");
             var emptyTitle = "";
-            expect(Database.deleteGrid(emptyTitle)).toBeFalsy();
-            expect($.ajax).not.toHaveBeenCalled();
+            Database.deleteGrid(emptyTitle).then(function(result) {
+                expect(result).toBeFalsy();
+                done();
+            });
+            expect(doneFn).not.toHaveBeenCalled();
         });
     });
 
     // testing updating different grids in database
     describe('updateGrid() tests', function() {
         it('should update a grid which *is* in the database', function() {
-            spyOn($, "ajax");
+            var doneFn = jasmine.createSpy("success");
             var updateTestGrid = {
                 "title" : "newUnitTestUpdateGrid",
                 "data" : "myfakedata123"
@@ -515,67 +487,87 @@ describe('REST API Tests', function() {
                 "title" : "newUnitTestUpdateGrid2",
                 "data" : "myfakedata123"
             };
-            expect(Database.addGrid(updateTestGrid)).toBeTruthy();
-            expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/add-grid/");
-            expect(Database.updateGrid(updateTestGrid)).toBeTruthy();
-            expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/update-grid/");
-            expect(Database.updateGrid(updateTestGrid2)).toBeTruthy();
-            expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/update-grid/");
+            expect(Database.storeGrid(JSON.stringify(updateTestGrid))).toBeTruthy();
+            expect(jasmine.Ajax.requests.mostRecent().url).toEqual(AWS_URL + STOREGRID_URL);
+            Database.updateGrid(JSON.stringify(updateTestGrid)).then(function(result) {
+                expect(result).toBeTruthy();
+                done();
+            });
+            expect(jasmine.Ajax.requests.mostRecent().url).toEqual(AWS_URL + UPDATEGRID_URL);
+            Database.updateGrid(JSON.stringify(updateTestGrid2)).then(function(result) {
+                expect(result).toBeTruthy();
+                done();
+            });
+            expect(jasmine.Ajax.requests.mostRecent().url).toEqual(AWS_URL + UPDATEGRID_URL);
+            expect(doneFn).not.toHaveBeenCalled();
         });
         it('should attempt to update a grid which is *not* in the database', function() {
-            spyOn($, "ajax");
+            var doneFn = jasmine.createSpy("success");
             var updateTestGrid = {
                 "title" : "updateTestGridWhichIsNotInDatabase",
                 "data" : "myfakedata123"
             };
-            expect(Database.updateGrid(updateTestGrid)).toBeFalsy();
-            expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/update-grid/");
+            Database.updateGrid(JSON.stringify(updateTestGrid)).then(function(result) {
+                expect(result).toBeFalsy();
+                done();
+            });
+            expect(jasmine.Ajax.requests.mostRecent().url).toEqual(AWS_URL + UPDATEGRID_URL);
+            expect(doneFn).not.toHaveBeenCalled();
         });
         it('should attempt to update a grid with invalid data', function() {
-            spyOn($, "ajax");
+            var doneFn = jasmine.createSpy("success");
             var badUpdateTestGrid = {
                 "nottitle" : "updateTestGridWhichIsNotInDatabase",
                 "notdata" : "myfakedata123"
             };
-            expect(Database.updateGrid(badUpdateTestGrid)).toBeFalsy();
-            expect($.ajax).not.toHaveBeenCalled();
+            Database.updateGrid(JSON.stringify(badUpdateTestGrid)).then(function(result) {
+                expect(result).toThrow();
+                done();
+            });
+            expect(doneFn).not.toHaveBeenCalled();
         });
     });
 
     // testing retrieving different grids from database
     describe('getByTitle() tests', function() {
         it('should retrieve a grid which *is* in the database', function() {
-            spyOn($, "ajax");
+            var doneFn = jasmine.createSpy("success");
             var addTestGrid = {
                 "title" : "addTestGrid",
                 "data" : "myfakedata123"
             };
-            expect(Database.addGrid(addTestGrid)).toBeTruthy();
-            expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/add-grid/");
-            expect(Database.getBytTitle(addTestGrid.title)).toBeTruthy();
-            expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/search-grid/" + addTestGrid.title);
+            expect(Database.storeGrid(JSON.stringify(addTestGrid))).toBeTruthy();
+            expect(jasmine.Ajax.requests.mostRecent().url).toEqual(AWS_URL + STOREGRID_URL);
+            Database.getByTitle(addTestGrid.title).then(function(result) {
+                expect(result).toBeTruthy();
+                done();
+            });
+            expect(jasmine.Ajax.requests.mostRecent().url).toEqual(AWS_URL + GETGRID_URL + addTestGrid.title);
+            expect(doneFn).not.toHaveBeenCalled();
         });
         it('should retrieve a grid which is *not* in the database', function() {
-            spyOn($, "ajax");
+            var doneFn = jasmine.createSpy("success");
             var badAddTestGrid = {
                 "title" : "badAddTestGrid",
                 "data" : "myfakedata123"
             };
-            expect(Database.getBytTitle(badAddTestGrid.title)).toBeFalsy();
-            expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/search-grid/" + badAddTestGrid.title);
-        });
-        it('should attempt to retrieve a grid which *is* in the database', function() {
-            spyOn($, "ajax");
-            var emptyTitle = "";
-            expect(Database.getByTitle(emptyTitle)).toBeFalsy();
-            expect($.ajax).not.toHaveBeenCalled();
+            Database.getByTitle(badAddTestGrid.title).then(function(result) {
+                expect(result).toBeFalsy();
+                done();
+            });
+            expect(jasmine.Ajax.requests.mostRecent().url).toEqual(AWS_URL + GETGRID_URL + badAddTestGrid.title);
+            expect(doneFn).not.toHaveBeenCalled();
         });
     });
     describe('getAllTitles() tests', function() {
-        it('', function() {
-            spyOn($, "ajax");
-            expect(Database.getAllTitles()).toBeTruthy();
-            expect($.ajax).toHaveBeenCalled();
+        it('should get titles from the database', function() {
+            var doneFn = jasmine.createSpy("success");
+            Database.getAllTitles().then(function(result) {
+                expect(result).toBeTruthy();
+                done();
+            });
+            expect(jasmine.Ajax.requests.mostRecent().url).toEqual(AWS_URL + GETALLTITLES_URL);
+            expect(doneFn).not.toHaveBeenCalled();
         });
     });
 });
