@@ -19,15 +19,15 @@
        content="width=device-width, initial-scale=1, user-scalable=yes">
     <title>Play a Level</title>
   </head>
+  <header class="header" id = "header">
+      {% if title %}
+          <div class="title" id="levelTitle">{{title}}</div>
+      {% else %}
+          <h1>Invalid Title</h1>
+      {% endif %}
+    <a href="#" id="movemode" class="myButton" onclick="engine.reset()">RESET</a>
+  </header>
   <body>
-    <header class="header" id = "header">
-        {% if title %}
-            <div class="title" id="levelTitle">{{title}}</div>
-        {% else %}
-            <h1>Invalid Title</h1>
-        {% endif %}
-      <a href="#" id="movemode" class="myButton" onclick="engine.reset()">RESET</a>
-    </header>
     <section="group">
       <section>
         <div class="wrapper" id="wrap">

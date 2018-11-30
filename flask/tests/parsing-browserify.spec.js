@@ -15,6 +15,12 @@
 const Element = require('./element.js');
 const Vector = require('./utility.js');
 
+/*
+|------------------------------------------------------------------------------
+| Constructor
+|------------------------------------------------------------------------------
+*/
+
 function Character(loc, max, hea, stat, hbox, url, size, spd, mvspd, grav){
 
     if((spd instanceof Vector) && (typeof mvspd === "number") &&
@@ -34,10 +40,10 @@ function Character(loc, max, hea, stat, hbox, url, size, spd, mvspd, grav){
 Character.prototype = Object.create(Element.prototype);
 
 /*
-|--------------------------------------------------------------------------
-| Getter and setter functions for the Character prototype (the javascript
-| version of class methods).
-|--------------------------------------------------------------------------
+|------------------------------------------------------------------------------
+| Getter and setter functions (functions are the javascript version of
+| class methods).
+|------------------------------------------------------------------------------
 */
 
 // Getter for position
@@ -125,10 +131,10 @@ Character.prototype.setGravity = function(g) {
 }
 
 /*
-|--------------------------------------------------------------------------
+|------------------------------------------------------------------------------
 | Movement-related functions for the Character prototype, wherein much of
 | the physics calculations are performed.
-|--------------------------------------------------------------------------
+|------------------------------------------------------------------------------
 */
 
 // Calculates the hypothetical next x position of a Character given a direction
@@ -146,21 +152,23 @@ Character.prototype.newXPos = function(step, dir) {
 // Checks if a hypothetical next x position of a Character is legal, and if so,
 // updates its position.
 Character.prototype.moveX = function(newPos, obstacle) {
-  if(obstacle != null) {
-      if(obstacle.getSolid() == 0){
-          this.position = newPos;
+    if (this.status) {
+        if (obstacle != null) {
+            if (obstacle.getSolid() == 0) {
+                this.position = newPos;
+            }
         }
-   }
-   else{
-       this.position = newPos;
-     }
+        else {
+            this.position = newPos;
+        }
+    }
 }
 
 // Calculates the hypothetical next y position of a character based on gravity
 Character.prototype.newYPos = function(step) {
   this.speed.y += step * this.gravity;
 
-  var motion = new Vector(0, this.speed.y * step);
+  var motion = new Vector(0, this.speed.y * 2 * step);
   var newPos = this.position.plus(motion);
   return newPos;
 };
@@ -169,27 +177,159 @@ Character.prototype.newYPos = function(step) {
 // updates its position; if it hits the ground stops its motion; if it is on
 // ground and jumps, updates its speed to allow the jump on the next game loop.
 Character.prototype.moveY = function(newPos, obstacle, up) {
-  var jumpSpeed = 70;
-  if(obstacle != null) {
-      if(obstacle.getSolid() == 1){
-          newPos.x = this.position.x
-          if (up && this.speed.y > 0){
-              this.speed.y = -jumpSpeed;
-          } else
-              this.speed.y = 0;
-      }
-    } else
-          this.position = newPos;
+    var jumpSpeed = 70;
+    if (this.status) {
+        if (obstacle != null) {
+            if (obstacle.getSolid() == 1) {
+                newPos.x = this.position.x
+                if (up && this.speed.y > 0) {
+                    this.speed.y = -jumpSpeed;
+                } else
+                    this.speed.y = 0;
+            }
+        } else
+            this.position = newPos;
+    }
 };
+
+Character.prototype.decHealth = function(damage){
+    this.health -= damage;
+    if(this.health <= 0){
+        this.status = false;
+    }
+}
+
+Character.prototype.addHealth = function(amount){
+    this.health += amount;
+    if(this.health > this.maxHealth){
+        this.health = this.maxHealth;
+    }
+}
 
 module.exports = Character;
 
-},{"./element.js":2,"./utility.js":9}],2:[function(require,module,exports){
+},{"./element.js":3,"./utility.js":10}],2:[function(require,module,exports){
+/*
+|------------------------------------------------------------------------------
+| Effect Class
+|------------------------------------------------------------------------------
+|
+| This file contains the Effect prototype (the javascript equivalent of a
+| class). Effect is used by Environment and Item. It contains data
+| about how an Effect affects the game (e.g. restores health), as well as
+| methods for activating or changing an Effect.
+|
+|------------------------------------------------------------------------------
+*/
+
+/*
+|------------------------------------------------------------------------------
+| Constructors
+|------------------------------------------------------------------------------
+*/
+
+function Effect(title, amount){
+    t = typeof title;
+    t2 = typeof amount;
+    if (t === "string" && t2 === "number" && (title == 'heal' || title == 'damage')){
+    this.effect = title;
+    this.isActive = false;
+    this.amount = amount;
+  }
+  else{
+    return {};
+  }
+}
+
+// Effect.prototype.Effect = function(bool, title){
+//     if (title == 'heal' || title == 'damage'){
+//     this.isActive = bool;
+//     this.effect = title;
+//   }
+//   else{
+//     return {};
+//   }
+// }
+
+/*
+|------------------------------------------------------------------------------
+| Getter and setter functions (functions are the javascript version of
+| class methods).
+|------------------------------------------------------------------------------
+*/
+
+// Getter for isActive
+Effect.prototype.getIsActive = function(){
+    return this.isActive;
+}
+
+// Setter for Effect type
+Effect.prototype.setEffect = function(eft){
+    t = typeof eft;
+    if (t == "object") {
+        this.effect = eft.effect;
+        this.isActive = eft.isActive;
+        this.amount = eft.amount;
+    }
+    else {
+        return null;
+    }
+}
+
+// Getter for  Effect type
+Effect.prototype.getEffect = function(){
+    return this.effect;
+}
+
+// Setter for isActive
+Effect.prototype.activate = function(){
+    this.isActive = true;
+}
+
+// Setter for isActive
+Effect.prototype.deactivate = function(){
+    this.isActive = false;
+}
+
+// Getter for amount
+Effect.prototype.getAmount = function(){
+    return this.amount;
+}
+
+// Setter for amount
+Effect.prototype.setAmount = function(num){
+    t = typeof num;
+    if (t === "number"){
+        this.amount = num;
+    }
+    else{
+        return null;
+    }
+}
+
+module.exports = Effect;
+
+},{}],3:[function(require,module,exports){
+/*
+|------------------------------------------------------------------------------
+| Element Class
+|------------------------------------------------------------------------------
+|
+| This file contains the Element prototype (the javascript equivalent of a
+| class). Element has getters and setters for its position, sprite, size, and hitbox.
+|
+|------------------------------------------------------------------------------
+*/
+
 const Vector = require('./utility.js');
 
-/*Element prototype */
 /*note: pos, scl, hitbox are vectors with x and y values */
 
+/*
+|------------------------------------------------------------------------------
+| Constructor
+|------------------------------------------------------------------------------
+*/
 function Element(pos, url, sz, hbox){
 	if(((pos instanceof Vector) && (typeof url === 'string')) && ((sz instanceof Vector) && (hbox instanceof Vector))){
 		this.position = pos; 
@@ -201,40 +341,54 @@ function Element(pos, url, sz, hbox){
 	}
 }
 
+/*
+|------------------------------------------------------------------------------
+| Getter and setter functions (functions are the javascript version of
+| class methods).
+|------------------------------------------------------------------------------
+*/
+//Getter for position
 Element.prototype.getPosition = function(){
 	return this.position;
 }
 
+//Setter for position
 Element.prototype.setPosition = function(pos){
 	if(pos instanceof Vector){
 		this.position = pos;
 	}
 }
 
+//Getter for sprite
 Element.prototype.getSprite = function(){
 	return this.sprite;
 }
 
+//Setter for sprite
 Element.prototype.setSprite = function(url){
 	if(typeof url === 'string'){
 		this.sprite = url;
 	}
 }
 
+//Getter for size
 Element.prototype.getSize = function(){
 	return this.size;
 }
 
+//Setter for size
 Element.prototype.setSize = function(scl){
 	if (scl instanceof Vector){
 		this.size = scl;
 	}
 }
 
+//Getter for Hitbox
 Element.prototype.getHitbox = function(){
 	return this.hitbox;
 }
 
+//Setter for Hitbox
 Element.prototype.setHitbox = function(hbx){
 	if(hbx instanceof Vector){
 		this.hitbox = hbx;
@@ -242,16 +396,36 @@ Element.prototype.setHitbox = function(hbx){
 }
 
 module.exports = Element;
-},{"./utility.js":9}],3:[function(require,module,exports){
-/*Enemy Prototype
-Note: location is a vector with x and y*/
+},{"./utility.js":10}],4:[function(require,module,exports){
+/*
+|------------------------------------------------------------------------------
+| Enemy Class
+|------------------------------------------------------------------------------
+|
+| This file contains the Enemy prototype (the javascript equivalent of a
+| class). Enemy is a subclass of the superclass Character. This contains
+| data about an Enemy's status, as well as methods for moving and interacting
+| with the game's physics.
+|
+|------------------------------------------------------------------------------
+*/
+
 const Character = require('./character.js');
 
-function Enemy(loc, max, hea, stat, dmg, hbox, url, size, speed, mvspeed, grav){
-    t = typeof dmg
-    if (t === "number") {
+/*
+|------------------------------------------------------------------------------
+| Constructor
+|------------------------------------------------------------------------------
+*/
+function Enemy(loc, max, hea, stat, dmg, hbox, url, size, speed, mvspeed, grav, dir, range, startLoc){
+    t = typeof dmg;
+    t2 = typeof range;
+    if (t === "number" && t2 === "number" && (dir === "right" || dir === "left" || dir === "still")) {
         Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspeed, grav);
         this.damage = dmg;
+        this.direction = dir;
+        this.range = range;
+        this.startPos = startLoc;
     }
     else {
         return {}
@@ -259,6 +433,7 @@ function Enemy(loc, max, hea, stat, dmg, hbox, url, size, speed, mvspeed, grav){
 }
 
 Enemy.prototype = Object.create(Character.prototype);
+Enemy.prototype.constructor = Enemy;
 
 //empty constructor. void
 Enemy.prototype.Enemy = function(){
@@ -266,7 +441,9 @@ Enemy.prototype.Enemy = function(){
     // health = 10, status = 1, damage = 1
     Character.call(this, vector(0,0), 10, 10, 1, new vector(50,50), null, new vector(50,50));
     this.damage = 1;
-}  
+    this.direction = "left";
+    this.shouldFall = 1;
+}
 
 //gets damage. return int damage
 Enemy.prototype.getDamage = function(){
@@ -277,111 +454,261 @@ Enemy.prototype.getDamage = function(){
 //set int damage
 Enemy.prototype.setDamage = function(amount){
     //set damage to amount
-        t = typeof amount
+        t = typeof amount;
         if (t === "number"){
             this.damage = amount;
         }
         else{
-            return {}
+            return null;
         }
 }
 
-Enemy.prototype.decHealth = function(){
-    // decrease an enemies health if attacked with damage effect
+//Getter for range
+Enemy.prototype.getRange = function(){
+    return this.range;
 }
+
+//Setter for range
+Enemy.prototype.setRange = function(rng){
+    t = typeof rng;
+    if (t === "number"){
+        this.range = rng;
+    }
+    else{
+        return null;
+    }
+}
+
+//Getter for direction
+Enemy.prototype.getDirection = function(){
+    return this.direction;
+}
+
+//Changes direction
+Enemy.prototype.changeDirection = function(){
+    if(this.direction === "right"){
+        this.direction = "left";
+    } else if(this.direction === "left"){
+        this.direction = "right";
+    }
+}
+
+//Setter for direction
+Enemy.prototype.setDirection = function(dir){
+    //set damage to amount
+        t = typeof dir;
+        if (t === "string" && (dir == "right" || dir == "left" || dir == "still")){
+            this.direction = dir;
+        }
+        else{
+            return null;
+        }
+}
+
 module.exports = Enemy;
 
-},{"./character.js":1}],4:[function(require,module,exports){
-/*Environment prototype*/
+},{"./character.js":1}],5:[function(require,module,exports){
+/*
+|------------------------------------------------------------------------------
+| Environment Class
+|------------------------------------------------------------------------------
+|
+| This file contains the Environment prototype (the javascript equivalent of a
+| class). 
+|
+|------------------------------------------------------------------------------
+*/
+
+
 /*note: Environment has flag for whether its solid or not*/
 const Element = require('./element.js');
+const Effect = require('./effect.js');
 
-function Environment(solid, pos, url, scale, hbox){
-  if (typeof solid == "boolean") {
+/*
+|------------------------------------------------------------------------------
+| Constructor
+|------------------------------------------------------------------------------
+*/
+function Environment(solid, pos, url, scale, hbox, eff){
+  if (solid == 0 || solid == 1) {
       Element.call(this, pos, url, scale, hbox);
       this.solid = solid;
+      this.effect = eff;
   }
-  else
+  else{
       return {};
-}
+    }
+};
 
 Environment.prototype = Object.create(Element.prototype);
 
 Environment.prototype.Environment = function(){
     Element.call(this, new vector(0,0), null, new vector(50,50), new vector (50,50));
-    this.solid= true;
-}
+    this.solid= 1;
+    this.effect = new Effect("heal", 2);;
+};
 
+//Getter for solid
 Environment.prototype.getSolid = function(){
     return this.solid;
-}
+};
 
+//Setter for solid
 Environment.prototype.setSolid = function(bool){
-  if (typeof solid == "boolean"){
+  if (bool == 1 || bool == 0){
       this.solid = bool;
   }
-}
+};
+
+//Setter for effect
+Environment.prototype.setEffect= function(eft){
+    if(eft instanceof Effect)
+        {this.effect = eft;}
+};
+
+//Getter for effect
+Environment.prototype.getEffect=function(){
+    return this.effect;
+};
 
 module.exports = Environment;
 
-},{"./element.js":2}],5:[function(require,module,exports){
-/* Item Prototype */
+},{"./effect.js":2,"./element.js":3}],6:[function(require,module,exports){
+/*
+|------------------------------------------------------------------------------
+| Item Class
+|------------------------------------------------------------------------------
+|
+| This file contains the Item prototype (the javascript equivalent of a
+| class). It contains data about item status, position, and effect.
+|
+|------------------------------------------------------------------------------
+*/
 
 var icon2 = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKH3Qd3RP33Q5XxcRMrLXYhYGRu_dxvpJCIBEU_MlAudC1ev-P8A";
 const Element = require('./element.js');
+const Vector = require('./utility.js');
+const Effect = require('./effect.js');
+const Enemy = require('./enemy.js');
+const Player = require('./player.js');
+const NPC = require('./npc.js');
 
-function Item(pos, url, sz, hbox, col, eff){
+
+/*
+|------------------------------------------------------------------------------
+| Constructor
+|------------------------------------------------------------------------------
+*/
+function Item(pos, url, sz, hbox, col, eff, bpos, hov){
     Element.call(this, pos, url, sz, hbox);
-    this.collected = col;
-    this.effect = eff;
+    if ((typeof col === 'boolean') && (eff instanceof Effect)) {
+        this.collected = col;
+        this.effect = eff;
+        this.basePos = bpos;
+        this.hovering = hov;
+        this.wobble = Math.random() * Math.PI * 2;
+        this.targets = [Enemy, NPC];
+    } else {
+        return {};
+    }
 }
 
-Item.prototype.Item = function(){  
+Item.prototype.Item = function(){
         //create enemy with loc = (0,0), no sprite
         // status = 1, collected = false, and effect = damage
         Element.call(this, vector(0,0), icon2, vector(50,50), vector(50,50));
         this.collected = false;
         this.effect = "damage";
-};
+}
 
-Item.prototype.setEffect= function(eft){
-    this.effect = eft;
-};
-
-Item.prototype.getEffect=function(){
+//Getter for effect
+Item.prototype.getEffect = function(){
     return this.effect;
-};
+}
 
-Item.prototype.getCollected= function(){
+//Setter for effect
+Item.prototype.setEffect = function(eft){
+    if (eft instanceof Effect) {
+        this.effect = eft;
+    }
+}
+
+//Getter for whether the item has been collected
+Item.prototype.getCollected = function(){
     return this.collected;
-};
+}
 
-Item.prototype.setCollected= function(b){
+//Setter for whether the item has been collected
+Item.prototype.setCollected = function(b){
     this.collected = b;
-};
+}
 
+//Make item hover
+Item.prototype.hover = function(step) {
+    if (typeof step == 'number') {
+        wobbleSpeed = 2;
+        // wobbleDist = 1.5;
+        this.wobble += step * wobbleSpeed;
+        // var wobblePos = Math.sin(this.wobble) * wobbleDist;
+        // this.position = this.basePos.plus(new Vector(0, wobblePos));
+    } else {
+        return null;
+    }
+}
+
+//Update the item's position
+Item.prototype.updatePosition = function(pc) {
+    if(pc.dir == "right"){
+        this.position.x = pc.position.x + pc.hitbox.x * .75;
+        this.position.y = pc.position.y; //- pc.hitbox.y;
+      }
+      else{
+        this.position.x = pc.position.x - pc.hitbox.x * .75;
+        this.position.y = pc.position.y; //- pc.hitbox.y;
+      }
+}
 module.exports = Item;
-},{"./element.js":2}],6:[function(require,module,exports){
+
+},{"./effect.js":2,"./element.js":3,"./enemy.js":4,"./npc.js":7,"./player.js":9,"./utility.js":10}],7:[function(require,module,exports){
+/*
+|------------------------------------------------------------------------------
+| NPC Class
+|------------------------------------------------------------------------------
+|
+| This file contains the NPC prototype (the javascript equivalent of a
+| class). NPC is a subclass of the Character superclass. It has 
+| information about the NPC's message.
+|
+|------------------------------------------------------------------------------
+*/
+
 const Character = require('./character.js');
 const Vector = require('./utility.js').vector;
 
+/*
+|------------------------------------------------------------------------------
+| Constructor
+|------------------------------------------------------------------------------
+*/
 function NPC(loc, max, hea, stat, msg, hbox, url, size, speed, mvspd, grav){
     
     if(typeof msg === "string"){
         Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspd, grav);
         this.message = msg;
+        this.spokenTo = false;
     }
     else return {};
 }
 
 NPC.prototype = Object.create(Character.prototype); 
-
-
+NPC.prototype.constructor = NPC;
+//Getter for message
 NPC.prototype.getMessage = function(){
     return this.message;
     
 }
 
+//Setter for message
 NPC.prototype.setMessage = function(msg){
     //disallow non-string message
     if(typeof msg == "string"){
@@ -396,21 +723,38 @@ NPC.prototype.setMessage = function(msg){
 
 module.exports = NPC;
 
-},{"./character.js":1,"./utility.js":9}],7:[function(require,module,exports){
+},{"./character.js":1,"./utility.js":10}],8:[function(require,module,exports){
+/*
+|------------------------------------------------------------------------------
+| Parser
+|------------------------------------------------------------------------------
+|
+| This file contains the Parser, the JSONtoElements function, which
+| creates a new element based on data from a given JSON.
+|
+|------------------------------------------------------------------------------
+*/
+
 const NPC = require('./npc.js');
 const Enemy = require('./enemy.js');
 const Player = require('./player.js');
 const Item = require('./item.js');
+const Effect = require('./effect.js');
 const Element = require('./element.js');
 const Character = require('./character.js');
 const Environment = require('./environment.js');
 const Vector = require('./utility.js');
 
 function JSONtoElements(data){
+    if(data == '{}'){
+        return {"elements": [],
+                "backgroundUrl": '' }; 
+    }
     var dataobj= JSON.parse(data);
+
     i=0;
     var elementarray= [];
-    var backgroundurl=dataobj.backgroundImage;
+    var backgroundurl= "https://i.pinimg.com/originals/fe/78/bb/fe78bbb25f35d56b502327fb6d43b309.png"; //dataobj.backgroundImage";
         for (i=0; i<dataobj.objects.length; i++){
             var temp= dataobj.objects[i];
             if (temp.type =="Element"){
@@ -420,28 +764,31 @@ function JSONtoElements(data){
                 var hitbox = new Vector(50,50);
                 var element;
                 if (temp.name == "Environment"){
-                    element = new Environment(1,pos,url,sz,hitbox);
+                    var eff= null; // new Effect("damage", 1);
+                    element = new Environment(1,pos,url,sz,hitbox,eff);
                 }
                 else if (temp.name == "Item"){
                     var col=0;
-                    var eff="heal";
-                    element = new Item(pos, url, sz, hitbox, col, eff);
+                    var eff= new Effect("damage", 1);
+                    var hov=true;
+                    element = new Item(pos, url, sz, hitbox, col, eff, pos, hov);
                 }
                 else if (temp.name == "Player"){
                     var max = 10;
-                    var hea = 10;
+                    var hea = 8;
                     var stat = true;
-                    var itm= 0;
+                    var itm= null;
                     var inv= [];
                     var hitbox = new Vector(19,50);
                     var spd = new Vector(0,0);
                     var mvspd = 60;
                     var grav = 40;
-                    element = new Player(pos, max, hea, stat, itm, inv, hitbox, url, sz, spd, mvspd, grav);
+                    var dir = "right";
+                    element = new Player(pos, max, hea, stat, itm, inv, hitbox, url, sz, spd, mvspd, grav, dir);
                 }
                 else if (temp.name == "NPC"){
                     var max = 10;
-                    var hea = 10;
+                    var hea = 7;
                     var stat= true;
                     var msg = "hi there";
                     var spd = new Vector(0,0);
@@ -453,104 +800,182 @@ function JSONtoElements(data){
                     var max = 10;
                     var hea= 10;
                     var stat = true;
-                    var dmg= 1;
+                    var dmg= .01;
                     var spd = new Vector(0,0);
-                    var mvspd = 40;
-                    var grav = 3;
-                    element = new Enemy(pos, max, hea, stat, dmg, hitbox, url, sz, spd, mvspd, grav);
+                    var mvspd = 15;
+                    var grav = 60;
+                    var dir = "left";
+                    var range = 35;
+                    var startLoc = pos;
+                    element = new Enemy(pos, max, hea, stat, dmg, hitbox, url, sz, spd, mvspd, grav, dir, range, startLoc);
                 }
                 elementarray.push(element);
             }
         }
+        console.log(elementarray);
+        console.log(backgroundurl);
         return {"elements": elementarray,
                 "backgroundUrl": backgroundurl };
-}
+    }
 module.exports = JSONtoElements;
-    
-    
-},{"./character.js":1,"./element.js":2,"./enemy.js":3,"./environment.js":4,"./item.js":5,"./npc.js":6,"./player.js":8,"./utility.js":9}],8:[function(require,module,exports){
-/*Player Prototype
-Note: location is a vector with x and y*/
+
+},{"./character.js":1,"./effect.js":2,"./element.js":3,"./enemy.js":4,"./environment.js":5,"./item.js":6,"./npc.js":7,"./player.js":9,"./utility.js":10}],9:[function(require,module,exports){
+/*
+|------------------------------------------------------------------------------
+| Player Class
+|------------------------------------------------------------------------------
+|
+| This file contains the Player prototype (the javascript equivalent of a
+| class). Player is a subclass of the superclass Character. It contains
+| data about player status and whether the player has an item.
+|
+|------------------------------------------------------------------------------
+*/
+/*Note: location is a vector with x and y*/
 const Item = require('./item.js');
 const Character = require('./character.js');
 const Vector = require('./utility.js');
 
-function Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed, mvspd, grav){
+/*
+|------------------------------------------------------------------------------
+| Constructor
+|------------------------------------------------------------------------------
+*/
+function Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed, mvspd, grav, dir){
+    if((itm instanceof Item) && (Array.isArray(inv)) && (dir instanceof Vector)){
     Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspd, grav);
     this.equippedItem = itm;
     this.inventory = inv;
-}
+    this.sinceTile = 50;
+    this.direction = dir;
+    
+    } else
+        return {};
+};
 
 Player.prototype = Object.create(Character.prototype);
+Player.prototype.constructor = Player;
 
-//empty constructor. void
-Player.prototype.Player = function(){
-    //create enemy with loc = (0,0), maxhealth = 10
-    // health = 10, status = 1, item = null, size 50x50, speed 10x10
 
-    Character.call(this, vector(0,0), 10, 10, 1, vector(50,50), vector(33,13));
-    this.equippedItem = null;
-    this.inventory = [];
-}  
-
+//Getter for inventory
 Player.prototype.getInventory= function(){
     return this.inventory;
 }
 
-Player.prototype.setInventory = function(arr)
-{
-    this.inventory = arr;
+//Setter for inventory
+Player.prototype.setInventory = function(arr){
+    if(Array.isArray(arr)){
+        items= true;
+        for(i=0; i<arr.length; i++){
+            if(!(arr[i] instanceof Item))
+                items=false;
+        }
+        if(items){
+        this.inventory = arr;
+        }
+    }
 }
 
-//gets OwnedItem. 
+//Getter for an owned item
 Player.prototype.getEquippedItem= function(){
     //return owned item
     return this.equippedItem;
 }
 
-//set owned item and return 1. return 0 for non-item input
+//Setter for owned item; return 1 if successful, return 0 for non-item input
 Player.prototype.setEquippedItem = function(itm){
-    //set owned item to itm
+    // set owned item to itm
     // set item.collected to be true
     if(itm instanceof Item){
-        this.inventory.push(this.equippedItem);
+        // this.inventory.push(this.equippedItem);
         this.equippedItem = itm;
         itm.collected = true;
     }
 }
 
-Player.prototype.useItem = function(){
-    if((this.equippedItem.getEffect())["effect"] == "heal"){
-        this.health = this.maxHealth;
-        this.equippedItem= null;
+//Use owned item
+Player.prototype.useItem = function(target){
+    /* if there is a target, do the effect (heal or damage)*/
+    if(this.status){
+        if(this.isTarget(target)){
+            if(this.equippedItem.getEffect().effect == "heal" && target.status){
+                target.addHealth(this.equippedItem.getEffect().getAmount());
+            }
+            else if (this.equippedItem.getEffect().effect == "damage" && target.status){
+                target.decHealth(this.equippedItem.getEffect().getAmount());
+            }
+        }
     }
-    else if ((this.equippedItem.getEffect())["effect"] == "damage"){ 
-        //swing sword or whatever
-    }
-    else {
-        this.equippedItem.getEffect().activate();
-    }
+
 }
 
-Player.prototype.pickUpItem = function(){
-    // to be called when player collides with item
+//Pick up an item
+Player.prototype.pickUpItem = function(item){
+    this.setEquippedItem(item);
+    this.inventory.unshift(item);
+}
+
+Player.prototype.isTarget = function (target){
+    for(i=0;i<this.equippedItem.targets.length;i++){
+        if(this.equippedItem.targets[i].name == target.constructor.name){
+            return true;
+        }
+    }
+    return false;
 }
 
 module.exports = Player;
 
-},{"./character.js":1,"./item.js":5,"./utility.js":9}],9:[function(require,module,exports){
-/*Vector class */
+},{"./character.js":1,"./item.js":6,"./utility.js":10}],10:[function(require,module,exports){
+/*
+|------------------------------------------------------------------------------
+| Vector Class
+|------------------------------------------------------------------------------
+|
+| This file contains the Vector prototype (the javascript equivalent of a
+| class).
+|
+|------------------------------------------------------------------------------
+*/
+
+/*
+|------------------------------------------------------------------------------
+| Constructor
+|------------------------------------------------------------------------------
+*/
 function Vector(x,y){
-	this.x=x;
-	this.y=y;
+	if (typeof(x) != 'number' || typeof(y) != 'number'){
+		return {};
+	}
+	else{
+		this.x=x;
+		this.y=y;
+	}
 }
 
+//Add to the vector
 Vector.prototype.plus = function(vec) {
-	return new Vector (this.x + vec.x, this.y + vec.y);
+	if (typeof(vec.x) != 'number' || typeof(vec.y) != 'number'){
+		return {};
+	}
+	else{
+		return new Vector (this.x + vec.x, this.y + vec.y);
+	}
+}
+
+//Multiply the vector times a number
+Vector.prototype.times = function(num) {
+	return new Vector (this.x * num, this.y * num);
+}
+
+//Multiply the vector times a vector
+Vector.prototype.times = function(vec) {
+	return new Vector (this.x * vec.x, this.y * vec.y);
 }
 
 module.exports = Vector;
-},{}],10:[function(require,module,exports){
+
+},{}],11:[function(require,module,exports){
 
 /*
 |------------------------------------------------------------------------------
@@ -590,7 +1015,7 @@ describe('Parsing', function() {
 
 	beforeEach(function(){
 		JSON1 = '{}';
-		JSON2 = '{"objects":[{},{"type":"Element","name":"Environment","top":25,"left":0,"url":"https://www.mariowiki.com/images/thumb/5/5d/GoldbrickblockNSMB2.png/400px-GoldbrickblockNSMB2.png","scale":1}], "backgroundImage:""fakeurl"}';
+		JSON2 = '{"objects":[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{"type":"Element","name":"Environment","top":250,"left":450,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"1","effect":"heal"},{"type":"Element","name":"Player","top":200,"left":450,"url":"https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png","scale":1,"speed":"high","gravity":"medium","maxhealth":"100"}],"background":""}';
 	});
 
 	/*
@@ -601,15 +1026,16 @@ describe('Parsing', function() {
 
 	it('should return an empty array and empty backgroundurl given an empty JSON', function(){
 			var returned= JSONtoElements(JSON1);
-			expect((returned).elements).toEqual([]);
-			expect((returned).backgroundUrl).toEqual('');
+			//console.log(returned);
+			expect(returned.elements).toEqual([]);
+			expect(returned.backgroundUrl).toEqual('');
 	});
 
-	it('should return an array with one environment element in it and background image fakeurl', function(){
-		var returned = JSONtoElements(JSON2);
-		expect((returned).backgroundUrl).toEqual('fakeurl');
+	it('should return an array with 2 environment elements in it and given background image ', function(){
+		 var returned = JSONtoElements(JSON2);
+		expect((returned).backgroundUrl).toEqual('https://i.pinimg.com/originals/fe/78/bb/fe78bbb25f35d56b502327fb6d43b309.png');
 	});
 });
 
-},{"../static/character.js":1,"../static/element.js":2,"../static/enemy.js":3,"../static/environment.js":4,"../static/item.js":5,"../static/npc.js":6,"../static/parsing.js":7,"../static/player.js":8,"../static/utility.js":9}]},{},[10])(10)
+},{"../static/character.js":1,"../static/element.js":3,"../static/enemy.js":4,"../static/environment.js":5,"../static/item.js":6,"../static/npc.js":7,"../static/parsing.js":8,"../static/player.js":9,"../static/utility.js":10}]},{},[11])(11)
 });

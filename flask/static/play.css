@@ -129,7 +129,7 @@ footer {
 .dividers {
     font-size: 15px;
     margin-top: 20px;
-    margin-left: 20px;
+    margin-left: 0px;
     background: #f2e6ff;
     color: #a3c0f5;
 }
@@ -151,5 +151,5 @@ footer {
   display: inline;
   background: #f2e6ff;
   color: #660066;
-  padding-left: 30px;
+  padding-left: 0px;
 }

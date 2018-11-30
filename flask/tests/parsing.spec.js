@@ -37,7 +37,7 @@ describe('Parsing', function() {
 
 	beforeEach(function(){
 		JSON1 = '{}';
-		JSON2 = '{"objects":[{},{"type":"Element","name":"Environment","top":25,"left":0,"url":"https://www.mariowiki.com/images/thumb/5/5d/GoldbrickblockNSMB2.png/400px-GoldbrickblockNSMB2.png","scale":1}], "backgroundImage:""fakeurl"}';
+		JSON2 = '{"objects":[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{"type":"Element","name":"Environment","top":250,"left":450,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"1","effect":"heal"},{"type":"Element","name":"Player","top":200,"left":450,"url":"https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png","scale":1,"speed":"high","gravity":"medium","maxhealth":"100"}],"background":""}';
 	});
 
 	/*
@@ -47,13 +47,13 @@ describe('Parsing', function() {
 	*/
 
 	it('should return an empty array and empty backgroundurl given an empty JSON', function(){
-			var returned= JSONtoElements(JSON1);
+			var returned = JSONtoElements(JSON1);
 			expect((returned).elements).toEqual([]);
 			expect((returned).backgroundUrl).toEqual('');
 	});
 
-	it('should return an array with one environment element in it and background image fakeurl', function(){
-		var returned = JSONtoElements(JSON2);
-		expect((returned).backgroundUrl).toEqual('fakeurl');
+	it('should return an array with 2 environment elements in it and given background image ', function(){
+		 var returned = JSONtoElements(JSON2);
+		expect((returned).backgroundUrl).toEqual('https://i.pinimg.com/originals/fe/78/bb/fe78bbb25f35d56b502327fb6d43b309.png');
 	});
 });
