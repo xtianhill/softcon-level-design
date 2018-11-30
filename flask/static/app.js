@@ -1,6 +1,7 @@
 window.onload = function a()
 {
     //setup
+    var backgroundimg=0;
     var selectedimg=0;
     var selectedelementtype=0;
     var eraser=0;
@@ -10,6 +11,7 @@ window.onload = function a()
     var canvassrc = "https://d2ujflorbtfzji.cloudfront.net/package-screenshot/4b7e815a-669f-4023-ac73-6c7691fe9a9f_scaled.jpg";
     var playergravity= "medium";
     var curr_url=0;
+    var winconds= new Array();
   var canvas = new fabric.Canvas('c', { selection: false});
     //canvas.setBackgroundImage(canvassrc);
 
@@ -126,8 +128,21 @@ function JSONderulo(object, name, url){
   if (target3==true){
     curr_target_list.push("Player");
   }
-  console.log(curr_target_list);
+  /*console.log(curr_target_list);
+  var con1=$('#check1').is(':checked');
+  var con2= $('#check2').is(':checked');
+  var con3=$('#check3').is(':checked');
+  if (con1==true){
 
+    winconds.push("End");
+  }
+  if (target2==true){
+    winconds.push("Enemy");
+  }
+  if (target3==true){
+    winconds.push("NPC");
+  }
+*/
 switch(name){
   case "Environment":
   object.toObject = function() {
@@ -475,6 +490,8 @@ document.getElementById("changebutton").onclick= function(){
 
 }
 
+
+
 document.getElementById("changeterrain").onclick= function(){
     var newurl=$("input[name='terrainurl']").val();
 
@@ -521,6 +538,7 @@ document.getElementById("eraserbutton").onclick= function(){
   document.getElementById("itemeditor").style="display: none";
   document.getElementById("enemyeditor").style="display: none";
   document.getElementById("npceditor").style="display: none";
+  document.getElementById("wincondeditor").style="display:none";
   document.getElementById("editpic").style="display: none";
   document.getElementById("cursor6").style.visibility="visible";
   document.getElementById("cursor").style.visibility="hidden";
@@ -552,6 +570,7 @@ eraser=0;
   document.getElementById("enemyeditor").style="display: none";
   document.getElementById("npceditor").style="display: none";
   document.getElementById("itemeditor").style="display: none";
+  document.getElementById("wincondeditor").style="display:none";
   document.getElementById("cursor").style.visibility="hidden";
   document.getElementById("cursor2").style.visibility="hidden";
   document.getElementById("cursor4").style.visibility="hidden";
@@ -560,10 +579,44 @@ eraser=0;
   document.getElementById("cursor6").style.visibility="hidden";
   }
 
+  document.getElementById("wincondbutton").onclick= function(){
+    document.getElementById("wincondeditor").style="display:inline";
+    document.getElementById("editpic").style="display: none";
+    document.getElementById("playereditor").style="display: none";
+    document.getElementById("environmenteditor").style="display: none";
+    document.getElementById("enemyeditor").style="display: none";
+    document.getElementById("npceditor").style="display: none";
+    document.getElementById("itemeditor").style="display: none";
+    document.getElementById("cursor").style.visibility="hidden";
+    document.getElementById("cursor2").style.visibility="hidden";
+    document.getElementById("cursor4").style.visibility="hidden";
+    document.getElementById("cursor3").style.visibility="hidden";
+    document.getElementById("cursor5").style.visibility="hidden";
+    document.getElementById("cursor6").style.visibility="hidden";
+
+  }
 
 document.getElementById("savegrid").onclick= function(){
+  var con1=$('#check1').is(':checked');
+  var con2= $('#check2').is(':checked');
+  var con3=$('#check3').is(':checked');
+  if (con1==true){
+
+    winconds.push("End");
+  }
+  if (target2==true){
+    winconds.push("Enemy");
+  }
+  if (target3==true){
+    winconds.push("NPC");
+  }
   var title = prompt("Enter the grid title", "title");
-  var data= JSON.stringify(canvas.toJSON());
+  var canvdata=JSON.stringify(canvas.toJSON());
+  var data= {
+    "canvas:" : canvdata,
+    "winconds:": winconds,
+    "background:": backgroundimg,
+  }
   var myJSON= {
     "title" : title,
     "data" : data
@@ -599,6 +652,7 @@ document.getElementById("save").onclick = function(){
    document.getElementById("itemeditor").style="display: none";
    document.getElementById("enemyeditor").style="display: none";
    document.getElementById("npceditor").style="display: none";
+   document.getElementById("wincondeditor").style="display:none";
    document.getElementById("cursor").style.visibility="visible";
    document.getElementById("cursor2").style.visibility="hidden";
    document.getElementById("cursor3").style.visibility="hidden";
@@ -628,6 +682,7 @@ document.getElementById("save").onclick = function(){
    document.getElementById("itemeditor").style="display: none";
    document.getElementById("enemyeditor").style="display: none";
    document.getElementById("npceditor").style="display: none";
+   document.getElementById("wincondeditor").style="display:none";
    document.getElementById("cursor2").style.visibility="visible";
    document.getElementById("cursor").style.visibility="hidden";
    document.getElementById("cursor3").style.visibility="hidden";
@@ -656,6 +711,7 @@ document.getElementById("save").onclick = function(){
    document.getElementById("playereditor").style="display: none";
    document.getElementById("enemyeditor").style="display: none";
    document.getElementById("npceditor").style="display: none";
+   document.getElementById("wincondeditor").style="display:none";
    document.getElementById("cursor3").style.visibility="visible";
    document.getElementById("cursor2").style.visibility="hidden";
    document.getElementById("cursor").style.visibility="hidden";
@@ -684,6 +740,7 @@ document.getElementById("save").onclick = function(){
    document.getElementById("playereditor").style="display: none";
    document.getElementById("itemeditor").style="display: none";
    document.getElementById("npceditor").style="display: none";
+   document.getElementById("wincondeditor").style="display:none";
    document.getElementById("cursor4").style.visibility="visible";
    document.getElementById("cursor2").style.visibility="hidden";
    document.getElementById("cursor").style.visibility="hidden";
@@ -712,6 +769,7 @@ document.getElementById("save").onclick = function(){
    document.getElementById("playereditor").style="display: none";
    document.getElementById("itemeditor").style="display: none";
    document.getElementById("enemyeditor").style="display: none";
+   document.getElementById("wincondeditor").style="display:none";
    document.getElementById("cursor5").style.visibility="visible";
    document.getElementById("cursor2").style.visibility="hidden";
    document.getElementById("cursor").style.visibility="hidden";

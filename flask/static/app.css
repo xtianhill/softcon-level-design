@@ -220,6 +220,11 @@ aside{
   left:450px;
 }
 
+.wincondeditor{
+  position:absolute;
+  top:-50px;
+}
+
 
 .cursor {
   position: absolute;
