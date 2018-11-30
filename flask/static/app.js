@@ -641,6 +641,7 @@ document.getElementById("savegrid").onclick= function(){
   }
   
   var title = prompt("Enter the grid title", "title");
+  console.log(JSON.stringify(canvas.toJSON()));
   var data=JSON.stringify(canvas.toJSON());
   var myJSON= {
     "title" : title,
