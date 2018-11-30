@@ -391,6 +391,14 @@ canvas.on('object:moving', function(options) {
   return json_data;
 }*/
 
+document.getElementById("changebutton").onclick= function(){
+  var newurl=$("input[name='spriteurl']").val();
+  //console.log(newurl);
+  document.getElementById("playerbutton").src=newurl;
+  document.getElementById("player").src=newurl;
+  document.getElementById("cursor2").src=newurl;
+}
+
 document.getElementById("eraserbutton").onclick= function(){
   eraser=1;
   curr_url=0;
