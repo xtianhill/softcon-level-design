@@ -35,9 +35,10 @@ function Item(pos, url, sz, hbox, col, eff, bpos, hov, ts){
         console.log(ts.length);
         console.log("test", (ts[0] === "Player"));
         for(var i=0;i<ts.length;i++){
-        //     console.log("hello");
             if(ts[i] === "Player"){
+                console.log("this should be setting targets");
                 this.targets.push(Player);
+                console.log(this.targets);
             }
             if(ts[i] === "Enemy"){
                 this.targets.push(Enemy);
@@ -46,10 +47,9 @@ function Item(pos, url, sz, hbox, col, eff, bpos, hov, ts){
                 this.targets.push(NPC);
             }
         }
-        if(this.targets.length == 0){
-            this.targets.push(Player);
-        }
+       
         console.log("TARGETS", this.targets);
+        console.log("TARGETS", this.targets[0]);
         
     } else {
         return {};
