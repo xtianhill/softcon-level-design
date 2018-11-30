@@ -12,8 +12,14 @@
 */
 
 var Item = require('../static/item.js');
+var Player = require('../static/player.js');
+var Vector = require('../static/utility.js');
+var Effect = require('../static/effect.js');
+const Enemy = require('../static/enemy.js');
+
 describe('Item', function(){
     let testItem;
+    let testPlayer;
 
     /*
     |--------------------------------------------------------------------------
@@ -24,7 +30,7 @@ describe('Item', function(){
     */
 
     beforeEach(function(){
-        testItem = new Item('pos', 'url', 'sz', 'hbox', true, new Effect('heal'));
+        testItem = new Item('pos', 'url', 'sz', 'hbox', true, new Effect('heal', 10));
         testPlayer = new Player(new Vector(1,1), 20, 0, 0, testItem, [testItem],
                                 new Vector(12,12), 'dummy_url', new Vector(3,3),
                                 new Vector(0,0), 50, 80);
@@ -45,7 +51,7 @@ describe('Item', function(){
 
     // Invalid Input Constructor Tests
     it('should fail to construct an item due to invalid input for collected', function(){
-        testItem = new Item('pos', 'url', 'sz', 'hbox', 19, new Effect('heal'));
+        testItem = new Item('pos', 'url', 'sz', 'hbox', 19, new Effect('heal', 9));
         expect(testItem).toEqual({});
     });
 
@@ -62,18 +68,19 @@ describe('Item', function(){
 
     // setEffect and getEffect Tests
     it('should set and get effect with valid input', function() {
-        testItem.setEffect(new Effect('damage'));
-        expect(testItem.getEffect()).toEqual('damage');;
+        testEffect1 = new Effect('damage', 10);
+        testItem.setEffect(testEffect1);
+        expect((testItem.getEffect()).getEffect()).toEqual('damage');;
     })
 
     it('should fail to set effect due to invalid input', function(){
     	testItem.setEffect(false);
-    	expect(testItem.getEffect()).toEqual('heal');
+    	expect((testItem.getEffect()).getEffect()).toEqual('heal');
     });
 
     it('should fail to set effect due to invalid input', function() {
         testItem.setEffect(300);
-        expect(testItem.getEffect()).toEqual('heal');
+        expect((testItem.getEffect()).getEffect()).toEqual('heal');
     });
 
     // setCollected and getCollected tests
@@ -85,9 +92,7 @@ describe('Item', function(){
     it('should fail to set collected due to invalid input', function() {
         testItem.setCollected("hooray");
         expect(testItem.getCollected()).toBeTruthy();
-    })
-
-});
+    });
 
     /*
     |--------------------------------------------------------------------------
@@ -98,17 +103,20 @@ describe('Item', function(){
     // hover test
     it('should make item hover with valid input', function() {
         testItem.hover(0.05);
-        expect(testItem.wobble()).toEqual(.1);
-        expect(testItem.position()).toEqual(Math.sin(.1) * 1.5);
-    })
+        shouldWobble = (2 * 0.05 + testItem.wobble) - 0.1;
+        expect(testItem.wobble).toEqual(shouldWobble);
+    });
 
-    it('should fail to make item hover due to invalid input'), function() {
+    it('should fail to make item hover due to invalid input', function() {
         testItem.hover(false);
-        expect(testItem.wobble()).toEqual(0);
-        expect(testItem.position()).toEqual(0);
-    })
+        originalWobbleValue = testItem.wobble;
+        expect(testItem.wobble).toEqual(originalWobbleValue);
+    });
     
     // update test
-    it('should update item position with valid input'), function() {
-        testItem.updatePosition(testPlayer.dir).
+    // it('should update item position with valid input'), function() {
+    //     testItem.updatePosition(testPlayer.dir).
+
+});
+
 

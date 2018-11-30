@@ -99,7 +99,7 @@ describe('Enemy', function() {
     it('should test changeDirection', function() {
         testEnemy.changeDirection();
         expect(testEnemy.getDirection()).toEqual("left");
-
+    });
     /*
     |--------------------------------------------------------------------------
     | Getter and Setter Tests for Range
@@ -134,7 +134,6 @@ describe('Enemy', function() {
     it('should change direction', function(){
         expect(testEnemy.changeDirection()).toEqual("left")
         expect(testEnemy.changeDirection()).toEqual("right")
->>>>>>> b95333d7ec9f4485dd9a206ca9bf157f834ae846
     });
 
 });

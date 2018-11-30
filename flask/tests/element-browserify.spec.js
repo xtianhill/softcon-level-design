@@ -1,9 +1,24 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.element = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+/*
+|------------------------------------------------------------------------------
+| Element Class
+|------------------------------------------------------------------------------
+|
+| This file contains the Element prototype (the javascript equivalent of a
+| class). Element has getters and setters for its position, sprite, size, and hitbox.
+|
+|------------------------------------------------------------------------------
+*/
+
 const Vector = require('./utility.js');
 
-/*Element prototype */
 /*note: pos, scl, hitbox are vectors with x and y values */
 
+/*
+|------------------------------------------------------------------------------
+| Constructor
+|------------------------------------------------------------------------------
+*/
 function Element(pos, url, sz, hbox){
 	if(((pos instanceof Vector) && (typeof url === 'string')) && ((sz instanceof Vector) && (hbox instanceof Vector))){
 		this.position = pos; 
@@ -15,40 +30,54 @@ function Element(pos, url, sz, hbox){
 	}
 }
 
+/*
+|------------------------------------------------------------------------------
+| Getter and setter functions (functions are the javascript version of
+| class methods).
+|------------------------------------------------------------------------------
+*/
+//Getter for position
 Element.prototype.getPosition = function(){
 	return this.position;
 }
 
+//Setter for position
 Element.prototype.setPosition = function(pos){
 	if(pos instanceof Vector){
 		this.position = pos;
 	}
 }
 
+//Getter for sprite
 Element.prototype.getSprite = function(){
 	return this.sprite;
 }
 
+//Setter for sprite
 Element.prototype.setSprite = function(url){
 	if(typeof url === 'string'){
 		this.sprite = url;
 	}
 }
 
+//Getter for size
 Element.prototype.getSize = function(){
 	return this.size;
 }
 
+//Setter for size
 Element.prototype.setSize = function(scl){
 	if (scl instanceof Vector){
 		this.size = scl;
 	}
 }
 
+//Getter for Hitbox
 Element.prototype.getHitbox = function(){
 	return this.hitbox;
 }
 
+//Setter for Hitbox
 Element.prototype.setHitbox = function(hbx){
 	if(hbx instanceof Vector){
 		this.hitbox = hbx;
@@ -57,17 +86,54 @@ Element.prototype.setHitbox = function(hbx){
 
 module.exports = Element;
 },{"./utility.js":2}],2:[function(require,module,exports){
-/*Vector class */
+/*
+|------------------------------------------------------------------------------
+| Vector Class
+|------------------------------------------------------------------------------
+|
+| This file contains the Vector prototype (the javascript equivalent of a
+| class).
+|
+|------------------------------------------------------------------------------
+*/
+
+/*
+|------------------------------------------------------------------------------
+| Constructor
+|------------------------------------------------------------------------------
+*/
 function Vector(x,y){
-	this.x=x;
-	this.y=y;
+	if (typeof(x) != 'number' || typeof(y) != 'number'){
+		return {};
+	}
+	else{
+		this.x=x;
+		this.y=y;
+	}
 }
 
+//Add to the vector
 Vector.prototype.plus = function(vec) {
-	return new Vector (this.x + vec.x, this.y + vec.y);
+	if (typeof(vec.x) != 'number' || typeof(vec.y) != 'number'){
+		return {};
+	}
+	else{
+		return new Vector (this.x + vec.x, this.y + vec.y);
+	}
+}
+
+//Multiply the vector times a number
+Vector.prototype.times = function(num) {
+	return new Vector (this.x * num, this.y * num);
+}
+
+//Multiply the vector times a vector
+Vector.prototype.times = function(vec) {
+	return new Vector (this.x * vec.x, this.y * vec.y);
 }
 
 module.exports = Vector;
+
 },{}],3:[function(require,module,exports){
 /*
 |------------------------------------------------------------------------------
