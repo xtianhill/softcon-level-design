@@ -324,10 +324,12 @@ canvas.on('object:moving', function(options) {
 $('input[name="spriteurl"]').change(function(){
 var newurl=$("input[name='spriteurl']").val();
 //alert(newurl);
-document.getElementById("playerbutton").src=newurl;
+/*document.getElementById("playerbutton").src=newurl;
 document.getElementById("player").src=newurl;
 document.getElementById("cursor2").src=newurl;
-
+document.getElementById("editpic").src=newurl;
+playersrc=newurl;
+*/
 });
 
   $("#gravity-selector").on("change", function () {
@@ -356,7 +358,8 @@ document.getElementById("cursor2").src=newurl;
     var posX = Math.round((pointer.x-25) / grid) * grid;
     var posY = Math.round((pointer.y-25) / grid) * grid;
     //console.log(posX+", "+posY);
-  var temp = new fabric.Image(selectedimg,{
+    var curselected=selectedimg
+  var temp = new fabric.Image(curselected,{
       left:  posX,
       top:  posY,
       hasControls: false,
@@ -376,7 +379,8 @@ document.getElementById("cursor2").src=newurl;
   scale: 1
   };
 }*/
-  draggable(temp,selectedelementtype,curr_url);
+  var tempurl=curr_url;
+  draggable(temp,selectedelementtype,tempurl);
 /*  temp.toObject = function() {
   return {type: "Element",
   name: selectedelementtype,
@@ -403,11 +407,21 @@ document.getElementById("changebutton").onclick= function(){
   document.getElementById("playerbutton").src=newurl;
   document.getElementById("player").src=newurl;
  document.getElementById("cursor2").src=newurl;
+ document.getElementById("editpic").src=newurl;
+ curr_url=newurl;
+
+
 }
 
 document.getElementById("eraserbutton").onclick= function(){
   eraser=1;
   curr_url=0;
+  document.getElementById("playereditor").style="display: none";
+  document.getElementById("environmenteditor").style="display: none";
+  document.getElementById("itemeditor").style="display: none";
+  document.getElementById("enemyeditor").style="display: none";
+  document.getElementById("npceditor").style="display: none";
+  document.getElementById("editpic").style="display: none";
   document.getElementById("cursor6").style.visibility="visible";
   document.getElementById("cursor").style.visibility="hidden";
   document.getElementById("cursor2").style.visibility="hidden";
@@ -432,6 +446,12 @@ eraser=0;
   /*var cursor= document.getElementById("cursor");
   cursor.style.display="none";
   */
+  document.getElementById("editpic").style="display: none";
+  document.getElementById("playereditor").style="display: none";
+  document.getElementById("environmenteditor").style="display: none";
+  document.getElementById("enemyeditor").style="display: none";
+  document.getElementById("npceditor").style="display: none";
+  document.getElementById("itemeditor").style="display: none";
   document.getElementById("cursor").style.visibility="hidden";
   document.getElementById("cursor2").style.visibility="hidden";
   document.getElementById("cursor4").style.visibility="hidden";
@@ -471,6 +491,14 @@ document.getElementById("save").onclick = function(){
    selectedelementtype="Environment";
    curr_url=groundsrc;
    eraser=0;
+   document.getElementById("editpic").src=groundsrc;
+   document.getElementById("editpic").style="display: inline; height:50px; width: 50px";
+   var editor= document.getElementById("environmenteditor");
+   editor.style="display: inline";
+   document.getElementById("playereditor").style="display: none";
+   document.getElementById("itemeditor").style="display: none";
+   document.getElementById("enemyeditor").style="display: none";
+   document.getElementById("npceditor").style="display: none";
    document.getElementById("cursor").style.visibility="visible";
    document.getElementById("cursor2").style.visibility="hidden";
    document.getElementById("cursor3").style.visibility="hidden";
@@ -492,6 +520,14 @@ document.getElementById("save").onclick = function(){
    selectedelementtype="Player";
    curr_url=playersrc;
    eraser=0;
+   document.getElementById("editpic").src=playersrc;
+  document.getElementById("editpic").style="display:inline; height:50px; width: 50px";
+   var editor= document.getElementById("playereditor");
+   editor.style="display: inline";
+   document.getElementById("environmenteditor").style="display: none";
+   document.getElementById("itemeditor").style="display: none";
+   document.getElementById("enemyeditor").style="display: none";
+   document.getElementById("npceditor").style="display: none";
    document.getElementById("cursor2").style.visibility="visible";
    document.getElementById("cursor").style.visibility="hidden";
    document.getElementById("cursor3").style.visibility="hidden";
@@ -513,6 +549,12 @@ document.getElementById("save").onclick = function(){
    selectedelementtype="Item";
    curr_url=coinsrc;
    eraser=0;
+    document.getElementById("editpic").src=coinsrc;
+    document.getElementById("editpic").style="display:inline; height:50px; width: 50px";
+   document.getElementById("itemeditor").style="display: inline";
+   document.getElementById("environmenteditor").style="display: none";
+   document.getElementById("playereditor").style="display: none";
+   document.getElementById("enemyeditor").style="display: none";
    document.getElementById("cursor3").style.visibility="visible";
    document.getElementById("cursor2").style.visibility="hidden";
    document.getElementById("cursor").style.visibility="hidden";
@@ -534,7 +576,13 @@ document.getElementById("save").onclick = function(){
    selectedelementtype="Enemy";
    curr_url=enemysrc;
    eraser=0;
-
+   document.getElementById("editpic").src=enemysrc;
+   document.getElementById("editpic").style="display:inline; height:50px; width: 50px";
+    document.getElementById("enemyeditor").style="display: inline";
+   document.getElementById("environmenteditor").style="display: none";
+   document.getElementById("playereditor").style="display: none";
+   document.getElementById("itemeditor").style="display: none";
+   document.getElementById("npceditor").style="display: none";
    document.getElementById("cursor4").style.visibility="visible";
    document.getElementById("cursor2").style.visibility="hidden";
    document.getElementById("cursor").style.visibility="hidden";
@@ -556,6 +604,13 @@ document.getElementById("save").onclick = function(){
    selectedelementtype="NPC";
    curr_url=npcsrc;
    eraser=0;
+   document.getElementById("editpic").src=npcsrc;
+   document.getElementById("editpic").style="display:inline; height:50px; width: 50px";
+    document.getElementById("npceditor").style="display: inline";
+   document.getElementById("environmenteditor").style="display: none";
+   document.getElementById("playereditor").style="display: none";
+   document.getElementById("itemeditor").style="display: none";
+   document.getElementById("enemyeditor").style="display: none";
    document.getElementById("cursor5").style.visibility="visible";
    document.getElementById("cursor2").style.visibility="hidden";
    document.getElementById("cursor").style.visibility="hidden";
