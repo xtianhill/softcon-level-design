@@ -62,8 +62,8 @@ function JSONtoElements(data){
                     if(url === defaultUrl)
                         hitbox = new Vector(19,50);
                     var spd = new Vector(0,0);
-                    var mvspd =  dataobj.objects[i].speed;
-                    var grav =  dataobj.objects[i].gravity;
+                    var mvspd = 30;//dataobj.objects[i].speed;
+                    var grav =  50;//dataobj.objects[i].gravity;
                     var dir = "right";
                     element = new Player(pos, max, max, stat, itm, inv, hitbox, url, sz, spd, mvspd, grav, dir);
                 }
@@ -81,7 +81,7 @@ function JSONtoElements(data){
                     var max = 10;
                     var hea= 10;
                     var stat = true;
-                    var dmg =  dataobj.objects[i].damage;
+                    var dmg =  1;//dataobj.objects[i].damage;
                     var spd = new Vector(0,0);
                     var mvspd = 15;
                     var grav = 60;
