@@ -52,7 +52,8 @@ function JSONtoElements(data){
                 else if (temp.name == "Item"){
                     console.log("item", dataobj.objects[i]);
                     var col = false;
-                    var eff = new Effect(temp.effect, 1);
+                    console.log("amount",temp.amount);
+                    var eff = new Effect(temp.effect, temp.amount);
                     var hov =true;
                     var targets = dataobj.objects[i].targets;
                     element = new Item(pos, url, sz, hitbox, col, eff, pos, hov, targets);
@@ -60,8 +61,8 @@ function JSONtoElements(data){
                 }
                 else if (temp.name == "Player"){
                     console.log("player",dataobj.objects[i]);
-                    var max = 10;//dataobj.objects[i].maxhealth;
-                    var stat = true;
+                    var max = temp.maxhealth;
+                    console.log("maxthea", maxhealht);                    var stat = true;
                     var itm= null;
                     var inv= [];
                     var hitbox = new Vector(50,50);
@@ -77,25 +78,25 @@ function JSONtoElements(data){
                     element = new Player(pos, max, max, stat, itm, inv, hitbox, url, sz, spd, mvspd, grav, dir);
                 }
                 else if (temp.name == "NPC"){
-                    var max = 10;
-                    var hea = 7;
+                    var max = temp.maxhealth;
+                    var hea = temp.maxhealth;
                     var stat = true; 
                     console.log("msg", temp.msg);
                     var msg =  temp.msg;
                     var spd = new Vector(0,0);
                     var mvspd = 30;
-                    var grav = 50;
+                    var grav = temp.gravity;
                     element = new NPC(pos, max, hea, stat, msg, hitbox, url, sz, spd, mvspd, grav);
                 }
                 else if (temp.name == "Enemy"){
-                    var max = 10;
-                    var hea= 10;
+                    var max = temp.maxhealth;
+                    var hea= temp.maxhealth;
                     var stat = true;
                     var dmg =  temp.damage;
                     console.log("damage",temp.damage);
                     var spd = new Vector(0,0);
-                    var mvspd = 15;
-                    var grav = 60;
+                    var mvspd = temp.speed;
+                    var grav = temp.gravity;
                     var dir = "left";
                     var range = 35;
                     var startLoc = pos;
