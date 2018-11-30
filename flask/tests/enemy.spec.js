@@ -26,7 +26,7 @@ describe('Enemy', function() {
     */
 
     beforeEach(function(){
-        testEnemy = new Enemy(new Vector(1,1), 20, 0, 0, 5, new Vector(10,10), new Vector(10,10), "right", 5, new Vector(5,5));
+        testEnemy = new Enemy(new Vector(1,1), 20, 10, true, 5, new Vector(10,10),'dummy', new Vector(10,10), new Vector(0,0), 10, 10, "right", 5, new Vector(5,5));
     });
 
     /*
@@ -36,19 +36,18 @@ describe('Enemy', function() {
     */
 
     // Full Constructor Tests
-    it('should create a new enemy with create enemy with loc (1,1), maxhealth 20 health 0, status 0, damage 5', function() {
+    it('should create a new enemy with create enemy with loc (1,1), maxhealth 20 health 10, status true, damage 5', function() {
+        //console.log(testEnemy);
         expect(testEnemy.getDamage()).toEqual(5);
-        expect(testEnemy.getLocation()).toEqual(new Vector(1,1));
+        expect(testEnemy.getPosition()).toEqual(new Vector(1,1));
         expect(testEnemy.getMaxHealth()).toEqual(20);
-        expect(testEnemy.getHealth()).toEqual(0);
-        expect(testEnemy.getStatus()).toEqual(0);
+        expect(testEnemy.getHealth()).toEqual(10);
+        expect(testEnemy.getStatus()).toEqual(true);
     });
 
     // Invalid Input Constructor Tests
     it('should return an empty object due to invalid damage', function() {
-        testEnemy = new Enemy(new Vector(0,0), 20, 0, 0, "bad",
-                                        new Vector(10,10),
-                                        new Vector(10,10), "right", 5, new Vector(5,5));
+        testEnemy = new Enemy(new Vector(1,1), 20, 10, true, 'bad', new Vector(10,10),'dummy', new Vector(10,10), new Vector(0,0), 10, 10, "right", 5, new Vector(5,5));
         expect(testEnemy).toEqual({});
     });
 
@@ -75,14 +74,14 @@ describe('Enemy', function() {
     });
 
     // test getRange and setRange
-    it('should set the range to null and get the range successfully', function() {
-        testEnemy.setRange(null);
-        expect(testEnemy.getRange()).toEqual(null);
+    it('should set the range to 20 and get the range successfully', function() {
+        testEnemy.setRange(20);
+        expect(testEnemy.getRange()).toEqual(20);
     });
 
     it('should fail to set the range due to invalid input', function() {
         testEnemy.setRange("hello");
-        expect(testEnemy.getRange()).toBeFalsy();
+        expect(testEnemy.getRange()).toEqual(5);
     });
 
     // test getDirection, setDirection, changeDirection
@@ -128,12 +127,15 @@ describe('Enemy', function() {
 
     it('should try and set direction to an invalid string', function(){
         testEnemy.setDirection("up");
-        expect(testEnemy.getDirection()).toEqual("right")
+        expect(testEnemy.getDirection()).toEqual("right");
     });
 
     it('should change direction', function(){
-        expect(testEnemy.changeDirection()).toEqual("left")
-        expect(testEnemy.changeDirection()).toEqual("right")
+        console.log(testEnemy);
+        testEnemy.changeDirection();
+        expect(testEnemy.getDirection()).toEqual("left");
+        testEnemy.changeDirection();
+        expect(testEnemy.getDirection()).toEqual("right");
     });
 
 });

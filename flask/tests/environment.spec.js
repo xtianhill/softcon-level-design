@@ -74,6 +74,7 @@ describe('Environment', function(){
 
     it('should fail to correctly set effect due to invalid input', function() {
         EffectB = new Effect('heal', 8);
+        testEnvironment.setEffect(EffectB);
         testEnvironment.setEffect("fake effect");
         expect(testEnvironment.getEffect()).toEqual(EffectB);
         testEnvironment.setEffect(1234);
