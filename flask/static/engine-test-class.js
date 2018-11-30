@@ -623,6 +623,7 @@ function reset(){
 
 function testNPCCondition(characters){
     for(i=0; i<characters.length; i++){
+
         if(characters[i] instanceof NPC && !characters[i].spokenTo){
             return false;
         }
@@ -695,3 +696,6 @@ module.exports.onCollision = onCollision;
 module.exports.detectCollision = detectCollision;
 module.exports.testWinConditions = testWinConditions;
 module.exports.update = update;
+module.exports.testNPCCondition = testNPCCondition;
+module.exports.testEndCondition = testEndCondition;
+module.exports.testEnemyCondition = testEnemyCondition;

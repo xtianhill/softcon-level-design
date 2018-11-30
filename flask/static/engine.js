@@ -639,7 +639,7 @@ function showInventory(gameState){
 
     function testNPCCondition(characters){
         for(i=0; i<characters.length; i++){
-            if(characters[i] instanceof NPC && !characters[i].spokenTo){
+            if((characters[i] instanceof NPC) && !characters[i].spokenTo){
                 return false;
             }
         }
