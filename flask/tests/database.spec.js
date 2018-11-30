@@ -140,7 +140,7 @@ describe('REST API Tests', function() {
             };
             expect(function() {
                 Database.storeGrid(JSON.stringify(badTestGrid))
-            }).toThrowError();
+            }).toThrow();
             expect(doneFn).not.toHaveBeenCalled();
         });
     });
@@ -192,21 +192,18 @@ describe('REST API Tests', function() {
                 "title" : "newUnitTestUpdateGrid2",
                 "data" : "myfakedata123"
             };
-            Database.storeGrid(JSON.stringify(updateTestGrid)).then(function(result) {
-                expect(result).toBeTruthy();
-                done();
-            });
+            expect(Database.storeGrid(JSON.stringify(updateTestGrid))).toBeTruthy();
             expect(jasmine.Ajax.requests.mostRecent().url).toEqual(AWS_URL + STOREGRID_URL);
             Database.updateGrid(JSON.stringify(updateTestGrid)).then(function(result) {
                 expect(result).toBeTruthy();
                 done();
             });
-            expect(jasmine.Ajax.requests.mostRecent().url).toEqual(AWS_URL + STOREGRID_URL);
+            expect(jasmine.Ajax.requests.mostRecent().url).toEqual(AWS_URL + UPDATEGRID_URL);
             Database.updateGrid(JSON.stringify(updateTestGrid2)).then(function(result) {
                 expect(result).toBeTruthy();
                 done();
             });
-            expect(jasmine.Ajax.requests.mostRecent().url).toEqual(AWS_URL + STOREGRID_URL);
+            expect(jasmine.Ajax.requests.mostRecent().url).toEqual(AWS_URL + UPDATEGRID_URL);
             expect(doneFn).not.toHaveBeenCalled();
         });
         it('should attempt to update a grid which is *not* in the database', function() {
@@ -228,7 +225,10 @@ describe('REST API Tests', function() {
                 "nottitle" : "updateTestGridWhichIsNotInDatabase",
                 "notdata" : "myfakedata123"
             };
-            expect(Database.updateGrid(JSON.stringify(badUpdateTestGrid))).toThrowError();
+            Database.updateGrid(JSON.stringify(badUpdateTestGrid)).then(function(result) {
+                expect(result).toThrow();
+                done();
+            });
             expect(doneFn).not.toHaveBeenCalled();
         });
     });
@@ -241,15 +241,12 @@ describe('REST API Tests', function() {
                 "title" : "addTestGrid",
                 "data" : "myfakedata123"
             };
-            Database.addGrid(JSON.stringify(addTestGrid)).then(function(result) {
+            expect(Database.storeGrid(JSON.stringify(addTestGrid))).toBeTruthy();
+            expect(jasmine.Ajax.requests.mostRecent().url).toEqual(AWS_URL + STOREGRID_URL);
+            Database.getByTitle(addTestGrid.title).then(function(result) {
                 expect(result).toBeTruthy();
                 done();
-            });;
-            expect(jasmine.Ajax.requests.mostRecent().url).toEqual(AWS_URL + GETGRID_URL);
-            Database.getBytTitle(addTestGrid.title).then(function(result) {
-                expect(result).toBeTruthy();
-                done();
-            });;
+            });
             expect(jasmine.Ajax.requests.mostRecent().url).toEqual(AWS_URL + GETGRID_URL + addTestGrid.title);
             expect(doneFn).not.toHaveBeenCalled();
         });
@@ -259,23 +256,22 @@ describe('REST API Tests', function() {
                 "title" : "badAddTestGrid",
                 "data" : "myfakedata123"
             };
-            Database.getBytTitle(JSON.stringify(badAddTestGrid.title));
-            expect(jasmine.Ajax.requests.mostRecent().url).toEqual(AWS_URL + "api/v1/search-grid/" + badAddTestGrid.title);
-            expect(doneFn).not.toHaveBeenCalled();
-        });
-        it('should attempt to retrieve a grid which *is* in the database', function() {
-            var doneFn = jasmine.createSpy("success");
-            var emptyTitle = "";
-            Database.getByTitle(JSON.stringify(emptyTitle));
-            expect(jasmine.Ajax.requests.mostRecent().url).toEqual(AWS_URL + "api/v1/search-grid/" + emptyTitle);
+            Database.getByTitle(badAddTestGrid.title).then(function(result) {
+                expect(result).toBeFalsy();
+                done();
+            });
+            expect(jasmine.Ajax.requests.mostRecent().url).toEqual(AWS_URL + GETGRID_URL + badAddTestGrid.title);
             expect(doneFn).not.toHaveBeenCalled();
         });
     });
     describe('getAllTitles() tests', function() {
         it('should get titles from the database', function() {
             var doneFn = jasmine.createSpy("success");
-            Database.getAllTitles();
-            expect(jasmine.Ajax.requests.mostRecent().url).toEqual(AWS_URL + "api/v1/query-all-titles/");
+            Database.getAllTitles().then(function(result) {
+                expect(result).toBeTruthy();
+                done();
+            });
+            expect(jasmine.Ajax.requests.mostRecent().url).toEqual(AWS_URL + GETALLTITLES_URL);
             expect(doneFn).not.toHaveBeenCalled();
         });
     });
