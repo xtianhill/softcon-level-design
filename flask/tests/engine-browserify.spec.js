@@ -1133,6 +1133,7 @@ function reset(){
 
 function testNPCCondition(characters){
     for(i=0; i<characters.length; i++){
+
         if(characters[i] instanceof NPC && !characters[i].spokenTo){
             return false;
         }
@@ -1205,6 +1206,9 @@ module.exports.onCollision = onCollision;
 module.exports.detectCollision = detectCollision;
 module.exports.testWinConditions = testWinConditions;
 module.exports.update = update;
+module.exports.testNPCCondition = testNPCCondition;
+module.exports.testEndCondition = testEndCondition;
+module.exports.testEnemyCondition = testEnemyCondition;
 
 },{"./character.js":1,"./element.js":3,"./enemy.js":4,"./environment.js":6,"./item.js":7,"./npc.js":8,"./parsing.js":9,"./player.js":10,"./utility.js":11}],6:[function(require,module,exports){
 /*
@@ -1689,6 +1693,9 @@ const keyDownHandler = require('../static/engine-test-class.js').keyDownHandler;
 const onCollision = require('../static/engine-test-class.js').onCollision;
 const detectCollision = require('../static/engine-test-class.js').detectCollision;
 const testWinConditions = require('../static/engine-test-class.js').testWinConditions;
+const testNPCCondition = require('../static/engine-test-class.js').testNPCCondition;
+const testEndCondition = require('../static/engine-test-class.js').testEndCondition;
+const testEnemyCondition = require('../static/engine-test-class.js').testEnemyCondition;
 
 const Player = require('../static/player.js');
 const Item = require('../static/item.js');
@@ -1724,7 +1731,7 @@ describe('Engine Tests', function(){
             , elements: elements
             , wrap: 'wrap'
             , pc: elements[0]
-            , characters: [elements[0], elements[1]]
+            , characters: [elements[1], elements[2]]
             , step: .05
             , sinceItem: 5
             , backgroundUrl: 'backgroundUrl'
@@ -1734,7 +1741,7 @@ describe('Engine Tests', function(){
             , victory: false
         };
         
-        console.log(gameState);
+        //console.log(gameState);
         gameState.elements[2].spokenTo = false;
     });
 
@@ -1781,7 +1788,7 @@ describe('Engine Tests', function(){
     */
 
     it('should return true if there is a collision', function(){
-        console.log(gameState);
+        //console.log(gameState);
         expect(detectCollision(gameState.elements[0].position,
             gameState.elements[2].position,gameState.elements[0],gameState.elements[2])).toBeTruthy();
 
@@ -1842,25 +1849,24 @@ describe('Engine Tests', function(){
     */
 
     it('should set npc condition to true if all npcs have displayed message', function(){
-        testWinConditions(gameState);
-        expect(gameState.winConditions[0]).toBeTruthy();
+        gameState.characters[1].spokenTo= true;
+        expect(testNPCCondition(gameState.characters)).toBeTruthy();
     });
 
     it('should set enemy condition to true if all enemies are dead', function(){
         gameState.elements[1].setStatus(false);
-        testWinConditions(gameState);
-        expect(gameState.winConditions[1]).toBeTruthy();
+        expect(testEnemyCondition(gameState)).toBeTruthy();
     });
 
     it('should set distance condition to true if you reach end of level', function(){
-        gameState.elements[0].pos = new Vector(490,30);
-        console.log(gameState);
-        testWinConditions(gameState);
-        expect(gameState.winConditions[3]).toBeTruthy();
+        gameState.pc.position = new Vector(499,30);
+        expect(testEndCondition(gameState)).toBeTruthy();
     });
 
     it('should end game when all conditions met', function(){
-        gameState.winConditions = [true, true, true, true];
+        gameState.npcCondition=true;
+        gameState.endCondition=true;
+        gameState.enemyCondition=true;
         testWinConditions(gameState);
         expect(gameState.victory).toBeTruthy();
     });
