@@ -1635,18 +1635,18 @@ function Item(pos, url, sz, hbox, col, eff, bpos, hov, targets){
         this.hovering = hov;
         this.wobble = Math.random() * Math.PI * 2;
         this.targets=[];
-        for(i=0;i<targets.length;i++){
-            console.log("hello");
-            if(targets[i] === "Player"){
-                this.targets.push(Player);
-            }
-            if(targets[i] === "Enemy"){
-                this.targets.push(Enemy);
-            }
-            if(targets[i] === "NPC"){
-                this.targets.push(NPC);
-            }
-        }
+        // for(i=0;i<targets.length;i++){
+        //     console.log("hello");
+        //     if(targets[i] === "Player"){
+        //         this.targets.push(Player);
+        //     }
+        //     if(targets[i] === "Enemy"){
+        //         this.targets.push(Enemy);
+        //     }
+        //     if(targets[i] === "NPC"){
+        //         this.targets.push(NPC);
+        //     }
+        // }
         if(this.targets.length == 0){
             this.targets.push(Player);
         }
