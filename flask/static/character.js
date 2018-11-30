@@ -21,12 +21,12 @@ const Vector = require('./utility.js');
 */
 
 function Character(loc, max, hea, stat, hbox, url, size, spd, mvspd, grav){
-    console.log("speed", (spd instanceof Vector));
-    console.log("mvspeed", (typeof mvspd === "number"));
-    console.log("stat", (typeof stat === "boolean"));
-    console.log("grav", (typeof grav === "number"));
-    console.log("health", (typeof hea ==="number"));
-    console.log("max",  (typeof max === "number"));
+    // console.log("speed", (spd instanceof Vector));
+    // console.log("mvspeed", (typeof mvspd === "number"));
+    // console.log("stat", (typeof stat === "boolean"));
+    // console.log("grav", (typeof grav === "number"));
+    // console.log("health", (typeof hea ==="number"));
+    // console.log("max",  (typeof max === "number"));
     if((spd instanceof Vector) && (typeof mvspd === "number") &&
        (typeof grav === "number")&&  (typeof stat === "boolean") &&
        (typeof max === "number") && (typeof hea ==="number")){
@@ -184,7 +184,7 @@ Character.prototype.moveY = function(newPos, obstacle, up) {
     var jumpSpeed = 70;
     if (this.status) {
         if (obstacle != null) {
-            if (obstacle.getSolid() == 1) {
+            if (obstacle.solid) {
                 newPos.x = this.position.x
                 if (up && this.speed.y > 0) {
                     this.speed.y = -jumpSpeed;

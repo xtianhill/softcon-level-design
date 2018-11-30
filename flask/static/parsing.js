@@ -26,10 +26,12 @@ function JSONtoElements(data){
                 "backgroundUrl": '' }; 
     }
     var dataobj= JSON.parse(data);
-
+    dataobj.objects = dataobj.canvas;
+    
     i=0;
     var elementarray= [];
-    var backgroundurl= "https://i.pinimg.com/originals/fe/78/bb/fe78bbb25f35d56b502327fb6d43b309.png"; //dataobj.backgroundImage";
+    var backgroundurl= dataobj.background; //dataobj.backgroundImage";
+    var winconds = dataobj.winconds;
         for (i=0; i<dataobj.objects.length; i++){
             var temp= dataobj.objects[i];
             if (temp.type =="Element"){
@@ -39,17 +41,19 @@ function JSONtoElements(data){
                 var hitbox = new Vector(50,50);
                 var element;
                 if (temp.name == "Environment"){
-                    console.log(dataobj.objects[i]);
+                    
                     var eff = new Effect(dataobj.objects[i].effect, 1); // new Effect("damage", 1);
-                    var status = true;//dataobj.objects[i].status;
-                    console.log("status", status);
-                    element = new Environment(status,pos,url,sz,hitbox,eff);
+                    var solid = dataobj.objects[i].solid;
+                    element = new Environment(solid,pos,url,sz,hitbox,eff);
+                    console.log(element);
                 }
                 else if (temp.name == "Item"){
+                    console.log("item", dataobj.objects[i]);
                     var col = false;
                     var eff = new Effect("damage", 1);
                     var hov =true;
-                    element = new Item(pos, url, sz, hitbox, col, eff, pos, hov);
+                    var targets = dataobj.objects[i].targets;
+                    element = new Item(pos, url, sz, hitbox, col, eff, pos, hov, targets);
                     console.log('from parsing');
                 }
                 else if (temp.name == "Player"){
@@ -95,6 +99,7 @@ function JSONtoElements(data){
         }
         
         return {"elements": elementarray,
-                "backgroundUrl": backgroundurl };
+                "backgroundUrl": backgroundurl,
+                "winconds": winconds };
     }
 module.exports = JSONtoElements;
