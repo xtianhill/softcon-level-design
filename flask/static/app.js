@@ -176,6 +176,7 @@ default:
 
 //function that make the buttons actually...buttons.
 function draggable(object, name, url) {
+  JSONderulo(object,name,url);
 /*  var curr_issolid=$('#solid-selector').val();
   var curr_env_effect=$('#environ-effect-selector').val();
   var curr_player_speed= $('#speed-selector').val();
