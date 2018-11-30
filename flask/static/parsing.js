@@ -20,7 +20,12 @@ const Environment = require('./environment.js');
 const Vector = require('./utility.js');
 
 function JSONtoElements(data){
+    if(data == '{}'){
+        return {"elements": [],
+                "backgroundUrl": '' }; 
+    }
     var dataobj= JSON.parse(data);
+
     i=0;
     var elementarray= [];
     var backgroundurl= "https://i.pinimg.com/originals/fe/78/bb/fe78bbb25f35d56b502327fb6d43b309.png"; //dataobj.backgroundImage";
@@ -81,6 +86,7 @@ function JSONtoElements(data){
                 elementarray.push(element);
             }
         }
+        
         return {"elements": elementarray,
                 "backgroundUrl": backgroundurl };
     }
