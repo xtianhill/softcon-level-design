@@ -1426,9 +1426,9 @@ function showInventory(gameState){
         gameState.ctx.fillRect(gameState.wrap.scrollLeft, 0,
             gameState.wrap.clientWidth, gameState.wrap.clientHeight);
         gameState.ctx.fillStyle = "#ffffff";
-        gameState.ctx.font = '40px "Press Start 2P"';
+        gameState.ctx.font = '30px "Press Start 2P"';
         gameState.ctx.fillText("VICTORY IS YOURS",
-            gameState.wrap.scrollLeft + gameState.wrap.clientWidth/2,
+            gameState.wrap.scrollLeft + .25* gameState.wrap.clientWidth,
             gameState.wrap.clientHeight/2);
     }
 
