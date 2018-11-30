@@ -22,12 +22,12 @@ const Vector = require('./utility.js');
 */
 
 function Character(loc, max, hea, stat, hbox, url, size, spd, mvspd, grav){
-    console.log("speed", (spd instanceof Vector));
-    console.log("mvspeed", (typeof mvspd === "number"));
-    console.log("stat", (typeof stat === "boolean"));
-    console.log("grav", (typeof grav === "number"));
-    console.log("health", (typeof hea ==="number"));
-    console.log("max",  (typeof max === "number"));
+    // console.log("speed", (spd instanceof Vector));
+    // console.log("mvspeed", (typeof mvspd === "number"));
+    // console.log("stat", (typeof stat === "boolean"));
+    // console.log("grav", (typeof grav === "number"));
+    // console.log("health", (typeof hea ==="number"));
+    // console.log("max",  (typeof max === "number"));
     if((spd instanceof Vector) && (typeof mvspd === "number") &&
        (typeof grav === "number")&&  (typeof stat === "boolean") &&
        (typeof max === "number") && (typeof hea ==="number")){
@@ -1555,8 +1555,8 @@ const Effect = require('./effect.js');
 |------------------------------------------------------------------------------
 */
 function Environment(solid, pos, url, scale, hbox, eff){
-    console.log("solid", solid == true);
-    console.log("solid", solid == false);
+    // console.log("solid", solid == true);
+    // console.log("solid", solid == false);
     if (solid == true || solid == false) {
       Element.call(this, pos, url, scale, hbox);
       this.solid = solid;
@@ -1808,11 +1808,12 @@ function JSONtoElements(data){
                 if (temp.name == "Environment"){
                     console.log(dataobj.objects[i]);
                     var eff = new Effect(dataobj.objects[i].effect, 1); // new Effect("damage", 1);
-                    var status = true;//dataobj.objects[i].status;
+                    var status = dataobj.objects[i].status;
                     console.log("status", status);
                     element = new Environment(status,pos,url,sz,hitbox,eff);
                 }
                 else if (temp.name == "Item"){
+                    console.log("item", dataobj.objects[i]);
                     var col = false;
                     var eff = new Effect("damage", 1);
                     var hov =true;
