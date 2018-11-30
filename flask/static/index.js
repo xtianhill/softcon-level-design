@@ -1835,7 +1835,7 @@ function JSONtoElements(data){
                 else if (temp.name == "Player"){
                     console.log("player",dataobj.objects[i]);
                     var max = temp.maxhealth;
-                    console.log("maxthea", maxhealht);                    var stat = true;
+                    var stat = true;
                     var itm= null;
                     var inv= [];
                     var hitbox = new Vector(50,50);
