@@ -927,9 +927,10 @@ function onCollision(gameState, i) {
 
             //if item, pick up and remove from elements, display in inventory
              if(gameState.elements[i] instanceof Item){
+                 console.log("hello");
                 gameState.pc.pickUpItem(gameState.elements[i]);
                 gameState.elements.splice(i,1);
-                showInventory(gameState);
+                //showInventory(gameState);
              }
 
              //if enviroment with effect, affect pc
@@ -1174,9 +1175,13 @@ function testWinConditions(gameState){
 
 function handleItemUse (gameState){
     for(var i=0; i<gameState.characters.length; i++){
+        console.log(gameState.characters[i]);
         if(gameState.characters[i].status){
+            console.log(detectCollision(gameState.characters[i].position, gameState.pc.equippedItem.position,
+                gameState.characters[i], gameState.pc.equippedItem));
             if(detectCollision(gameState.characters[i].position, gameState.pc.equippedItem.position,
                 gameState.characters[i], gameState.pc.equippedItem)){
+                    console.log("HELLO?");
                     gameState.pc.useItem(gameState.characters[i]);
                     return;
             }
@@ -1824,17 +1829,20 @@ describe('Engine Tests', function(){
     */
 
     it('should make player call pickUpItem when colliding with item', function(){
+        gameState.elements[0].pickUpItem = jasmine.createSpy('pickUpItem');
         onCollision(gameState, 3);
-        spyOn(gameState.elements[0], 'pickUpItem');
         expect(gameState.elements[0].pickUpItem).toHaveBeenCalled();
 
     });
 
     it('should decrease enemies health when attacked', function(){
-        onCollision(gameState, 1);
-
-        spyOn(gameState.elements[1], 'decHealth');
-        expect(gameState.elements[1].decHealth).toHaveBeenCalled();
+        var before = gameState.elements[1].health;
+        console.log(gameState.pc);
+        var damage = gameState.pc.equippedItem.effect.amount;
+        gameState.elements[0].position = new Vector(6,6);
+        handleItemUse(gameState);
+        gameState
+        expect(gameState.elements[1].health).toEqual(before-damage);
     });
 
     it('should call display message if collision with npc', function(){

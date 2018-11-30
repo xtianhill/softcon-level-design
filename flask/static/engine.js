@@ -452,7 +452,7 @@ getData(title).then((data) => {
 
     // detect key presses
     function keyDownHandler(event, gameState) {
-        if(event.keyCode == 32){
+        if(event.keyCode == 81){
             if(gameState.pc.equippedItem != null) {
                 gameState.itemUsed = true;
             }
