@@ -321,7 +321,14 @@ canvas.on('object:moving', function(options) {
 
 
 
+$('input[name="spriteurl"]').change(function(){
+var newurl=$("input[name='spriteurl']").val();
+//alert(newurl);
+document.getElementById("playerbutton").src=newurl;
+document.getElementById("player").src=newurl;
+document.getElementById("cursor2").src=newurl;
 
+});
 
   $("#gravity-selector").on("change", function () {
       //alert("You choose " + $("input[name='color']:checked").val());
@@ -391,6 +398,13 @@ canvas.on('object:moving', function(options) {
   return json_data;
 }*/
 
+document.getElementById("changebutton").onclick= function(){
+    var newurl=$("input[name='spriteurl']").val();
+  document.getElementById("playerbutton").src=newurl;
+  document.getElementById("player").src=newurl;
+ document.getElementById("cursor2").src=newurl;
+}
+
 document.getElementById("eraserbutton").onclick= function(){
   eraser=1;
   curr_url=0;
@@ -414,6 +428,7 @@ document.getElementById("movemode").onclick= function(){
   selectedimg=0;
 selectedelementtype=0;
 curr_url=0;
+eraser=0;
   /*var cursor= document.getElementById("cursor");
   cursor.style.display="none";
   */
@@ -455,6 +470,7 @@ document.getElementById("save").onclick = function(){
    selectedimg=ground;
    selectedelementtype="Environment";
    curr_url=groundsrc;
+   eraser=0;
    document.getElementById("cursor").style.visibility="visible";
    document.getElementById("cursor2").style.visibility="hidden";
    document.getElementById("cursor3").style.visibility="hidden";
@@ -475,6 +491,7 @@ document.getElementById("save").onclick = function(){
    selectedimg=player;
    selectedelementtype="Player";
    curr_url=playersrc;
+   eraser=0;
    document.getElementById("cursor2").style.visibility="visible";
    document.getElementById("cursor").style.visibility="hidden";
    document.getElementById("cursor3").style.visibility="hidden";
@@ -495,6 +512,7 @@ document.getElementById("save").onclick = function(){
    selectedimg=coin;
    selectedelementtype="Item";
    curr_url=coinsrc;
+   eraser=0;
    document.getElementById("cursor3").style.visibility="visible";
    document.getElementById("cursor2").style.visibility="hidden";
    document.getElementById("cursor").style.visibility="hidden";
@@ -515,6 +533,7 @@ document.getElementById("save").onclick = function(){
    selectedimg=enemy;
    selectedelementtype="Enemy";
    curr_url=enemysrc;
+   eraser=0;
 
    document.getElementById("cursor4").style.visibility="visible";
    document.getElementById("cursor2").style.visibility="hidden";
@@ -536,6 +555,7 @@ document.getElementById("save").onclick = function(){
    selectedimg=npc;
    selectedelementtype="NPC";
    curr_url=npcsrc;
+   eraser=0;
    document.getElementById("cursor5").style.visibility="visible";
    document.getElementById("cursor2").style.visibility="hidden";
    document.getElementById("cursor").style.visibility="hidden";

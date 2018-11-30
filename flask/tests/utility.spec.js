@@ -44,6 +44,7 @@ describe('Utility', function(){
         expect(testVector0).toEqual(new Vector(0, 0));
         expect(testVector1).toEqual(new Vector(6, 9));
         expect(testVector2).toEqual(new Vector(12, 18));
+        expect(testVector3).toEqual(new Vector(72, 162));
     });
 
     it('should fail to create a vectors with invalid input', function(){
@@ -67,13 +68,13 @@ describe('Utility', function(){
         expect(testVector0.plus(5)).toEqual({});
         expect(testVector0.plus("testVector1")).toEqual({});
     });
-    
+
     /*
     |--------------------------------------------------------------------------
     | Multiply Tests
     |--------------------------------------------------------------------------
     */
-    
+
     it('should multiply vectors', function() {
         expect(testVector1.times(testVector2)).toEqual(testVector3);
         expect(testVector0.times(testVector3)).toEqual(testVector0);
@@ -82,5 +83,6 @@ describe('Utility', function(){
     it('should multiply a vector times a number', function() {
         expect(testVector0.times(13)).toEqual(testVector0);
         expect(testVector1.times(2)).toEqual(testVector2);
+        console.log(testVector1.times(2));
     });
 });

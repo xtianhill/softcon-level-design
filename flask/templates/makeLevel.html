@@ -24,6 +24,7 @@
 </head>
 <body>
 
+
   <div class="header" id = "header">
     		   <div style="display: inline-block; background: #a3c0f5"></div>
            <svg class= "box" width="65" height="65" >
@@ -80,24 +81,35 @@
 </div>
 
 <div class="enemydamageselector">
-           <form action="/action_page.php">
+           <form>
              damage (1 - 100):
              <br>
              <input type="number" name="enemydamage" min="1" max="1000" value="5">
            </form>
          </div>
 <div class="npcmessager">
-<form action="/action_page.php">
+<form>
            message:<br>
           <input type="text" name="npcmessage" value="hi friend!">
+        </form>
 </div>
 
+<div class="customsprite">
+<form>
+           sprite url:<br>
+          <input type="url" name="spriteurl" id="myspriteurl">
+        
+        </form>
+</div>
+<div class= "changebutton"id ="changebutton">
+  <button>change sprite</button>
+</div>
 
 
 </div>
 		<button  id = "save"> Show my elements </button>
 
-		<!-- A canvas tag is required or
+		  <!-- A canvas tag is required or
 
      Fabric.js doesn't know where to draw. -->
     <div class="wrapper">

@@ -1,3 +1,4 @@
+(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 /*
  * database.js - database utility functions
  * Software Construction - Autumn 2018
@@ -30,7 +31,7 @@ const SUCCESS_MSG = "BACKEND RUNNING";
 //store a grid, which is a JSON, in the database
 function storeGrid(gridJSON) {
     if(!validJSON(gridJSON)) {
-        throw new Error("invalid JSON given");
+        throw "invalid JSON given";
     }
     var success;
     try {
@@ -77,7 +78,7 @@ async function isRunning() {
         success = await $.ajax({
             type: "GET",
             dataType: "text",
-            url: AWS_URL + "api/v1/backend-up/", 
+            url: AWS_URL + "api/v1/backend-up", 
             success: function(data) {
                 alert("Backend is running");
                 console.log("success: backend is running");
@@ -98,7 +99,7 @@ async function isRunning() {
 
 async function deleteGrid(title) {
     if(title.length <= 0 || title == null) {
-        throw new Error("invalid title given");
+        throw "invalid title given";
     }
     var success;
     try {
@@ -135,7 +136,7 @@ async function deleteGrid(title) {
 //update a grid that is already in the database
 async function updateGrid(gridJSON) {
     if(!validJSON(gridJSON)) {
-        throw new Error("invalid JSON given");
+        throw "invalid JSON given";
     }
     try {
         var success = await $.ajax({
@@ -176,7 +177,7 @@ async function updateGrid(gridJSON) {
 //retrieve a grid from the database using its title
 async function getByTitle(title) {
     if(title.length == 0) {
-        throw new Error("invalid title given");
+        throw "invalid title given";
     }
     var grid;
     try {
@@ -210,7 +211,7 @@ async function getByTitle(title) {
         console.log(error);
     }
     if(grid == null) {
-        throw new Error("didn't retrieve grid with title [" + title + "]");
+        throw "didn't retrieve grid with title [" + title + "]";
     }
     return grid;
 }
@@ -249,7 +250,7 @@ async function getAllTitles() {
         console.log(err);
     }
     if(titles == null) {
-        throw new Error("didn't retrieve titles");
+        throw "didn't retrieve titles";
     }
     return titles;
 }
@@ -285,3 +286,45 @@ module.exports.validJSON = validJSON;
 module.exports.updateGrid = updateGrid;
 module.exports.isRunning = isRunning;
 module.exports.deleteGrid = deleteGrid;
+},{}],2:[function(require,module,exports){
+database = require('./database.js');
+async function populateList(){
+    var data;
+    try{
+        data = await database.getAllTitles();
+        return data;
+    } catch (error){
+        data = "error";
+        return data;
+    }
+}
+
+populateList().then((response) => {
+    var ul = document.getElementById("allTitles");
+    for (var i = 0; i < response.length; i++) {
+        var listItem = document.createElement("li");
+        listItem.classList.add('name');
+        var a = document.createElement('a');
+        var linkText = document.createTextNode(response[i]);
+        a.appendChild(linkText);
+        a.title = response[i];
+        a.href = "http://softcon-leveldesign.us-east-1.elasticbeanstalk.com/play/" + response[i];
+        listItem.appendChild(a);
+        ul.appendChild(listItem);
+    }
+
+    var input = document.getElementById('input');
+    input.onkeyup = function () {
+        var filter = input.value.toUpperCase();
+        var lis = document.getElementsByTagName('li');
+        for (var i = 0; i < lis.length; i++) {
+            var name = lis[i].innerText;
+            if (name.toUpperCase().indexOf(filter) == 0) 
+                lis[i].style.display = 'list-item';
+            else
+                lis[i].style.display = 'none';
+    }
+}
+
+});
+},{"./database.js":1}]},{},[2]);

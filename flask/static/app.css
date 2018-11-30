@@ -21,6 +21,18 @@
   left: 405px;
 }
 
+.customsprite{
+  position:absolute;
+  top:20px;
+  left:550px;
+}
+
+.changebutton{
+  position:absolute;
+  top:55px;
+  left:550px;
+}
+
 .itembutton{
   position: absolute;
   top:20px;
