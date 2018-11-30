@@ -83,6 +83,5 @@ describe('Utility', function(){
     it('should multiply a vector times a number', function() {
         expect(testVector0.times(13)).toEqual(testVector0);
         expect(testVector1.times(2)).toEqual(testVector2);
-        console.log(testVector1.times(2));
     });
 });
