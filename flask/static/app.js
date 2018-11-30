@@ -604,10 +604,10 @@ document.getElementById("savegrid").onclick= function(){
 
     winconds.push("End");
   }
-  if (target2==true){
+  if (con2==true){
     winconds.push("Enemy");
   }
-  if (target3==true){
+  if (con3==true){
     winconds.push("NPC");
   }
   var title = prompt("Enter the grid title", "title");
