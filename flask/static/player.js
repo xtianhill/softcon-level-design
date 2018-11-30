@@ -20,7 +20,7 @@ const Vector = require('./utility.js');
 |------------------------------------------------------------------------------
 */
 function Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed, mvspd, grav, dir){
-    if((itm instanceof Item) && (Array.isArray(inv))){
+    if((Array.isArray(inv))){
     Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspd, grav);
     this.equippedItem = itm;
     this.inventory = inv;

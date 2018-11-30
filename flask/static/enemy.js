@@ -21,16 +21,17 @@ const Character = require('./character.js');
 function Enemy(loc, max, hea, stat, dmg, hbox, url, size, speed, mvspeed, grav, dir, range, startLoc){
     t = typeof dmg;
     t2 = typeof range;
-    if (t === "number" && t2 === "number" && (dir === "right" || dir === "left" || dir === "still")) {
+    //if (t === "number" && t2 === "number" && (dir === "right" || dir === "left" || dir === "still")) {
         Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspeed, grav);
+        console.log("please dear god");
         this.damage = dmg;
         this.direction = dir;
         this.range = range;
         this.startPos = startLoc;
-    }
-    else {
-        return {}
-    }
+   // }
+    // else {
+    //     return {}
+    // }
 }
 
 Enemy.prototype = Object.create(Character.prototype);
