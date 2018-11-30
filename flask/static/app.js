@@ -96,18 +96,162 @@ canvas.loadFromJSON(JSON.parse(json_data), function(obj) {
   console.log(' this is a callback. invoked when canvas is loaded!xxx ');
 });*/
 
-
-//function that make the buttons actually...buttons.
-function draggable(object, pos, name, url) {
+function JSONderulo(object,name,url){
+  var curr_issolid=$('#solid-selector').val();
+  var curr_env_effect=$('#environ-effect-selector').val();
+  var curr_player_speed= $('#speed-selector').val();
+  var curr_player_grav= $("input[name='color']:checked").val();
+  var curr_player_maxhealth= $("input[name='health']").val();
+  var curr_item_effect= $('#effect-selector').val();
+  var curr_enemy_damage= $('input[name=enemydamage]').val();
+  var curr_npc_message= $("input[name='npcmessage']").val();
+switch(name){
+  case "Environment":
+  object.toObject = function() {
+  return {type: "Element",
+    name: name,
+    top:object.top,
+    left: object.left,
+    url: url,
+    scale: 1,
+    solid: curr_issolid,
+    effect: curr_env_effect,
+  };
+}
+    break;
+  case "Player":
   object.toObject = function() {
   return {type: "Element",
   name: name,
   top:object.top,
   left: object.left,
   url: url,
-  scale: 1
+  scale: 1,
+  speed: curr_player_speed,
+  gravity: curr_player_grav,
+  maxhealth: curr_player_maxhealth,
   };
 }
+    break;
+  case "Item":
+  object.toObject = function() {
+  return {type: "Element",
+  name: name,
+  top:object.top,
+  left: object.left,
+  url: url,
+  scale: 1,
+  effect: curr_item_effect,
+  };
+}
+    break;
+  case "Enemy":
+  object.toObject = function() {
+  return {type: "Element",
+  name: name,
+  top:object.top,
+  left: object.left,
+  url: url,
+  scale: 1,
+  damage: curr_enemy_damage,
+  };
+}
+    break;
+  case "NPC":
+  object.toObject = function() {
+  return {type: "Element",
+  name: name,
+  top:object.top,
+  left: object.left,
+  url: url,
+  scale: 1,
+  msg: curr_npc_message,
+  };
+}
+  break;
+default:
+  alert("ummm this should not be happening! check switch statement");
+}
+}
+
+//function that make the buttons actually...buttons.
+function draggable(object, name, url) {
+/*  var curr_issolid=$('#solid-selector').val();
+  var curr_env_effect=$('#environ-effect-selector').val();
+  var curr_player_speed= $('#speed-selector').val();
+  var curr_player_grav= $("input[name='color']:checked").val();
+  var curr_player_maxhealth= $("input[name='health']").val();
+  var curr_item_effect= $('#effect-selector').val();
+  var curr_enemy_damage= $('input[name=enemydamage]').val();
+  var curr_npc_message= $("input[name='npcmessage']").val();
+switch(name){
+  case "Environment":
+  object.toObject = function() {
+  return {type: "Element",
+    name: name,
+    top:object.top,
+    left: object.left,
+    url: url,
+    scale: 1,
+    solid: curr_issolid,
+    effect: curr_env_effect,
+  };
+}
+    break;
+  case "Player":
+  object.toObject = function() {
+  return {type: "Element",
+  name: name,
+  top:object.top,
+  left: object.left,
+  url: url,
+  scale: 1,
+  speed: curr_player_speed,
+  gravity: curr_player_grav,
+  maxhealth: curr_player_maxhealth,
+  };
+}
+    break;
+  case "Item":
+  object.toObject = function() {
+  return {type: "Element",
+  name: name,
+  top:object.top,
+  left: object.left,
+  url: url,
+  scale: 1,
+  effect: curr_item_effect,
+  };
+}
+    break;
+  case "Enemy":
+  object.toObject = function() {
+  return {type: "Element",
+  name: name,
+  top:object.top,
+  left: object.left,
+  url: url,
+  scale: 1,
+  damage: curr_enemy_damage,
+  };
+}
+    break;
+  case "NPC":
+  object.toObject = function() {
+  return {type: "Element",
+  name: name,
+  top:object.top,
+  left: object.left,
+  url: url,
+  scale: 1,
+  msg: curr_npc_message,
+  };
+}
+  break;
+default:
+  alert("ummm this should not be happening! check switch statement");
+}*/
+
         object.on('mousedown', function() {
           /*{
             var temp = new fabric.Image(pic,{
@@ -146,7 +290,9 @@ if (eraser==1){
         });
         object.on('mouseup', function() {
             // Remove an event handler
-            object.toObject = function() {
+
+            JSONderulo(object,name,url);
+            /*object.toObject = function() {
             return {type: "Element",
             name: name,
             top:object.top,
@@ -154,7 +300,7 @@ if (eraser==1){
             url: url,
             scale: 1
             };
-  };
+  };*/
             this.off('mousedown');
 
             /*if(this.top <100) {
@@ -173,17 +319,7 @@ canvas.on('object:moving', function(options) {
 
 });
 
-canvas.on('mouseover', function(e) {
 
-    console.log("over");
-    //canvas.renderAll();
-  });
-
-  canvas.on('mouseout', function(e) {
-
-    console.log("out");
-    //canvas.renderAll();
-  });
 
 
 
@@ -204,10 +340,10 @@ canvas.on('mouseover', function(e) {
   });
 
   canvas.on('mouse:down', function(event){
-  //  console.log(playergravity);
-  //  console.log(issolid);
-  var health=$("input[name='health']").val();
-  console.log(health);
+  var msg=$("input[name='npcmessage']").val();
+  console.log(msg);
+//  var health=$("input[name='health']").val();
+  //console.log(health);
     if (selectedimg!=0 && eraser !=1){
     var pointer = canvas.getPointer(event.e);
     var posX = Math.round((pointer.x-25) / grid) * grid;
@@ -233,7 +369,7 @@ canvas.on('mouseover', function(e) {
   scale: 1
   };
 }*/
-  draggable(temp, posX,selectedelementtype,curr_url);
+  draggable(temp,selectedelementtype,curr_url);
 /*  temp.toObject = function() {
   return {type: "Element",
   name: selectedelementtype,
@@ -254,6 +390,14 @@ canvas.on('mouseover', function(e) {
   json_data = JSON.stringify(canvas.toJSON());
   return json_data;
 }*/
+
+document.getElementById("changebutton").onclick= function(){
+  var newurl=$("input[name='spriteurl']").val();
+  //console.log(newurl);
+  document.getElementById("playerbutton").src=newurl;
+  document.getElementById("player").src=newurl;
+  document.getElementById("cursor2").src=newurl;
+}
 
 document.getElementById("eraserbutton").onclick= function(){
   eraser=1;
@@ -310,7 +454,7 @@ document.getElementById("savegrid").onclick= function(){
 //take everything on the current canvas and print to console and alert in custom json format
 document.getElementById("save").onclick = function(){
      json_data = JSON.stringify(canvas.toJSON());
-               console.log(json_data);
+               //console.log(json_data);
                alert(json_data);
 
  }
