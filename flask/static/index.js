@@ -524,14 +524,14 @@ module.exports.deleteGrid = deleteGrid;
 function Effect(title, amount){
     t = typeof title;
     t2 = typeof amount;
-    if (t === "string" && t2 === "number" && (title == 'heal' || title == 'damage')){
+    //if (t === "string" && t2 === "number" && (title == 'heal' || title == 'damage')){
     this.effect = title;
     this.isActive = false;
     this.amount = amount;
-  }
-  else{
-    return {};
-  }
+//   }
+//   else{
+//     return {};
+//   }
 }
 
 // Effect.prototype.Effect = function(bool, title){
@@ -1558,6 +1558,7 @@ function Environment(solid, pos, url, scale, hbox, eff){
     // console.log("solid", solid == true);
     // console.log("solid", solid == false);
     if (solid == true || solid == false) {
+        console.log("did env work");
       Element.call(this, pos, url, scale, hbox);
       this.solid = solid;
       this.effect = eff;
@@ -1811,7 +1812,7 @@ function JSONtoElements(data){
                 var element;
                 if (temp.name == "Environment"){
                     
-                    var eff = new Effect(dataobj.objects[i].effect, 1); // new Effect("damage", 1);
+                    var eff = new Effect(temp.effect, 1); // new Effect("damage", 1);
                     var solid = dataobj.objects[i].solid;
                     element = new Environment(solid,pos,url,sz,hitbox,eff);
                     console.log(element);

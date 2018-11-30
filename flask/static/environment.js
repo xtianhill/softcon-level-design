@@ -23,6 +23,7 @@ function Environment(solid, pos, url, scale, hbox, eff){
     // console.log("solid", solid == true);
     // console.log("solid", solid == false);
     if (solid == true || solid == false) {
+        console.log("did env work");
       Element.call(this, pos, url, scale, hbox);
       this.solid = solid;
       this.effect = eff;
