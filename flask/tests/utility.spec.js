@@ -67,7 +67,13 @@ describe('Utility', function(){
         expect(testVector0.plus(5)).toEqual({});
         expect(testVector0.plus("testVector1")).toEqual({});
     });
-
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Multiply Tests
+    |--------------------------------------------------------------------------
+    */
+    
     it('should multiply vectors', function() {
         expect(testVector1.times(testVector2)).toEqual(testVector3);
         expect(testVector0.times(testVector3)).toEqual(testVector0);
