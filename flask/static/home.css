@@ -109,10 +109,29 @@ li{
   padding-left: 0px;
 }
 
+.pumpkin_man{
+  float: right;
+  top: 330px;
+  transform: scaleX(1);
+  left: 490px;
+  position: absolute;
+  width: 12%;
+}
+
+.moon{
+  float: right;
+  top: 380px;
+  left: 400px;
+  position: absolute;
+  width: 13%;
+  border: 3px solid #a3c0f5;
+  box-shadow: 0 0 60px #a3c0f5;
+}
+
 .myButton {
-    position: absolute;
-    top: 50px;
-    right: 20px;
+    position: relative;
+    float: left;
+    margin-top: 50px;
     font-family : 'Press Start 2P';
     font-size:15px;
     line-height: 120%;
@@ -124,6 +143,56 @@ li{
     color: #5e90ed;
     width: 150px;
 	  border:3px solid #a3c0f5;
+}
+
+.makelevel_text{
+  margin-left: 20px;
+  margin-right: 0px;
+  padding-top: 200px;
+  position: relative;
+  width: 40%;
+  line-height: 150%;
+  color: #b30059;
+  font-size: 15px;
+  font-family: 'Press Start 2P';
+}
+
+.landscape{
+  float: right;
+  top: 270px;
+  right: 70px;
+  position: absolute;
+  width: 20%;
+  border: 3px solid #a3c0f5;
+  box-shadow: 0 0 60px #a3c0f5;
+}
+
+.peaks{
+  float: right;
+  top: 370px;
+  right: 100px;
+  position: absolute;
+  width: 10%;
+  border: 3px solid #a3c0f5;
+  box-shadow: 0 0 60px #a3c0f5;
+}
+
+.sword{
+  float: right;
+  top: 130px;
+  transform: rotate(-140grad);
+  right: 10px;
+  position: absolute;
+  width: 20%;
+}
+
+.gargoyle{
+  float: right;
+  top: 400px;
+  transform: scaleX(1);
+  right: 175px;
+  position: absolute;
+  width: 10%;
 }
 
 /* unvisited link */
