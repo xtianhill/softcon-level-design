@@ -214,6 +214,12 @@ aside{
   left: 390px;
 }
 
+.wincondbutton{
+  position:absolute;
+  top:20px;
+  left:450px;
+}
+
 
 .cursor {
   position: absolute;
