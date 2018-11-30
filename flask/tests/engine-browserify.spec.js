@@ -1214,6 +1214,7 @@ module.exports.update = update;
 module.exports.testNPCCondition = testNPCCondition;
 module.exports.testEndCondition = testEndCondition;
 module.exports.testEnemyCondition = testEnemyCondition;
+module.exports.handleItemUse = handleItemUse;
 
 },{"./character.js":1,"./element.js":3,"./enemy.js":4,"./environment.js":6,"./item.js":7,"./npc.js":8,"./parsing.js":9,"./player.js":10,"./utility.js":11}],6:[function(require,module,exports){
 /*
@@ -1702,6 +1703,7 @@ const testNPCCondition = require('../static/engine-test-class.js').testNPCCondit
 const testEndCondition = require('../static/engine-test-class.js').testEndCondition;
 const testEnemyCondition = require('../static/engine-test-class.js').testEnemyCondition;
 
+const handleItemUse = require('../static/engine-test-class.js').handleItemUse;
 const Player = require('../static/player.js');
 const Item = require('../static/item.js');
 const Enemy = require('../static/enemy.js');
@@ -1746,7 +1748,6 @@ describe('Engine Tests', function(){
             , victory: false
         };
         
-        //console.log(gameState);
         gameState.elements[2].spokenTo = false;
     });
 
@@ -1793,7 +1794,6 @@ describe('Engine Tests', function(){
     */
 
     it('should return true if there is a collision', function(){
-        //console.log(gameState);
         expect(detectCollision(gameState.elements[0].position,
             gameState.elements[2].position,gameState.elements[0],gameState.elements[2])).toBeTruthy();
 

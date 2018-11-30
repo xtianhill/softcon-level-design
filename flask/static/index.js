@@ -1763,6 +1763,7 @@ const Character = require('./character.js');
 const Environment = require('./environment.js');
 const Vector = require('./utility.js');
 
+var defaultUrl = "https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png";
 function JSONtoElements(data){
     if(data == '{}'){
         return {"elements": [],
@@ -1782,33 +1783,36 @@ function JSONtoElements(data){
                 var hitbox = new Vector(50,50);
                 var element;
                 if (temp.name == "Environment"){
-                    var eff= null; // new Effect("damage", 1);
-                    element = new Environment(1,pos,url,sz,hitbox,eff);
+                    var eff = new Effect(dataobj.objects[i].effect, 1); // new Effect("damage", 1);
+                    var status = dataobj.objects[i].status;
+                    element = new Environment(status,pos,url,sz,hitbox,eff);
                 }
                 else if (temp.name == "Item"){
-                    var col=0;
-                    var eff= new Effect("damage", 1);
-                    var hov=true;
+                    var col = false;
+                    var eff = new Effect("damage", 1);
+                    var hov =true;
                     element = new Item(pos, url, sz, hitbox, col, eff, pos, hov);
+                    console.log('from parsing');
                 }
                 else if (temp.name == "Player"){
-                    var max = 10;
-                    var hea = 8;
+                    var max = dataobj.objects[i].maxhealth;
                     var stat = true;
                     var itm= null;
                     var inv= [];
-                    var hitbox = new Vector(19,50);
+                    var hitbox = new Vector(50,50);
+                    if(url === defaultUrl)
+                        hitbox = new Vector(19,50);
                     var spd = new Vector(0,0);
-                    var mvspd = 60;
-                    var grav = 40;
+                    var mvspd =  dataobj.objects[i].speed;
+                    var grav =  dataobj.objects[i].gravity;
                     var dir = "right";
-                    element = new Player(pos, max, hea, stat, itm, inv, hitbox, url, sz, spd, mvspd, grav, dir);
+                    element = new Player(pos, max, max, stat, itm, inv, hitbox, url, sz, spd, mvspd, grav, dir);
                 }
                 else if (temp.name == "NPC"){
                     var max = 10;
                     var hea = 7;
-                    var stat= true;
-                    var msg = "hi there";
+                    var stat = true; 
+                    var msg =  dataobj.objects[i].msg;
                     var spd = new Vector(0,0);
                     var mvspd = 30;
                     var grav = 50;
@@ -1818,7 +1822,7 @@ function JSONtoElements(data){
                     var max = 10;
                     var hea= 10;
                     var stat = true;
-                    var dmg= .01;
+                    var dmg =  dataobj.objects[i].damage;
                     var spd = new Vector(0,0);
                     var mvspd = 15;
                     var grav = 60;
@@ -1859,7 +1863,7 @@ const Vector = require('./utility.js');
 |------------------------------------------------------------------------------
 */
 function Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed, mvspd, grav, dir){
-    if((itm instanceof Item) && (Array.isArray(inv)) && (dir instanceof Vector)){
+    if((itm instanceof Item) && (Array.isArray(inv))){
     Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspd, grav);
     this.equippedItem = itm;
     this.inventory = inv;
