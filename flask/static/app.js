@@ -530,10 +530,11 @@ document.getElementById("changeenemy").onclick= function(){
 curr_url=newurl;
 }
 
-document.getElementById("changeenemy").onclick= function(){
+document.getElementById("changebackground").onclick= function(){
   var newurl=$("input[name='newbackground']").val();
   document.getElementById("wrapper").style="background-img: newurl";
   backgroundimg=newurl;
+  //console.log("areyouthere god");
 }
 
 document.getElementById("eraserbutton").onclick= function(){
