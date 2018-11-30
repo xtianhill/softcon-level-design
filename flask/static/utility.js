@@ -17,6 +17,7 @@
 function Vector(x,y){
 	if (typeof(x) != 'number' || typeof(y) != 'number'){
 		return null
+	}
 	this.x=x;
 	this.y=y;
 }
