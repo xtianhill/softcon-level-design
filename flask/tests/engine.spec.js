@@ -21,6 +21,8 @@ const Item = require('../static/item.js');
 const Enemy = require('../static/enemy.js');
 const NPC = require('../static/npc.js');
 const Vector = require('../static/utility.js');
+const Effect = require('../static/effect.js');
+const Element = require('../static/element.js');
 
 describe('Engine Tests', function(){
 
@@ -28,11 +30,11 @@ describe('Engine Tests', function(){
 
     beforeEach(function(){
         var vec = new Vector(5,5);
-        testItem = new Item('pos', 'testingUrl', 'sz', 'hbox', 'col', 'damage');
-        testItem2 = new Item('pos', 'secondTestingUrl', 'sz', 'hbox', 'col', 'damage');
-        var elements = [new Player(vec, 0, 0, true, testItem2, [testItem, testItem2], vec, 'p_url', vec, vec, 0, 0),
-            new Enemy(new Vector(20,20), 0, 0, true, 10, vec, 'e_url', vec, vec, 0, 0),
-            new NPC(vec, 0, 0, true, 'message!', vec, 'n_url', vec, vec, 0, 0),
+        testItem = new Item(new Vector(2,2), 'dummy_url', new Vector(2,2), new Vector(2,2), true, new Effect('heal', 10), new Vector(0,0), false);
+        testItem2 = new Item(new Vector(2,2), 'dummy_url', new Vector(2,2), new Vector(2,2), true, new Effect('damage', 10), new Vector(0,0), false);
+        var elements = [new Player(vec, 20, 20, true, testItem2, [testItem, testItem2], vec, 'p_url', vec, vec, 0, 0, vec),
+            new Enemy(new Vector(20,20), 20, 20, true, 10, vec, 'e_url', vec, vec, 0, 0, 'right', 5, vec),
+            new NPC(vec, 20, 20, true, 'message!', vec, 'n_url', vec, vec, 0, 0),
             testItem];
  
         gameState = { canvas: 'canvas'
@@ -176,14 +178,9 @@ describe('Engine Tests', function(){
         expect(gameState.winConditions[1]).toBeTruthy();
     });
 
-    it('should set item condition to true if all items picked up', function(){
-        gameState.elements[0].pickUpItem(gameState.elements[3]);
-        testWinConditions(gameState);
-        expect(gameState.winConditions[2]).toBeTruthy();
-    });
-
     it('should set distance condition to true if you reach end of level', function(){
         gameState.elements[0].pos = new Vector(490,30);
+        console.log(gameState);
         testWinConditions(gameState);
         expect(gameState.winConditions[3]).toBeTruthy();
     });
