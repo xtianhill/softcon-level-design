@@ -461,6 +461,16 @@ document.getElementById("changeterrain").onclick= function(){
  curr_url=newurl;
 }
 
+document.getElementById("changeitem").onclick= function(){
+    var newurl=$("input[name='newitem']").val();
+  document.getElementById("itembutton").src=newurl;
+  document.getElementById("coin").src=newurl;
+ document.getElementById("cursor3").src=newurl;
+ document.getElementById("editpic").src=newurl;
+curr_url=newurl;
+}
+
+
 document.getElementById("changenpc").onclick= function(){
     var newurl=$("input[name='newnpc']").val();
   document.getElementById("npcbutton").src=newurl;
@@ -612,6 +622,7 @@ document.getElementById("save").onclick = function(){
    document.getElementById("environmenteditor").style="display: none";
    document.getElementById("playereditor").style="display: none";
    document.getElementById("enemyeditor").style="display: none";
+   document.getElementById("npceditor").style="display: none";
    document.getElementById("cursor3").style.visibility="visible";
    document.getElementById("cursor2").style.visibility="hidden";
    document.getElementById("cursor").style.visibility="hidden";

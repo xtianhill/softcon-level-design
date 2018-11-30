@@ -76,13 +76,22 @@ aside{
 
 .effect-selector{
   position: absolute;
-  top: 120px;
-
+  top: 170px;
 }
 
 .itemstrengthselector{
   position: absolute;
-  top:140px;
+  top:30px;
+}
+
+.customitem{
+  position: absolute;
+  top:120px;
+}
+
+.changeitem{
+  position: absolute;
+  top:150px;
 }
 
 .solid-selector{

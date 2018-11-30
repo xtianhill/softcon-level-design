@@ -88,10 +88,23 @@
 </div>
 
 <div class="itemeditor" id="itemeditor" style="display:none">
-  <select name= "selector1"id="effect-selector" class="effect-selector">
+  <div class="customitem">
+        <form>
+            Item url:<br>
+            <input type="url" name="newitem" id="newitem">
+
+          </form>
+  </div>
+  <div class= "changeitem"id ="changeitem">
+    <button>change item</button>
+  </div>
+
+<div class="effect-selector"> Effect:
+  <select name= "selector1"id="effect-selector">
   <option value="heal">Heal</option>
   <option value="damage">Damage</option>
 </select>
+<div>
 <div class="itemstrengthselector">
            <form>
              strength:
