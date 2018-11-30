@@ -9,137 +9,258 @@
  * 
  */
 
-// const AWS_URL = "http://softcon-leveldesign.us-east-1.elasticbeanstalk.com/";
-const AWS_URL = "http://127.0.0.1:5000/";
+/*
+|------------------------------------------------------------------------------
+| Database
+|------------------------------------------------------------------------------
+|
+| This file contains the Database utility functions.
+|
+|------------------------------------------------------------------------------
+*/
 
-function storeGrid(gridJSON, cb) {
-    console.log('gridJSON title: ' + gridJSON.title);
-    console.log('gridJSON data: ' + gridJSON.data);
+
+const HTTP_OK = "200";
+const HTTP_CREATED = "201";
+const HTTP_BADREQUEST = "400";
+const HTTP_NOTFOUND = "404";
+const HTTP_CONFLICT = "409";
+
+const AWS_URL = "http://softcon-leveldesign.us-east-1.elasticbeanstalk.com/";
+// const AWS_URL = "http://127.0.0.1:5000/";
+const SUCCESS_MSG = "BACKEND RUNNING";
+
+//store a grid, which is a JSON, in the database
+function storeGrid(gridJSON) {
     if(!validJSON(gridJSON)) {
-        console.log('invalid json given');
+        throw new Error("invalid JSON given");
+    }
+    var success;
+    try {
+        success = $.ajax({
+            type: "POST",
+            url: AWS_URL + "api/v1/add-grid/",
+            data: JSON.stringify(gridJSON),
+            contentType: "application/json",
+            dataType: "text",
+            success: function(data) {
+                console.log("Success: stored [" + data + "] in database.");
+                alert("Success: grid successfully stored.");
+            },
+            failure: function(errMsg) {
+                console.log("failure: couldn't store grid");
+                alert("Error: operation could not be performed.");
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                var status = XMLHttpRequest.status;
+                if (status == HTTP_CONFLICT) {
+                    console.log("Error: HTTP CONFLICT (" + HTTP_CONFLICT + ")");
+                    alert("That title is taken; please choose another name.");
+                } else if(status == HTTP_BADREQUEST) {
+                    console.log("Error: HTTP BADREQUEST (" + HTTP_BADREQUEST + ")");
+                    alert("Sorry, something went wrong. The title could not be retrieved; please try again.");
+                } else {
+                    console.log("Error: unspecified error (" + status + ")");
+                    console.log("Error textStatus: " + textStatus);
+                    alert("Error: operation could not be performed.");
+                }
+            }
+        });
+        return true;
+    } catch(err) {
+        console.log(err);
         return false;
     }
-    $.ajax({
-        type: 'POST',
-        url: AWS_URL + "api/v1/add-grid/",
-        data: gridJSON,
-        dataType: "text",
-        async: false
-      }).done(function(data) {
-        cb(data);
-      }).fail(function(xhr, status, errorThrown) {
-        alert("Sorry, there was a problem!");
-        console.log("Error: " + errorThrown);
-        console.log("Status: " + status);
-        console.dir(xhr);
-      }).always(function() {
-        alert("storeGrid operation is complete.");
-      });
 }
 
-function isRunning(cb) {
-    $.ajax({
-        type: "GET",
-        url: AWS_URL,
-        success: function(data) {
-            console.log("success: backend is running");
-            cb(data);
-        },
-        failure: function(errMsg) {
-            console.log("failure: backend cannot be reached");
-        }
-    });
-}
-
-function deleteGrid(title, cb) {
-    console.log('title is: '+ title);
-    var success = false;
-    if(title.length == 0) {
+// checks if the database is running
+async function isRunning() {
+    var success;
+    try {
+        success = await $.ajax({
+            type: "GET",
+            dataType: "text",
+            url: AWS_URL + "api/v1/backend-up/", 
+            success: function(data) {
+                alert("Backend is running");
+                console.log("success: backend is running");
+            },
+            failure: function(errMsg) {
+                console.log("failure: backend cannot be reached");
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                console.log("error: " + textStatus);
+            }
+        });
+    } catch(err) {
+        console.log(err);
         return false;
     }
-    $.ajax({
-        type: "GET",
-        async: false,
-        url: AWS_URL + "api/v1/delete-grid/" + title,
-        success: function(data) {
-            console.log("success: deleted grid wwith title " + title + " in DB");
-            success = true;
-        },
-        failure: function(errMsg) {
-            alert("failure: didn't delete item with title: " + title);
-        }
-    });
-    return success;
+    return success==SUCCESS_MSG;
 }
 
-function updateGrid(gridJSON, cb) {
-    console.log('gridJSON is: ' + gridJSON);
-    success = false;
+async function deleteGrid(title) {
+    if(title.length <= 0 || title == null) {
+        throw new Error("invalid title given");
+    }
+    var success;
+    try {
+        success = await $.ajax({
+            type: "GET",
+            async: true,
+            url: AWS_URL + "api/v1/delete-grid/" + title,
+            success: function(data) {
+                alert("Success: grid successfully deleted.");
+                console.log("success: deleted grid in DB via success callback");
+            },
+            failure: function(errMsg) {
+                alert("Sorry, something went wrong. The grid was not deleted.");
+                console.log("failure: didn't delete item");
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                var status = XMLHttpRequest.status;
+                if (status == HTTP_NOTFOUND) {
+                    alert("Error: the grid was not found.");
+                } else {
+                    console.log("Error: unspecified error (" + status + ")");
+                    console.log("Error textStatus: " + textStatus);
+                    alert("Error: operation could not be performed.");
+                }
+            }
+        });
+        return true;
+    } catch(err) {
+        console.log(err);
+        return false;
+    }
+}
+
+//update a grid that is already in the database
+async function updateGrid(gridJSON) {
     if(!validJSON(gridJSON)) {
-        return success;
+        throw new Error("invalid JSON given");
     }
-    $.ajax({
-        type: "POST",
-        url: AWS_URL + "api/v1/update-grid/",
-        // The key needs to match your method's input parameter (case-sensitive).
-        data: JSON.stringify(gridJSON),
-        contentType: "application/json",
-        dataType: "json",
-        success: function(data) {
-            console.log("success: updated the following grid in DB: " + data);
-            console.log(data);
-            success = true;
-        },
-        failure: function(errMsg) {
-            console.log("failure: couldn't store grid");
-            success = false;
-        }
-    });
+    try {
+        var success = await $.ajax({
+            type: "POST",
+            url: AWS_URL + "api/v1/update-grid/",
+            data: JSON.stringify(gridJSON),
+            contentType: "application/json",
+            dataType: "text",
+            success: function(data) {
+                console.log("success: updated the following grid in DB: " + data);
+                console.log(data);
+            },
+            failure: function(errMsg) {
+                console.log("failure: couldn't store grid");
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                var status = XMLHttpRequest.status
+                if (status == HTTP_NOTFOUND) {
+                    console.log("Error: HTTP NOTFOUND (" + HTTP_NOTFOUND + ")");
+                    alert("Error: the grid was not found.");
+                } else if(status == HTTP_BADREQUEST) {
+                    console.log("Error: HTTP BADREQUEST (" + HTTP_BADREQUEST + ")");
+                    alert("Sorry, something went wrong. The title could not be retrieved; please try again.");
+                } else {
+                    console.log("Error: unspecified error (" + status + ")");
+                    console.log("Error textStatus: " + textStatus);
+                    alert("Error: operation could not be performed.");
+                }
+            }
+        });
+        return true;
+    } catch(error) {
+        console.log(error);
+        return false;
+    }
 }
 
-function getByTitle(title, cb) {
-    console.log('title is: '+ title);
+//retrieve a grid from the database using its title
+async function getByTitle(title) {
     if(title.length == 0) {
-        return false;
+        throw new Error("invalid title given");
     }
     var grid;
-    $.ajax({
-        type: "GET",
-        url: AWS_URL + "api/v1/search-grid/" + title,
-        contentType: "application/json",
-        dataType: "json",
-        async: false,
-        success: function(data) {
-            alert("success! found item with title " + title + " in DB");
-            console.log(data);
-            grid = data;
-        },
-        failure: function(errMsg) {
-            alert("failure: didn't find item in DB");
-            return null;
-        }
-    });
+    try {
+        grid = await $.ajax({
+            type: "GET",
+            url: AWS_URL + "api/v1/search-grid/" + title,
+            contentType: "application/json",
+            dataType: "json",
+            success: function(data) {
+                console.log("success: found item with title " + title + " in DB");
+            },
+            failure: function(errMsg) {
+                console.log("failure: didn't find item in DB");
+            }, 
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                var status = XMLHttpRequest.status
+                if (status == HTTP_NOTFOUND) {
+                    console.log("Error: HTTP NOTFOUND (" + HTTP_NOTFOUND + ")");
+                    alert("Error: the grid was not found.");
+                } else if(status == HTTP_BADREQUEST) {
+                    console.log("Error: HTTP BADREQUEST (" + HTTP_BADREQUEST + ")");
+                    alert("Sorry, something went wrong. The title could not be retrieved; please try again.");
+                } else {
+                    console.log("Error: unspecified error (" + status + ")");
+                    console.log("Error textStatus: " + textStatus);
+                    alert("Error: operation could not be performed.");
+                }
+            }
+        });
+    } catch(error) {
+        console.log(error);
+    }
+    if(grid == null) {
+        throw new Error("didn't retrieve grid with title [" + title + "]");
+    }
     return grid;
 }
 
-function getAllTitles(cb) {
-    $.ajax({
-        type: "GET",
-        url: AWS_URL + "/api/v1/query-all-titles/",
-        contentType: "application/json",
-        success: function(data) {
-            console.log("success! found the following titles:");
-            console.log(data);
-            return data;
-        },
-        failure: function(errMsg) {
-            console.log("failure: couldn't retrieve titles")
-            return null;
-        }
-    });
+//return all the titles of the levels stored in the database
+async function getAllTitles() {
+    var titles;
+    try {
+        titles = await $.ajax({
+            type: "GET",
+            url: AWS_URL + "api/v1/query-all-titles/",
+            contentType: "application/json",
+            // dataType: "json",
+            success: function(data) {
+                console.log("success! found the following titles:");
+                console.log(data);
+                // titles = data;
+            },
+            failure: function(errMsg) {
+                console.log("failure: couldn't retrieve titles")
+                // titles = null;
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                var status = XMLHttpRequest.status
+                if(status == HTTP_BADREQUEST) {
+                    console.log("Error: HTTP BADREQUEST (" + HTTP_BADREQUEST + ")");
+                    alert("Sorry, something went wrong. The titles could not be retrieved; please try again.");
+                } else {
+                    console.log("Error: unspecified error (" + status + ")");
+                    console.log("Error textStatus: " + textStatus);
+                    alert("Error: operation could not be performed.");
+                }
+            }
+        });
+    } catch(err) {
+        console.log(err);
+    }
+    if(titles == null) {
+        throw new Error("didn't retrieve titles");
+    }
+    return titles;
 }
 
+
+//function to check if a JSON is valid to store in the database
 function validJSON(myJSON) {
+    myJSON = JSON.parse(myJSON);
     if(myJSON.type == 'string') {
         myJSON = JSON.parse(myJSON);
     }
@@ -154,15 +275,11 @@ function validJSON(myJSON) {
         }
     }
     catch(err) {
+        console.log(err)
         return false;
     }
     return true;
 }
-
-// module.exports.storeGrid = storeGrid;
-// module.exports.getByTitle = getByTitle;
-// module.exports.getAllTitles = getAllTitles;
-// module.exports.validJSON = validJSON;
 
 module.exports.storeGrid = storeGrid;
 module.exports.getByTitle = getByTitle;
@@ -199,20 +316,27 @@ const Database = require('../static/database-browserify.js');
 // const jasmine = require('../../node_modules/jasmine-ajax');
 // const jasmine = require('../../spec/helpers/mock-ajax.js')
 
-// const AWS_URL = "http://softcon-leveldesign.us-east-1.elasticbeanstalk.com/";
-const AWS_URL = "http://127.0.0.1:5000/";
+const AWS_URL = "http://softcon-leveldesign.us-east-1.elasticbeanstalk.com/";
+// const AWS_URL = "http://127.0.0.1:5000/";
+
+const ISRUNNING_URL    = "api/v1/backend-up/";
+const STOREGRID_URL    = "api/v1/add-grid/";
+const DELETEGRID_URL   = "api/v1/delete-grid/";
+const UPDATEGRID_URL   = "api/v1/update-grid/"
+const GETGRID_URL      = "api/v1/search-grid/";
+const GETALLTITLES_URL = "api/v1/query-all-titles/";
 
 describe('Valid JSON Tests', function() {
-    var validJSON1 = JSON.parse('{ "title" : "mytitle1", "data" : "my data 1" }');
-    var validJSON2 = JSON.parse('{ "title" : "mytitle2", "data" : "my data 12" }');
-    var validJSON3 = JSON.parse('{ "title" : "mytitle3", "data" : "my data 123" }');
+    var validJSON1 = JSON.stringify(JSON.parse('{ "title" : "mytitle1", "data" : "my data 1" }'));
+    var validJSON2 = JSON.stringify(JSON.parse('{ "title" : "mytitle2", "data" : "my data 12" }'));
+    var validJSON3 = JSON.stringify(JSON.parse('{ "title" : "mytitle3", "data" : "my data 123" }'));
 
-    var invalidJSON1 = JSON.parse('{ "title" : "", "data" : "my data 123" }');
-    var invalidJSON2 = JSON.parse('{ "title" : "mytitle3", "data" : "" }');
-    var invalidJSON3 = JSON.parse('{ "title" : "", "data" : "" }');
-    var invalidJSON4 = JSON.parse('{ "notatitle" : "bad title", "notdata" : "bad data" }');
-    var invalidJSON5 = JSON.parse('{ "title" : "atitle", "data" : 123456789 }');
-    var invalidJSON6 = JSON.parse('{ "title" : "anothertitle", "data" : 0}');
+    var invalidJSON1 = JSON.stringify(JSON.parse('{ "title" : "", "data" : "my data 123" }'));
+    var invalidJSON2 = JSON.stringify(JSON.parse('{ "title" : "mytitle3", "data" : "" }'));
+    var invalidJSON3 = JSON.stringify(JSON.parse('{ "title" : "", "data" : "" }'));
+    var invalidJSON4 = JSON.stringify(JSON.parse('{ "notatitle" : "bad title", "notdata" : "bad data" }'));
+    var invalidJSON5 = JSON.stringify(JSON.parse('{ "title" : "atitle", "data" : 123456789 }'));
+    var invalidJSON6 = JSON.stringify(JSON.parse('{ "title" : "anothertitle", "data" : 0}'));
 
     it('should test that a given JSON with nonempty title and data fields is treated as valid', function() {
         expect(Database.validJSON(validJSON1)).toBeTruthy();
@@ -267,10 +391,10 @@ describe('REST API Tests', function() {
                   doneFn(this.responseText);
                 }
             };
-            xhr.open("GET", AWS_URL);
+            xhr.open("GET", AWS_URL+ ISRUNNING_URL);
             xhr.send();
 
-            expect(jasmine.Ajax.requests.mostRecent().url).toBe(AWS_URL);
+            expect(jasmine.Ajax.requests.mostRecent().url).toBe(AWS_URL + ISRUNNING_URL);
             expect(doneFn).not.toHaveBeenCalled();
 
             jasmine.Ajax.requests.mostRecent().respondWith({
@@ -282,17 +406,10 @@ describe('REST API Tests', function() {
         });
         it('should test if the backend is running with database.js function call', function() {
             var doneFn = jasmine.createSpy("success");
-
-            Database.isRunning(doneFn);
-
-            thisRequest = jasmine.Ajax.requests.mostRecent();
-            expect(thisRequest.url).toBe(AWS_URL);
+            expect(Database.isRunning()).toBeTruthy();
             expect(doneFn).not.toHaveBeenCalled();
-            expect(thisRequest.method).toBe("GET");
-            thisRequest.respondWith({
-                "status" : 200,
-                "responseText" : "SUCCESS: backend is running" 
-            });
+            expect(jasmine.Ajax.requests.mostRecent().url).toBe(AWS_URL + ISRUNNING_URL);
+            expect(jasmine.Ajax.requests.mostRecent().method).toBe("GET");
         });
     });
 
@@ -300,94 +417,68 @@ describe('REST API Tests', function() {
     describe('storeGrid() tests', function() {
         it('should test adding a grid which is *not* in the database', function() {
             var doneFn = jasmine.createSpy("success");
-            var callbackResult;
-            function testCB(data) {
-                callbackResult = data;
-                console.log("callbackResult is now [" + data + "]");
-            }
             var testGrid = {
                 "title" : "unitTestTestGrid",
                 "data" : "myfakedata123"
             };
-            Database.storeGrid(testGrid, testCB);
+            expect(Database.storeGrid(JSON.stringify(testGrid))).toBeTruthy();
             thisRequest = jasmine.Ajax.requests.mostRecent();
-            expect(thisRequest.url).toBe(AWS_URL + "api/v1/add-grid/");
+            expect(thisRequest.url).toBe(AWS_URL + STOREGRID_URL);
             expect(doneFn).not.toHaveBeenCalled();
             expect(thisRequest.method).toBe("POST");
-            thisRequest.respondWith({
-                "status" : 200,
-                "responseText" : "SUCCESS: backend is running" 
-            });
-            expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/add-grid/");
-        });
-        it('should test adding a grid which *is* already in the database', function() {
-            var callbackResult;
-            function testCB(data) {
-                callbackResult = data;
-                console.log("callbackResult is now [" + data + "]");
-            }
-            var newTestGrid = {
-                "title" : "newUnitTestTestGrid",
-                "data" : "myfakedata123"
-            };
-            spyOn($, "ajax");
-            expect(Database.storeGrid(newTestGrid, testCB)).toBeTruthy();
-            expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/add-grid/");
-            expect(Database.storeGrid(newTestGrid, testCB)).toBeFalsy();
-            expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/add-grid/");
         });
         it('should test adding a bad grid', function() {
-            var callbackResult;
-            function testCB(data) {
-                callbackResult = data;
-                console.log("callbackResult is now [" + data + "]");
-            }
-            spyOn($, "ajax");
+            var doneFn = jasmine.createSpy("success");
             var badTestGrid = {
                 "notATitle" : "badTitle",
                 "notData" : "notData"
             };
-            expect(Database.storeGrid(badTestGrid, testCB)).toBeFalsy();
-            expect($.ajax).not.toHaveBeenCalled();
+            expect(function() {
+                Database.storeGrid(JSON.stringify(badTestGrid))
+            }).toThrowError();
+            expect(doneFn).not.toHaveBeenCalled();
         });
     });
 
     // testing deleting different grids from database
     describe('deleteGrid() tests', function() {
         it('should test deleting a grid which *is* in the database', function() {
-            var callbackResult;
-            function testCB(data) {
-                callbackResult = data;
-                console.log("callbackResult is now [" + data + "]");
-            }
-            spyOn($, "ajax");
+            var doneFn = jasmine.createSpy("success");
             var deleteGrid = {
                 "title" : "unitTestDeleteGrid",
                 "data" : "mydata123"
             };
-            expect(Database.storeGrid(deleteGrid, testCB)).toBeTruthy();
-            expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/add-grid/");
+            expect(Database.storeGrid(JSON.stringify(deleteGrid))).toBeTruthy();
+            expect(jasmine.Ajax.requests.mostRecent().url).toEqual(AWS_URL + STOREGRID_URL);
             expect(Database.deleteGrid(deleteGrid.title)).toBeTruthy();
-            expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/delete-grid/" + deleteGrid.title);
+            expect(jasmine.Ajax.requests.mostRecent().url).toEqual(AWS_URL + DELETEGRID_URL + deleteGrid.title);
+            expect(doneFn).not.toHaveBeenCalled();
         });
         it('should test deleting a grid which is *not* in the database', function() {
-            spyOn($, "ajax");
+            var doneFn = jasmine.createSpy("success");
             var badDeleteGridTitle = "titleOfGridWhichIsNotInDatabase";
-            expect(Database.deleteGrid(badDeleteGridTitle)).toBeFalsy();
-            expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/delete-grid/" + badDeleteGridTitle);
+            Database.deleteGrid(badDeleteGridTitle).then(function(result) {
+                expect(result).toBeFalsy();
+                doneFn();
+            });
+            expect(jasmine.Ajax.requests.mostRecent().url).toEqual(AWS_URL + DELETEGRID_URL + badDeleteGridTitle);
+            expect(doneFn).not.toHaveBeenCalled();
         });
         it('should test deleting a grid given an empty string title', function() {
-            spyOn($, "ajax");
+            var doneFn = jasmine.createSpy("success");
             var emptyTitle = "";
-            expect(Database.deleteGrid(emptyTitle)).toBeFalsy();
-            expect($.ajax).not.toHaveBeenCalled();
+            Database.deleteGrid(emptyTitle).then(function(result) {
+                expect(result).toBeFalsy();
+                done();
+            });
+            expect(doneFn).not.toHaveBeenCalled();
         });
     });
 
     // testing updating different grids in database
     describe('updateGrid() tests', function() {
         it('should update a grid which *is* in the database', function() {
-            spyOn($, "ajax");
+            var doneFn = jasmine.createSpy("success");
             var updateTestGrid = {
                 "title" : "newUnitTestUpdateGrid",
                 "data" : "myfakedata123"
@@ -396,67 +487,73 @@ describe('REST API Tests', function() {
                 "title" : "newUnitTestUpdateGrid2",
                 "data" : "myfakedata123"
             };
-            expect(Database.addGrid(updateTestGrid)).toBeTruthy();
-            expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/add-grid/");
-            expect(Database.updateGrid(updateTestGrid)).toBeTruthy();
-            expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/update-grid/");
-            expect(Database.updateGrid(updateTestGrid2)).toBeTruthy();
-            expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/update-grid/");
+            Database.storeGrid(JSON.stringify(updateTestGrid));
+            expect(jasmine.Ajax.requests.mostRecent().url).toEqual(AWS_URL + "api/v1/add-grid/");
+            Database.updateGrid(JSON.stringify(updateTestGrid));
+            expect(jasmine.Ajax.requests.mostRecent().url).toEqual(AWS_URL + "api/v1/update-grid/");
+            Database.updateGrid(JSON.stringify(updateTestGrid2));
+            expect(jasmine.Ajax.requests.mostRecent().url).toEqual(AWS_URL + "api/v1/update-grid/");
+            expect(doneFn).not.toHaveBeenCalled();
         });
         it('should attempt to update a grid which is *not* in the database', function() {
-            spyOn($, "ajax");
+            var doneFn = jasmine.createSpy("success");
             var updateTestGrid = {
                 "title" : "updateTestGridWhichIsNotInDatabase",
                 "data" : "myfakedata123"
             };
-            expect(Database.updateGrid(updateTestGrid)).toBeFalsy();
-            expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/update-grid/");
+            Database.updateGrid(JSON.stringify(updateTestGrid));
+            expect(jasmine.Ajax.requests.mostRecent().url).toEqual(AWS_URL + "api/v1/update-grid/");
+            expect(doneFn).not.toHaveBeenCalled();
         });
         it('should attempt to update a grid with invalid data', function() {
-            spyOn($, "ajax");
+            var doneFn = jasmine.createSpy("success");
             var badUpdateTestGrid = {
                 "nottitle" : "updateTestGridWhichIsNotInDatabase",
                 "notdata" : "myfakedata123"
             };
-            expect(Database.updateGrid(badUpdateTestGrid)).toBeFalsy();
-            expect($.ajax).not.toHaveBeenCalled();
+            expect(Database.updateGrid(JSON.stringify(badUpdateTestGrid))).toThrowError();
+            expect(doneFn).not.toHaveBeenCalled();
         });
     });
 
     // testing retrieving different grids from database
     describe('getByTitle() tests', function() {
         it('should retrieve a grid which *is* in the database', function() {
-            spyOn($, "ajax");
+            var doneFn = jasmine.createSpy("success");
             var addTestGrid = {
                 "title" : "addTestGrid",
                 "data" : "myfakedata123"
             };
-            expect(Database.addGrid(addTestGrid)).toBeTruthy();
-            expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/add-grid/");
-            expect(Database.getBytTitle(addTestGrid.title)).toBeTruthy();
-            expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/search-grid/" + addTestGrid.title);
+            Database.addGrid(JSON.stringify(addTestGrid));
+            expect(jasmine.Ajax.requests.mostRecent().url).toEqual(AWS_URL + "api/v1/add-grid/");
+            Database.getBytTitle(addTestGrid.title);
+            expect(jasmine.Ajax.requests.mostRecent().url).toEqual(AWS_URL + "api/v1/search-grid/" + addTestGrid.title);
+            expect(doneFn).not.toHaveBeenCalled();
         });
         it('should retrieve a grid which is *not* in the database', function() {
-            spyOn($, "ajax");
+            var doneFn = jasmine.createSpy("success");
             var badAddTestGrid = {
                 "title" : "badAddTestGrid",
                 "data" : "myfakedata123"
             };
-            expect(Database.getBytTitle(badAddTestGrid.title)).toBeFalsy();
-            expect($.ajax.calls.mostRecent().args[0]["url"]).toEqual(AWS_URL + "api/v1/search-grid/" + badAddTestGrid.title);
+            Database.getBytTitle(JSON.stringify(badAddTestGrid.title));
+            expect(jasmine.Ajax.requests.mostRecent().url).toEqual(AWS_URL + "api/v1/search-grid/" + badAddTestGrid.title);
+            expect(doneFn).not.toHaveBeenCalled();
         });
         it('should attempt to retrieve a grid which *is* in the database', function() {
-            spyOn($, "ajax");
+            var doneFn = jasmine.createSpy("success");
             var emptyTitle = "";
-            expect(Database.getByTitle(emptyTitle)).toBeFalsy();
-            expect($.ajax).not.toHaveBeenCalled();
+            Database.getByTitle(JSON.stringify(emptyTitle));
+            expect(jasmine.Ajax.requests.mostRecent().url).toEqual(AWS_URL + "api/v1/search-grid/" + emptyTitle);
+            expect(doneFn).not.toHaveBeenCalled();
         });
     });
     describe('getAllTitles() tests', function() {
-        it('', function() {
-            spyOn($, "ajax");
-            expect(Database.getAllTitles()).toBeTruthy();
-            expect($.ajax).toHaveBeenCalled();
+        it('should get titles from the database', function() {
+            var doneFn = jasmine.createSpy("success");
+            Database.getAllTitles();
+            expect(jasmine.Ajax.requests.mostRecent().url).toEqual(AWS_URL + "api/v1/query-all-titles/");
+            expect(doneFn).not.toHaveBeenCalled();
         });
     });
 });
