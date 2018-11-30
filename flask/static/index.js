@@ -774,10 +774,11 @@ Enemy.prototype.getDirection = function(){
 
 //Changes direction
 Enemy.prototype.changeDirection = function(){
-    if(this.direction == "right")
+    if(this.direction === "right"){
         this.direction = "left";
-    else if(this.direction == "left")
+    } else if(this.direction === "left"){
         this.direction = "right";
+    }
 }
 
 //Setter for direction
@@ -862,6 +863,7 @@ getData(title).then((data) => {
         var height = canvas.height;
         var wrap = document.getElementById("wrap");
 
+        console.log("elements", elements);
         // set win conditions to false if they were chosen by designer
         var victory = false;
         var npcCondition = true;
@@ -1249,7 +1251,7 @@ getData(title).then((data) => {
 
     // detect key presses
     function keyDownHandler(event, gameState) {
-        if(event.keyCode == 32){
+        if(event.keyCode == 81){
             if(gameState.pc.equippedItem != null) {
                 gameState.itemUsed = true;
             }
@@ -1436,7 +1438,7 @@ function showInventory(gameState){
 
     function testNPCCondition(characters){
         for(i=0; i<characters.length; i++){
-            if(characters[i] instanceof NPC && !characters[i].spokenTo){
+            if((characters[i] instanceof NPC) && !characters[i].spokenTo){
                 return false;
             }
         }
@@ -1538,6 +1540,7 @@ module.exports.getData = getData;
 
 /*note: Environment has flag for whether its solid or not*/
 const Element = require('./element.js');
+const Effect = require('./effect.js');
 
 /*
 |------------------------------------------------------------------------------
@@ -1545,7 +1548,7 @@ const Element = require('./element.js');
 |------------------------------------------------------------------------------
 */
 function Environment(solid, pos, url, scale, hbox, eff){
-  if (solid == 1 || solid == 0) {
+  if (solid == 0 || solid == 1) {
       Element.call(this, pos, url, scale, hbox);
       this.solid = solid;
       this.effect = eff;
@@ -1559,7 +1562,7 @@ Environment.prototype = Object.create(Element.prototype);
 
 Environment.prototype.Environment = function(){
     Element.call(this, new vector(0,0), null, new vector(50,50), new vector (50,50));
-    this.solid= true;
+    this.solid= 1;
     this.effect = new Effect("heal", 2);;
 };
 
@@ -1570,14 +1573,15 @@ Environment.prototype.getSolid = function(){
 
 //Setter for solid
 Environment.prototype.setSolid = function(bool){
-  if (solid == 1 || solid == 0){
+  if (bool == 1 || bool == 0){
       this.solid = bool;
   }
 };
 
 //Setter for effect
 Environment.prototype.setEffect= function(eft){
-    this.effect = eft;
+    if(eft instanceof Effect)
+        {this.effect = eft;}
 };
 
 //Getter for effect
@@ -1587,7 +1591,7 @@ Environment.prototype.getEffect=function(){
 
 module.exports = Environment;
 
-},{"./element.js":4}],8:[function(require,module,exports){
+},{"./effect.js":3,"./element.js":4}],8:[function(require,module,exports){
 /*
 |------------------------------------------------------------------------------
 | Item Class
@@ -1760,7 +1764,12 @@ const Environment = require('./environment.js');
 const Vector = require('./utility.js');
 
 function JSONtoElements(data){
+    if(data == '{}'){
+        return {"elements": [],
+                "backgroundUrl": '' }; 
+    }
     var dataobj= JSON.parse(data);
+
     i=0;
     var elementarray= [];
     var backgroundurl= "https://i.pinimg.com/originals/fe/78/bb/fe78bbb25f35d56b502327fb6d43b309.png"; //dataobj.backgroundImage";
@@ -1821,6 +1830,7 @@ function JSONtoElements(data){
                 elementarray.push(element);
             }
         }
+        
         return {"elements": elementarray,
                 "backgroundUrl": backgroundurl };
     }
@@ -1849,25 +1859,20 @@ const Vector = require('./utility.js');
 |------------------------------------------------------------------------------
 */
 function Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed, mvspd, grav, dir){
+    if((itm instanceof Item) && (Array.isArray(inv)) && (dir instanceof Vector)){
     Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspd, grav);
     this.equippedItem = itm;
     this.inventory = inv;
     this.sinceTile = 50;
     this.direction = dir;
-}
+    
+    } else
+        return {};
+};
 
 Player.prototype = Object.create(Character.prototype);
 Player.prototype.constructor = Player;
 
-//empty constructor. void
-Player.prototype.Player = function(){
-    //create enemy with loc = (0,0), maxhealth = 10
-    // health = 10, status = 1, item = null, size 50x50, speed 10x10
-
-    Character.call(this, vector(0,0), 10, 10, 1, vector(50,50), vector(33,13));
-    this.equippedItem = null;
-    this.inventory = [];
-}
 
 //Getter for inventory
 Player.prototype.getInventory= function(){
@@ -1875,9 +1880,17 @@ Player.prototype.getInventory= function(){
 }
 
 //Setter for inventory
-Player.prototype.setInventory = function(arr)
-{
-    this.inventory = arr;
+Player.prototype.setInventory = function(arr){
+    if(Array.isArray(arr)){
+        items= true;
+        for(i=0; i<arr.length; i++){
+            if(!(arr[i] instanceof Item))
+                items=false;
+        }
+        if(items){
+        this.inventory = arr;
+        }
+    }
 }
 
 //Getter for an owned item
@@ -1967,14 +1980,12 @@ Vector.prototype.plus = function(vec) {
 	}
 }
 
-//Multiply the vector times a number
+//Multiply the vector times a number or a vector
 Vector.prototype.times = function(num) {
-	return new Vector (this.x * num, this.y * num);
-}
-
-//Multiply the vector times a vector
-Vector.prototype.times = function(vec) {
-	return new Vector (this.x * vec.x, this.y * vec.y);
+	if(typeof(num) == 'number')
+	    return new Vector (this.x * num, this.y * num);
+	else if(num instanceof Vector)
+	    return new Vector (this.x * num.x, this.y * num.y);
 }
 
 module.exports = Vector;
