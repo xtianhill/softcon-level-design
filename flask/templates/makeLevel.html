@@ -21,6 +21,88 @@
 
 	<!-- Get the highest 1.X version of jQuery from CDN. Required for ready() function. -->
 	<script src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
+</section>
+  <aside class = "inventory">
+  <div class="inventory_title">Options</div>
+  <div id="inventory_box" class="inventory_box">
+    <input type= "image" id = "editpic" class="editpic" src = "https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg" style= "height: 50px; width: 50px; display:none;">
+  </div>
+<div class="environmenteditor" id="environmenteditor" style="display:none">
+  <select name="selector2" id="solid-selector" class= "solid-selector">
+  <option value=1>solid</option>
+  <option value=0>not solid</option>
+  </select>
+
+  <select name= "enviroeffectselector"id="environ-effect-selector" class="environ-effect-selector">
+  <option value="heal">Heal</option>
+  <option value="damage">Damage</option>
+  </select>
+</div>
+
+<div class="playereditor" id="playereditor" style="display:none">
+  <div class="maxhealthselector">
+             <form action="/action_page.php">
+               Enter a max health between 1 and 1000:
+               <input type="number" name="health" min="1" max="1000" value="100">
+             </form>
+           </div>
+
+           <select name= "selector3"id="speed-selector" class="speed-selector">
+           <option value="high">High speed</option>
+           <option value="medium">Medium speed</option>
+           <option value="low">Low speed</option>
+           </select>
+           <div class="gravity-selector" id="gravity-selector">
+           <form>
+             Gravity:<br>
+             <input type="radio" name="color" value="high">high
+             <br>
+             <input type="radio" name="color" value="medium" checked>medium
+             <br>
+             <input type="radio" name="color" value="low">low
+             <br>
+           </form>
+           </div>
+           <div class="customsprite">
+           <form>
+                      sprite url:<br>
+                     <input type="url" name="spriteurl" id="myspriteurl">
+
+                   </form>
+           </div>
+           <div class= "changebutton"id ="changebutton">
+             <button>change sprite</button>
+           </div>
+
+</div>
+
+<div class="itemeditor" id="itemeditor" style="display:none">
+  <select name= "selector1"id="effect-selector" class="effect-selector">
+  <option value="heal">Heal</option>
+  <option value="damage">Damage</option>
+</select>
+</div>
+<div class="enemyeditor" id="enemyeditor" style= "display:none">
+<div class="enemydamageselector">
+           <form>
+             damage (1 - 100):
+             <br>
+             <input type="number" name="enemydamage" min="1" max="1000" value="5">
+           </form>
+         </div>
+       </div>
+<div class="npceditor" id="npceditor" style= "display:none">
+  <div class="npcmessager">
+  <form>
+             message:<br>
+            <input type="text" name="npcmessage" value="hi friend!">
+          </form>
+  </div>
+  </div
+
+  <ul id="inventory"></ul>
+</aside>
+</section>
 </head>
 <body>
 
@@ -39,71 +121,9 @@
            <input type= "image" id = "itembutton" class= "itembutton" src = "https://66.media.tumblr.com/4a8e88c9194d00c4e2e14d62f2a9dc76/tumblr_pi5t840NIu1u9vozfo1_250.png" style= "height: 50px; width: 50px">
            <input type= "image" id = "enemybutton" class= "enemybutton" src = "https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png" style= "height: 50px; width: 50px">
            <input type= "image" id= "npcbutton" class="npcbutton" src= "https://66.media.tumblr.com/18b1dcddb1e6de2d56f2bbc16e368af5/tumblr_pi5sz2UwpH1u9vozfo1_250.png" style= "height: 50px; width: 50px">
-<div class="maxhealthselector">
-           <form action="/action_page.php">
-             Enter a max health between 1 and 1000:
-             <input type="number" name="health" min="1" max="1000" value="100">
-           </form>
-         </div>
-
-  <select name= "selector1"id="effect-selector" class="effect-selector">
-  <option value="heal">Heal</option>
-  <option value="damage">Damage</option>
-</select>
-
-<select name= "selector3"id="speed-selector" class="speed-selector">
-<option value="high">High speed</option>
-<option value="medium">Medium speed</option>
-<option value="low">Low speed</option>
-</select>
 
 
-<select name="selector2" id="solid-selector" class= "solid-selector">
-<option value=1>solid</option>
-<option value=0>not solid</option>
-</select>
 
-<select name= "enviroeffectselector"id="environ-effect-selector" class="environ-effect-selector">
-<option value="heal">Heal</option>
-<option value="damage">Damage</option>
-</select>
-
-<div class="gravity-selector" id="gravity-selector">
-<form action="/action_page.php">
-  Gravity:<br>
-  <input type="radio" name="color" value="high">high
-  <br>
-  <input type="radio" name="color" value="medium" checked>medium
-  <br>
-  <input type="radio" name="color" value="low">low
-  <br>
-</form>
-</div>
-
-<div class="enemydamageselector">
-           <form>
-             damage (1 - 100):
-             <br>
-             <input type="number" name="enemydamage" min="1" max="1000" value="5">
-           </form>
-         </div>
-<div class="npcmessager">
-<form>
-           message:<br>
-          <input type="text" name="npcmessage" value="hi friend!">
-        </form>
-</div>
-
-<div class="customsprite">
-<form>
-           sprite url:<br>
-          <input type="url" name="spriteurl" id="myspriteurl">
-        
-        </form>
-</div>
-<div class= "changebutton"id ="changebutton">
-  <button>change sprite</button>
-</div>
 
 
 </div>
