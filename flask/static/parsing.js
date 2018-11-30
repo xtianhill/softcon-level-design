@@ -41,6 +41,7 @@ function JSONtoElements(data){
                 if (temp.name == "Environment"){
                     var eff = new Effect(dataobj.objects[i].effect, 1); // new Effect("damage", 1);
                     var status = dataobj.objects[i].status;
+                    console.log("status", status);
                     element = new Environment(status,pos,url,sz,hitbox,eff);
                 }
                 else if (temp.name == "Item"){
