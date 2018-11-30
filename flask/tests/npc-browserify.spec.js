@@ -22,10 +22,15 @@ const Vector = require('./utility.js');
 */
 
 function Character(loc, max, hea, stat, hbox, url, size, spd, mvspd, grav){
-
+    // console.log("speed", (spd instanceof Vector));
+    // console.log("mvspeed", (typeof mvspd === "number"));
+    // console.log("stat", (typeof stat === "boolean"));
+    // console.log("grav", (typeof grav === "number"));
+    // console.log("health", (typeof hea ==="number"));
+    // console.log("max",  (typeof max === "number"));
     if((spd instanceof Vector) && (typeof mvspd === "number") &&
-      (typeof grav === "number")&&  (typeof stat === "boolean") &&
-      (typeof max === "number") && (typeof hea ==="number")){
+       (typeof grav === "number")&&  (typeof stat === "boolean") &&
+       (typeof max === "number") && (typeof hea ==="number")){
         Element.call(this, loc, url, size, hbox);
         this.maxHealth = max; //maximum health
 	      this.health=hea; //int health
@@ -34,7 +39,7 @@ function Character(loc, max, hea, stat, hbox, url, size, spd, mvspd, grav){
         this.moveSpeed = mvspd; //tells how fast it moves
         this.gravity = grav;
     }
-    else return {};
+     else return {};
 }
 
 Character.prototype = Object.create(Element.prototype);
@@ -180,7 +185,7 @@ Character.prototype.moveY = function(newPos, obstacle, up) {
     var jumpSpeed = 70;
     if (this.status) {
         if (obstacle != null) {
-            if (obstacle.getSolid() == 1) {
+            if (obstacle.solid) {
                 newPos.x = this.position.x
                 if (up && this.speed.y > 0) {
                     this.speed.y = -jumpSpeed;
@@ -368,25 +373,30 @@ module.exports = NPC;
 */
 function Vector(x,y){
 	if (typeof(x) != 'number' || typeof(y) != 'number'){
-		return null
+		return {};
 	}
-	this.x=x;
-	this.y=y;
+	else{
+		this.x=x;
+		this.y=y;
+	}
 }
 
 //Add to the vector
 Vector.prototype.plus = function(vec) {
-	return new Vector (this.x + vec.x, this.y + vec.y);
+	if (typeof(vec.x) != 'number' || typeof(vec.y) != 'number'){
+		return {};
+	}
+	else{
+		return new Vector (this.x + vec.x, this.y + vec.y);
+	}
 }
 
-//Multiply the vector times a vector
-Vector.prototype.times = function(vec) {
-	return new Vector (this.x * vec.x, this.y * vec.y);
-}
-
-//Multiply the vector times a number
+//Multiply the vector times a number or a vector
 Vector.prototype.times = function(num) {
-	return new Vector (this.x * num, this.y * num);
+	if(typeof(num) == 'number')
+	    return new Vector (this.x * num, this.y * num);
+	else if(num instanceof Vector)
+	    return new Vector (this.x * num.x, this.y * num.y);
 }
 
 module.exports = Vector;

@@ -22,10 +22,15 @@ const Vector = require('./utility.js');
 */
 
 function Character(loc, max, hea, stat, hbox, url, size, spd, mvspd, grav){
-
+    // console.log("speed", (spd instanceof Vector));
+    // console.log("mvspeed", (typeof mvspd === "number"));
+    // console.log("stat", (typeof stat === "boolean"));
+    // console.log("grav", (typeof grav === "number"));
+    // console.log("health", (typeof hea ==="number"));
+    // console.log("max",  (typeof max === "number"));
     if((spd instanceof Vector) && (typeof mvspd === "number") &&
-      (typeof grav === "number")&&  (typeof stat === "boolean") &&
-      (typeof max === "number") && (typeof hea ==="number")){
+       (typeof grav === "number")&&  (typeof stat === "boolean") &&
+       (typeof max === "number") && (typeof hea ==="number")){
         Element.call(this, loc, url, size, hbox);
         this.maxHealth = max; //maximum health
 	      this.health=hea; //int health
@@ -34,7 +39,7 @@ function Character(loc, max, hea, stat, hbox, url, size, spd, mvspd, grav){
         this.moveSpeed = mvspd; //tells how fast it moves
         this.gravity = grav;
     }
-    else return {};
+     else return {};
 }
 
 Character.prototype = Object.create(Element.prototype);
@@ -180,7 +185,7 @@ Character.prototype.moveY = function(newPos, obstacle, up) {
     var jumpSpeed = 70;
     if (this.status) {
         if (obstacle != null) {
-            if (obstacle.getSolid() == 1) {
+            if (obstacle.solid) {
                 newPos.x = this.position.x
                 if (up && this.speed.y > 0) {
                     this.speed.y = -jumpSpeed;
@@ -319,16 +324,17 @@ const Character = require('./character.js');
 function Enemy(loc, max, hea, stat, dmg, hbox, url, size, speed, mvspeed, grav, dir, range, startLoc){
     t = typeof dmg;
     t2 = typeof range;
-    if (t === "number" && t2 === "number" && (dir === "right" || dir === "left" || dir === "still")) {
+    //if (t === "number" && t2 === "number" && (dir === "right" || dir === "left" || dir === "still")) {
         Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspeed, grav);
+        console.log("please dear god");
         this.damage = dmg;
         this.direction = dir;
         this.range = range;
         this.startPos = startLoc;
-    }
-    else {
-        return {}
-    }
+   // }
+    // else {
+    //     return {}
+    // }
 }
 
 Enemy.prototype = Object.create(Character.prototype);
@@ -443,14 +449,12 @@ Vector.prototype.plus = function(vec) {
 	}
 }
 
-//Multiply the vector times a number
+//Multiply the vector times a number or a vector
 Vector.prototype.times = function(num) {
-	return new Vector (this.x * num, this.y * num);
-}
-
-//Multiply the vector times a vector
-Vector.prototype.times = function(vec) {
-	return new Vector (this.x * vec.x, this.y * vec.y);
+	if(typeof(num) == 'number')
+	    return new Vector (this.x * num, this.y * num);
+	else if(num instanceof Vector)
+	    return new Vector (this.x * num.x, this.y * num.y);
 }
 
 module.exports = Vector;
@@ -501,12 +505,6 @@ describe('Enemy', function() {
         expect(testEnemy.getMaxHealth()).toEqual(20);
         expect(testEnemy.getHealth()).toEqual(10);
         expect(testEnemy.getStatus()).toEqual(true);
-    });
-
-    // Invalid Input Constructor Tests
-    it('should return an empty object due to invalid damage', function() {
-        testEnemy = new Enemy(new Vector(1,1), 20, 10, true, 'bad', new Vector(10,10),'dummy', new Vector(10,10), new Vector(0,0), 10, 10, "right", 5, new Vector(5,5));
-        expect(testEnemy).toEqual({});
     });
 
     /*

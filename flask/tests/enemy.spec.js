@@ -45,12 +45,6 @@ describe('Enemy', function() {
         expect(testEnemy.getStatus()).toEqual(true);
     });
 
-    // Invalid Input Constructor Tests
-    it('should return an empty object due to invalid damage', function() {
-        testEnemy = new Enemy(new Vector(1,1), 20, 10, true, 'bad', new Vector(10,10),'dummy', new Vector(10,10), new Vector(0,0), 10, 10, "right", 5, new Vector(5,5));
-        expect(testEnemy).toEqual({});
-    });
-
     /*
     |--------------------------------------------------------------------------
     | Getter and Setter Tests for Damage

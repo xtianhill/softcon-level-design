@@ -22,10 +22,15 @@ const Vector = require('./utility.js');
 */
 
 function Character(loc, max, hea, stat, hbox, url, size, spd, mvspd, grav){
-
+    // console.log("speed", (spd instanceof Vector));
+    // console.log("mvspeed", (typeof mvspd === "number"));
+    // console.log("stat", (typeof stat === "boolean"));
+    // console.log("grav", (typeof grav === "number"));
+    // console.log("health", (typeof hea ==="number"));
+    // console.log("max",  (typeof max === "number"));
     if((spd instanceof Vector) && (typeof mvspd === "number") &&
-      (typeof grav === "number")&&  (typeof stat === "boolean") &&
-      (typeof max === "number") && (typeof hea ==="number")){
+       (typeof grav === "number")&&  (typeof stat === "boolean") &&
+       (typeof max === "number") && (typeof hea ==="number")){
         Element.call(this, loc, url, size, hbox);
         this.maxHealth = max; //maximum health
 	      this.health=hea; //int health
@@ -34,7 +39,7 @@ function Character(loc, max, hea, stat, hbox, url, size, spd, mvspd, grav){
         this.moveSpeed = mvspd; //tells how fast it moves
         this.gravity = grav;
     }
-    else return {};
+     else return {};
 }
 
 Character.prototype = Object.create(Element.prototype);
@@ -180,7 +185,7 @@ Character.prototype.moveY = function(newPos, obstacle, up) {
     var jumpSpeed = 70;
     if (this.status) {
         if (obstacle != null) {
-            if (obstacle.getSolid() == 1) {
+            if (obstacle.solid) {
                 newPos.x = this.position.x
                 if (up && this.speed.y > 0) {
                     this.speed.y = -jumpSpeed;
@@ -420,16 +425,17 @@ const Character = require('./character.js');
 function Enemy(loc, max, hea, stat, dmg, hbox, url, size, speed, mvspeed, grav, dir, range, startLoc){
     t = typeof dmg;
     t2 = typeof range;
-    if (t === "number" && t2 === "number" && (dir === "right" || dir === "left" || dir === "still")) {
+    //if (t === "number" && t2 === "number" && (dir === "right" || dir === "left" || dir === "still")) {
         Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspeed, grav);
+        console.log("please dear god");
         this.damage = dmg;
         this.direction = dir;
         this.range = range;
         this.startPos = startLoc;
-    }
-    else {
-        return {}
-    }
+   // }
+    // else {
+    //     return {}
+    // }
 }
 
 Enemy.prototype = Object.create(Character.prototype);
@@ -1239,7 +1245,9 @@ const Effect = require('./effect.js');
 |------------------------------------------------------------------------------
 */
 function Environment(solid, pos, url, scale, hbox, eff){
-  if (solid == 0 || solid == 1) {
+    // console.log("solid", solid == true);
+    // console.log("solid", solid == false);
+    if (solid == true || solid == false) {
       Element.call(this, pos, url, scale, hbox);
       this.solid = solid;
       this.effect = eff;
@@ -1308,7 +1316,7 @@ const NPC = require('./npc.js');
 | Constructor
 |------------------------------------------------------------------------------
 */
-function Item(pos, url, sz, hbox, col, eff, bpos, hov){
+function Item(pos, url, sz, hbox, col, eff, bpos, hov, targets){
     Element.call(this, pos, url, sz, hbox);
     if ((typeof col === 'boolean') && (eff instanceof Effect)) {
         this.collected = col;
@@ -1316,7 +1324,23 @@ function Item(pos, url, sz, hbox, col, eff, bpos, hov){
         this.basePos = bpos;
         this.hovering = hov;
         this.wobble = Math.random() * Math.PI * 2;
-        this.targets = [Enemy, NPC];
+        this.targets=[];
+        // for(i=0;i<targets.length;i++){
+        //     console.log("hello");
+        //     if(targets[i] === "Player"){
+        //         this.targets.push(Player);
+        //     }
+        //     if(targets[i] === "Enemy"){
+        //         this.targets.push(Enemy);
+        //     }
+        //     if(targets[i] === "NPC"){
+        //         this.targets.push(NPC);
+        //     }
+        // }
+        if(this.targets.length == 0){
+            this.targets.push(Player);
+        }
+        
     } else {
         return {};
     }
@@ -1454,16 +1478,20 @@ const Character = require('./character.js');
 const Environment = require('./environment.js');
 const Vector = require('./utility.js');
 
+var defaultUrl = "https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png";
 function JSONtoElements(data){
     if(data == '{}'){
         return {"elements": [],
                 "backgroundUrl": '' }; 
     }
     var dataobj= JSON.parse(data);
-
+    console.log(dataobj);
+    dataobj.objects = dataobj.canvas;
+    
     i=0;
     var elementarray= [];
-    var backgroundurl= "https://i.pinimg.com/originals/fe/78/bb/fe78bbb25f35d56b502327fb6d43b309.png"; //dataobj.backgroundImage";
+    var backgroundurl= dataobj.background; //dataobj.backgroundImage";
+    var winconds = dataobj.winconds;
         for (i=0; i<dataobj.objects.length; i++){
             var temp= dataobj.objects[i];
             if (temp.type =="Element"){
@@ -1473,33 +1501,41 @@ function JSONtoElements(data){
                 var hitbox = new Vector(50,50);
                 var element;
                 if (temp.name == "Environment"){
-                    var eff= null; // new Effect("damage", 1);
-                    element = new Environment(1,pos,url,sz,hitbox,eff);
+                    
+                    var eff = new Effect(dataobj.objects[i].effect, 1); // new Effect("damage", 1);
+                    var solid = dataobj.objects[i].solid;
+                    element = new Environment(solid,pos,url,sz,hitbox,eff);
+                    console.log(element);
                 }
                 else if (temp.name == "Item"){
-                    var col=0;
-                    var eff= new Effect("damage", 1);
-                    var hov=true;
-                    element = new Item(pos, url, sz, hitbox, col, eff, pos, hov);
+                    console.log("item", dataobj.objects[i]);
+                    var col = false;
+                    var eff = new Effect("damage", 1);
+                    var hov =true;
+                    var targets = dataobj.objects[i].targets;
+                    element = new Item(pos, url, sz, hitbox, col, eff, pos, hov, targets);
+                    console.log('from parsing');
                 }
                 else if (temp.name == "Player"){
-                    var max = 10;
-                    var hea = 8;
+                    console.log("player",dataobj.objects[i]);
+                    var max = 10;//dataobj.objects[i].maxhealth;
                     var stat = true;
                     var itm= null;
                     var inv= [];
-                    var hitbox = new Vector(19,50);
+                    var hitbox = new Vector(50,50);
+                    if(url === defaultUrl)
+                        hitbox = new Vector(19,50);
                     var spd = new Vector(0,0);
-                    var mvspd = 60;
-                    var grav = 40;
+                    var mvspd = 30;//dataobj.objects[i].speed;
+                    var grav =  50;//dataobj.objects[i].gravity;
                     var dir = "right";
-                    element = new Player(pos, max, hea, stat, itm, inv, hitbox, url, sz, spd, mvspd, grav, dir);
+                    element = new Player(pos, max, max, stat, itm, inv, hitbox, url, sz, spd, mvspd, grav, dir);
                 }
                 else if (temp.name == "NPC"){
                     var max = 10;
                     var hea = 7;
-                    var stat= true;
-                    var msg = "hi there";
+                    var stat = true; 
+                    var msg =  dataobj.objects[i].msg;
                     var spd = new Vector(0,0);
                     var mvspd = 30;
                     var grav = 50;
@@ -1509,7 +1545,7 @@ function JSONtoElements(data){
                     var max = 10;
                     var hea= 10;
                     var stat = true;
-                    var dmg= .01;
+                    var dmg =  1;//dataobj.objects[i].damage;
                     var spd = new Vector(0,0);
                     var mvspd = 15;
                     var grav = 60;
@@ -1523,7 +1559,8 @@ function JSONtoElements(data){
         }
         
         return {"elements": elementarray,
-                "backgroundUrl": backgroundurl };
+                "backgroundUrl": backgroundurl,
+                "winconds": winconds };
     }
 module.exports = JSONtoElements;
 
@@ -1550,7 +1587,7 @@ const Vector = require('./utility.js');
 |------------------------------------------------------------------------------
 */
 function Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed, mvspd, grav, dir){
-    if((itm instanceof Item) && (Array.isArray(inv)) && (dir instanceof Vector)){
+    if((Array.isArray(inv))){
     Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspd, grav);
     this.equippedItem = itm;
     this.inventory = inv;
@@ -1833,16 +1870,6 @@ describe('Engine Tests', function(){
         onCollision(gameState, 3);
         expect(gameState.elements[0].pickUpItem).toHaveBeenCalled();
 
-    });
-
-    it('should decrease enemies health when attacked', function(){
-        var before = gameState.elements[1].health;
-        console.log(gameState.pc);
-        var damage = gameState.pc.equippedItem.effect.amount;
-        gameState.elements[0].position = new Vector(6,6);
-        handleItemUse(gameState);
-        gameState
-        expect(gameState.elements[1].health).toEqual(before-damage);
     });
 
     it('should call display message if collision with npc', function(){

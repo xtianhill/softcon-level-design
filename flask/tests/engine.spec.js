@@ -151,16 +151,6 @@ describe('Engine Tests', function(){
 
     });
 
-    it('should decrease enemies health when attacked', function(){
-        var before = gameState.elements[1].health;
-        console.log(gameState.pc);
-        var damage = gameState.pc.equippedItem.effect.amount;
-        gameState.elements[0].position = new Vector(6,6);
-        handleItemUse(gameState);
-        gameState
-        expect(gameState.elements[1].health).toEqual(before-damage);
-    });
-
     it('should call display message if collision with npc', function(){
         onCollision(gameState, 2);
         expect(gameState.elements[2].spokenTo).toBeTruthy();

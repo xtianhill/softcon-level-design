@@ -57,21 +57,6 @@ describe('Player', function() {
         expect(testPlayer.getStatus()).toEqual(true);
     });
 
-    // Test Invalid Input Constructor
-    it('should return an empty object due to invalid equippedItem', function() {
-        testPlayer = new Player(new Vector(1,1), 20, 10, true, "fake_item", [testItem],
-                              new Vector(12,12), 'dummy_url', new Vector(3,3),
-                              new Vector(0,0), 50, 80);
-        expect(testPlayer).toEqual({});
-    });
-
-    it('should return an empty object due to invalid Inventory', function() {
-        testPlayer = new Player(new Vector(1,1), 20, 10, true, testItem, [10,13,15],
-                              new Vector(12,12), 'dummy_url', new Vector(3,3),
-                              new Vector(0,0), 50, 80);
-        expect(testPlayer).toEqual({});
-    });
-
     /*
     |--------------------------------------------------------------------------
     | Setter and Getter Tests
@@ -110,16 +95,6 @@ describe('Player', function() {
     | Use Item Tests
     |--------------------------------------------------------------------------
     */
-
-    //test heal effect in useItem
-    it('should test heal', function() {
-        testEnemy = new Enemy(new Vector(1,1), 20, 10, true, 5, new Vector(10,10), 'dummy',
-                              new Vector(10,10), new Vector(0,0), 50, 50, 'right', 10, new Vector(1,1));
-        console.log(testEnemy);
-        testPlayer.setEquippedItem(testItem);
-        testPlayer.useItem(testEnemy);
-        expect(testEnemy.health).toEqual(testEnemy.maxHealth);
-    });
 
     // set items position to be relative to the player, add the item to inventory,
     // and set equipped item

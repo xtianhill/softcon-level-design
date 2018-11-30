@@ -22,10 +22,15 @@ const Vector = require('./utility.js');
 */
 
 function Character(loc, max, hea, stat, hbox, url, size, spd, mvspd, grav){
-
+    // console.log("speed", (spd instanceof Vector));
+    // console.log("mvspeed", (typeof mvspd === "number"));
+    // console.log("stat", (typeof stat === "boolean"));
+    // console.log("grav", (typeof grav === "number"));
+    // console.log("health", (typeof hea ==="number"));
+    // console.log("max",  (typeof max === "number"));
     if((spd instanceof Vector) && (typeof mvspd === "number") &&
-      (typeof grav === "number")&&  (typeof stat === "boolean") &&
-      (typeof max === "number") && (typeof hea ==="number")){
+       (typeof grav === "number")&&  (typeof stat === "boolean") &&
+       (typeof max === "number") && (typeof hea ==="number")){
         Element.call(this, loc, url, size, hbox);
         this.maxHealth = max; //maximum health
 	      this.health=hea; //int health
@@ -34,7 +39,7 @@ function Character(loc, max, hea, stat, hbox, url, size, spd, mvspd, grav){
         this.moveSpeed = mvspd; //tells how fast it moves
         this.gravity = grav;
     }
-    else return {};
+     else return {};
 }
 
 Character.prototype = Object.create(Element.prototype);
@@ -180,7 +185,7 @@ Character.prototype.moveY = function(newPos, obstacle, up) {
     var jumpSpeed = 70;
     if (this.status) {
         if (obstacle != null) {
-            if (obstacle.getSolid() == 1) {
+            if (obstacle.solid) {
                 newPos.x = this.position.x
                 if (up && this.speed.y > 0) {
                     this.speed.y = -jumpSpeed;
@@ -208,7 +213,108 @@ Character.prototype.addHealth = function(amount){
 
 module.exports = Character;
 
-},{"./element.js":2,"./utility.js":4}],2:[function(require,module,exports){
+},{"./element.js":3,"./utility.js":5}],2:[function(require,module,exports){
+/*
+|------------------------------------------------------------------------------
+| Effect Class
+|------------------------------------------------------------------------------
+|
+| This file contains the Effect prototype (the javascript equivalent of a
+| class). Effect is used by Environment and Item. It contains data
+| about how an Effect affects the game (e.g. restores health), as well as
+| methods for activating or changing an Effect.
+|
+|------------------------------------------------------------------------------
+*/
+
+/*
+|------------------------------------------------------------------------------
+| Constructors
+|------------------------------------------------------------------------------
+*/
+
+function Effect(title, amount){
+    t = typeof title;
+    t2 = typeof amount;
+    if (t === "string" && t2 === "number" && (title == 'heal' || title == 'damage')){
+    this.effect = title;
+    this.isActive = false;
+    this.amount = amount;
+  }
+  else{
+    return {};
+  }
+}
+
+// Effect.prototype.Effect = function(bool, title){
+//     if (title == 'heal' || title == 'damage'){
+//     this.isActive = bool;
+//     this.effect = title;
+//   }
+//   else{
+//     return {};
+//   }
+// }
+
+/*
+|------------------------------------------------------------------------------
+| Getter and setter functions (functions are the javascript version of
+| class methods).
+|------------------------------------------------------------------------------
+*/
+
+// Getter for isActive
+Effect.prototype.getIsActive = function(){
+    return this.isActive;
+}
+
+// Setter for Effect type
+Effect.prototype.setEffect = function(eft){
+    t = typeof eft;
+    if (t == "object") {
+        this.effect = eft.effect;
+        this.isActive = eft.isActive;
+        this.amount = eft.amount;
+    }
+    else {
+        return null;
+    }
+}
+
+// Getter for  Effect type
+Effect.prototype.getEffect = function(){
+    return this.effect;
+}
+
+// Setter for isActive
+Effect.prototype.activate = function(){
+    this.isActive = true;
+}
+
+// Setter for isActive
+Effect.prototype.deactivate = function(){
+    this.isActive = false;
+}
+
+// Getter for amount
+Effect.prototype.getAmount = function(){
+    return this.amount;
+}
+
+// Setter for amount
+Effect.prototype.setAmount = function(num){
+    t = typeof num;
+    if (t === "number"){
+        this.amount = num;
+    }
+    else{
+        return null;
+    }
+}
+
+module.exports = Effect;
+
+},{}],3:[function(require,module,exports){
 /*
 |------------------------------------------------------------------------------
 | Element Class
@@ -295,7 +401,7 @@ Element.prototype.setHitbox = function(hbx){
 }
 
 module.exports = Element;
-},{"./utility.js":4}],3:[function(require,module,exports){
+},{"./utility.js":5}],4:[function(require,module,exports){
 /*
 |------------------------------------------------------------------------------
 | Environment Class
@@ -310,6 +416,7 @@ module.exports = Element;
 
 /*note: Environment has flag for whether its solid or not*/
 const Element = require('./element.js');
+const Effect = require('./effect.js');
 
 /*
 |------------------------------------------------------------------------------
@@ -317,7 +424,9 @@ const Element = require('./element.js');
 |------------------------------------------------------------------------------
 */
 function Environment(solid, pos, url, scale, hbox, eff){
-  if (solid == 1 || solid == 0) {
+    // console.log("solid", solid == true);
+    // console.log("solid", solid == false);
+    if (solid == true || solid == false) {
       Element.call(this, pos, url, scale, hbox);
       this.solid = solid;
       this.effect = eff;
@@ -331,7 +440,7 @@ Environment.prototype = Object.create(Element.prototype);
 
 Environment.prototype.Environment = function(){
     Element.call(this, new vector(0,0), null, new vector(50,50), new vector (50,50));
-    this.solid= true;
+    this.solid= 1;
     this.effect = new Effect("heal", 2);;
 };
 
@@ -342,14 +451,15 @@ Environment.prototype.getSolid = function(){
 
 //Setter for solid
 Environment.prototype.setSolid = function(bool){
-  if (solid == 1 || solid == 0){
+  if (bool == 1 || bool == 0){
       this.solid = bool;
   }
 };
 
 //Setter for effect
 Environment.prototype.setEffect= function(eft){
-    this.effect = eft;
+    if(eft instanceof Effect)
+        {this.effect = eft;}
 };
 
 //Getter for effect
@@ -359,7 +469,7 @@ Environment.prototype.getEffect=function(){
 
 module.exports = Environment;
 
-},{"./element.js":2}],4:[function(require,module,exports){
+},{"./effect.js":2,"./element.js":3}],5:[function(require,module,exports){
 /*
 |------------------------------------------------------------------------------
 | Vector Class
@@ -396,19 +506,17 @@ Vector.prototype.plus = function(vec) {
 	}
 }
 
-//Multiply the vector times a number
+//Multiply the vector times a number or a vector
 Vector.prototype.times = function(num) {
-	return new Vector (this.x * num, this.y * num);
-}
-
-//Multiply the vector times a vector
-Vector.prototype.times = function(vec) {
-	return new Vector (this.x * vec.x, this.y * vec.y);
+	if(typeof(num) == 'number')
+	    return new Vector (this.x * num, this.y * num);
+	else if(num instanceof Vector)
+	    return new Vector (this.x * num.x, this.y * num.y);
 }
 
 module.exports = Vector;
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 /*
 |------------------------------------------------------------------------------
 | Tests for Character Class
@@ -700,5 +808,5 @@ describe('Character', function() {
     });
 });
 
-},{"../static/character.js":1,"../static/environment.js":3,"../static/utility.js":4}]},{},[5])(5)
+},{"../static/character.js":1,"../static/environment.js":4,"../static/utility.js":5}]},{},[6])(6)
 });

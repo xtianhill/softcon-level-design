@@ -209,7 +209,9 @@ const Effect = require('./effect.js');
 |------------------------------------------------------------------------------
 */
 function Environment(solid, pos, url, scale, hbox, eff){
-  if (solid == 0 || solid == 1) {
+    // console.log("solid", solid == true);
+    // console.log("solid", solid == false);
+    if (solid == true || solid == false) {
       Element.call(this, pos, url, scale, hbox);
       this.solid = solid;
       this.effect = eff;
@@ -289,14 +291,12 @@ Vector.prototype.plus = function(vec) {
 	}
 }
 
-//Multiply the vector times a number
+//Multiply the vector times a number or a vector
 Vector.prototype.times = function(num) {
-	return new Vector (this.x * num, this.y * num);
-}
-
-//Multiply the vector times a vector
-Vector.prototype.times = function(vec) {
-	return new Vector (this.x * vec.x, this.y * vec.y);
+	if(typeof(num) == 'number')
+	    return new Vector (this.x * num, this.y * num);
+	else if(num instanceof Vector)
+	    return new Vector (this.x * num.x, this.y * num.y);
 }
 
 module.exports = Vector;

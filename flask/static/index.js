@@ -1794,16 +1794,16 @@ function JSONtoElements(data){
         return {"elements": [],
                 "backgroundUrl": '' }; 
     }
+    console.log("data in paring", data);
     var dataobj= JSON.parse(data);
     console.log(dataobj);
-    dataobj.objects = dataobj.canvas;
+   dataobj.canvas;
     
     i=0;
     var elementarray= [];
     var backgroundurl= dataobj.background; //dataobj.backgroundImage";
-    var winconds = dataobj.winconds;
-        for (i=0; i<dataobj.objects.length; i++){
-            var temp= dataobj.objects[i];
+        for (i=0; i<dataobj.canvas.length; i++){
+            var temp= dataobj.canvas[i];
             if (temp.type =="Element"){
                 var pos = new Vector(temp.left, temp.top);
                 var sz = new Vector(50,50);
@@ -1812,23 +1812,23 @@ function JSONtoElements(data){
                 var element;
                 if (temp.name == "Environment"){
                     
-                    var eff = new Effect(dataobj.objects[i].effect, 1); // new Effect("damage", 1);
-                    var solid = dataobj.objects[i].solid;
+                    var eff = new Effect(dataobj.canvas[i].effect, 1); // new Effect("damage", 1);
+                    var solid = dataobj.canvas[i].solid;
                     element = new Environment(solid,pos,url,sz,hitbox,eff);
                     console.log(element);
                 }
                 else if (temp.name == "Item"){
-                    console.log("item", dataobj.objects[i]);
+                    console.log("item", dataobj.canvas[i]);
                     var col = false;
                     var eff = new Effect("damage", 1);
                     var hov =true;
-                    var targets = dataobj.objects[i].targets;
+                    var targets = dataobj.canvas[i].targets;
                     element = new Item(pos, url, sz, hitbox, col, eff, pos, hov, targets);
                     console.log('from parsing');
                 }
                 else if (temp.name == "Player"){
-                    console.log("player",dataobj.objects[i]);
-                    var max = 10;//dataobj.objects[i].maxhealth;
+                    console.log("player",dataobj.canvas[i]);
+                    var max = 10;//dataobj.canvas[i].maxhealth;
                     var stat = true;
                     var itm= null;
                     var inv= [];
@@ -1836,8 +1836,8 @@ function JSONtoElements(data){
                     if(url === defaultUrl)
                         hitbox = new Vector(19,50);
                     var spd = new Vector(0,0);
-                    var mvspd = 30;//dataobj.objects[i].speed;
-                    var grav =  50;//dataobj.objects[i].gravity;
+                    var mvspd = 30;//dataobj.canvas[i].speed;
+                    var grav =  50;//dataobj.canvas[i].gravity;
                     var dir = "right";
                     element = new Player(pos, max, max, stat, itm, inv, hitbox, url, sz, spd, mvspd, grav, dir);
                 }
@@ -1845,7 +1845,7 @@ function JSONtoElements(data){
                     var max = 10;
                     var hea = 7;
                     var stat = true; 
-                    var msg =  dataobj.objects[i].msg;
+                    var msg =  dataobj.canvas[i].msg;
                     var spd = new Vector(0,0);
                     var mvspd = 30;
                     var grav = 50;
@@ -1855,7 +1855,7 @@ function JSONtoElements(data){
                     var max = 10;
                     var hea= 10;
                     var stat = true;
-                    var dmg =  1;//dataobj.objects[i].damage;
+                    var dmg =  1;//dataobj.canvas[i].damage;
                     var spd = new Vector(0,0);
                     var mvspd = 15;
                     var grav = 60;

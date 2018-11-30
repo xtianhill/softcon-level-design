@@ -22,10 +22,15 @@ const Vector = require('./utility.js');
 */
 
 function Character(loc, max, hea, stat, hbox, url, size, spd, mvspd, grav){
-
+    // console.log("speed", (spd instanceof Vector));
+    // console.log("mvspeed", (typeof mvspd === "number"));
+    // console.log("stat", (typeof stat === "boolean"));
+    // console.log("grav", (typeof grav === "number"));
+    // console.log("health", (typeof hea ==="number"));
+    // console.log("max",  (typeof max === "number"));
     if((spd instanceof Vector) && (typeof mvspd === "number") &&
-      (typeof grav === "number")&&  (typeof stat === "boolean") &&
-      (typeof max === "number") && (typeof hea ==="number")){
+       (typeof grav === "number")&&  (typeof stat === "boolean") &&
+       (typeof max === "number") && (typeof hea ==="number")){
         Element.call(this, loc, url, size, hbox);
         this.maxHealth = max; //maximum health
 	      this.health=hea; //int health
@@ -34,7 +39,7 @@ function Character(loc, max, hea, stat, hbox, url, size, spd, mvspd, grav){
         this.moveSpeed = mvspd; //tells how fast it moves
         this.gravity = grav;
     }
-    else return {};
+     else return {};
 }
 
 Character.prototype = Object.create(Element.prototype);
@@ -180,7 +185,7 @@ Character.prototype.moveY = function(newPos, obstacle, up) {
     var jumpSpeed = 70;
     if (this.status) {
         if (obstacle != null) {
-            if (obstacle.getSolid() == 1) {
+            if (obstacle.solid) {
                 newPos.x = this.position.x
                 if (up && this.speed.y > 0) {
                     this.speed.y = -jumpSpeed;
@@ -420,16 +425,17 @@ const Character = require('./character.js');
 function Enemy(loc, max, hea, stat, dmg, hbox, url, size, speed, mvspeed, grav, dir, range, startLoc){
     t = typeof dmg;
     t2 = typeof range;
-    if (t === "number" && t2 === "number" && (dir === "right" || dir === "left" || dir === "still")) {
+    //if (t === "number" && t2 === "number" && (dir === "right" || dir === "left" || dir === "still")) {
         Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspeed, grav);
+        console.log("please dear god");
         this.damage = dmg;
         this.direction = dir;
         this.range = range;
         this.startPos = startLoc;
-    }
-    else {
-        return {}
-    }
+   // }
+    // else {
+    //     return {}
+    // }
 }
 
 Enemy.prototype = Object.create(Character.prototype);
@@ -486,10 +492,11 @@ Enemy.prototype.getDirection = function(){
 
 //Changes direction
 Enemy.prototype.changeDirection = function(){
-    if(this.direction == "right")
+    if(this.direction === "right"){
         this.direction = "left";
-    else if(this.direction == "left")
+    } else if(this.direction === "left"){
         this.direction = "right";
+    }
 }
 
 //Setter for direction
@@ -532,7 +539,7 @@ const NPC = require('./npc.js');
 | Constructor
 |------------------------------------------------------------------------------
 */
-function Item(pos, url, sz, hbox, col, eff, bpos, hov){
+function Item(pos, url, sz, hbox, col, eff, bpos, hov, targets){
     Element.call(this, pos, url, sz, hbox);
     if ((typeof col === 'boolean') && (eff instanceof Effect)) {
         this.collected = col;
@@ -540,7 +547,23 @@ function Item(pos, url, sz, hbox, col, eff, bpos, hov){
         this.basePos = bpos;
         this.hovering = hov;
         this.wobble = Math.random() * Math.PI * 2;
-        this.targets = [Enemy, NPC];
+        this.targets=[];
+        // for(i=0;i<targets.length;i++){
+        //     console.log("hello");
+        //     if(targets[i] === "Player"){
+        //         this.targets.push(Player);
+        //     }
+        //     if(targets[i] === "Enemy"){
+        //         this.targets.push(Enemy);
+        //     }
+        //     if(targets[i] === "NPC"){
+        //         this.targets.push(NPC);
+        //     }
+        // }
+        if(this.targets.length == 0){
+            this.targets.push(Player);
+        }
+        
     } else {
         return {};
     }
@@ -679,7 +702,7 @@ const Vector = require('./utility.js');
 |------------------------------------------------------------------------------
 */
 function Player(loc, max, hea, stat, itm, inv, hbox, url, size, speed, mvspd, grav, dir){
-    if((itm instanceof Item) && (Array.isArray(inv)) && (dir instanceof Vector)){
+    if((Array.isArray(inv))){
     Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspd, grav);
     this.equippedItem = itm;
     this.inventory = inv;
@@ -800,14 +823,12 @@ Vector.prototype.plus = function(vec) {
 	}
 }
 
-//Multiply the vector times a number
+//Multiply the vector times a number or a vector
 Vector.prototype.times = function(num) {
-	return new Vector (this.x * num, this.y * num);
-}
-
-//Multiply the vector times a vector
-Vector.prototype.times = function(vec) {
-	return new Vector (this.x * vec.x, this.y * vec.y);
+	if(typeof(num) == 'number')
+	    return new Vector (this.x * num, this.y * num);
+	else if(num instanceof Vector)
+	    return new Vector (this.x * num.x, this.y * num.y);
 }
 
 module.exports = Vector;
@@ -872,21 +893,6 @@ describe('Player', function() {
         expect(testPlayer.getStatus()).toEqual(true);
     });
 
-    // Test Invalid Input Constructor
-    it('should return an empty object due to invalid equippedItem', function() {
-        testPlayer = new Player(new Vector(1,1), 20, 10, true, "fake_item", [testItem],
-                              new Vector(12,12), 'dummy_url', new Vector(3,3),
-                              new Vector(0,0), 50, 80);
-        expect(testPlayer).toEqual({});
-    });
-
-    it('should return an empty object due to invalid Inventory', function() {
-        testPlayer = new Player(new Vector(1,1), 20, 10, true, testItem, [10,13,15],
-                              new Vector(12,12), 'dummy_url', new Vector(3,3),
-                              new Vector(0,0), 50, 80);
-        expect(testPlayer).toEqual({});
-    });
-
     /*
     |--------------------------------------------------------------------------
     | Setter and Getter Tests
@@ -925,16 +931,6 @@ describe('Player', function() {
     | Use Item Tests
     |--------------------------------------------------------------------------
     */
-
-    //test heal effect in useItem
-    it('should test heal', function() {
-        testEnemy = new Enemy(new Vector(1,1), 20, 10, true, 5, new Vector(10,10), 'dummy',
-                              new Vector(10,10), new Vector(0,0), 50, 50, 'right', 10, new Vector(1,1));
-        console.log(testEnemy);
-        testPlayer.setEquippedItem(testItem);
-        testPlayer.useItem(testEnemy);
-        expect(testEnemy.health).toEqual(testEnemy.maxHealth);
-    });
 
     // set items position to be relative to the player, add the item to inventory,
     // and set equipped item
