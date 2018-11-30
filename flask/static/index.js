@@ -1749,7 +1749,7 @@ function JSONtoElements(data){
     var dataobj= JSON.parse(data);
     i=0;
     var elementarray= [];
-    var backgroundurl=dataobj.backgroundImage;
+    var backgroundurl= "https://i.pinimg.com/originals/fe/78/bb/fe78bbb25f35d56b502327fb6d43b309.png"; //dataobj.backgroundImage";
         for (i=0; i<dataobj.objects.length; i++){
             var temp= dataobj.objects[i];
             if (temp.type =="Element"){
