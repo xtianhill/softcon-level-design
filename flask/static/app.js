@@ -96,7 +96,7 @@ canvas.loadFromJSON(JSON.parse(json_data), function(obj) {
   console.log(' this is a callback. invoked when canvas is loaded!xxx ');
 });*/
 
-function JSONderulo(object,name,url){
+function JSONderulo(object, name, url){
   var curr_issolid=$('#solid-selector').val();
   var curr_env_effect=$('#environ-effect-selector').val();
   var curr_player_speed= $('#speed-selector').val();
@@ -349,6 +349,9 @@ playersrc=newurl;
       curr_effect=$('#effect-selector').val();
   });
 
+
+
+//THINGS ADDED TO CANVAS
   canvas.on('mouse:down', function(event){
   var msg=$("input[name='npcmessage']").val();
   console.log(msg);
@@ -359,8 +362,36 @@ playersrc=newurl;
     var posX = Math.round((pointer.x-25) / grid) * grid;
     var posY = Math.round((pointer.y-25) / grid) * grid;
     //console.log(posX+", "+posY);
-    var curselected=selectedimg
-  var temp = new fabric.Image(curselected,{
+    var curselected=selectedimg;
+
+    /*var newthing=fabric.Image.fromURL(curr_url,function(img){
+      img.set({'left':  posX,
+      'top':  posY,
+      'hasControls': false,
+      'hasBorders': false,
+      'height': 50,
+      'width': 50,
+      'originX': 'left',
+      'originY': 'top'})
+      canvas.add(img);
+      return img;
+    })*/
+  fabric.Image.fromURL(curr_url,function(img){
+      img.set({'left':  posX,
+      'top':  posY,
+      'hasControls': false,
+      'hasBorders': false,
+      'height': 50,
+      'width': 50,
+      'originX': 'left',
+      'originY': 'top'})
+      canvas.add(img);
+      console.log(img);
+      var tempurl=curr_url;
+     draggable(img,selectedelementtype,tempurl);
+
+    });
+  /*var temp = new fabric.Image(curselected,{
       left:  posX,
       top:  posY,
       hasControls: false,
@@ -370,7 +401,8 @@ playersrc=newurl;
       originX: 'left',
       originY: 'top'
   });
-  canvas.add(temp);
+  */
+  //canvas.add(temp);
 /*  temp.toObject = function() {
   return {type: "Element",
   name: selectedelementtype,
@@ -380,8 +412,7 @@ playersrc=newurl;
   scale: 1
   };
 }*/
-  var tempurl=curr_url;
-  draggable(temp,selectedelementtype,tempurl);
+
 /*  temp.toObject = function() {
   return {type: "Element",
   name: selectedelementtype,
