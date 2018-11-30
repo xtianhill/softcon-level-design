@@ -33,6 +33,7 @@ function Item(pos, url, sz, hbox, col, eff, bpos, hov, targets){
         this.wobble = Math.random() * Math.PI * 2;
         this.targets=[];
         for(i=0;i<targets.length;i++){
+            console.log("hello");
             if(targets[i] === "Player"){
                 this.targets.push(Player);
             }
