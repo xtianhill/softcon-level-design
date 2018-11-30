@@ -531,8 +531,9 @@ document.getElementById("changeenemy").onclick= function(){
 curr_url=newurl;
 }
 
-/*document.getElementById("changebackground").onclick= function(){
+document.getElementById("changebackground").onclick= function(){
   var newurl=$("input[name='newbackground']").val();
+   $('#wrapper').css('background-image', 'url(' + newurl + ')');
   console.log(document.getElementById("wrapper").style);
   //document.getElementById("wrapper").style.background= "url(newurl)";
   console.log(document.getElementById("wrapper").style);
@@ -540,7 +541,7 @@ curr_url=newurl;
   backgroundimg=newurl;
   //console.log("areyouthere god");
 }
-*/
+
 document.getElementById("eraserbutton").onclick= function(){
   eraser=1;
   curr_url=0;
@@ -607,7 +608,7 @@ eraser=0;
 
   }
 
-  /*document.getElementById("backgroundbutton").onclick= function(){
+  document.getElementById("backgroundbutton").onclick= function(){
     document.getElementById("backgroundeditor").style="display:inline"
     document.getElementById("wincondeditor").style="display:none";
     document.getElementById("editpic").style="display: none";
@@ -623,7 +624,7 @@ eraser=0;
     document.getElementById("cursor5").style.visibility="hidden";
     document.getElementById("cursor6").style.visibility="hidden";
 
-  }*/
+  }
 
 document.getElementById("savegrid").onclick= function(){
   var con1=$('#check1').is(':checked');
@@ -639,7 +640,7 @@ document.getElementById("savegrid").onclick= function(){
   if (con3==true){
     winconds.push("NPC");
   }
-  
+
   var title = prompt("Enter the grid title", "title");
   console.log(JSON.stringify(canvas.toJSON()));
   var data=JSON.stringify(canvas.toJSON());
