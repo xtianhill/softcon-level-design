@@ -1,4 +1,13 @@
-/** SIDE menuy bar --options menu **/
+/* Makelevel CSS Table of Contents:
+  * SIDE menu bar
+  * TOP menu bar
+    * BUTTONS in top menu bar
+  * EDITORS: per-element menus that are displayed in side menu bar
+  * CURSORS
+  * WRAPPER element (wraps canvas)
+*/
+
+/** SIDE menu bar --options menu **/
 aside{
   float: right;
   margin-right: 20px;
@@ -33,6 +42,13 @@ aside{
     height: 60px;
     width: 60px;
     border: 5px solid #a3c0f5;
+}
+
+/*editpic is the thumbnail of the element shown in the options menu*/
+.editpic {
+  position:absolute;
+  top:5px;
+  left: 5px;
 }
 
 /** TOP menu bar **/
@@ -270,14 +286,6 @@ aside{
 }
 
 /* **end of editors** */
-
-
-/*editpic is the thumbnail of the element shown in the options menu*/
-.editpic {
-  position:absolute;
-  top:5px;
-  left: 5px;
-}
 
 
 /*cursor styles that change when element is selected*/
