@@ -34,7 +34,7 @@ function Character(loc, max, hea, stat, hbox, url, size, spd, mvspd, grav){
         this.gravity = grav;
     }
     // else return {};
-}
+//}
 
 Character.prototype = Object.create(Element.prototype);
 
