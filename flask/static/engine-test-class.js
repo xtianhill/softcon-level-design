@@ -417,9 +417,10 @@ function onCollision(gameState, i) {
 
             //if item, pick up and remove from elements, display in inventory
              if(gameState.elements[i] instanceof Item){
+                 console.log("hello");
                 gameState.pc.pickUpItem(gameState.elements[i]);
                 gameState.elements.splice(i,1);
-                showInventory(gameState);
+                //showInventory(gameState);
              }
 
              //if enviroment with effect, affect pc
@@ -664,9 +665,13 @@ function testWinConditions(gameState){
 
 function handleItemUse (gameState){
     for(var i=0; i<gameState.characters.length; i++){
+        console.log(gameState.characters[i]);
         if(gameState.characters[i].status){
+            console.log(detectCollision(gameState.characters[i].position, gameState.pc.equippedItem.position,
+                gameState.characters[i], gameState.pc.equippedItem));
             if(detectCollision(gameState.characters[i].position, gameState.pc.equippedItem.position,
                 gameState.characters[i], gameState.pc.equippedItem)){
+                    console.log("HELLO?");
                     gameState.pc.useItem(gameState.characters[i]);
                     return;
             }
@@ -699,3 +704,4 @@ module.exports.update = update;
 module.exports.testNPCCondition = testNPCCondition;
 module.exports.testEndCondition = testEndCondition;
 module.exports.testEnemyCondition = testEnemyCondition;
+module.exports.handleItemUse = handleItemUse;
