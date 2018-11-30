@@ -104,25 +104,71 @@
   <option value="heal">Heal</option>
   <option value="damage">Damage</option>
 </select>
-<div>
+</div>
 <div class="itemstrengthselector">
            <form>
              strength:
              <input type="number" name="amount" min="1" max="100" value="1">
            </form>
          </div>
+  <div class="itemtargets">
+    Item Targets:
+    <br>
+    <form>
+         <input type="checkbox" id="checkbox1" name="target1" value="NPC"> NPC<br>
+           <input type="checkbox"id="checkbox2" name="target2" value="Enemy"> Enemy<br>
+           <input type="checkbox" id="checkbox3" name="target3" value"Player" checked> Player<br>
+         </form>
 </div>
-</div>
-</div>
+
 <div class="enemyeditor" id="enemyeditor" style= "display:none">
+  <div class="customenemy">
+        <form>
+            Enemy url:<br>
+            <input type="url" name="newenemy" id="newenemy">
+
+          </form>
+  </div>
+  <div class= "changeenemy"id ="changeenemy">
+    <button>change Enemy</button>
+  </div>
 <div class="enemydamageselector">
            <form>
-             damage (1 - 100):
+             Damage:(number
              <br>
+              1-100)
+              <br>
              <input type="number" name="enemydamage" min="1" max="1000" value="5">
            </form>
          </div>
+
+         <div class="enemy-gravity-selector" id="enemy-gravity-selector">
+         <form>
+           Gravity:<br>
+           <input type="radio" name="enemygrav" value=70>high
+           <br>
+           <input type="radio" name="enemygrav" value=40 checked>medium
+           <br>
+           <input type="radio" name="enemygrav" value=25>low
+           <br>
+         </form>
+         </div>
+
+         <div class="enemymaxhealthselector">
+                    <form>
+                      Enter a max health between 1 and 1000:
+                      <input type="number" name="enemymaxhealth" min="1" max="1000" value="100">
+                    </form>
+                  </div>
+                  <div class="enemy-speed-selector"> Speed:
+                  <select name= "selector4"id="enemy-speed-selector" >
+                  <option value=50>High speed</option>
+                  <option value=30>Medium speed</option>
+                  <option value=10>Low speed</option>
+                  </select>
+                </div>
        </div>
+
 <div class="npceditor" id="npceditor" style= "display:none">
   <div class="customnpc">
         <form>

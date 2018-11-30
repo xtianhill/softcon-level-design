@@ -104,10 +104,30 @@ function JSONderulo(object, name, url){
   var curr_player_maxhealth= $("input[name='health']").val();
   var curr_item_effect= $('#effect-selector').val();
   var curr_enemy_damage= $("input[name='enemydamage']").val();
+  var curr_enemy_grav= $("input[name='enemygrav']:checked").val();
   var curr_npc_message= $("input[name='npcmessage']").val();
   var curr_item_amount=$("input[name='amount']").val();
   var curr_npc_grav =$("input[name='grav']:checked").val();
   var curr_npc_maxhealth= $("input[name='npcmaxhealth']").val();
+  var curr_enemy_maxhealth= $("input[name='enemymaxhealth']").val();
+  var curr_enemy_speed= $('#enemy-speed-selector').val();
+  var target1=$('#checkbox1').is(':checked');
+  var target2= $('#checkbox2').is(':checked');
+  var target3=$('#checkbox3').is(':checked');
+
+  var curr_target_list= new Array();
+  if (target1==true){
+    console.log("HIIIII");
+    curr_target_list.push("NPC");
+  }
+  if (target2==true){
+    curr_target_list.push("Enemy");
+  }
+  if (target3==true){
+    curr_target_list.push("Player");
+  }
+  console.log(curr_target_list);
+
 switch(name){
   case "Environment":
   object.toObject = function() {
@@ -146,6 +166,7 @@ switch(name){
   scale: 1,
   effect: curr_item_effect,
   amount: curr_item_amount,
+  targets: curr_target_list,
   };
 }
     break;
@@ -158,6 +179,9 @@ switch(name){
   url: url,
   scale: 1,
   damage: curr_enemy_damage,
+  gravity: curr_enemy_grav,
+  maxhealth: curr_enemy_maxhealth,
+  speed: curr_enemy_speed,
   };
 }
     break;
@@ -476,6 +500,15 @@ document.getElementById("changenpc").onclick= function(){
   document.getElementById("npcbutton").src=newurl;
   document.getElementById("npc").src=newurl;
  document.getElementById("cursor5").src=newurl;
+ document.getElementById("editpic").src=newurl;
+curr_url=newurl;
+}
+
+document.getElementById("changeenemy").onclick= function(){
+    var newurl=$("input[name='newenemy']").val();
+  document.getElementById("enemybutton").src=newurl;
+  document.getElementById("enemy").src=newurl;
+ document.getElementById("cursor4").src=newurl;
  document.getElementById("editpic").src=newurl;
 curr_url=newurl;
 }

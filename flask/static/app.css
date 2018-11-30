@@ -81,7 +81,12 @@ aside{
 
 .itemstrengthselector{
   position: absolute;
-  top:30px;
+  top:200px;
+}
+
+.itemtargets{
+  position:absolute;
+  top:220px;
 }
 
 .customitem{
@@ -149,10 +154,36 @@ aside{
   display: block;
 }
 
-.enemydamageselector{
+.customenemy{
   position: absolute;
   top: 120px;
+}
+
+.changeenemy{
+  position: absolute;
+  top: 150px;
+}
+.enemydamageselector{
+  position: absolute;
+  top: 190px;
   display: block;
+}
+
+.enemy-gravity-selector{
+  position: absolute;
+  top: 260px;
+  display: block;
+}
+
+.enemymaxhealthselector{
+  position: absolute;
+  top: 350px;
+
+}
+
+.enemy-speed-selector{
+  position: absolute;
+  top: 410px;
 }
 
 .speed-selector{
