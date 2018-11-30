@@ -15,6 +15,12 @@
 const Element = require('./element.js');
 const Vector = require('./utility.js');
 
+/*
+|------------------------------------------------------------------------------
+| Constructor
+|------------------------------------------------------------------------------
+*/
+
 function Character(loc, max, hea, stat, hbox, url, size, spd, mvspd, grav){
 
     if((spd instanceof Vector) && (typeof mvspd === "number") &&
@@ -34,10 +40,10 @@ function Character(loc, max, hea, stat, hbox, url, size, spd, mvspd, grav){
 Character.prototype = Object.create(Element.prototype);
 
 /*
-|--------------------------------------------------------------------------
-| Getter and setter functions for the Character prototype (the javascript
-| version of class methods).
-|--------------------------------------------------------------------------
+|------------------------------------------------------------------------------
+| Getter and setter functions (functions are the javascript version of
+| class methods).
+|------------------------------------------------------------------------------
 */
 
 // Getter for position
@@ -125,10 +131,10 @@ Character.prototype.setGravity = function(g) {
 }
 
 /*
-|--------------------------------------------------------------------------
+|------------------------------------------------------------------------------
 | Movement-related functions for the Character prototype, wherein much of
 | the physics calculations are performed.
-|--------------------------------------------------------------------------
+|------------------------------------------------------------------------------
 */
 
 // Calculates the hypothetical next x position of a Character given a direction
@@ -146,21 +152,23 @@ Character.prototype.newXPos = function(step, dir) {
 // Checks if a hypothetical next x position of a Character is legal, and if so,
 // updates its position.
 Character.prototype.moveX = function(newPos, obstacle) {
-  if(obstacle != null) {
-      if(obstacle.getSolid() == 0){
-          this.position = newPos;
+    if (this.status) {
+        if (obstacle != null) {
+            if (obstacle.getSolid() == 0) {
+                this.position = newPos;
+            }
         }
-   }
-   else{
-       this.position = newPos;
-     }
+        else {
+            this.position = newPos;
+        }
+    }
 }
 
 // Calculates the hypothetical next y position of a character based on gravity
 Character.prototype.newYPos = function(step) {
   this.speed.y += step * this.gravity;
 
-  var motion = new Vector(0, this.speed.y * step);
+  var motion = new Vector(0, this.speed.y * 2 * step);
   var newPos = this.position.plus(motion);
   return newPos;
 };
@@ -169,27 +177,58 @@ Character.prototype.newYPos = function(step) {
 // updates its position; if it hits the ground stops its motion; if it is on
 // ground and jumps, updates its speed to allow the jump on the next game loop.
 Character.prototype.moveY = function(newPos, obstacle, up) {
-  var jumpSpeed = 70;
-  if(obstacle != null) {
-      if(obstacle.getSolid() == 1){
-          newPos.x = this.position.x
-          if (up && this.speed.y > 0){
-              this.speed.y = -jumpSpeed;
-          } else
-              this.speed.y = 0;
-      }
-    } else
-          this.position = newPos;
+    var jumpSpeed = 70;
+    if (this.status) {
+        if (obstacle != null) {
+            if (obstacle.getSolid() == 1) {
+                newPos.x = this.position.x
+                if (up && this.speed.y > 0) {
+                    this.speed.y = -jumpSpeed;
+                } else
+                    this.speed.y = 0;
+            }
+        } else
+            this.position = newPos;
+    }
 };
+
+Character.prototype.decHealth = function(damage){
+    this.health -= damage;
+    if(this.health <= 0){
+        this.status = false;
+    }
+}
+
+Character.prototype.addHealth = function(amount){
+    this.health += amount;
+    if(this.health > this.maxHealth){
+        this.health = this.maxHealth;
+    }
+}
 
 module.exports = Character;
 
 },{"./element.js":2,"./utility.js":4}],2:[function(require,module,exports){
+/*
+|------------------------------------------------------------------------------
+| Element Class
+|------------------------------------------------------------------------------
+|
+| This file contains the Element prototype (the javascript equivalent of a
+| class). Element has getters and setters for its position, sprite, size, and hitbox.
+|
+|------------------------------------------------------------------------------
+*/
+
 const Vector = require('./utility.js');
 
-/*Element prototype */
 /*note: pos, scl, hitbox are vectors with x and y values */
 
+/*
+|------------------------------------------------------------------------------
+| Constructor
+|------------------------------------------------------------------------------
+*/
 function Element(pos, url, sz, hbox){
 	if(((pos instanceof Vector) && (typeof url === 'string')) && ((sz instanceof Vector) && (hbox instanceof Vector))){
 		this.position = pos; 
@@ -201,40 +240,54 @@ function Element(pos, url, sz, hbox){
 	}
 }
 
+/*
+|------------------------------------------------------------------------------
+| Getter and setter functions (functions are the javascript version of
+| class methods).
+|------------------------------------------------------------------------------
+*/
+//Getter for position
 Element.prototype.getPosition = function(){
 	return this.position;
 }
 
+//Setter for position
 Element.prototype.setPosition = function(pos){
 	if(pos instanceof Vector){
 		this.position = pos;
 	}
 }
 
+//Getter for sprite
 Element.prototype.getSprite = function(){
 	return this.sprite;
 }
 
+//Setter for sprite
 Element.prototype.setSprite = function(url){
 	if(typeof url === 'string'){
 		this.sprite = url;
 	}
 }
 
+//Getter for size
 Element.prototype.getSize = function(){
 	return this.size;
 }
 
+//Setter for size
 Element.prototype.setSize = function(scl){
 	if (scl instanceof Vector){
 		this.size = scl;
 	}
 }
 
+//Getter for Hitbox
 Element.prototype.getHitbox = function(){
 	return this.hitbox;
 }
 
+//Setter for Hitbox
 Element.prototype.setHitbox = function(hbx){
 	if(hbx instanceof Vector){
 		this.hitbox = hbx;
@@ -243,50 +296,108 @@ Element.prototype.setHitbox = function(hbx){
 
 module.exports = Element;
 },{"./utility.js":4}],3:[function(require,module,exports){
-/*Environment prototype*/
+/*
+|------------------------------------------------------------------------------
+| Environment Class
+|------------------------------------------------------------------------------
+|
+| This file contains the Environment prototype (the javascript equivalent of a
+| class). 
+|
+|------------------------------------------------------------------------------
+*/
+
+
 /*note: Environment has flag for whether its solid or not*/
 const Element = require('./element.js');
 
-function Environment(solid, pos, url, scale, hbox){
-  if (typeof solid == "boolean") {
+/*
+|------------------------------------------------------------------------------
+| Constructor
+|------------------------------------------------------------------------------
+*/
+function Environment(solid, pos, url, scale, hbox, eff){
+  if (solid == 1 || solid == 0) {
       Element.call(this, pos, url, scale, hbox);
       this.solid = solid;
+      this.effect = eff;
   }
-  else
+  else{
       return {};
-}
+    }
+};
 
 Environment.prototype = Object.create(Element.prototype);
 
 Environment.prototype.Environment = function(){
     Element.call(this, new vector(0,0), null, new vector(50,50), new vector (50,50));
     this.solid= true;
-}
+    this.effect = new Effect("heal", 2);;
+};
 
+//Getter for solid
 Environment.prototype.getSolid = function(){
     return this.solid;
-}
+};
 
+//Setter for solid
 Environment.prototype.setSolid = function(bool){
-  if (typeof solid == "boolean"){
+  if (solid == 1 || solid == 0){
       this.solid = bool;
   }
-}
+};
+
+//Setter for effect
+Environment.prototype.setEffect= function(eft){
+    this.effect = eft;
+};
+
+//Getter for effect
+Environment.prototype.getEffect=function(){
+    return this.effect;
+};
 
 module.exports = Environment;
 
 },{"./element.js":2}],4:[function(require,module,exports){
-/*Vector class */
+/*
+|------------------------------------------------------------------------------
+| Vector Class
+|------------------------------------------------------------------------------
+|
+| This file contains the Vector prototype (the javascript equivalent of a
+| class). 
+|
+|------------------------------------------------------------------------------
+*/
+
+/*
+|------------------------------------------------------------------------------
+| Constructor
+|------------------------------------------------------------------------------
+*/
 function Vector(x,y){
 	this.x=x;
 	this.y=y;
 }
 
+//Add to the vector
 Vector.prototype.plus = function(vec) {
 	return new Vector (this.x + vec.x, this.y + vec.y);
 }
 
+//Multiply the vector times a vector
+Vector.prototype.times = function(vec) {
+	return new Vector (this.x * vec.x, this.y * vec.y);
+}
+
+//Multiply the vector times a number
+Vector.prototype.times = function(num) {
+	return new Vector (this.x * num, this.y * num);
+}
+
 module.exports = Vector;
+
 },{}],5:[function(require,module,exports){
 /*
 |------------------------------------------------------------------------------
@@ -550,6 +661,31 @@ describe('Character', function() {
         testCharacter.moveY(new Vector(1,41), testEnvironment, true);
         expect(testCharacter.getPosition()).toEqual(new Vector(1, 1));
         expect(testCharacter.getSpeed()).toEqual(new Vector(0,-70));
+    });
+
+    //decHealth Tests
+    it('should decrease health by damage of 3', function(){
+        testCharacter.decHealth(3);
+        expect(testCharacter.getHealth()).toEqual(7);
+        expect(testCharacter.getStatus()).toBeTruthy();
+    });
+
+    it('should try to decrease health to less than zero and character dies', function(){
+        testCharacter.decHealth(11);
+        expect(testCharacter.getStatus()).toBeFalsy();
+    });
+
+    //addHealth Tests
+    it('should increase health by 5', function(){
+        testCharacter.addHealth(5);
+        expect(testCharacter.getHealth()).toEqual(15);
+        expect(testCharacter.getStatus()).toBeTruthy();
+    });
+
+    it('should try to increase health past max and stop at the max', function(){
+        testCharacter.addHealth(85);
+        expect(testCharacter.getHealth()).toEqual(20);
+        expect(testCharacter.getStatus()).toBeTruthy();
     });
 });
 

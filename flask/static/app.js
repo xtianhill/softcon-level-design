@@ -9,6 +9,7 @@ window.onload = function a()
     var curr_effect="heal";
     var canvassrc = "https://d2ujflorbtfzji.cloudfront.net/package-screenshot/4b7e815a-669f-4023-ac73-6c7691fe9a9f_scaled.jpg";
     var playergravity= "medium";
+    var curr_url=0;
   var canvas = new fabric.Canvas('c', { selection: false});
     //canvas.setBackgroundImage(canvassrc);
 
@@ -97,7 +98,7 @@ canvas.loadFromJSON(JSON.parse(json_data), function(obj) {
 
 
 //function that make the buttons actually...buttons.
-function draggable(object, pic, pos, name, url) {
+function draggable(object, pos, name, url) {
   object.toObject = function() {
   return {type: "Element",
   name: name,
@@ -186,7 +187,6 @@ canvas.on('mouseover', function(e) {
 
 
 
-
   $("#gravity-selector").on("change", function () {
       //alert("You choose " + $("input[name='color']:checked").val());
       playergravity=$("input[name='color']:checked").val();
@@ -206,7 +206,7 @@ canvas.on('mouseover', function(e) {
   canvas.on('mouse:down', function(event){
   //  console.log(playergravity);
   //  console.log(issolid);
-  var health= $('#maxhealthselector').val();
+  var health=$("input[name='health']").val();
   console.log(health);
     if (selectedimg!=0 && eraser !=1){
     var pointer = canvas.getPointer(event.e);
@@ -233,7 +233,7 @@ canvas.on('mouseover', function(e) {
   scale: 1
   };
 }*/
-  draggable(temp,  ground, posX,selectedelementtype,groundsrc);
+  draggable(temp, posX,selectedelementtype,curr_url);
 /*  temp.toObject = function() {
   return {type: "Element",
   name: selectedelementtype,
@@ -257,6 +257,7 @@ canvas.on('mouseover', function(e) {
 
 document.getElementById("eraserbutton").onclick= function(){
   eraser=1;
+  curr_url=0;
   document.getElementById("cursor6").style.visibility="visible";
   document.getElementById("cursor").style.visibility="hidden";
   document.getElementById("cursor2").style.visibility="hidden";
@@ -276,6 +277,7 @@ document.getElementById("eraserbutton").onclick= function(){
 document.getElementById("movemode").onclick= function(){
   selectedimg=0;
 selectedelementtype=0;
+curr_url=0;
   /*var cursor= document.getElementById("cursor");
   cursor.style.display="none";
   */
@@ -316,6 +318,7 @@ document.getElementById("save").onclick = function(){
  document.getElementById("groundbutton").onclick = function() {
    selectedimg=ground;
    selectedelementtype="Environment";
+   curr_url=groundsrc;
    document.getElementById("cursor").style.visibility="visible";
    document.getElementById("cursor2").style.visibility="hidden";
    document.getElementById("cursor3").style.visibility="hidden";
@@ -335,6 +338,7 @@ document.getElementById("save").onclick = function(){
  document.getElementById("playerbutton").onclick = function() {
    selectedimg=player;
    selectedelementtype="Player";
+   curr_url=playersrc;
    document.getElementById("cursor2").style.visibility="visible";
    document.getElementById("cursor").style.visibility="hidden";
    document.getElementById("cursor3").style.visibility="hidden";
@@ -354,6 +358,7 @@ document.getElementById("save").onclick = function(){
  document.getElementById("itembutton").onclick = function() {
    selectedimg=coin;
    selectedelementtype="Item";
+   curr_url=coinsrc;
    document.getElementById("cursor3").style.visibility="visible";
    document.getElementById("cursor2").style.visibility="hidden";
    document.getElementById("cursor").style.visibility="hidden";
@@ -373,6 +378,8 @@ document.getElementById("save").onclick = function(){
  document.getElementById("enemybutton").onclick = function() {
    selectedimg=enemy;
    selectedelementtype="Enemy";
+   curr_url=enemysrc;
+
    document.getElementById("cursor4").style.visibility="visible";
    document.getElementById("cursor2").style.visibility="hidden";
    document.getElementById("cursor").style.visibility="hidden";
@@ -392,6 +399,7 @@ document.getElementById("save").onclick = function(){
  document.getElementById("npcbutton").onclick = function() {
    selectedimg=npc;
    selectedelementtype="NPC";
+   curr_url=npcsrc;
    document.getElementById("cursor5").style.visibility="visible";
    document.getElementById("cursor2").style.visibility="hidden";
    document.getElementById("cursor").style.visibility="hidden";

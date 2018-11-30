@@ -24,12 +24,12 @@
 .itembutton{
   position: absolute;
   top:20px;
-  left: 600px;
+  left: 800px;
 }
 
 .effect-selector{
   position: absolute;
-  left:605px;
+  left:800px;
   top: 70px;
 
 }
@@ -41,12 +41,32 @@
 
 }
 
+.environ-effect-selector{
+  position: absolute;
+  left:165px;
+  top: 0px;
+}
+
+.npcmessager{
+  position: absolute;
+  top:70px;
+  left: 1100px;
+}
+
 .gravity-selector{
   position: absolute;
-  left:320px;
+  left:450px;
+  top: 20px;
+  display: block;
+}
+
+.enemydamageselector{
+  position: absolute;
+  left:900px;
   top: 70px;
   display: block;
 }
+
 .speed-selector{
   position: absolute;
   left:310px;
@@ -63,13 +83,13 @@
 .enemybutton{
   position: absolute;
   top:20px;
-  left: 700px;
+  left: 900px;
 }
 
 .npcbutton{
   position: absolute;
   top:20px;
-  left: 800px;
+  left: 1100px;
 }
 
 
