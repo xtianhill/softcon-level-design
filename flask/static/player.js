@@ -77,9 +77,11 @@ Player.prototype.useItem = function(target){
     if(this.status){
         if(this.isTarget(target)){
             if(this.equippedItem.getEffect().effect == "heal" && target.status){
+                console.log("using");
                 target.addHealth(this.equippedItem.getEffect().getAmount());
             }
             else if (this.equippedItem.getEffect().effect == "damage" && target.status){
+                console.log("using2");
                 target.decHealth(this.equippedItem.getEffect().getAmount());
             }
         }
