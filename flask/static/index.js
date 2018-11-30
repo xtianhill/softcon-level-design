@@ -1626,7 +1626,7 @@ const NPC = require('./npc.js');
 | Constructor
 |------------------------------------------------------------------------------
 */
-function Item(pos, url, sz, hbox, col, eff, bpos, hov){
+function Item(pos, url, sz, hbox, col, eff, bpos, hov, targets){
     Element.call(this, pos, url, sz, hbox);
     if ((typeof col === 'boolean') && (eff instanceof Effect)) {
         this.collected = col;
@@ -1634,7 +1634,21 @@ function Item(pos, url, sz, hbox, col, eff, bpos, hov){
         this.basePos = bpos;
         this.hovering = hov;
         this.wobble = Math.random() * Math.PI * 2;
-        this.targets = [Enemy, NPC];
+        for(i=0;i<targets.length;i++){
+            if(targets[i] === "Player"){
+                this.targets.push(Player);
+            }
+            if(targets[i] === "Enemy"){
+                this.targets.push(Enemy);
+            }
+            if(targets[i] === "NPC"){
+                this.targets.push(NPC);
+            }
+        }
+        if(this.targets.length == 0){
+            this.targets.push(Player);
+        }
+        
     } else {
         return {};
     }
@@ -1802,7 +1816,8 @@ function JSONtoElements(data){
                     var col = false;
                     var eff = new Effect("damage", 1);
                     var hov =true;
-                    element = new Item(pos, url, sz, hitbox, col, eff, pos, hov);
+                    var targets = dataobj.objects[i].targets;
+                    element = new Item(pos, url, sz, hitbox, col, eff, pos, hov, targets);
                     console.log('from parsing');
                 }
                 else if (temp.name == "Player"){

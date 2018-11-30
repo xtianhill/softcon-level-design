@@ -49,7 +49,8 @@ function JSONtoElements(data){
                     var col = false;
                     var eff = new Effect("damage", 1);
                     var hov =true;
-                    element = new Item(pos, url, sz, hitbox, col, eff, pos, hov);
+                    var targets = dataobj.objects[i].targets;
+                    element = new Item(pos, url, sz, hitbox, col, eff, pos, hov, targets);
                     console.log('from parsing');
                 }
                 else if (temp.name == "Player"){
