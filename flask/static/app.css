@@ -7,15 +7,39 @@
   * WRAPPER element (wraps canvas)
 */
 
+/** TOP menu bar **/
+header {
+    position: relative;
+    ax-width: 100%;
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 10px;
+    height: 100px;
+    background-color: #f2e6ff;
+    border: 5px solid #a3c0f5;
+    font-family: 'Press Start 2P';
+    font-size: 10px;
+
+}
+
+/** canvas area **/
+section {
+  float: left;
+  margin-left: 20px;
+  margin-top: 5px;
+  width: calc(100% - 270px);
+}
+
 /** SIDE menu bar --options menu **/
 aside{
   float: right;
   margin-right: 20px;
-  margin-top: 20px;
-  width: 150px;
+  margin-top: 5px;
+  width: 200px;
 }
 
-.inventory{
+.options{
   height: 500px;
   position: relative;
   background-color: #f2e6ff;
@@ -25,7 +49,7 @@ aside{
 }
 
 
-.inventory_title {
+.options_title {
     position: absolute;
     margin-top: 10px;
     font-size: 15px;
@@ -35,13 +59,13 @@ aside{
     color: #660066;
 }
 
-.inventory_box {
+.options_box {
     position: absolute;
     margin-top: 40px;
     margin-left: 40px;
     height: 60px;
     width: 60px;
-    border: 5px solid #a3c0f5;
+    border:05px solid #a3c0f5;
 }
 
 /*editpic is the thumbnail of the element shown in the options menu*/
@@ -51,21 +75,7 @@ aside{
   left: 5px;
 }
 
-/** TOP menu bar **/
-.header {
-    position:fixed; top:0; left:0;
-    width: 80%;
-    margin-top: 3%;
-    margin-left: 5%;
-    margin-right: -5%;
-    margin-bottom: 3%;
-    height: 100px;
-    background-color: #f2e6ff;
-    border: 5px solid #a3c0f5;
-    font-family: 'Press Start 2P';
-    font-size: 10px;
 
-}
 
 /** BUTTONS in top menu **/
 
@@ -347,16 +357,25 @@ aside{
 
 /* WRAPPER:  CANVAS is in, sets contains background image for game*/
 .wrapper {
-  width: 80%;
-      height: 500px;
-      background: url("https://i.pinimg.com/originals/fe/78/bb/fe78bbb25f35d56b502327fb6d43b309.png");
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover;
-      border: 5px solid #a3c0f5;
-      margin-top:10%;
-      margin-left: 4%;
-      overflow: auto;
-      position: fixed;
+  max-width: 100%;
+  max-height: 500px;
+  background: url("https://i.pinimg.com/originals/fe/78/bb/fe78bbb25f35d56b502327fb6d43b309.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border: 5px solid #a3c0f5;
+  overflow: auto;
+  position: relative;
+}
 
+footer {
+    clear: both;
+    background-color: #f2e6ff;
+    max-width: 100%;
+    margin-top: 540px;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    border: 5px solid #a3c0f5;
+    font-family: 'Press Start 2P';
 }
