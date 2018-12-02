@@ -1,7 +1,8 @@
 window.onload = function a()
 {
-    //setup
-
+    /* **SETUP **
+      * global variables for state of menu selections and default values
+    */
     var backgroundimg="https://i.pinimg.com/originals/fe/78/bb/fe78bbb25f35d56b502327fb6d43b309.png";
     var selectedimg=0;
     var selectedelementtype=0;
@@ -13,14 +14,14 @@ window.onload = function a()
     var playergravity= "medium";
     var curr_url=0;
     var winconds= new Array();
-  var canvas = new fabric.Canvas('c', { selection: false});
 
-    //canvas.setBackgroundImage(canvassrc);
+    //initialize canvas element
+    var canvas = new fabric.Canvas('c', { selection: false});
 
     var json_data = JSON.stringify(canvas.toDatalessJSON()); //initializing to be used later
 
 
-//drawing the lines of the grid
+/* ** GRID LINES ** */
     var grid = 50;
     for( var i=0; i< (2000/grid);i++){
     var line= new fabric.Line([i*grid,0, i*grid, 500], {stroke:'#a3c0f5', selectable: false, originX: 'center',
@@ -37,24 +38,7 @@ window.onload = function a()
         };
 }
 
-
-//gray rectangle for buttons to go in
-/*var menubox = new fabric.Rect({
-        left: 0,
-        top: 0,
-        fill:  "#96B2E3",
-        width: 600,
-        height: 200,
-        lockRotation: true,
-        selectable: false,
-    });
-canvas.add(menubox);
-menubox.toObject = function() {
-  return { };
-};
-*/
-
-//urls for all the buttons
+/* DEFAULT URLS for all element images */
 var groundsrc = "https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg";
 var playersrc = "https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png";
 var coinsrc= "https://66.media.tumblr.com/f7acf066084d424d5da0c09795fe8483/tumblr_inline_piy8y9FbkJ1ruhpn7_540.png";
@@ -62,46 +46,15 @@ var coinsrc= "https://66.media.tumblr.com/f7acf066084d424d5da0c09795fe8483/tumbl
 var enemysrc= "https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png";
 var npcsrc = "https://66.media.tumblr.com/18b1dcddb1e6de2d56f2bbc16e368af5/tumblr_pi5sz2UwpH1u9vozfo1_250.png";
 
-// function make a button, visually: calls draggable() to make it actually work.
-
-/*function button(url, pos,pic, elementname){
- fabric.Image.fromURL(url, function(img) {
-       var btn =img.set({ top: 25,
-        left: pos,
-        width: 50,
-        height: 50,
-        hasControls: false,
-        hasBorders: false,
-        originX: 'left',
-        originY: 'top',
-        hasRotatingPoint: false,
-    });
-    canvas.add(img);
-    draggable(btn,pic,pos,elementname,url);
-    btn.toObject = function() {
-        return {}; //dont want buttons to show up in JSON sent to makelevel
-    };
-});
-}
 
 
-button(groundsrc,0,ground, "Environment");
-button(playersrc,50,player, "Player");
-button(coinsrc,100, coin, "Item");
-button(enemysrc,150,enemy, "Enemy");
-button(npcsrc,200,npc, "NPC");
-*/
-//ignore these comments for now but dont delete
-//console.log(JSON.stringify(canvas));
-/*
-var json_data = JSON.stringify(canvas.toDatalessJSON());
-//console.log(json_data);
-canvas.loadFromJSON(JSON.parse(json_data), function(obj) {
-  canvas.renderAll();
-  console.log(' this is a callback. invoked when canvas is loaded!xxx ');
-});*/
-
+/* JSONderulo:
+  * what it does: turns canvas objects into JSON objects with custom attributes
+  * checks state of selected buttons and custom image urls using jQuery
+  *called by draggable()
+  */
 function JSONderulo(object, name, url){
+  /* JQUERY to detect currently selected values in per-element menus*/
   var curr_issolid=$('#solid-selector').val();
   var curr_env_effect=$('#environ-effect-selector').val();
   var curr_player_speed= $('#speed-selector').val();
@@ -120,6 +73,7 @@ function JSONderulo(object, name, url){
   var target2= $('#checkbox2').is(':checked');
   var target3=$('#checkbox3').is(':checked');
 
+  /*create array for list of item's targets */
   var curr_target_list= new Array();
   if (target1==true){
     console.log("HIIIII");
@@ -131,21 +85,8 @@ function JSONderulo(object, name, url){
   if (target3==true){
     curr_target_list.push("Player");
   }
-  /*console.log(curr_target_list);
-  var con1=$('#check1').is(':checked');
-  var con2= $('#check2').is(':checked');
-  var con3=$('#check3').is(':checked');
-  if (con1==true){
 
-    winconds.push("End");
-  }
-  if (target2==true){
-    winconds.push("Enemy");
-  }
-  if (target3==true){
-    winconds.push("NPC");
-  }
-*/
+/* custom JSON per-element begins here */
 switch(name){
   case "Environment":
   object.toObject = function() {
@@ -218,144 +159,28 @@ switch(name){
 }
   break;
 default:
-  alert("ummm this should not be happening! check switch statement");
+  alert("ummm this should not be happening! check switch statement");//debugging
 }
 }
 
-//function that make the buttons actually...buttons.
+
 function draggable(object, name, url) {
   JSONderulo(object,name,url);
-/*  var curr_issolid=$('#solid-selector').val();
-  var curr_env_effect=$('#environ-effect-selector').val();
-  var curr_player_speed= $('#speed-selector').val();
-  var curr_player_grav= $("input[name='color']:checked").val();
-  var curr_player_maxhealth= $("input[name='health']").val();
-  var curr_item_effect= $('#effect-selector').val();
-  var curr_enemy_damage= $('input[name=enemydamage]').val();
-  var curr_npc_message= $("input[name='npcmessage']").val();
-switch(name){
-  case "Environment":
-  object.toObject = function() {
-  return {type: "Element",
-    name: name,
-    top:object.top,
-    left: object.left,
-    url: url,
-    scale: 1,
-    solid: curr_issolid,
-    effect: curr_env_effect,
-  };
-}
-    break;
-  case "Player":
-  object.toObject = function() {
-  return {type: "Element",
-  name: name,
-  top:object.top,
-  left: object.left,
-  url: url,
-  scale: 1,
-  speed: curr_player_speed,
-  gravity: curr_player_grav,
-  maxhealth: curr_player_maxhealth,
-  };
-}
-    break;
-  case "Item":
-  object.toObject = function() {
-  return {type: "Element",
-  name: name,
-  top:object.top,
-  left: object.left,
-  url: url,
-  scale: 1,
-  effect: curr_item_effect,
-  };
-}
-    break;
-  case "Enemy":
-  object.toObject = function() {
-  return {type: "Element",
-  name: name,
-  top:object.top,
-  left: object.left,
-  url: url,
-  scale: 1,
-  damage: curr_enemy_damage,
-  };
-}
-    break;
-  case "NPC":
-  object.toObject = function() {
-  return {type: "Element",
-  name: name,
-  top:object.top,
-  left: object.left,
-  url: url,
-  scale: 1,
-  msg: curr_npc_message,
-  };
-}
-  break;
-default:
-  alert("ummm this should not be happening! check switch statement");
-}*/
-
-        object.on('mousedown', function() {
+  object.on('mousedown', function() {
           console.log("hello");
-          /*{
-            var temp = new fabric.Image(pic,{
-                left: pos,
-                top: 25,
-                hasControls: false,
-                hasBorders: false,
-                height: 50,
-                width: 50,
-                originX: 'left',
-                originY: 'top'
-            });*/
-            //canvas.add(temp);
-            //draggable(temp, pic,pos,name,url);
-            //the following determines the json attributes of each thing when added to grid
-            //its generic right now, but should be different for the element types
-            // for ecxample, NPC needs "message"
-            //temp.toObject = function() {
-            //return {type: "button",
-            //};
-//};
+
 if (eraser==1){
   canvas.remove(this);
 }
-        /*if (name == "NPC"){
-        var msg = prompt("Please enter a message for the npc:", "You are under attack!");
-            //actually save the input here
 
-        }
-        if (name == "Item"){
-        var effect = prompt("Please enter an effect for this item:", "Heal");
-            //actually save the input here
-            //ask molly about effects
-        }
-*/
         });
         object.on('mouseup', function() {
             // Remove an event handler
 
-            JSONderulo(object,name,url);
-            /*object.toObject = function() {
-            return {type: "Element",
-            name: name,
-            top:object.top,
-            left: object.left,
-            url: url,
-            scale: 1
-            };
-  };*/
+            //JSONderulo(object,name,url);
+            //console.log("does this even happen");
             this.off('mousedown');
 
-            /*if(this.top <100) {
-               canvas.remove(this);
-            }*/
         });
     }
 
@@ -830,15 +655,5 @@ document.getElementById("save").onclick = function(){
    $(".cursor5").hide();
  });
  }
-
-
-
-
-
-
-
-
-
-
 
  }
