@@ -626,7 +626,7 @@ document.getElementById("save").onclick = function(){
    eraser=0;
    document.getElementById("editpic").src=npcsrc;
    document.getElementById("editpic").style="display:inline; height:50px; width: 50px";
-    document.getElementById("npceditor").style="display: inline";
+   document.getElementById("npceditor").style="display: inline";
    document.getElementById("environmenteditor").style="display: none";
    document.getElementById("playereditor").style="display: none";
    document.getElementById("itemeditor").style="display: none";
@@ -662,7 +662,7 @@ document.getElementById("save").onclick = function(){
 
 
       var hit=detectIntersection(options.target,obj);
-      //console.log(hit);
+      //  the following four lines use a combination of answers posted here https://stackoverflow.com/questions/22591927/snap-edges-of-objects-to-each-other-and-prevent-overlap
     var outerRight = obj.getLeft() + obj.getWidth();
       var outerBottom = obj.getTop()+obj.getHeight();
       var distX = (outerRight / 2) - ((options.target.getLeft() + options.target.getWidth()) / 2);
@@ -690,6 +690,8 @@ function detectIntersection( r1, r2 ) {
 }
 
 function getNewPosition(distX, distY, target, obj) {
+
+  // referencing a combination of answers posted here: https://stackoverflow.com/questions/22591927/snap-edges-of-objects-to-each-other-and-prevent-overlap
     if(Math.abs(distX) > Math.abs(distY)) {
         if (distX > 0) {
             console.log("distx>0");
