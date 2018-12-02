@@ -369,9 +369,15 @@ canvas.on('object:moving', function(options) {
 
 });
 
-canvas.on('mouse:down', function(obj){
-  if (eraser==1){
-  canvas.remove(obj.target);
+canvas.on('mouse:down', function(click){
+  if (eraser==1 && click.target!=undefined){
+  var clicked=JSON.stringify(click.target);
+  var clickedthing=JSON.parse(clicked);
+  if (clickedthing.name=="Player"){
+    hasplayer=0;
+  }
+
+  canvas.remove(click.target);
 }
 
 });
@@ -390,18 +396,18 @@ playersrc=newurl;
 });
 
   $("#gravity-selector").on("change", function () {
-      //alert("You choose " + $("input[name='color']:checked").val());
+
       playergravity=$("input[name='color']:checked").val();
-      //issolid=$('gra-selector').val();
+
   });
 
   $("#solid-selector").on("change", function () {
-    //  alert("You choose " + $('#solid-selector').val());
+
       issolid=$('#solid-selector').val();
   });
 
   $("#effect-selector").on("change", function () {
-    //  alert("You choose " + $('#effect-selector').val());
+
       curr_effect=$('#effect-selector').val();
   });
 
@@ -409,14 +415,14 @@ playersrc=newurl;
 
 //THINGS ADDED TO CANVAS
   canvas.on('mouse:down', function(event){
-
+    console.log(JSON.stringify(event.target));
   if (event.target==undefined){//checks if grid is empty there before adding
     if (selectedimg!=0 && eraser !=1){
     var pointer = canvas.getPointer(event.e);
     var posX = Math.round((pointer.x-25) / grid) * grid;
     var posY = Math.round((pointer.y-25) / grid) * grid;
     var curselected=selectedimg;
-
+    if (!((selectedelementtype=="Player")&&(hasplayer==1))){
   fabric.Image.fromURL(curr_url,function(img){
       img.set({'left':  posX,
       'top':  posY,
@@ -429,8 +435,11 @@ playersrc=newurl;
       canvas.add(img);
       var tempurl=curr_url;
      draggable(img,selectedelementtype,tempurl);
-
+     if (selectedelementtype=="Player"){
+        hasplayer=1;
+    }
     });
+  }
 }
 }
 });
@@ -601,6 +610,11 @@ eraser=0;
   }
 
 document.getElementById("savegrid").onclick= function(){
+  if (hasplayer==0){
+    alert("Uh oh! You must add a player character to your game in order to save.")
+    return;
+  }
+
   var con1=$('#check1').is(':checked');
   var con2= $('#check2').is(':checked');
   var con3=$('#check3').is(':checked');
