@@ -14,6 +14,7 @@ window.onload = function a()
     var curr_url=0;
     var winconds= new Array();
   var canvas = new fabric.Canvas('c', { selection: false});
+
     //canvas.setBackgroundImage(canvassrc);
 
     var json_data = JSON.stringify(canvas.toDatalessJSON()); //initializing to be used later
@@ -301,6 +302,7 @@ default:
 }*/
 
         object.on('mousedown', function() {
+          console.log("hello");
           /*{
             var temp = new fabric.Image(pic,{
                 left: pos,
@@ -367,6 +369,13 @@ canvas.on('object:moving', function(options) {
 
 });
 
+canvas.on('mouse:down', function(obj){
+  if (eraser==1){
+  canvas.remove(obj.target);
+}
+
+});
+
 
 
 $('input[name="spriteurl"]').change(function(){
@@ -400,29 +409,14 @@ playersrc=newurl;
 
 //THINGS ADDED TO CANVAS
   canvas.on('mouse:down', function(event){
-  var msg=$("input[name='npcmessage']").val();
-  console.log(msg);
-//  var health=$("input[name='health']").val();
-  //console.log(health);
+
+  if (event.target==undefined){//checks if grid is empty there before adding
     if (selectedimg!=0 && eraser !=1){
     var pointer = canvas.getPointer(event.e);
     var posX = Math.round((pointer.x-25) / grid) * grid;
     var posY = Math.round((pointer.y-25) / grid) * grid;
-    //console.log(posX+", "+posY);
     var curselected=selectedimg;
 
-    /*var newthing=fabric.Image.fromURL(curr_url,function(img){
-      img.set({'left':  posX,
-      'top':  posY,
-      'hasControls': false,
-      'hasBorders': false,
-      'height': 50,
-      'width': 50,
-      'originX': 'left',
-      'originY': 'top'})
-      canvas.add(img);
-      return img;
-    })*/
   fabric.Image.fromURL(curr_url,function(img){
       img.set({'left':  posX,
       'top':  posY,
@@ -433,43 +427,11 @@ playersrc=newurl;
       'originX': 'left',
       'originY': 'top'})
       canvas.add(img);
-      console.log(img);
       var tempurl=curr_url;
      draggable(img,selectedelementtype,tempurl);
 
     });
-  /*var temp = new fabric.Image(curselected,{
-      left:  posX,
-      top:  posY,
-      hasControls: false,
-      hasBorders: false,
-      height: 50,
-      width: 50,
-      originX: 'left',
-      originY: 'top'
-  });
-  */
-  //canvas.add(temp);
-/*  temp.toObject = function() {
-  return {type: "Element",
-  name: selectedelementtype,
-  top:temp.top,
-  left: temp.left,
-  url: "hi",
-  scale: 1
-  };
-}*/
-
-/*  temp.toObject = function() {
-  return {type: "Element",
-  name: selectedelementtype,
-  top:temp.top,
-  left: temp.left,
-  url: "hi",
-  scale: 1
-  };
-};
-*/
+}
 }
 });
 
@@ -595,6 +557,10 @@ eraser=0;
   }
 
   document.getElementById("wincondbutton").onclick= function(){
+    eraser=0;
+    selectedimg=0;
+    selectedelementtype=0;
+    curr_url=0;
     document.getElementById("wincondeditor").style="display:inline";
     document.getElementById("editpic").style="display: none";
     document.getElementById("playereditor").style="display: none";
@@ -613,6 +579,10 @@ eraser=0;
   }
 
   document.getElementById("backgroundbutton").onclick= function(){
+    eraser=0;
+    selectedelementtype=0;
+    curr_url=0;
+    selectedimg=0;
     document.getElementById("backgroundeditor").style="display:inline"
     document.getElementById("wincondeditor").style="display:none";
     document.getElementById("editpic").style="display: none";
