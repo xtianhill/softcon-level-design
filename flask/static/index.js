@@ -853,6 +853,7 @@ getData(title).then((data) => {
         /*
          * Christian's log
          */
+
         console.log("data: " + data);
 
         // comment this line if you want to load from database
@@ -860,10 +861,10 @@ getData(title).then((data) => {
 
         // translate data from database into list of elements
         var parsedJSON = JSONtoElements(data);
+        console.log(parsedJSON);
         var elements = parsedJSON.elements;
         var characters = [];
         var backgroundUrl = parsedJSON.backgroundUrl;
-
         //var winConditions =  ["enemy", "npc"];
         var winConditions= parsedJSON.winconditions;
         console.log(winConditions);
@@ -1799,15 +1800,16 @@ var defaultUrl = "https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/t
 function JSONtoElements(data){
     if(data == '{}'){
         return {"elements": [],
-                "backgroundUrl": '' }; 
+                "backgroundUrl": '' };
     }
-    console.log("data in paring", data);
+    console.log("data in parsing", data);
     var dataobj= JSON.parse(data);
     console.log(dataobj);
-    
+
     i=0;
     var elementarray= [];
-    var backgroundurl= dataobj.background; //dataobj.backgroundImage";
+    var backgroundurl= dataobj.thebackgroundimg;
+    var winconds= dataobj.winconds;
         for (i=0; i<dataobj.objects.length; i++){
             var temp= dataobj.objects[i];
             if (temp.type =="Element"){
@@ -1857,7 +1859,7 @@ function JSONtoElements(data){
                 else if (temp.name == "NPC"){
                     var max = temp.maxhealth;
                     var hea = temp.maxhealth;
-                    var stat = true; 
+                    var stat = true;
                     console.log("msg", temp.msg);
                     var msg =  temp.msg;
                     var spd = new Vector(0,0);
@@ -1882,9 +1884,10 @@ function JSONtoElements(data){
                 elementarray.push(element);
             }
         }
-        
+
         return {"elements": elementarray,
-                "backgroundUrl": "https://i.pinimg.com/originals/fe/78/bb/fe78bbb25f35d56b502327fb6d43b309.png"
+                "backgroundUrl": backgroundurl,
+                "winconditions": winconds,
              }
     }
 module.exports = JSONtoElements;
