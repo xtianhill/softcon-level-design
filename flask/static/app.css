@@ -15,12 +15,13 @@ header {
     margin-left: 20px;
     margin-right: 20px;
     margin-bottom: 10px;
-    height: 100px;
+    height: 90px;
     background-color: #f2e6ff;
     border: 5px solid #a3c0f5;
     font-family: 'Press Start 2P';
     font-size: 10px;
-
+    overflow: hidden;
+    overflow-x: scroll;
 }
 
 /** canvas area **/
@@ -50,22 +51,21 @@ aside{
 
 
 .options_title {
-    position: absolute;
-    margin-top: 10px;
+    position: relative;
+    margin-top: 30px;
     font-size: 15px;
-    margin-left: 8px;
+    margin-left: 45px;
     display: inline-block;
     background: #f2e6ff;
     color: #660066;
 }
 
 .options_box {
-    position: absolute;
-    margin-top: 40px;
-    margin-left: 40px;
+    position: relative;
+    margin-top: 10px;
+    margin-left: 60px;
     height: 60px;
     width: 60px;
-    border:05px solid #a3c0f5;
 }
 
 /*editpic is the thumbnail of the element shown in the options menu*/
@@ -73,226 +73,151 @@ aside{
   position:absolute;
   top:5px;
   left: 5px;
+  outline-style:none;
+  box-shadow:none;
 }
 
-
-
 /** BUTTONS in top menu **/
+.savebutton {
+    position: relative;
+    float: right;
+    margin-top: 14px;
+    margin-right: 20px;
+    font-family : 'Press Start 2P';
+    font-size:15px;
+    line-height: 120%;
+    padding: 10px 10px;
+    text-decoration:none;
+    display: inline-block;
+    text-align: center;
+    background-color:#ffe6f0;
+    color: #5e90ed;
+    width: 150px;
+    -moz-border-radius:28px;
+    -webkit-border-radius:28px;
+    border-radius:28px;
+    outline-style:none;
+    box-shadow:none;
+    border:3px solid #a3c0f5;
+}
+
+.homebutton {
+    position: relative;
+    float: right;
+    margin-top: 14px;
+    margin-right: 20px;
+    font-family : 'Press Start 2P';
+    font-size:15px;
+    line-height: 120%;
+    padding: 19px 10px;
+    text-decoration:none;
+    display: inline-block;
+    text-align: center;
+    background-color:#ffe6f0;
+    color: #5e90ed;
+    -moz-border-radius:28px;
+    -webkit-border-radius:28px;
+    border-radius:28px;
+    width: 150px;
+    outline-style:none;
+    box-shadow:none;
+    border:3px solid #a3c0f5;
+}
 
 /*move mode button*/
-.myButton{
+.movemode{
+  outline-style:none;
+  box-shadow:none;
   position: absolute;
-  top:25px;
+  top:20px;
   left: 25px
 }
 
 /*eraser button*/
 .eraser {
+  outline-style:none;
+  box-shadow:none;
   position: absolute;
-  top:20px;
-  left: 100px;
+  top: 20px;
+  left: 90px;
 }
 
 .groundbutton{
+  outline-style:none;
+  box-shadow:none;
   position: absolute;
-  top:20px;
-  left:175px;
+  top: 20px;
+  left: 155px;
 }
 
 
 .playerbutton{
+  outline-style:none;
+  box-shadow:none;
   position: absolute;
-  top:20px;
-  left: 235px;
-}
-
-.itembutton{
-  position: absolute;
-  top:20px;
-  left: 270px;
-}
-
-.enemybutton{
-  position: absolute;
-  top:20px;
-  left: 325px;
+  top: 20px;
+  left: 220px;
 }
 
 .npcbutton{
+  outline-style:none;
+  box-shadow:none;
   position: absolute;
   top:20px;
-  left: 390px;
+  left: 280px;
+}
+
+.enemybutton{
+  outline-style:none;
+  box-shadow:none;
+  position: absolute;
+  top:20px;
+  left: 340px;
+}
+
+.itembutton{
+  outline-style:none;
+  box-shadow:none;
+  position: absolute;
+  top:20px;
+  left: 400px;
 }
 
 .wincondbutton{
+  outline-style:none;
+  box-shadow:none;
   position:absolute;
   top:20px;
-  left:450px;
+  left:460px;
 }
 
 .backgroundbutton{
+  outline-style:none;
+  box-shadow:none;
   position:absolute;
-  top:20px;
-  left:510px;
+  top:25px;
+  left:520px;
 }
-
-
 
 /**EDITORS**
   **per-element menus that display in the Options box on the right
 */
 
-/** ITEM editor **/
-.effect-selector{
-  position: absolute;
-  top: 170px;
+.editorTitle{
+  position: relative;
+  font-size: 10px;
+  margin-top: 20px;
+  margin-left: 25px;
+  color: #660066;
 }
 
-.itemstrengthselector{
-  position: absolute;
-  top:200px;
-}
-
-.itemtargets{
-  position:absolute;
-  top:220px;
-}
-
-.customitem{
-  position: absolute;
-  top:120px;
-}
-
-.changeitem{
-  position: absolute;
-  top:150px;
-}
-
-
-/** ENVIRONMENT editor **/
-.solid-selector{
-  position: absolute;
-  top:110px;
-
-}
-
-.environ-effect-selector{
-  position: absolute;
-  top: 130px;
-}
-
-.customterrain{
-  position: absolute;
-  top:160px;
-}
-.changeterrain{
-  position: absolute;
-  top:190px;
-
-}
-
-/** NPC editor **/
-.customnpc{
-  position: absolute;
-  top:120px;
-}
-
-.changenpc{
-  position: absolute;
-  top:150px;
-}
-
-.npcmessager{
-  position: absolute;
-  top:175px;
-
-}
-
-.npc-gravity-selector{
-  position: absolute;
-  top:210px;
-  display:block;
-}
-
-.npcmaxhealthselector{
-  position: absolute;
-  top:300px;
-
-}
-
-/** PLAYER editor **/
-.customsprite{
-  position:absolute;
-  top:150px;
-}
-
-.changebutton{
-  position:absolute;
-  top:180px;
-}
-
-.gravity-selector{
-  position: absolute;
-  top: 200px;
-  display: block;
-}
-
-.speed-selector{
-  position: absolute;
-  top: 265px;
-  display: block;
-}
-.maxhealthselector{
-  position:absolute;
-  top:290px;
-}
-
-/** ENEMY editor **/
-.customenemy{
-  position: absolute;
-  top: 120px;
-}
-
-.changeenemy{
-  position: absolute;
-  top: 150px;
-}
-.enemydamageselector{
-  position: absolute;
-  top: 190px;
-  display: block;
-}
-
-.enemy-gravity-selector{
-  position: absolute;
-  top: 260px;
-  display: block;
-}
-
-.enemymaxhealthselector{
-  position: absolute;
-  top: 350px;
-
-}
-
-.enemy-speed-selector{
-  position: absolute;
-  top: 410px;
-}
-
-/** WINCOND editor **/
-
-.wincondeditor{
-  position:absolute;
-  top:-50px;
-}
-
-/** BACKGROUND editor **/
-
-.changebackground{
-  position:absolute;
-  top:160px;
-
+.editorElement{
+  position: relative;
+  max-width: 100%;
+  font-size: 9px;
+  margin-top: 5px;
+  margin-left: 25px;
+  color: #5e90ed;
 }
 
 /* **end of editors** */
@@ -366,6 +291,7 @@ aside{
   border: 5px solid #a3c0f5;
   overflow: auto;
   position: relative;
+  margin-bottom: 20px;
 }
 
 footer {
@@ -378,4 +304,62 @@ footer {
     margin-bottom: 20px;
     border: 5px solid #a3c0f5;
     font-family: 'Press Start 2P';
+}
+
+/* mouse over link */
+a.headerbuttons:hover {
+  color: #b30059;
+  background: #d2e0f9;
+  box-shadow: 0 0 20px #a3c0f5;
+  text-decoration: none;
+}
+
+button:hover {
+  color: #b30059;
+  background: #d2e0f9;
+  box-shadow: 0 0 20px #a3c0f5;
+  text-decoration: none;
+}
+
+input.headerbuttons:hover {
+  -webkit-filter: drop-shadow(0px 0px 10px rgba(255, 102, 179, 1));
+   filter: drop-shadow(0px 0px 10px rgba(255, 102, 179, 1));
+  text-decoration: none;
+}
+
+a {
+  outline-style:none;
+  box-shadow:none;
+}
+
+button {
+  font-family : 'Press Start 2P';
+  font-size:9px;
+  padding: 5px 15px;
+  text-decoration:none;
+  background-color:#ffe6f0;
+  color: #5e90ed;
+  -moz-border-radius:28px;
+  -webkit-border-radius:28px;
+  border-radius:28px;
+  border:2px solid #a3c0f5;
+  outline-style:none;
+  box-shadow:none;
+}
+
+input {
+  outline-style:none;
+  box-shadow:none;
+}
+
+select {
+  font-family : 'Press Start 2P';
+  font-size: 9px;
+  height: 21px;
+  text-decoration:none;
+  background-color:#ffe6f0;
+  color: #5e90ed;
+  border:2px solid #a3c0f5;
+  outline-style:none;
+  box-shadow:none;
 }
