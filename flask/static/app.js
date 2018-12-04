@@ -85,7 +85,7 @@ function JSONderulo(object, name, url){
   /*array for list of Item's targets */
   var curr_target_list= new Array();
   if (target1==true){
-    console.log("HIIIII");
+    // console.log("HIIIII");
     curr_target_list.push("NPC");
   }
   if (target2==true){
@@ -456,7 +456,10 @@ document.getElementById("savegrid").onclick= function(){
   if (con3==true){
     winconds.push("npc");
   }
-
+  if(!con1 && !con2 && !con3){
+    alert("Please choose a win condition for your game!");
+    return;
+  }
   var title = prompt("Enter the grid title", "title");
 
   var plaindata=JSON.stringify(canvas.toJSON());
@@ -468,14 +471,13 @@ document.getElementById("savegrid").onclick= function(){
     "title" : title,
     "data" : data
   }
-  alert(data);
-  console.log(data);
+  // console.log(data);
   function myCB(data) {
     alert(data);
   }
  if (title != null){
     database.storeGrid(JSON.stringify(myJSON), myCB);
-    console.log("tried to store grid!");
+    // console.log("tried to store grid!");
   }
 
 }
@@ -663,7 +665,7 @@ document.getElementById("savegrid").onclick= function(){
       var distX = (outerRight / 2) - ((options.target.getLeft() + options.target.getWidth()) / 2);
       var distY = (outerBottom / 2) - ((options.target.getTop() + options.target.getHeight()) / 2);
       if (hit==true){
-        //console.log("intersection!");
+        // console.log("intersection!");
         getNewPosition(distX,distY,options.target,obj);
 
 }
@@ -689,17 +691,17 @@ function getNewPosition(distX, distY, target, obj) {
   // referencing a combination of answers posted here: https://stackoverflow.com/questions/22591927/snap-edges-of-objects-to-each-other-and-prevent-overlap
     if(Math.abs(distX) > Math.abs(distY)) {
         if (distX > 0) {
-            console.log("distx>0");
+            // console.log("distx>0");
             target.setLeft(obj.getLeft() - target.getWidth());
         } else {
             target.setLeft(obj.getLeft() + obj.getWidth());
         }
     } else {
         if (distY > 0) {
-          console.log("disty>0");
+          // console.log("disty>0");
             target.setTop(obj.getTop() - target.getHeight());
         } else {
-            console.log("disty<0");
+            // console.log("disty<0");
             target.setTop(obj.getTop() + obj.getHeight());
         }
     }
