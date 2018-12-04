@@ -24,19 +24,40 @@ header {
 .myButton {
     position: absolute;
     top: 12%;
-    right: 20px;
+    right: 180px;
     font-family : 'Press Start 2P';
     font-size:12px;
 	  padding: 10px 20px;
 	  text-decoration:none;
     display: inline-block;
-    background-color:#e6e6ff;
+    background-color:#ffe6f0;
     color: #5e90ed;
     width: 65px;
     -moz-border-radius:28px;
   	-webkit-border-radius:28px;
 	  border-radius:28px;
 	  border:2px solid #a3c0f5;
+}
+
+.homeButton {
+    position: absolute;
+    top: 12%;
+    right: 20px;
+    font-family : 'Press Start 2P';
+    font-size:12px;
+	  padding: 10px 20px;
+	  text-decoration:none;
+    display: inline-block;
+    background-color:#ffe6f0;
+    color: #5e90ed;
+    width: 100px;;
+    -moz-border-radius:28px;
+  	-webkit-border-radius:28px;
+	  border-radius:28px;
+	  border:2px solid #a3c0f5;
+    text-align: center;
+    outline-style:none;
+    box-shadow:none;
 }
 
 .horizontal-list {
@@ -120,15 +141,15 @@ footer {
 
 .foot_text {
     font-size: 15px;
-    margin-top: 20px;
     margin-left: 20px;
+    margin-bottom: 15px;
     background: #f2e6ff;
     color: #660066;
 }
 
 .dividers {
     font-size: 15px;
-    margin-top: 20px;
+    margin-bottom: 15px;
     margin-left: 0px;
     background: #f2e6ff;
     color: #a3c0f5;
@@ -142,7 +163,6 @@ footer {
     color: #660066;
     list-style: none;
     padding-left: 0;
-    line-height: 300%;
     list-style-type:disc;
 }
 
@@ -152,4 +172,18 @@ footer {
   background: #f2e6ff;
   color: #660066;
   padding-left: 0px;
+}
+
+a:hover {
+  color: #b30059;
+  background: #d2e0f9;
+  box-shadow: 0 0 30px #a3c0f5;
+  text-decoration: none;
+}
+
+button:hover {
+  color: #b30059;
+  background: #d2e0f9;
+  box-shadow: 0 0 30px #a3c0f5;
+  text-decoration: none;
 }

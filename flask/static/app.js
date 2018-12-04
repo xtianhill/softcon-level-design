@@ -47,7 +47,7 @@ var coinsrc= "https://66.media.tumblr.com/f7acf066084d424d5da0c09795fe8483/tumbl
 //var coinsrc= "http://pluspng.com/img-png/sprite-png-sprite-png-can-image-431.png";
 var enemysrc= "https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png";
 var npcsrc = "https://66.media.tumblr.com/18b1dcddb1e6de2d56f2bbc16e368af5/tumblr_pi5sz2UwpH1u9vozfo1_250.png";
-
+var winsrc = "https://66.media.tumblr.com/c8b37ca12ffceee4cb3b90b4fa5a252c/tumblr_pj2zemAm671u9vozfo1_250.png";
 
 
 /* JSONderulo:
@@ -322,8 +322,10 @@ curr_url=newurl;
 document.getElementById("changebackground").onclick= function(){
   var newurl=$("input[name='newbackground']").val();
    $('#wrapper').css('background-image', 'url(' + newurl + ')');
-  backgroundimg=newurl;
-}
+   document.getElementById("backgroundbutton").src=newurl;
+   backgroundimg=newurl;
+   document.getElementById("editpic").src=backgroundimg;
+ }
 
 
 
@@ -340,6 +342,8 @@ document.getElementById("eraserbutton").onclick= function(){
   document.getElementById("npceditor").style="display: none";
   document.getElementById("wincondeditor").style="display:none";
   document.getElementById("backgroundeditor").style="display:none"
+  document.getElementById("options_title").innerHTML="Eraser Mode";
+  document.getElementById("options_title").style="margin-left: 15px;";
   document.getElementById("editpic").style="display: none";
   document.getElementById("cursor6").style.visibility="visible";
   document.getElementById("cursor").style.visibility="hidden";
@@ -350,7 +354,7 @@ document.getElementById("eraserbutton").onclick= function(){
   $(document).mousemove(function (e) {
     $(".cursor6").show().css({
       "left": e.clientX,
-      "top": e.clientY
+      "top": e.screenY
     });
   }).mouseout(function () {
     $(".cursor6").hide();
@@ -363,6 +367,8 @@ document.getElementById("movemode").onclick= function(){
   selectedelementtype=0;
   curr_url=0;
   eraser=0;
+  document.getElementById("options_title").innerHTML="Cursor Mode";
+  document.getElementById("options_title").style="margin-left: 15px;";
   document.getElementById("editpic").style="display: none";
   document.getElementById("playereditor").style="display: none";
   document.getElementById("environmenteditor").style="display: none";
@@ -385,7 +391,10 @@ document.getElementById("movemode").onclick= function(){
     selectedelementtype=0;
     curr_url=0;
     document.getElementById("wincondeditor").style="display:inline";
-    document.getElementById("editpic").style="display: none";
+    document.getElementById("options_title").innerHTML="Game Rules";
+    document.getElementById("options_title").style="margin-left: 20px;";
+    document.getElementById("editpic").src=winsrc;
+    document.getElementById("editpic").style="display: inline; height:50px; width: 50px";
     document.getElementById("playereditor").style="display: none";
     document.getElementById("environmenteditor").style="display: none";
     document.getElementById("enemyeditor").style="display: none";
@@ -406,9 +415,12 @@ document.getElementById("movemode").onclick= function(){
     selectedelementtype=0;
     curr_url=0;
     selectedimg=0;
+    document.getElementById("options_title").innerHTML="Background";
+    document.getElementById("options_title").style="margin-left: 20px;"
     document.getElementById("backgroundeditor").style="display:inline"
     document.getElementById("wincondeditor").style="display:none";
-    document.getElementById("editpic").style="display: none";
+    document.getElementById("editpic").src=backgroundimg;
+    document.getElementById("editpic").style="height: 60px; width: 85px; border-radius: 5px; margin-left: -10px; object-fit: cover;";
     document.getElementById("playereditor").style="display: none";
     document.getElementById("environmenteditor").style="display: none";
     document.getElementById("enemyeditor").style="display: none";
@@ -457,6 +469,7 @@ document.getElementById("savegrid").onclick= function(){
     "data" : data
   }
   alert(data);
+  console.log(data);
   function myCB(data) {
     alert(data);
   }
@@ -467,34 +480,6 @@ document.getElementById("savegrid").onclick= function(){
 
 }
 
-
-//take everything on the current canvas and print to console and alert in custom json format
-document.getElementById("save").onclick = function(){
-  var con1=$('#check1').is(':checked');
-  var con2= $('#check2').is(':checked');
-  var con3=$('#check3').is(':checked');
-  if (con1==true){
-
-    winconds.push("end");
-  }
-  if (con2==true){
-    winconds.push("enemy");
-  }
-  if (con3==true){
-    winconds.push("npc");
-  }
-
-     json_data = JSON.stringify(canvas.toJSON());
-     ojson_data=JSON.parse(json_data);
-     ojson_data.winconds=winconds;
-     ojson_data.thebackgroundimg=backgroundimg;
-     new_json_data = JSON.stringify(ojson_data);
-
-               console.log(new_json_data);
-               alert(new_json_data);
-
- }
-
 /* top menu buttons on click functions  */
 
  document.getElementById("groundbutton").onclick = function() {
@@ -502,6 +487,8 @@ document.getElementById("save").onclick = function(){
    selectedelementtype="Environment";
    curr_url=groundsrc;
    eraser=0;
+   document.getElementById("options_title").innerHTML="Terrain";
+   document.getElementById("options_title").style="margin-left: 40px;";
    document.getElementById("editpic").src=groundsrc;
    document.getElementById("editpic").style="display: inline; height:50px; width: 50px";
    var editor= document.getElementById("environmenteditor");
@@ -521,7 +508,7 @@ document.getElementById("save").onclick = function(){
  $(document).mousemove(function (e) {
    $(".cursor").show().css({
      "left": e.clientX,
-     "top": e.clientY
+     "top": e.screenY
    });
  }).mouseout(function () {
    $(".cursor").hide();
@@ -533,8 +520,10 @@ document.getElementById("save").onclick = function(){
    selectedelementtype="Player";
    curr_url=playersrc;
    eraser=0;
+   document.getElementById("options_title").innerHTML="Player";
+   document.getElementById("options_title").style="margin-left: 50px;";
    document.getElementById("editpic").src=playersrc;
-  document.getElementById("editpic").style="display:inline; height:50px; width: 50px";
+   document.getElementById("editpic").style="display:inline; height:50px; width: 50px";
    var editor= document.getElementById("playereditor");
    editor.style="display: inline";
    document.getElementById("environmenteditor").style="display: none";
@@ -552,7 +541,7 @@ document.getElementById("save").onclick = function(){
  $(document).mousemove(function (e) {
    $(".cursor2").show().css({
      "left": e.clientX,
-     "top": e.clientY
+     "top": e.screenY
    });
  }).mouseout(function () {
    $(".cursor2").hide();
@@ -564,6 +553,8 @@ document.getElementById("save").onclick = function(){
    selectedelementtype="Item";
    curr_url=coinsrc;
    eraser=0;
+   document.getElementById("options_title").innerHTML="Item";
+   document.getElementById("options_title").style="margin-left: 65px;";
     document.getElementById("editpic").src=coinsrc;
     document.getElementById("editpic").style="display:inline; height:50px; width: 50px";
    document.getElementById("itemeditor").style="display: inline";
@@ -582,7 +573,7 @@ document.getElementById("save").onclick = function(){
  $(document).mousemove(function (e) {
    $(".cursor3").show().css({
      "left": e.clientX,
-     "top": e.clientY
+     "top": e.screenY
    });
  }).mouseout(function () {
    $(".cursor3").hide();
@@ -594,6 +585,8 @@ document.getElementById("save").onclick = function(){
    selectedelementtype="Enemy";
    curr_url=enemysrc;
    eraser=0;
+   document.getElementById("options_title").innerHTML="Enemy";
+   document.getElementById("options_title").style="margin-left: 60px;";
    document.getElementById("editpic").src=enemysrc;
    document.getElementById("editpic").style="display:inline; height:50px; width: 50px";
     document.getElementById("enemyeditor").style="display: inline";
@@ -612,7 +605,7 @@ document.getElementById("save").onclick = function(){
  $(document).mousemove(function (e) {
    $(".cursor4").show().css({
      "left": e.clientX,
-     "top": e.clientY
+     "top": e.screenY
    });
  }).mouseout(function () {
    $(".cursor4").hide();
@@ -624,6 +617,8 @@ document.getElementById("save").onclick = function(){
    selectedelementtype="NPC";
    curr_url=npcsrc;
    eraser=0;
+   document.getElementById("options_title").innerHTML="NPC";
+   document.getElementById("options_title").style="margin-left: 70px;";
    document.getElementById("editpic").src=npcsrc;
    document.getElementById("editpic").style="display:inline; height:50px; width: 50px";
    document.getElementById("npceditor").style="display: inline";
@@ -642,7 +637,7 @@ document.getElementById("save").onclick = function(){
  $(document).mousemove(function (e) {
    $(".cursor5").show().css({
      "left": e.clientX,
-     "top": e.clientY
+     "top": e.screenY
    });
  }).mouseout(function () {
    $(".cursor5").hide();

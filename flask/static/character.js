@@ -184,7 +184,6 @@ Character.prototype.moveY = function(newPos, obstacle, up) {
     if (this.status) {
         if (obstacle != null) {
             if (obstacle.solid) {
-                newPos.x = this.position.x
                 if (up && this.speed.y > 0) {
                     this.speed.y = -jumpSpeed;
                 } else
