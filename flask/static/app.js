@@ -354,7 +354,7 @@ document.getElementById("eraserbutton").onclick= function(){
   $(document).mousemove(function (e) {
     $(".cursor6").show().css({
       "left": e.clientX,
-      "top": e.screenY
+      "top": e.pageY
     });
   }).mouseout(function () {
     $(".cursor6").hide();
