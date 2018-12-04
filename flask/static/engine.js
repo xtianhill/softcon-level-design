@@ -66,6 +66,7 @@ getData(title).then((data) => {
         // console.log(winConditions);
         var width = canvas.width;
         var height = canvas.height;
+        console.log(width, height);
         var wrap = document.getElementById("wrap");
 
         // console.log("elements", elements);
