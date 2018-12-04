@@ -277,7 +277,7 @@ document.getElementById("changebutton").onclick= function(){
  document.getElementById("cursor2").src=newurl;
  document.getElementById("editpic").src=newurl;
  curr_url=newurl;
-
+playersrc=newurl;
 
 }
 
@@ -289,6 +289,7 @@ document.getElementById("changeterrain").onclick= function(){
  document.getElementById("cursor").src=newurl;
  document.getElementById("editpic").src=newurl;
  curr_url=newurl;
+ groundsrc=newurl;
 }
 
 document.getElementById("changeitem").onclick= function(){
@@ -298,6 +299,7 @@ document.getElementById("changeitem").onclick= function(){
  document.getElementById("cursor3").src=newurl;
  document.getElementById("editpic").src=newurl;
 curr_url=newurl;
+coinsrc=newurl;
 }
 
 
@@ -308,6 +310,7 @@ document.getElementById("changenpc").onclick= function(){
  document.getElementById("cursor5").src=newurl;
  document.getElementById("editpic").src=newurl;
 curr_url=newurl;
+npcsrc=newurl;
 }
 
 document.getElementById("changeenemy").onclick= function(){
@@ -317,6 +320,7 @@ document.getElementById("changeenemy").onclick= function(){
  document.getElementById("cursor4").src=newurl;
  document.getElementById("editpic").src=newurl;
 curr_url=newurl;
+enemysrc=newurl;
 }
 
 document.getElementById("changebackground").onclick= function(){
@@ -354,7 +358,7 @@ document.getElementById("eraserbutton").onclick= function(){
   $(document).mousemove(function (e) {
     $(".cursor6").show().css({
       "left": e.clientX,
-      "top": e.screenY
+      "top": e.pageY
     });
   }).mouseout(function () {
     $(".cursor6").hide();
@@ -510,7 +514,7 @@ document.getElementById("savegrid").onclick= function(){
  $(document).mousemove(function (e) {
    $(".cursor").show().css({
      "left": e.clientX,
-     "top": e.screenY
+     "top": e.pageY
    });
  }).mouseout(function () {
    $(".cursor").hide();
@@ -543,7 +547,7 @@ document.getElementById("savegrid").onclick= function(){
  $(document).mousemove(function (e) {
    $(".cursor2").show().css({
      "left": e.clientX,
-     "top": e.screenY
+     "top": e.pageY
    });
  }).mouseout(function () {
    $(".cursor2").hide();
@@ -575,7 +579,7 @@ document.getElementById("savegrid").onclick= function(){
  $(document).mousemove(function (e) {
    $(".cursor3").show().css({
      "left": e.clientX,
-     "top": e.screenY
+     "top": e.pageY
    });
  }).mouseout(function () {
    $(".cursor3").hide();
@@ -607,7 +611,7 @@ document.getElementById("savegrid").onclick= function(){
  $(document).mousemove(function (e) {
    $(".cursor4").show().css({
      "left": e.clientX,
-     "top": e.screenY
+     "top": e.pageY
    });
  }).mouseout(function () {
    $(".cursor4").hide();
@@ -639,7 +643,7 @@ document.getElementById("savegrid").onclick= function(){
  $(document).mousemove(function (e) {
    $(".cursor5").show().css({
      "left": e.clientX,
-     "top": e.screenY
+     "top": e.pageY
    });
  }).mouseout(function () {
    $(".cursor5").hide();
