@@ -1,4 +1,3 @@
-/* Top bar with page title */
 header {
     position: relative;
     background-color: #f2e6ff;
@@ -12,10 +11,9 @@ header {
     font-family: 'Press Start 2P';
 }
 
-/* Page title */
 .title {
     position: absolute;
-    font-size: 2vw;
+    font-size: 20px;
     margin-top: 16px;
     margin-left: 20px;
     display: inline-block;
@@ -23,7 +21,6 @@ header {
     color: #660066;
 }
 
-/* Section containing Play Level information */
 section {
   float: left;
   margin-top: 5px;
@@ -32,43 +29,18 @@ section {
   background-color: #f2e6ff;
   border: 5px solid #a3c0f5;
   width: calc(50% - 40px);
-  overflow: hidden;
 }
 
-/* Play Level title text */
-.playlevel_scroll{
-  margin-top: 18px;
-  margin-left: 25px;
-  position: absolute;
-  color: #660066;
-  font-size: 2vw;
-  font-family: 'Press Start 2P';
+aside{
+  float: right;
+  margin-top: 5px;
+  margin-right:20px;
+  height: 500px;
+  background-color: #f2e6ff;
+  border: 5px solid #a3c0f5;
+  width: calc(50% - 40px);
 }
 
-/* Play Level search bar text */
-.search_text{
-  float: left;
-  margin-top: 50px;
-  margin-left: 25px;
-  position: absolute;
-  width: 25%;
-  color: #660066;
-  font-size: 1.2vw;
-  font-family: 'Press Start 2P';
-}
-
-/* Play Level search bar */
-.search{
-  width: 50%;
-  background-color: #fff;
-  border: none;
-  padding: 3px 3px 5px 5px;
-  border-radius: 3px;
-  margin-bottom: 10px;
-  box-sizing: border-box;
-}
-
-/* Play Level scrolling titles list */
 .nav {
   float: left;
   margin-left: 20px;
@@ -83,35 +55,6 @@ section {
   font-family: 'Press Start 2P';
 }
 
-/* Play Level scrolling titles list */
-.all_titles{
-  height: 390px;
-  padding-left: 10px;
-  margin-right: 0px;
-  position: relative;
-  font-size: 1vw;
-  font-family: 'Press Start 2P';
-}
-
-/* Play Level scrolling titles: list formatting */
-nav ul{
-    line-height: 200%;
-    margin-top: 0px;
-    background: #ffe6f0;
-    color: #660066;
-    list-style: none;
-    overflow-y: scroll;
-}
-
-/* Play Level scrolling titles: list item formatting */
-li{
-  font-size: 1vw;
-  background: #ffe6f0;
-  color: #660066;
-  padding-left: 0px;
-}
-
-/* Play Level info text */
 .playlevel_text{
   float: right;
   margin-top: 90px;
@@ -119,130 +62,137 @@ li{
   width: 40%;
   line-height: 150%;
   color: #b30059;
-  font-size: 1.1vw;
+  font-size: 15px;
   font-family: 'Press Start 2P';
 }
 
-/* Play Level accent images container */
-.play_container{
-  float: right;
-  position: relative;
-  margin-top: 0px;
-  margin-right: 20px;
-  margin-bottom: 20px;
-  width: calc(40% - 20px);
-  height: 100px;
-}
-
-/* Play Level accent image */
-.pumpkin_man{
-  position: absolute;
-  margin-left: 45%;
-  width: 80%;
-}
-
-/* Play Level accent image */
-.moon{
-  position: absolute;
+.search{
+  float: left;
   margin-top: 50px;
-  width: 80%;
+  margin-left: 25px;
+  position: absolute;
+  color: #660066;
+  font-family: 'Press Start 2P';
+}
+
+.playlevel_scroll{
+  margin-top: 20px;
+  margin-left: 25px;
+  position: absolute;
+  color: #660066;
+  font-size: 20px;
+  font-family: 'Press Start 2P';
+}
+
+.all_titles{
+  height: 390px;
+  padding-left: 10px;
+  margin-right: 0px;
+  position: relative;
+  font-family: 'Press Start 2P';
+}
+
+nav ul{
+    line-height: 200%;
+    margin-top: 0px;
+    background: #ffe6f0;
+    color: #660066;
+    list-style: none;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+li{
+  font-size: 15px;
+  background: #ffe6f0;
+  color: #660066;
+  padding-left: 0px;
+}
+
+.pumpkin_man{
+  float: right;
+  top: 330px;
+  transform: scaleX(1);
+  left: 490px;
+  position: absolute;
+  width: 12%;
+}
+
+.moon{
+  float: right;
+  top: 380px;
+  left: 400px;
+  position: absolute;
+  width: 13%;
   border: 3px solid #a3c0f5;
   box-shadow: 0 0 60px #a3c0f5;
 }
 
-/* Section containing Make Level information */
-aside{
-  float: right;
-  margin-top: 5px;
-  margin-right:20px;
-  height: 500px;
-  background-color: #f2e6ff;
-  border: 5px solid #a3c0f5;
-  width: calc(50% - 40px);
-  overflow: scroll;
-}
-
-/* Button to go to Make Level screen */
 .myButton {
     position: relative;
-    left: 0;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 20px;
-    margin-bottom: 30px;
+    float: left;
+    margin-top: 50px;
     font-family : 'Press Start 2P';
     font-size:15px;
     line-height: 120%;
 	  padding: 10px 10px;
 	  text-decoration:none;
-    display: block;
+    display: inline-block;
     text-align: center;
     background-color:#ffe6f0;
     color: #5e90ed;
     width: 150px;
 	  border:3px solid #a3c0f5;
-    box-shadow: 0 0 30px #a3c0f5;
 }
 
-/* Make Level info text */
 .makelevel_text{
-  float: left;
   margin-left: 20px;
-  margin-top: 30px;
+  margin-right: 0px;
+  margin-top: 200px;
   position: relative;
-  width: 35%;
+  width: 40%;
   line-height: 150%;
   color: #b30059;
-  font-size: 1.1vw;
+  font-size: 15px;
   font-family: 'Press Start 2P';
 }
 
-/* Make Level accent images container */
-.make_container{
-  float: right;
-  position: relative;
-  margin-top: 0px;
-  margin-right: 20px;
-  margin-bottom: 20px;
-  width: calc(55% - 20px);
-  height: 100px;
-}
-
-/* Make Level accent image */
 .landscape{
-  margin-top: 50px;
-  margin-right: 40%;
+  float: right;
+  top: 270px;
+  right: 70px;
   position: absolute;
-  width: 90%;
+  width: 20%;
   border: 3px solid #a3c0f5;
   box-shadow: 0 0 60px #a3c0f5;
 }
 
-/* Make Level accent image */
 .peaks{
-  margin-top: 150px;
-  margin-left: 30%;
+  float: right;
+  top: 370px;
+  right: 100px;
   position: absolute;
-  width: 50%;
+  width: 10%;
   border: 3px solid #a3c0f5;
   box-shadow: 0 0 60px #a3c0f5;
 }
 
-/* Make Level accent image */
 .sword{
-  top: -15px;
+  float: right;
+  top: 130px;
   transform: rotate(-140grad);
-  margin-left: 40%;
+  right: 10px;
   position: absolute;
-  width: 70%;
+  width: 20%;
 }
 
-/* Make Level accent image */
 .gargoyle{
-  margin-top: 190px;
-  margin-left: 8%;
+  float: right;
+  top: 400px;
+  transform: scaleX(1);
+  right: 175px;
   position: absolute;
-  width: 40%;
+  width: 10%;
 }
 
 /* unvisited link */
