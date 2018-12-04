@@ -510,7 +510,7 @@ document.getElementById("savegrid").onclick= function(){
  $(document).mousemove(function (e) {
    $(".cursor").show().css({
      "left": e.clientX,
-     "top": e.screenY
+     "top": e.pageY
    });
  }).mouseout(function () {
    $(".cursor").hide();
@@ -543,7 +543,7 @@ document.getElementById("savegrid").onclick= function(){
  $(document).mousemove(function (e) {
    $(".cursor2").show().css({
      "left": e.clientX,
-     "top": e.screenY
+     "top": e.pageY
    });
  }).mouseout(function () {
    $(".cursor2").hide();
@@ -575,7 +575,7 @@ document.getElementById("savegrid").onclick= function(){
  $(document).mousemove(function (e) {
    $(".cursor3").show().css({
      "left": e.clientX,
-     "top": e.screenY
+     "top": e.pageY
    });
  }).mouseout(function () {
    $(".cursor3").hide();
@@ -607,7 +607,7 @@ document.getElementById("savegrid").onclick= function(){
  $(document).mousemove(function (e) {
    $(".cursor4").show().css({
      "left": e.clientX,
-     "top": e.screenY
+     "top": e.pageY
    });
  }).mouseout(function () {
    $(".cursor4").hide();
@@ -639,7 +639,7 @@ document.getElementById("savegrid").onclick= function(){
  $(document).mousemove(function (e) {
    $(".cursor5").show().css({
      "left": e.clientX,
-     "top": e.screenY
+     "top": e.pageY
    });
  }).mouseout(function () {
    $(".cursor5").hide();
