@@ -57,6 +57,7 @@ getData(title).then((data) => {
 
         // translate data from database into list of elements
         var parsedJSON = JSONtoElements(data);
+        console.log(parsedJSON);
         var elements = parsedJSON.elements;
         var characters = [];
         var backgroundUrl = parsedJSON.backgroundUrl;
