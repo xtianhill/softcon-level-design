@@ -50,6 +50,7 @@ getData(title).then((data) => {
         /*
          * Christian's log
          */
+
         console.log("data: " + data);
 
         // comment this line if you want to load from database
@@ -61,7 +62,8 @@ getData(title).then((data) => {
         var characters = [];
         var backgroundUrl = parsedJSON.backgroundUrl;
         //var winConditions =  ["enemy", "npc"];
-        var winConditions= parsedJSON.winconds;
+        var winConditions= parsedJSON.winconditions;
+        console.log(winConditions);
         var width = canvas.width;
         var height = canvas.height;
         var wrap = document.getElementById("wrap");
@@ -72,6 +74,7 @@ getData(title).then((data) => {
         var npcCondition = true;
         var endCondition = true;
         var enemyCondition = true;
+        console.log(document);
         var ul = document.getElementById("rules");
         ul.innerHTML = "";
         console.log(ul);

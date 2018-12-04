@@ -1,7 +1,8 @@
 window.onload = function a()
 {
-    //setup
-
+    /* **SETUP **
+      * global variables for state of menu selections and default values
+    */
     var backgroundimg="https://i.pinimg.com/originals/fe/78/bb/fe78bbb25f35d56b502327fb6d43b309.png";
     var selectedimg=0;
     var selectedelementtype=0;
@@ -13,93 +14,56 @@ window.onload = function a()
     var playergravity= "medium";
     var curr_url=0;
     var winconds= new Array();
-  var canvas = new fabric.Canvas('c', { selection: false});
-    //canvas.setBackgroundImage(canvassrc);
+
+    //initialize canvas element
+    var canvas = new fabric.Canvas('c', { selection: false});
 
     var json_data = JSON.stringify(canvas.toDatalessJSON()); //initializing to be used later
 
 
-//drawing the lines of the grid
-    var grid = 50;
-    for( var i=0; i< (2000/grid);i++){
+/* ** GRID LINES **
+* line.toObject sets json for line to be {} so lines dont get sent to playlevel
+*/
+   var grid = 50;
+   for( var i=0; i< (2000/grid);i++){
     var line= new fabric.Line([i*grid,0, i*grid, 500], {stroke:'#a3c0f5', selectable: false, originX: 'center',
       originY: 'center'});
       canvas.add(line);
       line.toObject = function() {
-            return { };
+            return {};
         };
     var line2= new fabric.Line([0, i*grid, 2000, i*grid], {stroke:'#a3c0f5', selectable: false, originX: 'center',
       originY: 'center'});
       canvas.add(line2);
       line2.toObject = function() {
-            return { };
+            return {};
         };
 }
 
-
-//gray rectangle for buttons to go in
-/*var menubox = new fabric.Rect({
-        left: 0,
-        top: 0,
-        fill:  "#96B2E3",
-        width: 600,
-        height: 200,
-        lockRotation: true,
-        selectable: false,
-    });
-canvas.add(menubox);
-menubox.toObject = function() {
-  return { };
-};
-*/
-
-//urls for all the buttons
+/* DEFAULT URLS for all element images */
 var groundsrc = "https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg";
-var playersrc = "https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png"
+var playersrc = "https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png";
 var coinsrc= "https://66.media.tumblr.com/f7acf066084d424d5da0c09795fe8483/tumblr_inline_piy8y9FbkJ1ruhpn7_540.png";
+//var coinsrc= "http://pluspng.com/img-png/sprite-png-sprite-png-can-image-431.png";
 var enemysrc= "https://66.media.tumblr.com/884ee0b1b0e3e6433476646be9448c54/tumblr_pi5tjpe7T81u9vozfo1_250.png";
 var npcsrc = "https://66.media.tumblr.com/18b1dcddb1e6de2d56f2bbc16e368af5/tumblr_pi5sz2UwpH1u9vozfo1_250.png";
 
-// function make a button, visually: calls draggable() to make it actually work.
-
-/*function button(url, pos,pic, elementname){
- fabric.Image.fromURL(url, function(img) {
-       var btn =img.set({ top: 25,
-        left: pos,
-        width: 50,
-        height: 50,
-        hasControls: false,
-        hasBorders: false,
-        originX: 'left',
-        originY: 'top',
-        hasRotatingPoint: false,
-    });
-    canvas.add(img);
-    draggable(btn,pic,pos,elementname,url);
-    btn.toObject = function() {
-        return {}; //dont want buttons to show up in JSON sent to makelevel
-    };
-});
-}
 
 
-button(groundsrc,0,ground, "Environment");
-button(playersrc,50,player, "Player");
-button(coinsrc,100, coin, "Item");
-button(enemysrc,150,enemy, "Enemy");
-button(npcsrc,200,npc, "NPC");
-*/
-//ignore these comments for now but dont delete
-//console.log(JSON.stringify(canvas));
-/*
-var json_data = JSON.stringify(canvas.toDatalessJSON());
-//console.log(json_data);
-canvas.loadFromJSON(JSON.parse(json_data), function(obj) {
-  canvas.renderAll();
-  console.log(' this is a callback. invoked when canvas is loaded!xxx ');
-});*/
+/* JSONderulo:
+  ** sets the JSON toObject function to take in custom attributes
+  *     so that when canvas.toJSON() is called, canvas objects have the desired
+  *     format for parsing.js.
+  ** checks the state of selected buttons form fields using jQuery
+  *     JSONderulo is called in dragggable() when an element is added to the canvas,
+  *     permanently associating with each element the attributes that were selected
+  *     in the "options" menu at the time the object was added.
+  ** note: the position of the object is dynamically set at the time of the
+  *     toObject() call, which happens in canvas.toJSON();
+  */
 
 function JSONderulo(object, name, url){
+  // ** JQUERY to detect currently selected values in per-element menus **
   var curr_issolid=$('#solid-selector').val();
   var curr_env_effect=$('#environ-effect-selector').val();
   var curr_player_speed= $('#speed-selector').val();
@@ -118,6 +82,7 @@ function JSONderulo(object, name, url){
   var target2= $('#checkbox2').is(':checked');
   var target3=$('#checkbox3').is(':checked');
 
+  /*array for list of Item's targets */
   var curr_target_list= new Array();
   if (target1==true){
     console.log("HIIIII");
@@ -129,21 +94,8 @@ function JSONderulo(object, name, url){
   if (target3==true){
     curr_target_list.push("Player");
   }
-  /*console.log(curr_target_list);
-  var con1=$('#check1').is(':checked');
-  var con2= $('#check2').is(':checked');
-  var con3=$('#check3').is(':checked');
-  if (con1==true){
 
-    winconds.push("End");
-  }
-  if (target2==true){
-    winconds.push("Enemy");
-  }
-  if (target3==true){
-    winconds.push("NPC");
-  }
-*/
+/* custom JSON per-element begins here */
 switch(name){
   case "Environment":
   object.toObject = function() {
@@ -216,269 +168,107 @@ switch(name){
 }
   break;
 default:
-  alert("ummm this should not be happening! check switch statement");
+  alert("ummm this should not be happening! check switch statement");//debugging
 }
 }
 
-//function that make the buttons actually...buttons.
+
+/* draggable()
+ * called when an element is added to the canvas, does the following:
+ * sets the custom json for the element (JSONderulo())
+ * makes object translucent on mousedown and opaque on mouseup
+ */
 function draggable(object, name, url) {
   JSONderulo(object,name,url);
-/*  var curr_issolid=$('#solid-selector').val();
-  var curr_env_effect=$('#environ-effect-selector').val();
-  var curr_player_speed= $('#speed-selector').val();
-  var curr_player_grav= $("input[name='color']:checked").val();
-  var curr_player_maxhealth= $("input[name='health']").val();
-  var curr_item_effect= $('#effect-selector').val();
-  var curr_enemy_damage= $('input[name=enemydamage]').val();
-  var curr_npc_message= $("input[name='npcmessage']").val();
-switch(name){
-  case "Environment":
-  object.toObject = function() {
-  return {type: "Element",
-    name: name,
-    top:object.top,
-    left: object.left,
-    url: url,
-    scale: 1,
-    solid: curr_issolid,
-    effect: curr_env_effect,
-  };
-}
-    break;
-  case "Player":
-  object.toObject = function() {
-  return {type: "Element",
-  name: name,
-  top:object.top,
-  left: object.left,
-  url: url,
-  scale: 1,
-  speed: curr_player_speed,
-  gravity: curr_player_grav,
-  maxhealth: curr_player_maxhealth,
-  };
-}
-    break;
-  case "Item":
-  object.toObject = function() {
-  return {type: "Element",
-  name: name,
-  top:object.top,
-  left: object.left,
-  url: url,
-  scale: 1,
-  effect: curr_item_effect,
-  };
-}
-    break;
-  case "Enemy":
-  object.toObject = function() {
-  return {type: "Element",
-  name: name,
-  top:object.top,
-  left: object.left,
-  url: url,
-  scale: 1,
-  damage: curr_enemy_damage,
-  };
-}
-    break;
-  case "NPC":
-  object.toObject = function() {
-  return {type: "Element",
-  name: name,
-  top:object.top,
-  left: object.left,
-  url: url,
-  scale: 1,
-  msg: curr_npc_message,
-  };
-}
-  break;
-default:
-  alert("ummm this should not be happening! check switch statement");
-}*/
-
-        object.on('mousedown', function() {
-          /*{
-            var temp = new fabric.Image(pic,{
-                left: pos,
-                top: 25,
-                hasControls: false,
-                hasBorders: false,
-                height: 50,
-                width: 50,
-                originX: 'left',
-                originY: 'top'
-            });*/
-            //canvas.add(temp);
-            //draggable(temp, pic,pos,name,url);
-            //the following determines the json attributes of each thing when added to grid
-            //its generic right now, but should be different for the element types
-            // for ecxample, NPC needs "message"
-            //temp.toObject = function() {
-            //return {type: "button",
-            //};
-//};
-if (eraser==1){
-  canvas.remove(this);
-}
-        /*if (name == "NPC"){
-        var msg = prompt("Please enter a message for the npc:", "You are under attack!");
-            //actually save the input here
-
-        }
-        if (name == "Item"){
-        var effect = prompt("Please enter an effect for this item:", "Heal");
-            //actually save the input here
-            //ask molly about effects
-        }
-*/
-        });
-        object.on('mouseup', function() {
-            // Remove an event handler
-
-            JSONderulo(object,name,url);
-            /*object.toObject = function() {
-            return {type: "Element",
-            name: name,
-            top:object.top,
-            left: object.left,
-            url: url,
-            scale: 1
-            };
-  };*/
-            this.off('mousedown');
-
-            /*if(this.top <100) {
-               canvas.remove(this);
-            }*/
-        });
-    }
-
-
- //snap to grid
-canvas.on('object:moving', function(options) {
-  options.target.set({
-    left: Math.round(options.target.left / grid) * grid,
-    top: Math.round(options.target.top / grid) * grid
+  object.on('mousedown', function() {
+        object.opacity=0.7;
   });
 
+  object.on('mouseup', function(options) {
+      object.opacity = 1;
+  });
+
+}
+
+/* eraser functionality
+ * removes object if clicked when eraser==1
+ * if removed object is a player char, sets hasplayer back to 0
+ */
+canvas.on('mouse:down', function(click){
+  if (eraser==1 && click.target!=undefined){
+    var clicked=JSON.stringify(click.target);
+    var clickedthing=JSON.parse(clicked);
+    if (clickedthing.name=="Player"){
+      hasplayer=0;
+    }
+    canvas.remove(click.target);
+  }
 });
 
-
-
+/* do we need these*/
 $('input[name="spriteurl"]').change(function(){
 var newurl=$("input[name='spriteurl']").val();
-//alert(newurl);
-/*document.getElementById("playerbutton").src=newurl;
-document.getElementById("player").src=newurl;
-document.getElementById("cursor2").src=newurl;
-document.getElementById("editpic").src=newurl;
-playersrc=newurl;
-*/
+
 });
 
-  $("#gravity-selector").on("change", function () {
-      //alert("You choose " + $("input[name='color']:checked").val());
+$("#gravity-selector").on("change", function () {
+
       playergravity=$("input[name='color']:checked").val();
-      //issolid=$('gra-selector').val();
+
   });
 
   $("#solid-selector").on("change", function () {
-    //  alert("You choose " + $('#solid-selector').val());
+
       issolid=$('#solid-selector').val();
   });
 
   $("#effect-selector").on("change", function () {
-    //  alert("You choose " + $('#effect-selector').val());
+
       curr_effect=$('#effect-selector').val();
   });
 
 
 
-//THINGS ADDED TO CANVAS
-  canvas.on('mouse:down', function(event){
-  var msg=$("input[name='npcmessage']").val();
-  console.log(msg);
-//  var health=$("input[name='health']").val();
-  //console.log(health);
+/* function that adds elements to canvas */
+canvas.on('mouse:down', function(event){
+  if (event.target==undefined){//checks if grid is empty there before adding
     if (selectedimg!=0 && eraser !=1){
-    var pointer = canvas.getPointer(event.e);
-    var posX = Math.round((pointer.x-25) / grid) * grid;
-    var posY = Math.round((pointer.y-25) / grid) * grid;
-    //console.log(posX+", "+posY);
-    var curselected=selectedimg;
-
-    /*var newthing=fabric.Image.fromURL(curr_url,function(img){
-      img.set({'left':  posX,
-      'top':  posY,
-      'hasControls': false,
-      'hasBorders': false,
-      'height': 50,
-      'width': 50,
-      'originX': 'left',
-      'originY': 'top'})
-      canvas.add(img);
-      return img;
-    })*/
-  fabric.Image.fromURL(curr_url,function(img){
-      img.set({'left':  posX,
-      'top':  posY,
-      'hasControls': false,
-      'hasBorders': false,
-      'height': 50,
-      'width': 50,
-      'originX': 'left',
-      'originY': 'top'})
-      canvas.add(img);
-      console.log(img);
-      var tempurl=curr_url;
-     draggable(img,selectedelementtype,tempurl);
-
-    });
-  /*var temp = new fabric.Image(curselected,{
-      left:  posX,
-      top:  posY,
-      hasControls: false,
-      hasBorders: false,
-      height: 50,
-      width: 50,
-      originX: 'left',
-      originY: 'top'
-  });
-  */
-  //canvas.add(temp);
-/*  temp.toObject = function() {
-  return {type: "Element",
-  name: selectedelementtype,
-  top:temp.top,
-  left: temp.left,
-  url: "hi",
-  scale: 1
-  };
-}*/
-
-/*  temp.toObject = function() {
-  return {type: "Element",
-  name: selectedelementtype,
-  top:temp.top,
-  left: temp.left,
-  url: "hi",
-  scale: 1
-  };
-};
-*/
-}
+      var pointer = canvas.getPointer(event.e);
+      //posx and posy are current mouse position coords for new elementm rounded
+      var posX = Math.round((pointer.x-25) / grid) * grid; //snap to grid
+      var posY = Math.round((pointer.y-25) / grid) * grid;
+      var curselected=selectedimg;
+      if (!((selectedelementtype=="Player")&&(hasplayer==1))){
+        //dont add player if game has player
+        //create fabric image object from current url
+        fabric.Image.fromURL(curr_url,function(img){
+          img.set({'left':  posX,
+            'top':  posY,
+            'hasControls': false,
+            'hasBorders': false,
+            'height': 50,
+            'width': 50,
+            'originX': 'left', //important: all coordinates are top and left
+            'originY': 'top',
+          })
+        canvas.add(img);
+        var tempurl=curr_url;
+        draggable(img,selectedelementtype,tempurl);
+         if (selectedelementtype=="Player"){
+          hasplayer=1;
+          }
+        });
+      }
+    }
+  }
 });
 
 
 
-
-/*function makejson(){
-  json_data = JSON.stringify(canvas.toJSON());
-  return json_data;
-}*/
+/* change buttons use jquery to get urls from form fields.
+ * when clicked, they change the element image icon, cursor, and options
+ * menu preview to display the new user-inputrted image
+*/
 
 document.getElementById("changebutton").onclick= function(){
     var newurl=$("input[name='spriteurl']").val();
@@ -490,8 +280,6 @@ document.getElementById("changebutton").onclick= function(){
 
 
 }
-
-
 
 document.getElementById("changeterrain").onclick= function(){
     var newurl=$("input[name='terrainurl']").val();
@@ -534,13 +322,13 @@ curr_url=newurl;
 document.getElementById("changebackground").onclick= function(){
   var newurl=$("input[name='newbackground']").val();
    $('#wrapper').css('background-image', 'url(' + newurl + ')');
-  console.log(document.getElementById("wrapper").style);
-  //document.getElementById("wrapper").style.background= "url(newurl)";
-  console.log(document.getElementById("wrapper").style);
-
   backgroundimg=newurl;
-  //console.log("areyouthere god");
 }
+
+
+
+
+/* eraserbutton */
 
 document.getElementById("eraserbutton").onclick= function(){
   eraser=1;
@@ -569,14 +357,12 @@ document.getElementById("eraserbutton").onclick= function(){
   });
 }
 
+/*movemode button */
 document.getElementById("movemode").onclick= function(){
   selectedimg=0;
-selectedelementtype=0;
-curr_url=0;
-eraser=0;
-  /*var cursor= document.getElementById("cursor");
-  cursor.style.display="none";
-  */
+  selectedelementtype=0;
+  curr_url=0;
+  eraser=0;
   document.getElementById("editpic").style="display: none";
   document.getElementById("playereditor").style="display: none";
   document.getElementById("environmenteditor").style="display: none";
@@ -594,6 +380,10 @@ eraser=0;
   }
 
   document.getElementById("wincondbutton").onclick= function(){
+    eraser=0;
+    selectedimg=0;
+    selectedelementtype=0;
+    curr_url=0;
     document.getElementById("wincondeditor").style="display:inline";
     document.getElementById("editpic").style="display: none";
     document.getElementById("playereditor").style="display: none";
@@ -612,6 +402,10 @@ eraser=0;
   }
 
   document.getElementById("backgroundbutton").onclick= function(){
+    eraser=0;
+    selectedelementtype=0;
+    curr_url=0;
+    selectedimg=0;
     document.getElementById("backgroundeditor").style="display:inline"
     document.getElementById("wincondeditor").style="display:none";
     document.getElementById("editpic").style="display: none";
@@ -629,7 +423,14 @@ eraser=0;
 
   }
 
+
+/* SAVE GRID FUNCTION TO SAVE TO DATABASE */
 document.getElementById("savegrid").onclick= function(){
+  if (hasplayer==0){
+    alert("Uh oh! You must add a player character to your game in order to save.")
+    return;
+  }
+
   var con1=$('#check1').is(':checked');
   var con2= $('#check2').is(':checked');
   var con3=$('#check3').is(':checked');
@@ -645,7 +446,7 @@ document.getElementById("savegrid").onclick= function(){
   }
 
   var title = prompt("Enter the grid title", "title");
-  //console.log(JSON.stringify(canvas.toJSON()));
+
   var plaindata=JSON.stringify(canvas.toJSON());
   var objdata=JSON.parse(plaindata);
   objdata.winconds=winconds;
@@ -669,16 +470,32 @@ document.getElementById("savegrid").onclick= function(){
 
 //take everything on the current canvas and print to console and alert in custom json format
 document.getElementById("save").onclick = function(){
+  var con1=$('#check1').is(':checked');
+  var con2= $('#check2').is(':checked');
+  var con3=$('#check3').is(':checked');
+  if (con1==true){
+
+    winconds.push("end");
+  }
+  if (con2==true){
+    winconds.push("enemy");
+  }
+  if (con3==true){
+    winconds.push("npc");
+  }
+
      json_data = JSON.stringify(canvas.toJSON());
      ojson_data=JSON.parse(json_data);
-     var additionalFields = ['selectable', 'uid', 'custom'];
-     ojson_data.objects[1]=additionalFields;
+     ojson_data.winconds=winconds;
+     ojson_data.thebackgroundimg=backgroundimg;
      new_json_data = JSON.stringify(ojson_data);
 
-               //console.log(json_data);
+               console.log(new_json_data);
                alert(new_json_data);
 
  }
+
+/* top menu buttons on click functions  */
 
  document.getElementById("groundbutton").onclick = function() {
    selectedimg=ground;
@@ -809,7 +626,7 @@ document.getElementById("save").onclick = function(){
    eraser=0;
    document.getElementById("editpic").src=npcsrc;
    document.getElementById("editpic").style="display:inline; height:50px; width: 50px";
-    document.getElementById("npceditor").style="display: inline";
+   document.getElementById("npceditor").style="display: inline";
    document.getElementById("environmenteditor").style="display: none";
    document.getElementById("playereditor").style="display: none";
    document.getElementById("itemeditor").style="display: none";
@@ -833,13 +650,64 @@ document.getElementById("save").onclick = function(){
  }
 
 
+/* FUNCTION THAT PREVENTS  THINGS FROM BEING DRAGGED ON TOP OF EACHOTHER */
+ canvas.on('object:moving', function(options){
+   //options.target.opacity = 0.7;
+   options.target.setCoords();
+    canvas.forEachObject(function(obj) {
+      jsonobj=JSON.stringify(obj);
+      if ((obj === options.target) || (JSON.parse(jsonobj)=={})) {
+        return;
+      }
 
 
+      var hit=detectIntersection(options.target,obj);
+      //  the following four lines use a combination of answers posted here https://stackoverflow.com/questions/22591927/snap-edges-of-objects-to-each-other-and-prevent-overlap
+    var outerRight = obj.getLeft() + obj.getWidth();
+      var outerBottom = obj.getTop()+obj.getHeight();
+      var distX = (outerRight / 2) - ((options.target.getLeft() + options.target.getWidth()) / 2);
+      var distY = (outerBottom / 2) - ((options.target.getTop() + options.target.getHeight()) / 2);
+      if (hit==true){
+        //console.log("intersection!");
+        getNewPosition(distX,distY,options.target,obj);
 
+}
 
+});
+options.target.set({
+  left: Math.round(options.target.left / grid) * grid,
+  top: Math.round(options.target.top / grid) * grid
+    });
+  });
 
+  /* Box model detection, return true on collision */
+function detectIntersection( r1, r2 ) {
+   return  !(r2.left > r1.left+48 ||
+           r2.left+48 < r1.left ||
+           r2.top > r1.top+48 ||
+           r2.top+48 < r1.top);
 
+}
 
+function getNewPosition(distX, distY, target, obj) {
 
+  // referencing a combination of answers posted here: https://stackoverflow.com/questions/22591927/snap-edges-of-objects-to-each-other-and-prevent-overlap
+    if(Math.abs(distX) > Math.abs(distY)) {
+        if (distX > 0) {
+            console.log("distx>0");
+            target.setLeft(obj.getLeft() - target.getWidth());
+        } else {
+            target.setLeft(obj.getLeft() + obj.getWidth());
+        }
+    } else {
+        if (distY > 0) {
+          console.log("disty>0");
+            target.setTop(obj.getTop() - target.getHeight());
+        } else {
+            console.log("disty<0");
+            target.setTop(obj.getTop() + obj.getHeight());
+        }
+    }
+}
 
  }
