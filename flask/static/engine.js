@@ -12,21 +12,21 @@ const database = require('./database.js');
 
 var gameState;
 
-// // searches the database by the title given and returns the data to be parsed
-// async function getData(title){
-//     var data;
-//     try{
-//         data = await database.getByTitle(title);
-//         return data;
-//     } catch (error){
-//         data = "error";
-//         return data;
-//     }
-// }
+// searches the database by the title given and returns the data to be parsed
+async function getData(title){
+    var data;
+    try{
+        data = await database.getByTitle(title);
+        return data;
+    } catch (error){
+        data = "error";
+        return data;
+    }
+}
 
-// var title = document.getElementById("levelTitle").innerHTML;
-// console.log(title);
-// getData(title).then((data) => {
+var title = document.getElementById("levelTitle").innerHTML;
+console.log(title);
+getData(title).then((data) => {
 
 /*
 |------------------------------------------------------------------------------
@@ -728,5 +728,5 @@ function showInventory(gameState){
     module.exports.showInventory = showInventory;
     module.exports.reset = reset;
 
-// });
-// module.exports.getData = getData;
+});
+module.exports.getData = getData;
