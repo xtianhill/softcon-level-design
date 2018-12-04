@@ -815,21 +815,21 @@ const database = require('./database.js');
 
 var gameState;
 
-// // searches the database by the title given and returns the data to be parsed
-// async function getData(title){
-//     var data;
-//     try{
-//         data = await database.getByTitle(title);
-//         return data;
-//     } catch (error){
-//         data = "error";
-//         return data;
-//     }
-// }
+// searches the database by the title given and returns the data to be parsed
+async function getData(title){
+    var data;
+    try{
+        data = await database.getByTitle(title);
+        return data;
+    } catch (error){
+        data = "error";
+        return data;
+    }
+}
 
-// var title = document.getElementById("levelTitle").innerHTML;
-// console.log(title);
-// getData(title).then((data) => {
+var title = document.getElementById("levelTitle").innerHTML;
+console.log(title);
+getData(title).then((data) => {
 
 /*
 |------------------------------------------------------------------------------
@@ -1531,8 +1531,8 @@ function showInventory(gameState){
     module.exports.showInventory = showInventory;
     module.exports.reset = reset;
 
-// });
-// module.exports.getData = getData;
+});
+module.exports.getData = getData;
 
 },{"./character.js":1,"./database.js":2,"./element.js":4,"./enemy.js":5,"./environment.js":7,"./item.js":8,"./npc.js":9,"./parsing.js":10,"./player.js":11,"./utility.js":12}],7:[function(require,module,exports){
 /*
