@@ -180,13 +180,65 @@ default:
  */
 function draggable(object, name, url) {
   JSONderulo(object,name,url);
+var x;
+var y;
+
   object.on('mousedown', function() {
-        object.opacity=0.7;
+if (selectedelementtype==0){
+        object.opacity=0.8;
+        object.setShadow({
+       blur: 4,
+       color: 'rgba(0,0,0,0.5)',
+       offsetX: 4,
+       offsetX: 4,
+   });
+}
+        x=object.getLeft();
+        y=object.getTop();
+
+
   });
 
   object.on('mouseup', function(options) {
       object.opacity = 1;
+      object.setShadow({
+      blur: 0,
+     color: 'rgba(0,0,0,0)',
+     offsetX: 0,
+     offsetX: 0,
+ });
+      var active= canvas.getActiveObject();
+      var inter=0;
+      canvas.forEachObject(function(obj){
+        jsonobj=JSON.stringify(obj);
+        var stringobj=JSON.stringify(JSON.parse(jsonobj));
+
+        if (!((active==null)|| (obj === active) || (stringobj=='{}'))) {
+          active.set({
+            left: Math.round(active.left / grid) * grid,
+            top: Math.round(active.top / grid) * grid
+              });
+        if ((active.getLeft()==obj.getLeft())&& (active.getTop()==obj.getTop())){
+          inter=1;
+
+          //to view when an invalid drag was attempted, do:
+          //debugging highlight box
+        /* active.set({'strokeWidth':  2,
+          'stroke': '#f2e6ff',})*/
+          active.set({
+          'left':x,
+          'top':y,
+        });
+        active.setCoords();
+          return;
+      }
+}
+if (inter==0&&(!(active==null))){
+  active.set({'strokeWidth':  0,
+  'stroke': false,})
+}
   });
+});
 
 }
 
@@ -464,6 +516,7 @@ document.getElementById("savegrid").onclick= function(){
     alert("Please choose a win condition for your game!");
     return;
   }
+
   var title = prompt("Enter the grid title", "title");
 
   var plaindata=JSON.stringify(canvas.toJSON());
@@ -654,39 +707,56 @@ document.getElementById("savegrid").onclick= function(){
 /* FUNCTION THAT PREVENTS  THINGS FROM BEING DRAGGED ON TOP OF EACHOTHER */
  canvas.on('object:moving', function(options){
    //options.target.opacity = 0.7;
+   //makeing sure things cant fall off grid
    options.target.setCoords();
-    canvas.forEachObject(function(obj) {
+   if(options.target.getLeft() < 0) {
+      options.target.setLeft(0);
+  }
+  if(options.target.getLeft() > 1950) {
+     options.target.setLeft(1950);
+ }
+  if(options.target.getTop() >450) {
+      options.target.setTop(450);
+  }
+
+//abandoning the old collision detection ways
+  /*  canvas.forEachObject(function(obj) {
       jsonobj=JSON.stringify(obj);
-      if ((obj === options.target) || (JSON.parse(jsonobj)=={})) {
+      var stringobj=JSON.stringify(JSON.parse(jsonobj));
+      if ((obj === options.target) || (stringobj=='{}')) {
         return;
       }
-
-
-      var hit=detectIntersection(options.target,obj);
+ var hit=detectIntersection(options.target,obj);
       //  the following four lines use a combination of answers posted here https://stackoverflow.com/questions/22591927/snap-edges-of-objects-to-each-other-and-prevent-overlap
     var outerRight = obj.getLeft() + obj.getWidth();
       var outerBottom = obj.getTop()+obj.getHeight();
-      var distX = (outerRight / 2) - ((options.target.getLeft() + options.target.getWidth()) / 2);
-      var distY = (outerBottom / 2) - ((options.target.getTop() + options.target.getHeight()) / 2);
+      var distX = (outerRight/2) - ((options.target.getLeft() + options.target.getWidth())/2);
+      var distY = (outerBottom/2) - ((options.target.getTop() + options.target.getHeight())/2);
       if (hit==true){
         // console.log("intersection!");
         getNewPosition(distX,distY,options.target,obj);
+        options.target.setCoords();
+      }
 
-}
 
 });
+*/
 options.target.set({
   left: Math.round(options.target.left / grid) * grid,
   top: Math.round(options.target.top / grid) * grid
     });
   });
 
+
+
+
+
   /* Box model detection, return true on collision */
 function detectIntersection( r1, r2 ) {
-   return  !(r2.left > r1.left+48 ||
-           r2.left+48 < r1.left ||
-           r2.top > r1.top+48 ||
-           r2.top+48 < r1.top);
+   return  !(r2.left > r1.left+49 ||
+           r2.left+49 < r1.left ||
+           r2.top > r1.top+49 ||
+           r2.top+49 < r1.top);
 
 }
 
@@ -695,17 +765,18 @@ function getNewPosition(distX, distY, target, obj) {
   // referencing a combination of answers posted here: https://stackoverflow.com/questions/22591927/snap-edges-of-objects-to-each-other-and-prevent-overlap
     if(Math.abs(distX) > Math.abs(distY)) {
         if (distX > 0) {
-            // console.log("distx>0");
+           console.log("distx>0");
             target.setLeft(obj.getLeft() - target.getWidth());
         } else {
+          console.log("distx<0")
             target.setLeft(obj.getLeft() + obj.getWidth());
         }
     } else {
         if (distY > 0) {
-          // console.log("disty>0");
+           console.log("disty>0");
             target.setTop(obj.getTop() - target.getHeight());
         } else {
-            // console.log("disty<0");
+             console.log("disty<0");
             target.setTop(obj.getTop() + obj.getHeight());
         }
     }
