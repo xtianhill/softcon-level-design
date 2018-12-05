@@ -4,7 +4,7 @@
  * Software Construction - Autumn 2018
  * Christian Hill
  * Marjorie Antohi
- * 
+ *
  */
 
 /*
@@ -78,7 +78,7 @@ async function isRunning() {
         success = await $.ajax({
             type: "GET",
             dataType: "text",
-            url: AWS_URL + "api/v1/backend-up/", 
+            url: AWS_URL + "api/v1/backend-up/",
             success: function(data) {
                 alert("Backend is running");
                 console.log("success: backend is running");
@@ -191,7 +191,7 @@ async function getByTitle(title) {
             },
             failure: function(errMsg) {
                 console.log("failure: didn't find item in DB");
-            }, 
+            },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 var status = XMLHttpRequest.status
                 if (status == HTTP_NOTFOUND) {
@@ -286,5 +286,6 @@ module.exports.validJSON = validJSON;
 module.exports.updateGrid = updateGrid;
 module.exports.isRunning = isRunning;
 module.exports.deleteGrid = deleteGrid;
+
 },{}]},{},[1])(1)
 });

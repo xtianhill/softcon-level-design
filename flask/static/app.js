@@ -14,6 +14,8 @@ window.onload = function a()
     var playergravity= "medium";
     var curr_url=0;
     var winconds= new Array();
+    var yourgameurl=0;
+    var saved=false;
 
     //initialize canvas element
     var canvas = new fabric.Canvas('c', { selection: false});
@@ -528,16 +530,31 @@ document.getElementById("savegrid").onclick= function(){
     "title" : title,
     "data" : data
   }
+
+
   // console.log(data);
   function myCB(data) {
     alert(data);
   }
- if (title != null){
-    database.storeGrid(JSON.stringify(myJSON), myCB);
-    // console.log("tried to store grid!");
-  }
 
+ if (title != null){
+    database.storeGrid(JSON.stringify(myJSON))
+      yourgameurl="Link to your level: http://softcon-leveldesign.us-east-1.elasticbeanstalk.com/play/" + title;
+        saved=true;
+    }
+
+    // console.log("tried to store grid!");
 }
+
+document.getElementById("getlink").onclick= function(){
+  if (saved==true){
+    alert(yourgameurl);
+  }
+  else (
+    alert("You must save your level with a valid title to get a link to play.")
+  )
+}
+
 
 /* top menu buttons on click functions  */
 
