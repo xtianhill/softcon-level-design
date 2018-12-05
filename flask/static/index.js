@@ -217,7 +217,7 @@ module.exports = Character;
  * Software Construction - Autumn 2018
  * Christian Hill
  * Marjorie Antohi
- * 
+ *
  */
 
 /*
@@ -291,7 +291,7 @@ async function isRunning() {
         success = await $.ajax({
             type: "GET",
             dataType: "text",
-            url: AWS_URL + "api/v1/backend-up/", 
+            url: AWS_URL + "api/v1/backend-up/",
             success: function(data) {
                 alert("Backend is running");
                 console.log("success: backend is running");
@@ -404,7 +404,7 @@ async function getByTitle(title) {
             },
             failure: function(errMsg) {
                 console.log("failure: didn't find item in DB");
-            }, 
+            },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 var status = XMLHttpRequest.status
                 if (status == HTTP_NOTFOUND) {
@@ -499,6 +499,7 @@ module.exports.validJSON = validJSON;
 module.exports.updateGrid = updateGrid;
 module.exports.isRunning = isRunning;
 module.exports.deleteGrid = deleteGrid;
+
 },{}],3:[function(require,module,exports){
 /*
 |------------------------------------------------------------------------------
@@ -814,21 +815,21 @@ const database = require('./database.js');
 
 var gameState;
 
-// // searches the database by the title given and returns the data to be parsed
-// async function getData(title){
-//     var data;
-//     try{
-//         data = await database.getByTitle(title);
-//         return data;
-//     } catch (error){
-//         data = "error";
-//         return data;
-//     }
-// }
+// searches the database by the title given and returns the data to be parsed
+async function getData(title){
+    var data;
+    try{
+        data = await database.getByTitle(title);
+        return data;
+    } catch (error){
+        data = "error";
+        return data;
+    }
+}
 
-// var title = document.getElementById("levelTitle").innerHTML;
+var title = document.getElementById("levelTitle").innerHTML;
 // console.log(title);
-// getData(title).then((data) => {
+getData(title).then((data) => {
 
 /*
 |------------------------------------------------------------------------------
@@ -852,12 +853,10 @@ var gameState;
         /*
          * Christian's log
          */
-
         //console.log("data: " + data);
 
-
         // comment this line if you want to load from database
-    data = '{"objects":[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{"type":"Element","name":"Environment","top":400,"left":0,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":400,"left":50,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":400,"left":100,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":400,"left":150,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":400,"left":200,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":400,"left":250,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":350,"left":250,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":350,"left":300,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":300,"left":300,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":300,"left":350,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":250,"left":350,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":250,"left":400,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":200,"left":400,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":200,"left":450,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":150,"left":450,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":150,"left":500,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":100,"left":500,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":100,"left":550,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":100,"left":600,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":100,"left":1650,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":100,"left":1100,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"NPC","top":50,"left":1100,"url":"https://66.media.tumblr.com/18b1dcddb1e6de2d56f2bbc16e368af5/tumblr_pi5sz2UwpH1u9vozfo1_250.png","scale":1,"msg":"hifriend!","gravity":"40","maxhealth":"100"},{"type":"Element","name":"NPC","top":50,"left":1650,"url":"https://66.media.tumblr.com/18b1dcddb1e6de2d56f2bbc16e368af5/tumblr_pi5sz2UwpH1u9vozfo1_250.png","scale":1,"msg":"hifriend!","gravity":"40","maxhealth":"100"},{"type":"Element","name":"Environment","top":100,"left":1950,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"NPC","top":50,"left":1950,"url":"https://66.media.tumblr.com/18b1dcddb1e6de2d56f2bbc16e368af5/tumblr_pi5sz2UwpH1u9vozfo1_250.png","scale":1,"msg":"hifriend!","gravity":"40","maxhealth":"100"},{"type":"Element","name":"Environment","top":200,"left":0,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":200,"left":50,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":200,"left":100,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":200,"left":150,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":200,"left":200,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Player","top":150,"left":0,"url":"https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png","scale":1,"speed":"80","gravity":"40","maxhealth":"100"}],"background":"","winconds":["end"],"thebackgroundimg":"https://i.pinimg.com/originals/fe/78/bb/fe78bbb25f35d56b502327fb6d43b309.png"}';
+    //data = '{"objects":[{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{"type":"Element","name":"Environment","top":400,"left":0,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":400,"left":50,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":400,"left":100,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":400,"left":150,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":400,"left":200,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":400,"left":250,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":350,"left":250,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":350,"left":300,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":300,"left":300,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":300,"left":350,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":250,"left":350,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":250,"left":400,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":200,"left":400,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":200,"left":450,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":150,"left":450,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":150,"left":500,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":100,"left":500,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":100,"left":550,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":100,"left":600,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":100,"left":1650,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":100,"left":1100,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"NPC","top":50,"left":1100,"url":"https://66.media.tumblr.com/18b1dcddb1e6de2d56f2bbc16e368af5/tumblr_pi5sz2UwpH1u9vozfo1_250.png","scale":1,"msg":"hifriend!","gravity":"40","maxhealth":"100"},{"type":"Element","name":"NPC","top":50,"left":1650,"url":"https://66.media.tumblr.com/18b1dcddb1e6de2d56f2bbc16e368af5/tumblr_pi5sz2UwpH1u9vozfo1_250.png","scale":1,"msg":"hifriend!","gravity":"40","maxhealth":"100"},{"type":"Element","name":"Environment","top":100,"left":1950,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"NPC","top":50,"left":1950,"url":"https://66.media.tumblr.com/18b1dcddb1e6de2d56f2bbc16e368af5/tumblr_pi5sz2UwpH1u9vozfo1_250.png","scale":1,"msg":"hifriend!","gravity":"40","maxhealth":"100"},{"type":"Element","name":"Environment","top":200,"left":0,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":200,"left":50,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":200,"left":100,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":200,"left":150,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Environment","top":200,"left":200,"url":"https://66.media.tumblr.com/80be0a8193d1c538f062f9999f9bff51/tumblr_pi5rtm1dbr1u9vozfo1_400.jpg","scale":1,"solid":"true","effect":"heal"},{"type":"Element","name":"Player","top":150,"left":0,"url":"https://66.media.tumblr.com/f115b5010bccc9364bfcd0ee79af7132/tumblr_pi5tmjHk2r1u9vozfo1_400.png","scale":1,"speed":"80","gravity":"40","maxhealth":"100"}],"background":"","winconds":["end"],"thebackgroundimg":"https://i.pinimg.com/originals/fe/78/bb/fe78bbb25f35d56b502327fb6d43b309.png"}';
 
         // translate data from database into list of elements
         var parsedJSON = JSONtoElements(data);
@@ -867,21 +866,21 @@ var gameState;
         var backgroundUrl = parsedJSON.backgroundUrl;
         //var winConditions =  ["enemy", "npc"];
         var winConditions= parsedJSON.winconditions;
-        console.log(winConditions);
+        // console.log(winConditions);
         var width = canvas.width;
         var height = canvas.height;
         var wrap = document.getElementById("wrap");
 
-        console.log("elements", elements);
+        // console.log("elements", elements);
         // set win conditions to false if they were chosen by designer
         var victory = false;
         var npcCondition = true;
         var endCondition = true;
         var enemyCondition = true;
-        console.log(document);
+        // console.log(document);
         var ul = document.getElementById("rules");
         ul.innerHTML = "";
-        console.log(ul);
+        // console.log(ul);
         for(i=0; i<winConditions.length; i++){
             var listItem = document.createElement("li");
             if(winConditions[i] === "npc"){
@@ -1537,8 +1536,8 @@ function showInventory(gameState){
     module.exports.showInventory = showInventory;
     module.exports.reset = reset;
 
-// });
-// module.exports.getData = getData;
+});
+module.exports.getData = getData;
 
 },{"./character.js":1,"./database.js":2,"./element.js":4,"./enemy.js":5,"./environment.js":7,"./item.js":8,"./npc.js":9,"./parsing.js":10,"./player.js":11,"./utility.js":12}],7:[function(require,module,exports){
 /*
@@ -1659,10 +1658,10 @@ function Item(pos, url, sz, hbox, col, eff, bpos, hov, ts){
         //         this.targets.push(NPC);
         //     }
         // }
-       
+
         // console.log("TARGETS", this.targets);
         // console.log("TARGETS", this.targets[0]);
-        
+
     } else {
         return {};
     }
@@ -1700,15 +1699,11 @@ Item.prototype.setCollected = function(b){
 
 //Make item hover
 Item.prototype.hover = function(step) {
-    if (typeof step == 'number') {
         wobbleSpeed = 2;
-        // wobbleDist = 1.5;
+        wobbleDist = 1.5;
         this.wobble += step * wobbleSpeed;
-        // var wobblePos = Math.sin(this.wobble) * wobbleDist;
-        // this.position = this.basePos.plus(new Vector(0, wobblePos));
-    } else {
-        return null;
-    }
+        var wobblePos = Math.sin(this.wobble) * wobbleDist;
+        this.position = this.basePos.plus(new Vector(0, wobblePos));
 }
 
 //Update the item's position
@@ -1731,7 +1726,7 @@ module.exports = Item;
 |------------------------------------------------------------------------------
 |
 | This file contains the NPC prototype (the javascript equivalent of a
-| class). NPC is a subclass of the Character superclass. It has 
+| class). NPC is a subclass of the Character superclass. It has
 | information about the NPC's message.
 |
 |------------------------------------------------------------------------------
@@ -1746,7 +1741,7 @@ const Vector = require('./utility.js').vector;
 |------------------------------------------------------------------------------
 */
 function NPC(loc, max, hea, stat, msg, hbox, url, size, speed, mvspd, grav){
-    
+
     if(typeof msg === "string"){
         Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspd, grav);
         this.message = msg;
@@ -1755,12 +1750,12 @@ function NPC(loc, max, hea, stat, msg, hbox, url, size, speed, mvspd, grav){
     else return {};
 }
 
-NPC.prototype = Object.create(Character.prototype); 
+NPC.prototype = Object.create(Character.prototype);
 NPC.prototype.constructor = NPC;
 //Getter for message
 NPC.prototype.getMessage = function(){
     return this.message;
-    
+
 }
 
 //Setter for message
@@ -1769,8 +1764,8 @@ NPC.prototype.setMessage = function(msg){
     if(typeof msg == "string"){
         this.message = msg;
         return;
-    }   
-    else 
+    }
+    else
         return null;
 }
 
