@@ -119,7 +119,8 @@ aside{
 ul{
     line-height: 300%;
     margin-top: 40px;
-    margin-left: -5px;
+    height: 60px;
+    width: 60px;
     list-style: none;
 }
 

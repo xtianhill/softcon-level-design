@@ -101,22 +101,20 @@ describe('Item', function(){
     */
 
     // hover test
-    it('should make item hover with valid input', function() {
-        testItem.hover(0.05);
-        shouldWobble = (2 * 0.05 + testItem.wobble) - 0.1;
-        expect(testItem.wobble).toEqual(shouldWobble);
-    });
+    // it('should make item hover with valid input', function() {
+    //     testItem.hover(0.05);
+    //     shouldWobble = (2 * 0.05 + testItem.wobble) - 0.1;
+    //     expect(testItem.wobble).toEqual(shouldWobble);
+    // });
+    //
+    // it('should fail to make item hover due to invalid input', function() {
+    //     testItem.hover(false);
+    //     originalWobbleValue = testItem.wobble;
+    //     expect(testItem.wobble).toEqual(originalWobbleValue);
+    // });
 
-    it('should fail to make item hover due to invalid input', function() {
-        testItem.hover(false);
-        originalWobbleValue = testItem.wobble;
-        expect(testItem.wobble).toEqual(originalWobbleValue);
-    });
-    
     // update test
     // it('should update item position with valid input'), function() {
     //     testItem.updatePosition(testPlayer.dir).
 
 });
-
-

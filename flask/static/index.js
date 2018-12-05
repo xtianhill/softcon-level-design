@@ -1660,10 +1660,10 @@ function Item(pos, url, sz, hbox, col, eff, bpos, hov, ts){
         //         this.targets.push(NPC);
         //     }
         // }
-       
+
         // console.log("TARGETS", this.targets);
         // console.log("TARGETS", this.targets[0]);
-        
+
     } else {
         return {};
     }
@@ -1701,15 +1701,11 @@ Item.prototype.setCollected = function(b){
 
 //Make item hover
 Item.prototype.hover = function(step) {
-    if (typeof step == 'number') {
         wobbleSpeed = 2;
-        // wobbleDist = 1.5;
+        wobbleDist = 1.5;
         this.wobble += step * wobbleSpeed;
-        // var wobblePos = Math.sin(this.wobble) * wobbleDist;
-        // this.position = this.basePos.plus(new Vector(0, wobblePos));
-    } else {
-        return null;
-    }
+        var wobblePos = Math.sin(this.wobble) * wobbleDist;
+        this.position = this.basePos.plus(new Vector(0, wobblePos));
 }
 
 //Update the item's position
