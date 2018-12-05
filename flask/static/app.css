@@ -348,6 +348,11 @@ button {
 }
 
 input {
+  width: 50%;
+  border: none;
+  padding: 3px 3px 3px 3px;
+  border-radius: 3px;
+  box-sizing: border-box;
   outline-style:none;
   box-shadow:none;
 }
