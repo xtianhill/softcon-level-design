@@ -1,89 +1,84 @@
-README (with nice formatting):
-https://docs.google.com/document/d/1-KWoKyu6tmTp3O7bchcDixfaKW7GgqFf_R9AiCsp_Zc/edit?usp=sharing
+README
 
-Milestone 4B
+**Level Editor**
 Christian Hill, Hayley Grey, Eri Rogers, Julia Hanson, Oliver Hahn, Molly O’Donnell, Marjorie Antohi, Radhika Kaicker
 
-How to run code
-http://softcon-leveldesign.us-east-1.elasticbeanstalk.com/home.
-Is not entirely responsive to browser resize. 
-How to run test cases
+**Accessing our Project**
+The Level Editor homepage can be found at this link: http://softcon-leveldesign.us-east-1.elasticbeanstalk.com/ 
+No installation of software is necessary. For best results, we recommend using Google Chrome on macOS, though other operating systems and browsers should not cause extreme issues.
+ 
+**Functionality Description**
+The purpose of our product is to create a scrolling platform level editor that provides a large extent of freedom of customization to the user. Our vision is that creative users should be able to create platform-based games that can be saved and shared without having to rely on restrictive software or building game engines from scratch. Our project has two main functions: level creation and level playing. From the homepage, users can follow the links to enter the lever editor or play a level from searching by title or  by selecting a level from the list of existing levels. From these pages, users can press the home button to return to the home page. On the play level pages, the user can control their character to play the game using the WAD keys.
+ 
+**Tutorial**
+The Homepage —
+The Homepage is the connection point between making a level and playing a level. The user begins here, and can navigate to the level editor by clicking the button on the righthand side, or can choose to play any one of the levels that is already in the database by clicking the correct title from the list on the lefthand side. The user can also search for a level by title. Here’s a quick-reference guide:
+To make a level — Click square button “Click to go to the Level Editor!”
+To play a level — Click level’s title in list titled “Saved Levels”
+To find a level — Type level’s title into the search bar under “Saved Levels”
+ 
+**Making a Level** —
+In the level editor, the user can add characters, items, and other customizable game elements to their level using the menu across the top of the screen, The level is displayed in the window in the center of the screen.  Elements are added to the level by clicking on the menu to select an element type and then clicking in the level where you would like to add the element. You can use the default sprite images given in the menu, or elements can be customized using the menus that display on the righthand side of the screen when an element type is selected. 
+We recommend choosing .png images with transparent backgrounds that are constrained to a square aspect ratio for elements, and higher-resolution images that are wider than they are tall for the background. Grid lines are present on top of the level in the editor environment to aid element placement during the editing process. All levels are a fixed size, which is larger than the window they are displayed in. To edit further right in the level, the user can scroll using a laptop’s trackpad.
+ 
+Explore at the top to browse the element types and configurable features of a level. 
+Here’s a guide to the menu across the top of the screen in the editor (from left to right):
+-Move Mode (arrow cursor icon): when selected, allows the user to move elements around in the level. You will notice that you cannot drag elements on top of eachother.
+-Eraser: when selected, allows the user to remove an element from the level by clicking it.
+-Terrain (stone block): when selected, allows the user to add Terrain elements to the level. You can choose the image url, solidity, and effect of the terrain elements  you add using the menu that displays on the right. 
+-Player (pumpkin man): when selected, allows the user to add a Player character to the level. Levels must have exactly one -Player character to be saved. You can choose the image url, speed, maximum health and gravity amount  for the player you add using the menu that displays on the right. 
+-NPC (gargoyle): when selected, allows the user to add a NPC to the level. NPCs will say a message to your player character when you run into them in play level. You can choose this message, as well as the image url, speed, maximum health and gravity amount for each NPC you add using the menu that displays on the right. 
+-Enemy(wild boar): when selected, allows the user to add an Enemy to the level. Enemies deal damage to a player character when a player character collides with an enemy in play level. You can choose how much damage the enemy deals, as well as the image url, speed, maximum health and gravity amount for each Enemy you add using the menu that displays on the right. 
+-Item(sword): when selected, allows the user to add an Item to the level. Items can heal or deal damage to different character types. When a player character collides with an item in play level, the item will be added to its inventory, where it can be used by a player char on a target. You can choose the effect and strength of an item, what character types it can be used on (targets), and the image url for each Item you add using the menu that displays on the right. 
+-Win Conditions(trophy): when selected, the right-side menu will display your options for the win conditions of your level: what a player needs to do in order to win the level. You can select any combination of the options.
+-Set Background (background image): when selected, allows the user to set the background image of your level using the menu on the right by pasting a url in the input box.
+-Get Link: once your game has been successfully saved with a title, you can click get link to get the url at which you can play your level.
+-Save Grid: if you click this button, you will be prompted to enter a title for your level. If that title has not been taken by another user, your level will be saved with that title and available to play at the link displayed after pressing “get link”
+-Homepage: clicking this button will navigate you back to the home page. If you’ve saved your level with a valid title, it will be searchable by title there.
+ 
+**Playing a Level** —
+In the level playing mode, the user can play any level that has been saved to the database. Some levels may not be winnable, and some may be extremely ugly depending on what the user who made that level decided to use as image sprites.
+To move right — D key
+To move left — A key
+To jump — W key
+To pick up an item — Run into it
+To switch active items — E key; if there is more than 1 item in inventory
+To use item — Q key
+To attack a character — Equip an item that does damage, and press Q near the character
+To heal a character — Equip an item that does damage, and press Q near the character
+To talk to an NPC — Run into it
+To die — Fall off a platform, stand next to an enemy or on a tile that damages for too long
+To heal — Stand on a platform with a healing effect, or use a healing item with Player target
+To win — Meet the conditions listed in the footer of the page.
+To reset the level — Press the Reset button in the top right
+To return to the homepage — Press the Homepage button in the top right
+ 
+ 
+** Bugs and Non-Functionalities **
 
-To run tests for the js components, enter the test file, and run the following for each spec file: 
-“jasmine <filename>.spec.js”
-Unit testing output will print to the console.
-Alternatively, run the “SpecRunner.html” file from the top level directory.
+MakeLevel
+-No input validation for url entries in makelevel:  we can only guarantee correctness for .png files at valid urls
+-No input validation for level titles (other than being non-empty or not already in the database)
+-Getting a link: if you click “get link,” you will be alerted with the link to the level with the title you inputted. The small bug here is: if you click “get link” after trying to save with an invalid title (that is already in the database) but before you save with a new title, you will be alerted with the link to the game with the title you inputted, which is whichever level is in the database with that title. 
+-Users can’t do any sort of re-loading and editing levels once they’ve navigated away from the editor; more generally, there’s no functionality to test a level. 
+-Users can make unwinnable levels (this is not a bug).
 
-Make/Play Level Acceptance Tests
-*Additional notes*: default win conditions are talk to all npcs, and kill all enemies. So you must put an an npc or an enemy on your stage so you dont automatically win
-Balance your item strength and character’s health, otherwise you may be too weak, or overpowered.
+PlayLevel
+-Health bar display doesn’t reflect input values but are fractions of 100 (actual health amounts for characters are correct)
+-Health for enemies and NPCs doesn’t have a default value, causing issues with interactions and the health bar displays if the user doesn’t enter a value while editing.
+-Sometimes rules in the footer repeat for unknown reasons.
+-On a few computers, the D key only worked while shift was held down.
+-The player’s hitbox is hard-coded to the size of the Pumpkin Man. If wider or thinner sprites are used for the player, it may appear as if collisions are being ignored.
 
-Test Item Collection.
-Pick up items by running into them and watch them move with their character.
-Test Effect Customization
-Alter settings in the sidebar options menu as you create your game and watch as placed sprites interact differently with the character.
-Test Sprite Uploading
-Paste an image URL in the box to make a custom sprite.
-Test Enemy item interaction
-Collect an item with the damage effect and press q when near an enemy to deal damage to it.
-Collect an item with the heal effect and press q when near an enemy or npc to increase their health level.
+Database
+-Not secure against SQL injection attacks
 
+UI/UX
+-Responsiveness on various devices: all pages are optimized for laptop screens and Chrome.
+-The text/background contrast is not high enough in some areas to be accessible to people with impaired vision.
+-When Homepage is resized to be too small, images spread out on the MakeLevel side and disappear on the PlayLevel side. This should not be an issue for a normal browser window on a laptop screen.
+-When MakeLevel is resized to be too small, the menu buttons overlap with the Homepage/Save Grid buttons. This should not be an issue for a normal browser window on a laptop screen.
+-The inventory selected-item box in PlayLevel slightly overlaps with the item images inside it.
 
-Database Acceptance Tests
-Browser backend test
-Point browser to http://softcon-leveldesign.us-east-1.elasticbeanstalk.com/api/v1/backend-up
-A message saying “BACKEND RUNNING” will appear
-Browser display all DB entries test
-Point browser to http://softcon-leveldesign.us-east-1.elasticbeanstalk.com/home
-A list of entries representing level titles will be queried from the database and appear on-screen. 
-Browser search level test:
-Point browser to: http://softcon-leveldesign.us-east-1.elasticbeanstalk.com/home 
-Type level names in the search bar: results will update automatically.
-
-What is implemented
-
-Making/Editing a Level
-
-For iteration two, we built on the skeleton of our level editor. Players can now title their level and  can now upload custom images for each game element. Levels now scroll in editing mode, too. We also implemented increased customization options such as the ability to define effects, damage levels, gravity levels (high, medium, low) for characters, win conditions, targets for items, and environmental effects. The menus involved in creating a level have been expanded and given improved organization Users now place items by “stamping” instead of dragging and dropping elements into the grid. 
-
-Playing a Level
-
-In iteration two interactions between items, the player character, enemies, and the environment were finalized. The player can now pick up items and switch which of them is equipped using the inventory. The player can also use the equipped item using the q key, which can have effects like “damage” and “heal” and can apply those effects to enemies and NPCs in addition to the player themselves. Environmental effects have also been implemented so that the player can be damaged or healed by the environment itself (e.g. spikes). Enemies now can move around the level, and items can wobble in midair to give a floating effect. Win conditions have been implemented so that they player can complete the level upon succeeding in killing all enemies, speaking to all NPCs, or collecting all items. The player character can also die if they take too much damage.
-
-Saving/Loading a Level (Database)
-
-The database and controller components are now fully integrated with the game editor and player. These components interact with the backend through a well-defined API, handling a variety of errors for each possible situation invocations of the API might trigger. 
-
-Who did what: who paired with who, which part is implemented by which pair
-
-The groups:
-Christian Hill
-Julia Hanson
-Eri Rogers, and Molly O’Donnell
-Oliver Hahn, Hayley Gray, Radhika Kaicker and Marjorie Antohi
-
-Christian Hill and Marjorie Antohi:
-Christian updated the Flask webserver to handle the new pages for this iteration, like the homepage and the updated make level and play level pages. Christian added functionality to the webserver to handle unique level urls (automatically loads a level to play given the title in the URL) and updated the REST API to handle this functionality. Christian added new functionality to the database, including the new features “update grid,”“delete grid,” and “query all titles.” Christian also updated the database unit tests to handle a new style of return from the REST API functions (using JavaScript’s async await feature), given the difficulty encountered in the previous iteration with iQuery AJAX and the Jasmine unit testing suite. 
-
-Julia Hanson 
-	Julia implemented all of the updates to make level listed above, including the functionality and display of all of the buttons and menus. In addition, she helped christian connect make level to save to the database.
-
-Eri Rogers and Molly O’Donnell 
-This team implemented all the unit two updates to play level. Molly implemented item collection, updated item interactions with enemies and NPCs, and created an inventory structure that allowed for equipping and switching of items. Molly also implemented several game win conditions and performed dynamic testing for the engine class. Molly also implemented character death. She also wrote the script for the homepage, and helped debug unit tests. Eri added movement and animation to NPCs, enemies, and items. Eri also implemented dynamically scrolling levels with larger canvases and designed the aesthetics of the front-end UI. In addition, Eri made UI for the homepage from which playLevel and makeLevel can be accessed.
-
-Oliver Hahn, Hayley Gray, Radhika Kaicker and Marjorie Antohi
-This group was primarily in charge of unit and acceptance testing. Since a major factor of iteration two was making certain that everything implemented in iteration one worked with the iteration two updates, and that all the iteration two updates worked even in very rare edge cases, this was a significant portion of the unit two work. Hayley worked on unit tests and finalization for enemy, player, engine, environment, and parsing. She also helped play test the game. Oliver worked primarily on unit tests and type checking for utility, player, npc, and more. Marjorie worked on unit tests and fixing bugs for class documents in flask. Marjorie also added documentation and comments to the files in the static and tests folders.
-
-Changes: have you made any design changes or unit test changes from earlier milestones?
-	Changes were made the database unit tests, as the return method for the REST API functions was changed from success/failure callback methods to leverage JavaScript’s async await functionality. The unit tests were also updated to test the new functionality of the database (update, delete, etc.). 
-	Unit tests from iteration one have been fully updated and made comprehensive. Some unit tests submitted for iteration 4A have been altered slightly as parameter types have changed, but overall the unit test suite is similar.
-
-
-Notes:
-We have not been able to play test all of the different combinations of made levels, so we assume there will be some small bugs that need to be fixed in that regard. Additionally, you cannot set your own background image right now, and you can place two objects in make level on top of eachother, which will break that level when played. We will do our best to fix these bugs as they surface.
-
-Extensive play testing will occur.
-
-Background image and win conditions will be fixed in the coming week. 
 
 
