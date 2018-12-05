@@ -15,7 +15,7 @@ header {
 /* Page title */
 .title {
     position: absolute;
-    font-size: 2vw;
+    font-size: 1.8vw;
     margin-top: 16px;
     margin-left: 20px;
     display: inline-block;
@@ -41,7 +41,7 @@ section {
   margin-left: 25px;
   position: absolute;
   color: #660066;
-  font-size: 2vw;
+  font-size: 1.5vw;
   font-family: 'Press Start 2P';
 }
 
