@@ -113,7 +113,7 @@ aside{
     margin-left: 40px;
     height: 60px;
     width: 60px;
-    border: 5px solid #a3c0f5;
+    border: 5px dotted #a3c0f5;
 }
 
 ul{
