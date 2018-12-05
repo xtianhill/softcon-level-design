@@ -185,7 +185,6 @@ Character.prototype.moveY = function(newPos, obstacle, up) {
     if (this.status) {
         if (obstacle != null) {
             if (obstacle.solid) {
-                newPos.x = this.position.x
                 if (up && this.speed.y > 0) {
                     this.speed.y = -jumpSpeed;
                 } else
@@ -562,10 +561,10 @@ function Item(pos, url, sz, hbox, col, eff, bpos, hov, ts){
         //         this.targets.push(NPC);
         //     }
         // }
-       
+
         // console.log("TARGETS", this.targets);
         // console.log("TARGETS", this.targets[0]);
-        
+
     } else {
         return {};
     }
@@ -603,15 +602,11 @@ Item.prototype.setCollected = function(b){
 
 //Make item hover
 Item.prototype.hover = function(step) {
-    if (typeof step == 'number') {
         wobbleSpeed = 2;
-        // wobbleDist = 1.5;
+        wobbleDist = 1.5;
         this.wobble += step * wobbleSpeed;
-        // var wobblePos = Math.sin(this.wobble) * wobbleDist;
-        // this.position = this.basePos.plus(new Vector(0, wobblePos));
-    } else {
-        return null;
-    }
+        var wobblePos = Math.sin(this.wobble) * wobbleDist;
+        this.position = this.basePos.plus(new Vector(0, wobblePos));
 }
 
 //Update the item's position
@@ -634,7 +629,7 @@ module.exports = Item;
 |------------------------------------------------------------------------------
 |
 | This file contains the NPC prototype (the javascript equivalent of a
-| class). NPC is a subclass of the Character superclass. It has 
+| class). NPC is a subclass of the Character superclass. It has
 | information about the NPC's message.
 |
 |------------------------------------------------------------------------------
@@ -649,7 +644,7 @@ const Vector = require('./utility.js').vector;
 |------------------------------------------------------------------------------
 */
 function NPC(loc, max, hea, stat, msg, hbox, url, size, speed, mvspd, grav){
-    
+
     if(typeof msg === "string"){
         Character.call(this, loc, max, hea, stat, hbox, url, size, speed, mvspd, grav);
         this.message = msg;
@@ -658,12 +653,12 @@ function NPC(loc, max, hea, stat, msg, hbox, url, size, speed, mvspd, grav){
     else return {};
 }
 
-NPC.prototype = Object.create(Character.prototype); 
+NPC.prototype = Object.create(Character.prototype);
 NPC.prototype.constructor = NPC;
 //Getter for message
 NPC.prototype.getMessage = function(){
     return this.message;
-    
+
 }
 
 //Setter for message
@@ -672,8 +667,8 @@ NPC.prototype.setMessage = function(msg){
     if(typeof msg == "string"){
         this.message = msg;
         return;
-    }   
-    else 
+    }
+    else
         return null;
 }
 
@@ -945,25 +940,23 @@ describe('Item', function(){
     */
 
     // hover test
-    it('should make item hover with valid input', function() {
-        testItem.hover(0.05);
-        shouldWobble = (2 * 0.05 + testItem.wobble) - 0.1;
-        expect(testItem.wobble).toEqual(shouldWobble);
-    });
+    // it('should make item hover with valid input', function() {
+    //     testItem.hover(0.05);
+    //     shouldWobble = (2 * 0.05 + testItem.wobble) - 0.1;
+    //     expect(testItem.wobble).toEqual(shouldWobble);
+    // });
+    //
+    // it('should fail to make item hover due to invalid input', function() {
+    //     testItem.hover(false);
+    //     originalWobbleValue = testItem.wobble;
+    //     expect(testItem.wobble).toEqual(originalWobbleValue);
+    // });
 
-    it('should fail to make item hover due to invalid input', function() {
-        testItem.hover(false);
-        originalWobbleValue = testItem.wobble;
-        expect(testItem.wobble).toEqual(originalWobbleValue);
-    });
-    
     // update test
     // it('should update item position with valid input'), function() {
     //     testItem.updatePosition(testPlayer.dir).
 
 });
-
-
 
 },{"../static/effect.js":2,"../static/enemy.js":4,"../static/item.js":5,"../static/player.js":7,"../static/utility.js":8}]},{},[9])(9)
 });
