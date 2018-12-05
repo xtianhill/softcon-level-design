@@ -29,7 +29,7 @@ const AWS_URL = "http://softcon-leveldesign.us-east-1.elasticbeanstalk.com/";
 const SUCCESS_MSG = "BACKEND RUNNING";
 
 //store a grid, which is a JSON, in the database
-async function storeGrid(gridJSON) {
+function storeGrid(gridJSON) {
     if(!validJSON(gridJSON)) {
         throw new Error("invalid JSON given");
     }

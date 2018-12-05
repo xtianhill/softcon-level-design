@@ -538,17 +538,12 @@ document.getElementById("savegrid").onclick= function(){
   }
 
  if (title != null){
-    database.storeGrid(JSON.stringify(myJSON)).then((result)=> {
-      console.log(result);
+    database.storeGrid(JSON.stringify(myJSON))
       yourgameurl="Link to your level: http://softcon-leveldesign.us-east-1.elasticbeanstalk.com/play/" + title;
-      if (result==true){
         saved=true;
-      }
-    });
+    }
 
     // console.log("tried to store grid!");
-
-  }
 }
 
 document.getElementById("getlink").onclick= function(){
