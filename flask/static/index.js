@@ -1470,9 +1470,7 @@ function showInventory(gameState){
     }
 
     function testEndCondition(gameState){
-        console.log(gameState.pc.position.x+gameState.pc.hitbox.x);
-        console.log(gameState.width - 15);
-        if(gameState.pc.position.x+gameState.pc.hitbox.x >= gameState.width - 15){
+        if(gameState.pc.position.x+gameState.pc.hitbox.x >= gameState.width - 50){
             
             return true;
         }
