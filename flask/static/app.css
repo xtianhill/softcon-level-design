@@ -124,6 +124,28 @@ aside{
     border:3px solid #a3c0f5;
 }
 
+.linkbutton {
+    position: relative;
+    float: right;
+    margin-top: 14px;
+    margin-right: 20px;
+    font-family : 'Press Start 2P';
+    font-size:15px;
+    line-height: 120%;
+    padding: 10px 10px;
+    text-decoration:none;
+    display: inline-block;
+    text-align: center;
+    background-color:#ffe6f0;
+    color: #5e90ed;
+    width: 150px;
+    -moz-border-radius:28px;
+    -webkit-border-radius:28px;
+    border-radius:28px;
+    outline-style:none;
+    box-shadow:none;
+    border:3px solid #a3c0f5;
+}
 /*move mode button*/
 .movemode{
   outline-style:none;
